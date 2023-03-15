@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Source\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Source\MeshFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Source\Vehicle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\implot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\implot_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\External\Include\imgui\implot_items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Callback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\imgui_stuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Mesh_imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\MeshFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\MeshFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Prototypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\RandomRocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\Simulation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\TrilateralMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\src\Application\Include\TrueInformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\BATU\source\repos\Trilateral\Trilateral\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{8911BC06-3AC2-327E-951E-C2B3571014DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A01EB417-AF20-3CBB-B976-28B48EAD1DEE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

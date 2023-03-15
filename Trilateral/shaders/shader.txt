@@ -1,0 +1,36 @@
+#shader vertex
+#version 330 core
+#extension GL_ARB_gpu_shader_fp64 : enable
+layout(location = 0) in vec3 motor_and_time; // 1- motor_angle (radian ) 2 - time  3 - intensity 
+layout(location = 1) in vec3 color; // 1- r 2 -g 3 -b 
+uniform mat4 u_MVP;
+
+out vec3 o_color;
+void main()
+{
+    float  speed_of_light_mm_ns = 299.792458;
+    float calibrated_time = motor_and_time.y * 0.41220568 + 1.03289107;
+    float calibrated_distance = (speed_of_light_mm_ns * calibrated_time);
+    float motor_angle_rad = (motor_and_time.x ); // radian
+    float distance = calibrated_distance / 100000;    // m
+    float control_variable = motor_and_time.z;
+    gl_PointSize = control_variable == 0.9 ? 2.0f : 1.0f; //0.9 is lidar position flag number
+    vec3 position;
+    position.x = distance * cos(motor_angle_rad  );
+    position.y = distance * sin(motor_angle_rad  ) ;
+    position.z = 0.0;
+    gl_Position = u_MVP * vec4(position.x, position.y, position.z, 1.0);
+    o_color = color;
+
+};
+
+
+ 
+#shader fragment
+#version 330 core
+out vec4 FragColor;
+in vec3 o_color;
+void main()
+{
+    FragColor = vec4(o_color ,1.0f);
+};

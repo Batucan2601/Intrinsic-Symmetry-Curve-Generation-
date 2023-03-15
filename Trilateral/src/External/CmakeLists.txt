@@ -1,0 +1,11 @@
+file(GLOB_RECURSE SOURCES
+     Include/*.h
+     Include/GL/*.h
+     Include/GLFW/*.h
+     Include/glm/*.hpp
+     Include/eigen/Eigen/*
+     Include/imgui/*
+)
+include_directories( Include)
+
+add_library(EXTERNAL_SOURCE ${SOURCES})
