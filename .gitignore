@@ -366,8 +366,6 @@ FodyWeavers.xsd
 
 # my additions
 build/
-x64/
-Trilateral/x64/
 .ini
 .proj
 .filters
