@@ -16,6 +16,12 @@ set(Header_Files
     "src/Application/Include/Simulation.h"
     "src/Application/Include/TrilateralMap.h"
     "src/Application/Include/TrueInformation.h"
+    "src/Application/Include/Sampling.h"
+    "src/Application/Include/Laplace-Beltrami.h"
+    "src/Application/Include/DominantSymmetry.h"
+    "src/Application/Include/CoreTypeDefs.h"
+
+
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -24,6 +30,10 @@ set(Source_Files
     "src/Application/Source/Mesh.cpp"
     "src/Application/Source/MeshFactory.cpp"
     "src/Application/Source/Vehicle.cpp"
+    "src/Application/Source/Sampling.cpp"
+    "src/Application/Source/Laplace-Beltrami.cpp"
+    "src/Application/Source/DominantSymmetry.cpp"
+    "src/Application/Source/CoreTypeDefs.cpp"
     "src/External/Include/imgui/imgui.cpp"
     "src/External/Include/imgui/imgui_demo.cpp"
     "src/External/Include/imgui/imgui_draw.cpp"
@@ -35,6 +45,7 @@ set(Source_Files
     "src/External/Include/imgui/implot.cpp"
     "src/External/Include/imgui/implot_demo.cpp"
     "src/External/Include/imgui/implot_items.cpp"
+
 )
 source_group("Source Files" FILES ${Source_Files})
 

@@ -369,12 +369,8 @@ int main(void)
         model = glm::scale(model, glm::vec3(scale, scale, scale));
         MVP = proj * view * model;
         glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-        //compute_geodesic_distances_array(off, 0);
-        //compute_geodesic_distances_min_heap(off, 0);
-        
-        //imgui_mesh_window();
+
         imgui_mesh_window(selected_mesh , mesh_fac);
-        //mesh_fac.draw_meshes();
 
         model = mesh_fac.mesh_vec[0].move_mesh(glm::vec3(1.0f, 1.0f, 1.0f));
         if (selected_mesh == 0)
@@ -388,6 +384,30 @@ int main(void)
         //mesh_fac.mesh_vec[0].model_mat = model; 
         mesh_fac.draw_mesh(0);
 
+        if (mesh_fac.mesh_vec.size() > 5)
+        {
+            //mesh_fac.mesh_vec[5].model_mat = model;
+            //MVP = proj * view * model;
+            //mesh_fac.mesh_vec[5].MVP = MVP;
+            //glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+            ////mesh_fac.mesh_vec[0].model_mat = model; 
+            //mesh_fac.draw_mesh(5);
+
+            mesh_fac.mesh_vec[6].model_mat = model;
+            MVP = proj * view * model;
+            mesh_fac.mesh_vec[6].MVP = MVP;
+            glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+            //mesh_fac.mesh_vec[0].model_mat = model; 
+            mesh_fac.draw_mesh(6);
+
+            //mesh_fac.mesh_vec[7].model_mat = model;
+            //MVP = proj * view * model;
+            //mesh_fac.mesh_vec[7].MVP = MVP;
+            //glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+            ////mesh_fac.mesh_vec[0].model_mat = model; 
+            //mesh_fac.draw_mesh(7);
+        }
+      
 
         model = mesh_fac.mesh_vec[1].move_mesh(glm::vec3(10.0f, 1.0f, 1.0f));
         if (selected_mesh == 1)

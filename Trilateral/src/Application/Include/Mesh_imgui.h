@@ -1,6 +1,10 @@
 #pragma once
 #include "../Include/MeshFactory.h"
 #include "../Include/TrilateralMap.h"
+#include "../Include/Sampling.h"
+#include "../Include/Laplace-Beltrami.h"
+#include "../Include/DominantSymmetry.h"
+
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -37,6 +41,8 @@ bool activate_histogram = false;
 std::vector<float> histogram; 
 
 std::vector<float> lines; 
+
+int no_of_sampling_fps = 10; 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -166,6 +172,26 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("Brute Force Trilateral Symmetry "))
     {
         brute_force_symmetry_extraction(m_factory, selected_mesh);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    ImGui::InputInt("no of samples  ", &no_of_sampling_fps);
+    ImGui::SameLine();
+    if (ImGui::Button("FPS sampling"))
+    {
+        furthest_point_sampling(&m_factory.mesh_vec[selected_mesh] , no_of_sampling_fps);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("Laplacian generation "))
+    {
+        generate_L(&m_factory.mesh_vec[selected_mesh]);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("dominant symmetry plane  "))
+    {
+        generate_dominant_symmetry_plane(selected_mesh , m_factory);
         m_factory.remove_all();
         m_factory.add_all();
     }

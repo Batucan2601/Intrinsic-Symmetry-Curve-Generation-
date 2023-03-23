@@ -2,6 +2,8 @@
 #include "happly.h"
 #include "glm/gtc/matrix_transform.hpp"
 
+
+
 Mesh::Mesh(char* filename)
 {
 	model_mat = glm::mat4(1.0f);
@@ -181,6 +183,30 @@ void Mesh::read_off_format(char* filename)
 	}
 
 	fclose(fPtr);
+}
+//plane constructor 
+Mesh::Mesh(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3, glm::vec3* p4)
+{
+	this->model_mat = glm::mat4(1.0f);
+
+	this->vertices.push_back(*p1 );
+	this->vertices.push_back(*p2);
+	this->vertices.push_back(*p3);
+	this->vertices.push_back(*p4);
+
+	this->triangles.push_back(0);
+	this->triangles.push_back(1);
+	this->triangles.push_back(2);
+
+	this->triangles.push_back(2);
+	this->triangles.push_back(3);
+	this->triangles.push_back(0);
+
+	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
+	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
+	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
+	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
+
 }
 glm::mat4 Mesh::move_mesh(glm::vec3 direction)
 {

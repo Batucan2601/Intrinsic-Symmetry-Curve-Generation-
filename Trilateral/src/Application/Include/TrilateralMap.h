@@ -1616,77 +1616,77 @@ void brute_force_symmetry_extraction(MeshFactory& mesh_fac, int& selected_index)
 }
 
 
-// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
-
-Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)
-{
-
-	Mesh mesh = mesh_fac.mesh_vec[selected_index]; //mesh itself
-	
-	int mesh_size = mesh.vertices.size();
-	//initialise the wights for the mesh
-	std::vector<double> mesh_weights;
-	for (int i = 0; i < mesh_size; i++)
-	{
-		mesh_weights.push_back(1.0); //assume every vertex is the same 
-	}
-	//double mesh_weights[mesh.vertices.size()]; //initialise weights according to paper 
-	// steps
-	// 1 - get centroid
-	glm::vec3 centroid(0.0f,0.f,0.0f); //initialisiation
-
-	for (size_t i = 0; i < mesh_size; i++)
-	{
-		centroid += mesh.vertices[i];
-	}
-	centroid /= mesh_size; //now we got the centroid 
-	// now convert the centrid glm vec to matrix
-	Eigen::Matrix<double, 3, 1 > centroid_mat;
-	centroid_mat(0) = centroid[0];
-	centroid_mat(1) = centroid[1];
-	centroid_mat(2) = centroid[2];
-	// get the covariance matrix
-	Eigen::Matrix<double, 3, 3> covariance; //covariance mtrix
-	//fill covariance matrix
-	covariance(0, 0) = 0.0;
-	covariance(0, 1) = 0.0;
-	covariance(0, 2) = 0.0;
-	covariance(1, 0) = 0.0;
-	covariance(1, 1) = 0.0;
-	covariance(1, 2) = 0.0;
-	covariance(2, 0) = 0.0;
-	covariance(2, 1) = 0.0;
-	covariance(2, 2) = 0.0;
-
-	for (size_t i = 0; i < mesh_size; i++)
-	{
-		//get P_i and turn it to a matrix 
-		Eigen::Matrix<double, 3, 1 > p_i;
-		p_i(0) = mesh.vertices[i][0];
-		p_i(1) = mesh.vertices[i][1];
-		p_i(2) = mesh.vertices[i][2];
-
-		Eigen::Matrix<double, 3, 1 > p_i_minus_centroid = (p_i - centroid_mat);
-
-		Eigen::Matrix<double, 3, 3 > covariance_i =  mesh_weights[i] * p_i_minus_centroid * p_i_minus_centroid.transpose();
-		
-		covariance += covariance_i;
-	}
-	double s = 0;
-	for (int i = 0; i < mesh_size; i++)
-	{
-		s += mesh_weights[i];
-	}
-	covariance /= s; //covariance is ready for the first part 
-
-	return covariance;
-}
-
-void plane_calculations_from_covariance(Eigen::Matrix<double, 3, 3 >& covariance)
-{
-	//define planes 
-	Eigen::Matrix<double, 4, 1 > p1; 
-	Eigen::Matrix<double, 4, 1 > p2; 
-	Eigen::Matrix<double, 4, 1 > p3;
-
-}
+//// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
+//
+//Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)
+//{
+//
+//	Mesh mesh = mesh_fac.mesh_vec[selected_index]; //mesh itself
+//	
+//	int mesh_size = mesh.vertices.size();
+//	//initialise the wights for the mesh
+//	std::vector<double> mesh_weights;
+//	for (int i = 0; i < mesh_size; i++)
+//	{
+//		mesh_weights.push_back(1.0); //assume every vertex is the same 
+//	}
+//	//double mesh_weights[mesh.vertices.size()]; //initialise weights according to paper 
+//	// steps
+//	// 1 - get centroid
+//	glm::vec3 centroid(0.0f,0.f,0.0f); //initialisiation
+//
+//	for (size_t i = 0; i < mesh_size; i++)
+//	{
+//		centroid += mesh.vertices[i];
+//	}
+//	centroid /= mesh_size; //now we got the centroid 
+//	// now convert the centrid glm vec to matrix
+//	Eigen::Matrix<double, 3, 1 > centroid_mat;
+//	centroid_mat(0) = centroid[0];
+//	centroid_mat(1) = centroid[1];
+//	centroid_mat(2) = centroid[2];
+//	// get the covariance matrix
+//	Eigen::Matrix<double, 3, 3> covariance; //covariance mtrix
+//	//fill covariance matrix
+//	covariance(0, 0) = 0.0;
+//	covariance(0, 1) = 0.0;
+//	covariance(0, 2) = 0.0;
+//	covariance(1, 0) = 0.0;
+//	covariance(1, 1) = 0.0;
+//	covariance(1, 2) = 0.0;
+//	covariance(2, 0) = 0.0;
+//	covariance(2, 1) = 0.0;
+//	covariance(2, 2) = 0.0;
+//
+//	for (size_t i = 0; i < mesh_size; i++)
+//	{
+//		//get P_i and turn it to a matrix 
+//		Eigen::Matrix<double, 3, 1 > p_i;
+//		p_i(0) = mesh.vertices[i][0];
+//		p_i(1) = mesh.vertices[i][1];
+//		p_i(2) = mesh.vertices[i][2];
+//
+//		Eigen::Matrix<double, 3, 1 > p_i_minus_centroid = (p_i - centroid_mat);
+//
+//		Eigen::Matrix<double, 3, 3 > covariance_i =  mesh_weights[i] * p_i_minus_centroid * p_i_minus_centroid.transpose();
+//		
+//		covariance += covariance_i;
+//	}
+//	double s = 0;
+//	for (int i = 0; i < mesh_size; i++)
+//	{
+//		s += mesh_weights[i];
+//	}
+//	covariance /= s; //covariance is ready for the first part 
+//
+//	return covariance;
+//}
+//
+//void plane_calculations_from_covariance(Eigen::Matrix<double, 3, 3 >& covariance)
+//{
+//	//define planes 
+//	Eigen::Matrix<double, 4, 1 > p1; 
+//	Eigen::Matrix<double, 4, 1 > p2; 
+//	Eigen::Matrix<double, 4, 1 > p3;
+//
+//}

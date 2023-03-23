@@ -36,7 +36,7 @@ public:
 	//MVP
 	glm::mat4 MVP;
 	Mesh(char* filename);
-
+	Mesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);
 	glm::mat4 move_mesh(glm::vec3 direction);
 	glm::mat4 scale_mesh(glm::vec3 scale);
 

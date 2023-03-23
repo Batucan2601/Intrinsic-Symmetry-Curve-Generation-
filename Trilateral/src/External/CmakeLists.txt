@@ -5,7 +5,11 @@ file(GLOB_RECURSE SOURCES
      Include/glm/*.hpp
      Include/eigen/Eigen/*
      Include/imgui/*
+     #Include/spectra/Spectra/*
 )
+add_subdirectory(Include/eigen)
 include_directories( Include)
+include_directories( Include/eigen )
+
 
 add_library(EXTERNAL_SOURCE ${SOURCES})
