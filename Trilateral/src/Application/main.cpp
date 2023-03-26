@@ -279,7 +279,6 @@ int main(void)
     Mesh m3((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//meshes2//man0.off");
     Mesh m4((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//meshes2//bunny.off");
     Mesh m5((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//faust//tr_reg_007.ply");
-    //Mesh m2((char*)"meshes2//bunny.off"); // not suggested in catmull clark 
 
     MeshFactory mesh_fac;
     mesh_fac.add_mesh(m1);
@@ -365,102 +364,19 @@ int main(void)
         //classic VAO 
         glBindVertexArray(VAO);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        MVP = proj * view * model;
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-
-        imgui_mesh_window(selected_mesh , mesh_fac);
-
-        model = mesh_fac.mesh_vec[0].move_mesh(glm::vec3(1.0f, 1.0f, 1.0f));
-        if (selected_mesh == 0)
+        imgui_mesh_window(selected_mesh, mesh_fac);
+        imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
+      
+        for (size_t i = 0; i < mesh_fac.mesh_vec.size(); i++)
         {
-            mesh_fac.mesh_vec[0].scale_mesh(glm::vec3(scale, scale, scale));
-        }
-        mesh_fac.mesh_vec[0].model_mat = model;
-        MVP = proj * view * model;
-        mesh_fac.mesh_vec[0].MVP = MVP;
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-        //mesh_fac.mesh_vec[0].model_mat = model; 
-        mesh_fac.draw_mesh(0);
-
-        if (mesh_fac.mesh_vec.size() > 5)
-        {
-            //mesh_fac.mesh_vec[5].model_mat = model;
-            //MVP = proj * view * model;
-            //mesh_fac.mesh_vec[5].MVP = MVP;
-            //glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-            ////mesh_fac.mesh_vec[0].model_mat = model; 
-            //mesh_fac.draw_mesh(5);
-
-            mesh_fac.mesh_vec[6].model_mat = model;
+            glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
             MVP = proj * view * model;
-            mesh_fac.mesh_vec[6].MVP = MVP;
+            mesh_fac.mesh_vec[i].MVP = MVP;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
             //mesh_fac.mesh_vec[0].model_mat = model; 
-            mesh_fac.draw_mesh(6);
-
-            //mesh_fac.mesh_vec[7].model_mat = model;
-            //MVP = proj * view * model;
-            //mesh_fac.mesh_vec[7].MVP = MVP;
-            //glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-            ////mesh_fac.mesh_vec[0].model_mat = model; 
-            //mesh_fac.draw_mesh(7);
+            mesh_fac.draw_mesh(i);
         }
-      
-
-        model = mesh_fac.mesh_vec[1].move_mesh(glm::vec3(10.0f, 1.0f, 1.0f));
-        if (selected_mesh == 1)
-        {
-            model = glm::scale(model, glm::vec3(scale, scale, scale));
-        }
-        mesh_fac.mesh_vec[1].model_mat = model;
-        MVP = proj * view * model;
-        mesh_fac.mesh_vec[1].MVP = MVP;
-
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-       // mesh_fac.mesh_vec[1].model_mat = model;
-        mesh_fac.draw_mesh(1);
-
-
-        model = mesh_fac.mesh_vec[2].move_mesh(glm::vec3(5.0f, 1.0f, 1.0f));
-        if (selected_mesh == 2)
-        {
-            model = glm::scale(model, glm::vec3(scale, scale, scale));
-        }
-        mesh_fac.mesh_vec[2].model_mat = model;
-        MVP = proj * view * model;
-        mesh_fac.mesh_vec[2].MVP = MVP;
-
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-
-        mesh_fac.draw_mesh(2);
-        
-        model = mesh_fac.mesh_vec[3].move_mesh(glm::vec3(8.0f, 1.0f, 1.0f));
-        if (selected_mesh == 3)
-        {
-            model = glm::scale(model, glm::vec3(scale, scale, scale));
-        }
-        mesh_fac.mesh_vec[3].model_mat = model;
-        MVP = proj * view * model;
-        mesh_fac.mesh_vec[3].MVP = MVP;
-
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-
-        mesh_fac.draw_mesh(3);
-
-        model = mesh_fac.mesh_vec[4].move_mesh(glm::vec3(15.0f, 1.0f, 1.0f));
-        if (selected_mesh == 4)
-        {
-            model = glm::scale(model, glm::vec3(scale, scale, scale));
-        }
-        mesh_fac.mesh_vec[4].model_mat = model;
-        MVP = proj * view * model;
-        mesh_fac.mesh_vec[4].MVP = MVP;
-
-        glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-
-        mesh_fac.draw_mesh(4);
+       
 
         mesh_fac.get_camera_and_projection(view, proj);
 

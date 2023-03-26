@@ -43,6 +43,7 @@ std::vector<float> histogram;
 std::vector<float> lines; 
 
 int no_of_sampling_fps = 10; 
+
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -196,4 +197,19 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.add_all();
     }
     ImGui::End();
+}
+
+//display the attributes of selected mesh 
+void imgui_selected_mesh_properties_window(const int& selected_mesh , MeshFactory& m_factory)
+{
+    ImGui::Begin("Mesh properties ");
+    
+
+    ImGui::InputFloat(" X ", &m_factory.mesh_vec[selected_mesh].model_mat[3][0]);
+    ImGui::InputFloat(" Y ", &m_factory.mesh_vec[selected_mesh].model_mat[3][1]);
+    ImGui::InputFloat(" Z ", &m_factory.mesh_vec[selected_mesh].model_mat[3][2]);
+
+
+    ImGui::End();
+
 }
