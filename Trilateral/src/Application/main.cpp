@@ -226,8 +226,8 @@ int main(void)
     // build and compile our shader program
    // ------------------------------------
 #pragma region shaders
-    Shader default_shader("C:/Users/BATU/source/repos/Trilateral/Trilateral/shaders/MeshVertex.shader" , "C:/Users/BATU/source/repos/Trilateral/Trilateral/shaders/MeshFragment.shader");
-    Shader line_point_shader("C:/Users/BATU/source/repos/Trilateral/Trilateral/shaders/LinePointVertex.shader", "C:/Users/BATU/source/repos/Trilateral/Trilateral/shaders/LinePointFragment.shader");
+    Shader default_shader("../../Trilateral/shaders/MeshVertex.shader" , "../../Trilateral/shaders/MeshFragment.shader");
+    Shader line_point_shader("../../Trilateral/shaders/LinePointVertex.shader", "../../Trilateral/shaders/LinePointFragment.shader");
 
     default_shader.use();
 #pragma endregion 
@@ -274,11 +274,11 @@ int main(void)
 
 // SUGGESTED MESHES 
 
-    Mesh m1((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//faust//tr_reg_018.off");
-    Mesh m2((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//faust//tr_reg_000.off");
-    Mesh m3((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//meshes2//man0.off");
-    Mesh m4((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//meshes2//bunny.off");
-    Mesh m5((char*)"C://Users//BATU//source//repos//Trilateral//Trilateral//Mesh//faust//tr_reg_007.ply");
+    Mesh m1((char*)"../../Trilateral/Mesh/faust/tr_reg_018.off");
+    Mesh m2((char*)"../../Trilateral/Mesh/faust/tr_reg_000.off");
+    Mesh m3((char*)"../../Trilateral/Mesh/meshes2/man0.off");
+    Mesh m4((char*)"../../Trilateral/Mesh/meshes2/bunny.off");
+    Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");
 
     MeshFactory mesh_fac;
     mesh_fac.add_mesh(m1);
