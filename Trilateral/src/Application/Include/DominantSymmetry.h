@@ -1,2 +1,4 @@
+#pragma once 
 #include "MeshFactory.h"
-void generate_dominant_symmetry_plane(int seletected_mesh , MeshFactory & mesh_fac );
+#include "CoreTypeDefs.h"
+Plane generate_dominant_symmetry_plane(int seletected_mesh , MeshFactory & mesh_fac );

@@ -24,7 +24,8 @@ MatrixXd generate_L(Mesh* mesh)
 
 	std::ostringstream oss;
 	std::cout << oss.str() << std::endl; 
-	//
+	// for now !! 
+	return A;
 }
 MatrixXd generate_W_cotangent_laplacian(Mesh* mesh)
 {

@@ -6,6 +6,9 @@
 #include <stack>
 #include <algorithm> 
 #include <eigen/Eigen/Dense>
+#include "Sampling.h"
+#include "CoreTypeDefs.h"
+
 #pragma once
 static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
@@ -1062,6 +1065,137 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 	}
 
 	return trilateral_descriptor;
+}
+static std::vector<std::vector<int>> point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , float sampling_rate  )
+{
+	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+	
+	std::vector<int> vertex_indices = furthest_point_sampling(mesh, mesh->vertices.size() * sampling_rate);
+	// divide the points in two 
+	std::vector<int> vertex_indices_right;
+	std::vector<int> vertex_indices_left;
+
+	float* vertex_indices_left_right = new float[vertex_indices.size() ];
+	for (size_t i = 0; i < vertex_indices.size(); i++)
+	{
+		//check left or right
+		float point_loc = get_point_status_from_plane(plane, &mesh->vertices[vertex_indices[i]]);
+
+		if (point_loc >= 0)
+		{
+			//vertex_indices_right.push_back(vertex_indices[i]);
+			vertex_indices_left_right[vertex_indices[i]] = point_loc;
+		}
+		else
+		{
+			//vertex_indices_left.push_back(vertex_indices[i]);
+			vertex_indices_left_right[vertex_indices[i]] = point_loc;
+		}
+	}
+	bool* vertex_indices_location_array = new bool[mesh->vertices.size()];
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		bool is_in_indices = false; 
+		for (size_t j = 0; j < vertex_indices.size(); j++)
+		{
+			if (vertex_indices[j] == i)
+			{
+				is_in_indices = true; 
+				break; 
+			}
+		}
+		vertex_indices_location_array[i] = is_in_indices;
+	}
+	std::vector<std::vector<int>> closest_3_pairs; // n x 3 matrix
+	for (size_t i = 0; i < vertex_indices.size(); i++)
+	{
+		std::vector<float> closest_matrix = compute_geodesic_distances_fibonacci_heap_distances(*mesh, vertex_indices[i]);
+		//get closest 3 
+		int closest_index_1 = -1;
+		int closest_index_2 = -1;
+		float closest_distance1 = 1e5; 
+		float closest_distance2 = 1e5;
+		for (size_t j = 0; j < closest_matrix.size() ; j++)
+		{
+			if (vertex_indices_location_array[j])
+			{
+				if (closest_distance1 > closest_matrix[j])
+				{
+					if (j != vertex_indices[i]) //because it is 0 an himself
+					{
+						if (((vertex_indices_left_right[vertex_indices[i]] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
+						{
+							closest_index_1 = j;
+							closest_distance1 = closest_matrix[j];
+						}
+
+					}
+				}
+			}
+			
+		}
+		for (size_t j = 0; j < closest_matrix.size(); j++)
+		{
+			if (vertex_indices_location_array[j])
+			{
+				if (closest_distance2 > closest_matrix[j])
+				{
+					if (j != vertex_indices[i] && j != closest_index_1) //because it is 0 an himself
+					{
+						if (((vertex_indices_left_right[vertex_indices[i]] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
+						{
+							closest_index_2 = j;
+							closest_distance2 = closest_matrix[j];
+						}
+					}
+				}
+			}
+			
+		}
+		std::vector<int> temp; 
+		closest_3_pairs.push_back(temp);
+		closest_3_pairs[i].push_back(vertex_indices[i]);
+		closest_3_pairs[i].push_back(closest_index_1);
+		closest_3_pairs[i].push_back(closest_index_2);
+	}
+	TrilateralDescriptor* descriptors = new TrilateralDescriptor[vertex_indices.size()];
+	for (size_t i = 0; i < vertex_indices.size(); i++)
+	{
+		descriptors[i] = generate_trilateral_descriptor(mesh_fac , selected_index , closest_3_pairs[i][0] , closest_3_pairs[i][1] , closest_3_pairs[i][2] , true );
+	}
+
+	std::vector<std::vector<int>> vertex_index_pairs; 
+	//last part match points.
+	for (size_t i = 0; i < vertex_indices.size() ; i++)
+	{
+		float min_diff_score = INFINITY; 
+		int min_diff_index = -1; 
+		for (size_t j = 0; j < vertex_indices.size() ; j++)
+		{
+			if (i != j)
+			{
+				float area_dif = std::abs(descriptors[i].area - descriptors[j].area );
+				float roi_len_dif = std::abs(descriptors[i].total_length - descriptors[j].total_length);
+				// easy sum for now
+				float curv_dif = std::abs(descriptors[i].curvature_1_2 + descriptors[i].curvature_1_3 + descriptors[i].curvature_2_3 - descriptors[j].curvature_1_2 - descriptors[j].curvature_1_3 - descriptors[j].curvature_2_3);
+				float dist_dif = std::abs(descriptors[i].lenght_1_2+ descriptors[i].lenght_1_3+ descriptors[i].lenght_2_3 - descriptors[j].lenght_1_2- descriptors[j].lenght_1_3- descriptors[j].lenght_2_3);
+
+				if (area_dif + roi_len_dif + curv_dif + dist_dif <  min_diff_score)
+				{
+					min_diff_score = area_dif + roi_len_dif + curv_dif + dist_dif;
+					min_diff_index = j;
+				}
+			}
+		}
+		std::vector<int> temp;
+		temp.push_back(i);
+		temp.push_back(min_diff_index);
+		vertex_index_pairs.push_back(temp);
+	}
+	delete[] vertex_indices_location_array;
+	delete[] descriptors;
+	delete[] vertex_indices_left_right;
+	return vertex_index_pairs; 
 }
 
 // sampling

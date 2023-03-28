@@ -32,3 +32,16 @@ Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 	Mesh plane_mesh(&p1,&p2,&p3,&p4); 
 	return plane_mesh;
 }
+
+float get_point_status_from_plane(Plane* plane, glm::vec3* point)
+{
+	// negative if behind
+	// positive if front
+	// 0 if inside
+
+	//plane equation 
+	float result = plane->normal.x * (plane->point.x - point->x) + plane->normal.y * (plane->point.y - point->y) + plane->normal.z * (plane->point.z - point->z );
+
+	return result;
+
+}

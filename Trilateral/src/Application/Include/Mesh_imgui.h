@@ -3,7 +3,7 @@
 #include "../Include/TrilateralMap.h"
 #include "../Include/Sampling.h"
 #include "../Include/Laplace-Beltrami.h"
-#include "../Include/DominantSymmetry.h"
+#include <src/Application/Include/DominantSymmetry.h>
 
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
@@ -43,7 +43,8 @@ std::vector<float> histogram;
 std::vector<float> lines; 
 
 int no_of_sampling_fps = 10; 
-
+Plane plane; 
+std::vector<std::vector<int>> symmetry_paired_points; 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -192,9 +193,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("dominant symmetry plane  "))
     {
-        generate_dominant_symmetry_plane(selected_mesh , m_factory);
+        plane =  generate_dominant_symmetry_plane(selected_mesh , m_factory);
         m_factory.remove_all();
         m_factory.add_all();
+    }
+    if (ImGui::Button("point matching using dominant symmetry plane "))
+    {
+        float sampling_rate = ((float)no_of_sampling_fps) / m_factory.mesh_vec[selected_mesh].vertices.size();
+        symmetry_paired_points = point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, sampling_rate);
     }
     ImGui::End();
 }

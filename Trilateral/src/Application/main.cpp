@@ -289,14 +289,10 @@ int main(void)
 
 
  
- /*   line_point_shader.use();
-    glBindVertexArray(VAO_matching_points);
+ //   line_point_shader.use();
+   /* glBindVertexArray(VAO_matching_points);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_matchig_points);
-    line_points = match_points_from2_mesh_mock(mesh_fac, selected_mesh_for_points1, selected_mesh_for_points2, partition_no);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glBufferData(GL_ARRAY_BUFFER, line_points.size() * sizeof(float), &line_points[0], GL_STATIC_DRAW);*/
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_matchig_points);*/
     
    
 // END OF SUGGESTED MESHES
@@ -379,6 +375,9 @@ int main(void)
        
 
         mesh_fac.get_camera_and_projection(view, proj);
+
+        //glBindVertexArray(VAO_matching_points);
+
 
         //temp
        

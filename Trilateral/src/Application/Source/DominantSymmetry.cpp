@@ -2,9 +2,8 @@
 #include "../Include/glm/glm.hpp"
 #include "../../External/Include/eigen/Eigen/Core"
 #include "../../External/Include/eigen/Eigen/Eigenvalues" 
-#include "../Include/CoreTypeDefs.h"
 using Eigen::MatrixXd;
-void generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
+Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
 {
 	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
 	// generate PCA weights are same and 1 for now 
@@ -56,8 +55,20 @@ void generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac
 	Mesh plane_mesh3 = generate_mesh_from_plane(&plane3, &m);
 
 
-	mesh_fac.add_mesh(plane_mesh1);
-	mesh_fac.add_mesh(plane_mesh2);
-	mesh_fac.add_mesh(plane_mesh3);
-	int a = 1; 
+	//easy way for now !!! get the plane which cuts y 
+	if (std::abs(plane1.normal.y) <= std::abs(plane2.normal.y) && std::abs(plane1.normal.y) <= std::abs(plane3.normal.y) )
+	{
+		mesh_fac.add_mesh(plane_mesh1);
+		return plane1;
+	}
+	else if (std::abs(plane2.normal.y) <= std::abs(plane3.normal.y) && std::abs(plane2.normal.y) <= std::abs(plane1.normal.y) )
+	{
+		mesh_fac.add_mesh(plane_mesh2);
+		return plane2;
+	}
+	else if(std::abs(plane3.normal.y) <= std::abs(plane1.normal.y) && std::abs(plane3.normal.y) <= std::abs(plane2.normal.y) )
+	{
+		mesh_fac.add_mesh(plane_mesh3);
+		return plane3;
+	}
 }
