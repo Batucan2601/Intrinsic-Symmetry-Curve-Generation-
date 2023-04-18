@@ -200,7 +200,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("point matching using dominant symmetry plane "))
     {
         float sampling_rate = ((float)no_of_sampling_fps) / m_factory.mesh_vec[selected_mesh].vertices.size();
-        symmetry_paired_points = point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, sampling_rate);
+        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, sampling_rate);
+        
     }
     ImGui::End();
 }

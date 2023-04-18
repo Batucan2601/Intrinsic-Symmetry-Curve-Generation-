@@ -214,6 +214,11 @@ static std::vector<int> draw_with_fib_heap_implementation(Mesh& m, int p1_index,
 	}
 	return consec_indices;
 }
+typedef struct
+{
+	std::vector<float> point_pairs;
+	glm::mat4 MVP;
+}MeshPointPairs;
 #pragma endregion functions
 class MeshFactory
 {
@@ -233,6 +238,7 @@ public:
 	void get_camera_and_projection(glm::mat4 view_, glm::mat4  projection_);
 	void remove_lines();
 	std::vector<Mesh> mesh_vec;
+	std::vector<MeshPointPairs> mesh_point_pairs; //point paris for each mesh
 	std::vector<glm::vec3> points;
 	std::vector<glm::vec3> colors;
 	std::vector<int> point_indices;

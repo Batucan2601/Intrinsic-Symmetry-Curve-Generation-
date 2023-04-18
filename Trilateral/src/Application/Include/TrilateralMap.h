@@ -1066,7 +1066,7 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 
 	return trilateral_descriptor;
 }
-static std::vector<std::vector<int>> point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , float sampling_rate  )
+static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , float sampling_rate  )
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	
@@ -1195,7 +1195,22 @@ static std::vector<std::vector<int>> point_matching_with_dominant_symmetry_plane
 	delete[] vertex_indices_location_array;
 	delete[] descriptors;
 	delete[] vertex_indices_left_right;
-	return vertex_index_pairs; 
+
+	std::vector<float> pair_points;
+	for (size_t i = 0; i < vertex_index_pairs.size(); i++)
+	{
+		pair_points.push_back(mesh->vertices[i].x);
+		pair_points.push_back(mesh->vertices[i].y);
+		pair_points.push_back(mesh->vertices[i].z);
+
+		pair_points.push_back(0.0f);
+		pair_points.push_back(255.0f);
+		pair_points.push_back(255.0f);
+	}
+	MeshPointPairs pair;
+	pair.point_pairs = pair_points; 
+	pair.MVP = mesh->MVP;
+	mesh_fac.mesh_point_pairs.push_back(pair);
 }
 
 // sampling

@@ -239,7 +239,8 @@ int main(void)
     glGenBuffers(1, &VBO_matching_points);
     glGenBuffers(1, &VAO_matching_points);
     glGenBuffers(1, &IBO_matchig_points);
-
+    unsigned int VBO_pairs; 
+    glGenBuffers(1, &VBO_pairs);
 
 
     
@@ -282,10 +283,10 @@ int main(void)
 
     MeshFactory mesh_fac;
     mesh_fac.add_mesh(m1);
-    mesh_fac.add_mesh(m2);
-    mesh_fac.add_mesh(m3);
-    mesh_fac.add_mesh(m4);
-    mesh_fac.add_mesh(m5);
+    //mesh_fac.add_mesh(m2);
+    //mesh_fac.add_mesh(m3);
+    //mesh_fac.add_mesh(m4);
+    //mesh_fac.add_mesh(m5);
 
 
  
@@ -373,7 +374,16 @@ int main(void)
             mesh_fac.draw_mesh(i);
         }
        
-
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
+        for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
+        {
+            glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_point_pairs[i].point_pairs.size() * sizeof(float), &mesh_fac.mesh_point_pairs[i].point_pairs[0], GL_STATIC_DRAW);
+            glm::mat4 model = mesh_fac.mesh_point_pairs[i].MVP;
+            MVP = proj * view * model;
+            glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size());
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
         mesh_fac.get_camera_and_projection(view, proj);
 
         //glBindVertexArray(VAO_matching_points);
