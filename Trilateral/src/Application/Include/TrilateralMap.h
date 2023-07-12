@@ -1081,16 +1081,9 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 		//check left or right
 		float point_loc = get_point_status_from_plane(plane, &mesh->vertices[vertex_indices[i]]);
 
-		if (point_loc >= 0)
-		{
-			//vertex_indices_right.push_back(vertex_indices[i]);
-			vertex_indices_left_right[vertex_indices[i]] = point_loc;
-		}
-		else
-		{
-			//vertex_indices_left.push_back(vertex_indices[i]);
-			vertex_indices_left_right[vertex_indices[i]] = point_loc;
-		}
+		//vertex_indices_right.push_back(vertex_indices[i]);
+		vertex_indices_left_right[vertex_indices[i]] = point_loc;
+
 	}
 	bool* vertex_indices_location_array = new bool[mesh->vertices.size()];
 	for (size_t i = 0; i < mesh->vertices.size(); i++)

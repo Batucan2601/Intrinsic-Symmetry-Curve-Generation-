@@ -34,6 +34,7 @@ int selected_mesh_for_points1 = 0;
 int selected_mesh_for_points2 = 1;
 bool is_draw_lines_activated = false;
 bool is_draw_lines_activated_once = false; // indicator for one time buffering of points
+bool is_polygon_filled = true ; 
 std::vector<float> line_points; //line points will be global 
 
 bool activate_histogram = false; 
@@ -130,10 +131,22 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         sqrt3_calculate_triangle_area(m);
     }
     */
-    if (ImGui::Button("Enable polygon mode "))
+    if (is_polygon_filled)
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    } 
+        if (ImGui::Button("Enable polygon mode "))
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            is_polygon_filled = false; 
+        }
+    }
+    else
+    {
+        if (ImGui::Button("Disable polygon mode "))
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            is_polygon_filled = true;
+        }
+    }
     if (ImGui::Button("Trilateral  "))
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);

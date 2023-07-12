@@ -207,7 +207,7 @@ static std::vector<int> draw_with_fib_heap_implementation(Mesh& m, int p1_index,
 	std::vector<int> predecessors = compute_geodesic_distances_fibonacci_heap(m, p1_index);
 	std::vector<int> consec_indices;
 	int pred = p2_index;
-	while (pred != p1_index)
+	while (pred != p1_index )
 	{
 		consec_indices.push_back(pred);
 		pred = predecessors[pred];

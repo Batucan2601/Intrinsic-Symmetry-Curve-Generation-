@@ -234,10 +234,10 @@ int main(void)
     unsigned int VBO, VAO ,IBO ;
     unsigned int VBO_matching_points , VAO_matching_points , IBO_matchig_points; 
     glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &VAO_matching_points);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &IBO);
     glGenBuffers(1, &VBO_matching_points);
-    glGenBuffers(1, &VAO_matching_points);
     glGenBuffers(1, &IBO_matchig_points);
     unsigned int VBO_pairs; 
     glGenBuffers(1, &VBO_pairs);
@@ -290,13 +290,8 @@ int main(void)
 
 
  
- //   line_point_shader.use();
-   /* glBindVertexArray(VAO_matching_points);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_matchig_points);*/
-    
    
-// END OF SUGGESTED MESHES
+    // END OF SUGGESTED MESHES
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -307,6 +302,16 @@ int main(void)
     int selected_mesh = 0;
     mesh_fac.buffer_meshes();
     
+    glBindVertexArray(VAO_matching_points);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_matchig_points);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(VAO);
+
     /*glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -374,16 +379,15 @@ int main(void)
             mesh_fac.draw_mesh(i);
         }
        
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
+        glBindVertexArray(VAO_matching_points);
         for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
         {
             glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_point_pairs[i].point_pairs.size() * sizeof(float), &mesh_fac.mesh_point_pairs[i].point_pairs[0], GL_STATIC_DRAW);
-            glm::mat4 model = mesh_fac.mesh_point_pairs[i].MVP;
+            glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
             MVP = proj * view * model;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
             glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size());
         }
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
         mesh_fac.get_camera_and_projection(view, proj);
 
         //glBindVertexArray(VAO_matching_points);
