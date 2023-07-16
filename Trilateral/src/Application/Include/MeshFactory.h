@@ -217,7 +217,7 @@ static std::vector<int> draw_with_fib_heap_implementation(Mesh& m, int p1_index,
 typedef struct
 {
 	std::vector<float> point_pairs;
-	glm::mat4 MVP;
+	glm::mat4 model_mat;
 }MeshPointPairs;
 #pragma endregion functions
 class MeshFactory

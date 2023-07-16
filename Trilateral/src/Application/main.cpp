@@ -289,7 +289,9 @@ int main(void)
     //mesh_fac.add_mesh(m5);
 
 
- 
+
+
+
    
     // END OF SUGGESTED MESHES
     glBindVertexArray(VAO);
@@ -302,6 +304,9 @@ int main(void)
     int selected_mesh = 0;
     mesh_fac.buffer_meshes();
     
+     
+
+
     glBindVertexArray(VAO_matching_points);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_matchig_points);
@@ -338,12 +343,16 @@ int main(void)
 
     while (!glfwWindowShouldClose(window))
     {
+
+
         // input
         // -----
         poll_keys();
 
+        imgui_new_frame();
         // render
         // ------
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -357,8 +366,9 @@ int main(void)
         //classic VAO 
 
         
-      
+
         glBindVertexArray(VAO);
+
         for (size_t i = 0; i < mesh_fac.mesh_vec.size(); i++)
         {
             glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
@@ -368,18 +378,28 @@ int main(void)
             //mesh_fac.mesh_vec[0].model_mat = model; 
             mesh_fac.draw_mesh(i);
         }
-        
+       
+         
+
         glBindVertexArray(VAO_matching_points);
+         
+
         for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
         {
-            glBindVertexArray(VBO_matching_points);
-            glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_point_pairs[i].point_pairs.size() * sizeof(float), &mesh_fac.mesh_point_pairs[i].point_pairs[0], GL_STATIC_DRAW);
+             
+             
+         
+             
+
             glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
             MVP = proj * view * model;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size());
+             
+
+            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size() / 6 * 2 );
         }
 
+        glBindVertexArray(0);
 
         mesh_fac.get_camera_and_projection(view, proj);
        
@@ -391,7 +411,6 @@ int main(void)
         // ui 
         //imgui_input_window();
                 //imgui new frame
-        imgui_new_frame();
         imgui_mesh_window(selected_mesh, mesh_fac);
         imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
         imgui_render();

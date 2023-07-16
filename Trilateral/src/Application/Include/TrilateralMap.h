@@ -1082,7 +1082,7 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 		float point_loc = get_point_status_from_plane(plane, &mesh->vertices[vertex_indices[i]]);
 
 		//vertex_indices_right.push_back(vertex_indices[i]);
-		vertex_indices_left_right[vertex_indices[i]] = point_loc;
+		vertex_indices_left_right[i] = point_loc;
 
 	}
 	bool* vertex_indices_location_array = new bool[mesh->vertices.size()];
@@ -1108,15 +1108,13 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 		int closest_index_2 = -1;
 		float closest_distance1 = 1e5; 
 		float closest_distance2 = 1e5;
-		for (size_t j = 0; j < closest_matrix.size() ; j++)
+		for (size_t j = 0; j < vertex_indices.size() ; j++)
 		{
-			if (vertex_indices_location_array[j])
-			{
-				if (closest_distance1 > closest_matrix[j])
+				if (closest_distance1 > closest_matrix[vertex_indices[j]])
 				{
-					if (j != vertex_indices[i]) //because it is 0 an himself
+					if (j != i) //because it is 0 an himself
 					{
-						if (((vertex_indices_left_right[vertex_indices[i]] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
+						if (((vertex_indices_left_right[i] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
 						{
 							closest_index_1 = j;
 							closest_distance1 = closest_matrix[j];
@@ -1124,32 +1122,28 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 
 					}
 				}
-			}
 			
 		}
-		for (size_t j = 0; j < closest_matrix.size(); j++)
+		for (size_t j = 0; j < vertex_indices.size(); j++)
 		{
-			if (vertex_indices_location_array[j])
-			{
-				if (closest_distance2 > closest_matrix[j])
+				if (closest_distance2 > closest_matrix[vertex_indices[j]])
 				{
-					if (j != vertex_indices[i] && j != closest_index_1) //because it is 0 an himself
+					if (j != i && j != closest_index_1 ) //because it is 0 an himself
 					{
-						if (((vertex_indices_left_right[vertex_indices[i]] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
+						if (((vertex_indices_left_right[i] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[i] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
 						{
 							closest_index_2 = j;
 							closest_distance2 = closest_matrix[j];
 						}
 					}
 				}
-			}
 			
 		}
 		std::vector<int> temp; 
 		closest_3_pairs.push_back(temp);
 		closest_3_pairs[i].push_back(vertex_indices[i]);
-		closest_3_pairs[i].push_back(closest_index_1);
-		closest_3_pairs[i].push_back(closest_index_2);
+		closest_3_pairs[i].push_back(vertex_indices[closest_index_1]);
+		closest_3_pairs[i].push_back(vertex_indices[closest_index_2]);
 	}
 	TrilateralDescriptor* descriptors = new TrilateralDescriptor[vertex_indices.size()];
 	for (size_t i = 0; i < vertex_indices.size(); i++)
@@ -1197,12 +1191,12 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 		pair_points.push_back(mesh->vertices[i].z);
 
 		pair_points.push_back(0.0f);
-		pair_points.push_back(255.0f);
-		pair_points.push_back(255.0f);
+		pair_points.push_back(1.0f);
+		pair_points.push_back(1.0f);
 	}
 	MeshPointPairs pair;
 	pair.point_pairs = pair_points; 
-	pair.MVP = mesh->MVP;
+	pair.model_mat = mesh->model_mat;
 	mesh_fac.mesh_point_pairs.push_back(pair);
 }
 

@@ -52,6 +52,22 @@ void MeshFactory::buffer_meshes()
 	glBindBuffer(GL_ARRAY_BUFFER, 1); // VBO will lok into that later 
 	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size()    * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, point_indices.size()  * sizeof(int), &point_indices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 3); // VBO will lok into that later 
+	float_points_vec.clear();
+	for (int i = 0; i < mesh_point_pairs.size(); i++ )
+	{
+		for (int j = 0; j < mesh_point_pairs[i].point_pairs.size(); j++)
+		{
+			float_points_vec.push_back(mesh_point_pairs[i].point_pairs[j]);
+
+		}
+		
+	}
+	if(mesh_point_pairs.size( )> 0 )
+	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size() * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
+
+
 }
 
 void MeshFactory::draw_meshes()
