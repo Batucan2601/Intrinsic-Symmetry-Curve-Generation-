@@ -45,7 +45,7 @@ std::vector<float> lines;
 
 int no_of_sampling_fps = 10; 
 Plane plane; 
-std::vector<std::vector<int>> symmetry_paired_points; 
+std::vector<std::vector<int>> symmetry_paired_points;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -212,9 +212,9 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("point matching using dominant symmetry plane "))
     {
-        float sampling_rate = ((float)no_of_sampling_fps) / m_factory.mesh_vec[selected_mesh].vertices.size();
-        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, sampling_rate);
-        
+        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_sampling_fps);
+        m_factory.remove_all();
+        m_factory.add_all();
     }
     ImGui::End();
 }

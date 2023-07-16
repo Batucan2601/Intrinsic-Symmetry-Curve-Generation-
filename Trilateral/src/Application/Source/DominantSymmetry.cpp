@@ -56,17 +56,17 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 
 
 	//easy way for now !!! get the plane which cuts y 
-	if (std::abs(plane1.normal.y) <= std::abs(plane2.normal.y) && std::abs(plane1.normal.y) <= std::abs(plane3.normal.y) )
+	if (std::abs(plane1.normal.z) >= std::abs(plane2.normal.z) && std::abs(plane1.normal.z) >= std::abs(plane3.normal.z) )
 	{
 		mesh_fac.add_mesh(plane_mesh1);
 		return plane1;
 	}
-	else if (std::abs(plane2.normal.y) <= std::abs(plane3.normal.y) && std::abs(plane2.normal.y) <= std::abs(plane1.normal.y) )
+	else if (std::abs(plane2.normal.z) >= std::abs(plane3.normal.z) && std::abs(plane2.normal.z) >= std::abs(plane1.normal.z) )
 	{
 		mesh_fac.add_mesh(plane_mesh2);
 		return plane2;
 	}
-	else if(std::abs(plane3.normal.y) <= std::abs(plane1.normal.y) && std::abs(plane3.normal.y) <= std::abs(plane2.normal.y) )
+	else if(std::abs(plane3.normal.z) >= std::abs(plane1.normal.z) && std::abs(plane3.normal.z) >= std::abs(plane2.normal.z) )
 	{
 		mesh_fac.add_mesh(plane_mesh3);
 		return plane3;

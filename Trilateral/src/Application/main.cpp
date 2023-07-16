@@ -341,8 +341,7 @@ int main(void)
         // input
         // -----
         poll_keys();
-        //imgui new frame
-        imgui_new_frame();
+
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -351,24 +350,15 @@ int main(void)
         // calculate movement
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-#pragma region single simulation rocket
-        /*line_point_shader.use();
-        glBindVertexArray(VAO_matching_points);
-        glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "projection"), 1, GL_FALSE, &proj[0][0]);
-        glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "view"), 1, GL_FALSE, &view[0][0]);
-        glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_1"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points1].model_mat[0][0]));
-        glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_2"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points2].model_mat[0][0]));
-        glDrawArrays(GL_LINES, 0, line_points.size() / 4);*/
 
 #pragma region  cs589e
         //mesh shader 
         default_shader.use();
         //classic VAO 
-        glBindVertexArray(VAO);
 
-        imgui_mesh_window(selected_mesh, mesh_fac);
-        imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
+        
       
+        glBindVertexArray(VAO);
         for (size_t i = 0; i < mesh_fac.mesh_vec.size(); i++)
         {
             glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
@@ -378,62 +368,21 @@ int main(void)
             //mesh_fac.mesh_vec[0].model_mat = model; 
             mesh_fac.draw_mesh(i);
         }
-       
+        
         glBindVertexArray(VAO_matching_points);
         for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
         {
+            glBindVertexArray(VBO_matching_points);
             glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_point_pairs[i].point_pairs.size() * sizeof(float), &mesh_fac.mesh_point_pairs[i].point_pairs[0], GL_STATIC_DRAW);
             glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
             MVP = proj * view * model;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
             glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size());
         }
+
+
         mesh_fac.get_camera_and_projection(view, proj);
-
-        //glBindVertexArray(VAO_matching_points);
-
-
-        //temp
        
-        //glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
-        //glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "projection"), 1, GL_FALSE, &proj[0][0]);
-        //glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "view"), 1, GL_FALSE, &view[0][0]);
-        //glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_1"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points1].model_mat[0][0]));
-        //glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_2"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points2].model_mat[0][0]));
-        if (is_draw_lines_activated)
-        {
-
-            line_point_shader.use();
-            glBindVertexArray(VAO_matching_points);
-            if (is_draw_lines_activated_once)
-            {
-                // wtf !  ? 
-                /*glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-                glEnableVertexAttribArray(0);
-                glBindBuffer(GL_ARRAY_BUFFER, VBO_matching_points);
-                line_points = match_points_from2_mesh_mock(mesh_fac, selected_mesh_for_points1, selected_mesh_for_points2, partition_no);
-                glBufferData(GL_ARRAY_BUFFER, line_points.size() * sizeof(float), &line_points[0], GL_STATIC_DRAW);*/
-
-                is_draw_lines_activated_once = false; // do not buffer to gpu ever again 
-            }
-            
-            glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "projection"), 1, GL_FALSE, &proj[0][0]);
-            glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "view"), 1, GL_FALSE, &view[0][0]);
-            glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_1"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points1].model_mat[0][0]));
-            glUniformMatrix4fv(glGetUniformLocation(line_point_shader.ID, "model_2"), 1, GL_FALSE, &(mesh_fac.mesh_vec[selected_mesh_for_points2].model_mat[0][0]));
-            glDrawArrays(GL_LINES, 0, line_points.size() / 4);
-
-            glBindVertexArray(0);
-
-           /* glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);*/
-            
-
-            /*glBindVertexArray(0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
-
-        }
         if (activate_histogram)
         {
             imgui_histogram(histogram, partition_no);
@@ -441,11 +390,12 @@ int main(void)
 #pragma endregion 
         // ui 
         //imgui_input_window();
+                //imgui new frame
+        imgui_new_frame();
+        imgui_mesh_window(selected_mesh, mesh_fac);
+        imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
         imgui_render();
-        // glBindVertexArray(0); // no need to unbind it every time 
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

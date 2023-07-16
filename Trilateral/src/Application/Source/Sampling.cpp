@@ -62,11 +62,12 @@ std::vector<int>  furthest_point_sampling(Mesh* m, int no_of_samples)
 			if (sampled_id_vector[j] == i)
 			{
 				is_sampled = true; 
+				break;
 			}
 		}
 		if (is_sampled ) 
 		{
-			new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+			new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 		else
 		{

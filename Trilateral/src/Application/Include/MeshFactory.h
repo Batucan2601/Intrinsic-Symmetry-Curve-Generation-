@@ -248,7 +248,6 @@ public:
 	glm::mat4 view;
 	glm::mat4 projection;
 	// line 
-	int no_of_lines = 0;
 private:
 	
 };

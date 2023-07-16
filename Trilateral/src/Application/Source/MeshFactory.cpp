@@ -34,35 +34,24 @@ void MeshFactory::add_mesh(Mesh& m)
 	}
 	
 }
-
 void MeshFactory::buffer_meshes()
 {
 	// 1 mesh part 
 	std::vector<float> float_points_vec; 
-	for (int i = 0; i < points.size()  - (no_of_lines*2); i++ )
+	for (int i = 0; i < points.size(); i++ )
 	{
 		float_points_vec.push_back(points[i].x);
 		float_points_vec.push_back(points[i].y);
 		float_points_vec.push_back(points[i].z);
 
-		float_points_vec.push_back(colors[i].x);
+		float_points_vec.push_back(colors[i].x );
 		float_points_vec.push_back(colors[i].y);
 		float_points_vec.push_back(colors[i].z);
 	}
-	
-	for (size_t i = points.size() - (no_of_lines * 2); i < points.size(); i++)
-	{
-		float_points_vec.push_back(points[i].x);
-		float_points_vec.push_back(points[i].y);
-		float_points_vec.push_back(points[i].z);
-
-		float_points_vec.push_back(1.0f);
-		float_points_vec.push_back(1.0f);
-		float_points_vec.push_back(0.0f);
-	}
-	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size() * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, point_indices.size() * sizeof(int), &point_indices[0], GL_STATIC_DRAW);
-	
+		
+	glBindBuffer(GL_ARRAY_BUFFER, 1); // VBO will lok into that later 
+	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size()    * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, point_indices.size()  * sizeof(int), &point_indices[0], GL_STATIC_DRAW);
 }
 
 void MeshFactory::draw_meshes()
@@ -81,38 +70,38 @@ void MeshFactory::remove_all()
 	colors.clear();
 	
 }
-void MeshFactory::create_lines(int mesh_no1, int mesh_no2 , int  no_of_lines_to_draw)
-{
-	srand(time(0));
-	no_of_lines = no_of_lines_to_draw;
-	Mesh* m1 = &mesh_vec[mesh_no1];
-	Mesh* m2 = &mesh_vec[mesh_no2];
-	glm::mat4 m1_model = m1->model_mat;
-	glm::mat4 m2_model = m2->model_mat;
-	
-	std::vector<glm::vec4> mesh_1_random_vertices;
-	std::vector<glm::vec4> mesh_2_random_vertices;
-	//generate random points for both of the meshes
-	for (size_t i = 0; i < no_of_lines; i++)
-	{
-		int random_index = rand() % m1->vertices.size();
-		glm::vec3 temp_point = m1->vertices[random_index];
-		//model mat
-		glm::vec4 temp_point_new =  projection * view * m1_model * glm::vec4(temp_point.x, temp_point.y, temp_point.z, 1.0f);
-		temp_point_new /= temp_point_new.w;
-		points.push_back(glm::vec3( temp_point_new.x , temp_point_new.y , temp_point_new.z) );
-
-
-		int random_index_2 = rand() % m2->vertices.size() ;
-		glm::vec3 temp_point_2 = m2->vertices[random_index_2];
-		//model mat
-		glm::vec4 temp_point_new_2 =  projection * view * m2_model * glm::vec4(temp_point_2.x, temp_point_2.y, temp_point_2.z, 1.0f);
-		temp_point_new_2 /= temp_point_new_2.w;
-		points.push_back(glm::vec3(temp_point_new_2.x, temp_point_new_2.y, temp_point_new_2.z));
-	}
-
-	// draw lines 
-}
+//void MeshFactory::create_lines(int mesh_no1, int mesh_no2 , int  no_of_lines_to_draw)
+//{
+//	srand(time(0));
+//	no_of_lines = no_of_lines_to_draw;
+//	Mesh* m1 = &mesh_vec[mesh_no1];
+//	Mesh* m2 = &mesh_vec[mesh_no2];
+//	glm::mat4 m1_model = m1->model_mat;
+//	glm::mat4 m2_model = m2->model_mat;
+//	
+//	std::vector<glm::vec4> mesh_1_random_vertices;
+//	std::vector<glm::vec4> mesh_2_random_vertices;
+//	//generate random points for both of the meshes
+//	for (size_t i = 0; i < no_of_lines; i++)
+//	{
+//		int random_index = rand() % m1->vertices.size();
+//		glm::vec3 temp_point = m1->vertices[random_index];
+//		//model mat
+//		glm::vec4 temp_point_new =  projection * view * m1_model * glm::vec4(temp_point.x, temp_point.y, temp_point.z, 1.0f);
+//		temp_point_new /= temp_point_new.w;
+//		points.push_back(glm::vec3( temp_point_new.x , temp_point_new.y , temp_point_new.z) );
+//
+//
+//		int random_index_2 = rand() % m2->vertices.size() ;
+//		glm::vec3 temp_point_2 = m2->vertices[random_index_2];
+//		//model mat
+//		glm::vec4 temp_point_new_2 =  projection * view * m2_model * glm::vec4(temp_point_2.x, temp_point_2.y, temp_point_2.z, 1.0f);
+//		temp_point_new_2 /= temp_point_new_2.w;
+//		points.push_back(glm::vec3(temp_point_new_2.x, temp_point_new_2.y, temp_point_new_2.z));
+//	}
+//
+//	// draw lines 
+//}
 //void MeshFactory::paint_points(int mesh_no1, int mesh_no2, int  no_of_lines_to_draw)
 void MeshFactory::add_lines_between_meshes(int mesh_index1, int mesh_index2, int p1, int p2)
 {
@@ -156,16 +145,6 @@ void MeshFactory::draw_mesh(int mesh_no)
 	int point_size_up_limit = point_size_down_limit + mesh_vec[mesh_no].triangles.size();
 	glDrawElements(GL_TRIANGLES, mesh_vec[mesh_no].triangles.size()   , GL_UNSIGNED_INT,  (const void * ) ( point_size_down_limit  * (sizeof(unsigned int) ))  );
 
-}
-
-void MeshFactory::draw_lines()
-{
-	glDrawArrays(GL_LINES , points.size()  , 2 * no_of_lines );
-}
-
-void MeshFactory::remove_lines()
-{
-	points.erase(points.begin() + points.size() - (no_of_lines *2), points.end() );
 }
 
 
