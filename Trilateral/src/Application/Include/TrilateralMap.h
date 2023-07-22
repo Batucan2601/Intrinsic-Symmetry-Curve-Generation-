@@ -1113,15 +1113,14 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 				{
 					if (j != i) //because it is 0 an himself
 					{
-						if (((vertex_indices_left_right[i] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[vertex_indices[i]] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
+						if (((vertex_indices_left_right[i] >= 0) && (vertex_indices_left_right[j] >= 0)) || ((vertex_indices_left_right[i] < 0) && (vertex_indices_left_right[j] < 0))) //check same sign 
 						{
 							closest_index_1 = j;
 							closest_distance1 = closest_matrix[j];
 						}
 
 					}
-				}
-			
+				}			
 		}
 		for (size_t j = 0; j < vertex_indices.size(); j++)
 		{

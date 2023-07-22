@@ -36,6 +36,9 @@ void MeshFactory::add_mesh(Mesh& m)
 }
 void MeshFactory::buffer_meshes()
 {
+	glBindVertexArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 1);
+
 	// 1 mesh part 
 	std::vector<float> float_points_vec; 
 	for (int i = 0; i < points.size(); i++ )
