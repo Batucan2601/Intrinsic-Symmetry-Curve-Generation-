@@ -55,6 +55,13 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	Mesh plane_mesh3 = generate_mesh_from_plane(&plane3, &m);
 
 
+	glm::vec3 a1(100.0f, 100.0f, 0.0f);
+	glm::vec3 a2(100.0f, -100.0f, 0.0f);
+	glm::vec3 a3(-100.0f, -100.0f, 0.0f);
+	glm::vec3 a4(-100.0f, 100.0f, 0.0f);
+	Mesh temp( &a1 , &a2 , &a3 , &a4 );
+	mesh_fac.add_mesh(temp);
+	return plane1;
 	//easy way for now !!! get the plane which cuts y 
 	if (std::abs(plane1.normal.z) >= std::abs(plane2.normal.z) && std::abs(plane1.normal.z) >= std::abs(plane3.normal.z) )
 	{

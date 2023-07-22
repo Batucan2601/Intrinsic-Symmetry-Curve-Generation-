@@ -379,18 +379,11 @@ int main(void)
             mesh_fac.draw_mesh(i);
         }
        
-         
 
         glBindVertexArray(VAO_matching_points);
-         
-
         for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
         {
              
-             
-         
-             
-
             glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
             MVP = proj * view * model;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
