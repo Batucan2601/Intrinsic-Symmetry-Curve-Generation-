@@ -91,6 +91,94 @@ void Mesh::read_ply_format(char* filename)
 		triangles.push_back(face_indices[i][1]);
 		triangles.push_back(face_indices[i][2]);
 	}
+
+	//neighbourhood search 
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		std::vector<unsigned int> neighbour_vec;
+		this->neighbours.push_back(neighbour_vec);
+	}
+	for (size_t i = 0; i < this->triangles.size(); i+= 3 )
+	{
+		bool p1_exists = false;
+		bool p2_exists = false;
+		bool p3_exists = false;
+		unsigned int p1 = this->triangles[i];
+		unsigned int p2 = this->triangles[i+1];
+		unsigned int p3 = this->triangles[i+3];
+		
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p1].size(); j++)
+		{
+			if (this->neighbours[i][j] == p2)
+			{
+				p2_exists = true;
+			}
+			if (this->neighbours[i][j] == p3)
+			{
+				p3_exists = true;
+			}
+		}
+		if (!p2_exists)
+		{
+			this->neighbours[i].push_back(p2);
+		}
+		if (!p3_exists)
+		{
+			this->neighbours[i].push_back(p3);
+		}
+
+		p2_exists = false;
+		p3_exists = false;
+
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p2].size(); j++)
+		{
+			if (this->neighbours[i][j] == p1)
+			{
+				p1_exists = true;
+			}
+			if (this->neighbours[i][j] == p3)
+			{
+				p3_exists = true;
+			}
+		}
+		if (!p1_exists)
+		{
+			this->neighbours[i].push_back(p1);
+		}
+		if (!p3_exists)
+		{
+			this->neighbours[i].push_back(p3);
+		}
+
+		p1_exists = false;
+		p3_exists = false;
+
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p3].size(); j++)
+		{
+			if (this->neighbours[i][j] == p1)
+			{
+				p1_exists = true;
+			}
+			if (this->neighbours[i][j] == p2)
+			{
+				p2_exists = true;
+			}
+		}
+		if (!p1_exists)
+		{
+			this->neighbours[i].push_back(p1);
+		}
+		if (!p2_exists)
+		{
+			this->neighbours[i].push_back(p2);
+		}
+
+		p1_exists = false;
+		p2_exists = false;
+	}
 }
 void Mesh::read_off_format(char* filename)
 {
@@ -181,7 +269,92 @@ void Mesh::read_off_format(char* filename)
 
 
 	}
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		std::vector<unsigned int> neighbour_vec;
+		this->neighbours.push_back(neighbour_vec);
+	}
+	for (size_t i = 0; i < this->triangles.size(); i += 3)
+	{
+		bool p1_exists = false;
+		bool p2_exists = false;
+		bool p3_exists = false;
+		unsigned int p1 = this->triangles[i];
+		unsigned int p2 = this->triangles[i + 1];
+		unsigned int p3 = this->triangles[i + 3];
 
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p1].size(); j++)
+		{
+			if (this->neighbours[i][j] == p2)
+			{
+				p2_exists = true;
+			}
+			if (this->neighbours[i][j] == p3)
+			{
+				p3_exists = true;
+			}
+		}
+		if (!p2_exists)
+		{
+			this->neighbours[i].push_back(p2);
+		}
+		if (!p3_exists)
+		{
+			this->neighbours[i].push_back(p3);
+		}
+
+		p2_exists = false;
+		p3_exists = false;
+
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p2].size(); j++)
+		{
+			if (this->neighbours[i][j] == p1)
+			{
+				p1_exists = true;
+			}
+			if (this->neighbours[i][j] == p3)
+			{
+				p3_exists = true;
+			}
+		}
+		if (!p1_exists)
+		{
+			this->neighbours[i].push_back(p1);
+		}
+		if (!p3_exists)
+		{
+			this->neighbours[i].push_back(p3);
+		}
+
+		p1_exists = false;
+		p3_exists = false;
+
+		//for p1 if p2 or p3 does not exists add them
+		for (size_t j = 0; j < this->neighbours[p3].size(); j++)
+		{
+			if (this->neighbours[i][j] == p1)
+			{
+				p1_exists = true;
+			}
+			if (this->neighbours[i][j] == p2)
+			{
+				p2_exists = true;
+			}
+		}
+		if (!p1_exists)
+		{
+			this->neighbours[i].push_back(p1);
+		}
+		if (!p2_exists)
+		{
+			this->neighbours[i].push_back(p2);
+		}
+
+		p1_exists = false;
+		p2_exists = false;
+	}
 	fclose(fPtr);
 }
 //plane constructor 

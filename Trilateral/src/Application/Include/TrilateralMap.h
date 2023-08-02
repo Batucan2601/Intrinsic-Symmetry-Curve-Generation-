@@ -534,7 +534,60 @@ static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1
 	return tau_chart; 
 }*/
 
+static void AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index , int& number_of_points)
+{
+	std::vector<unsigned int> points; 
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	std::vector<float> agdValues( m->vertices.size() , 0 ) ;
+	// O(n * n logn )
+	
+	// 1- for each vertex
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		// 2 - calculate distances for all
+		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		// sum 
+		for (size_t j = 0; j < geodesic_distances.size(); j++)
+		{
+			agdValues[i] += geodesic_distances[j];
+		}
+		// multiply it with one ring area
+		// for that look through triangles
+		float triangleArea = 0;
+		for (size_t j = 0; j < m->triangles.size(); j+= 3 )
+		{
+			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i)
+			{
+				triangleArea += glm::length(glm::cross(glm::vec3(m->vertices[j + 1] - m->vertices[j]), glm::vec3(m->vertices[j + 2] - m->vertices[j]))) /  2 ;
+			}
+		}
+		triangleArea = triangleArea / 3;
+	}
 
+	// for now pick number_of_points/2 from least number_of_points /2 from best 
+	//copy array
+	std::vector<float> temp_agd = agdValues;
+
+	//sort the original
+	std::sort(temp_agd.begin(), temp_agd.end());
+
+	//now get the first number_of_points/2
+	for (size_t i = 0; i < number_of_points/2 ; i++)
+	{
+		//in order to get it traverse the original array
+		float value = temp_agd[i];
+
+		for (size_t j = 0; j < agdValues.size(); j++)
+		{
+			if (value == agdValues[j])
+			{
+				points.push_back(j);
+			}
+		}
+	}
+
+	return points; 
+}
 
 struct TrilateralDescriptor
 {
@@ -1626,127 +1679,6 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 
 	m1->colors = m1_colors;
 	m2->colors = m2_colors;
-}
-
-std::vector<float> match_points_from2_mesh_mock(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int division_no )
-{
-	//get the histogram of the traingle with the most near 2 points
-	Mesh* m1 = &mesh_fac.mesh_vec[mesh_index1];
-	Mesh* m2 = &mesh_fac.mesh_vec[mesh_index2];
-
-	std::vector<int> sample_indices_m1;
-	std::vector<int> sample_indices_m2;
-	srand(time(NULL));
-
-	std::vector<float> lines_between_meshes;
-
-	for (size_t i = 0; i < division_no; i++)
-	{
-		int point_m1 = rand() % m1->vertices.size();
-		int point_m2 = rand() % m2->vertices.size();
-
-		sample_indices_m1.push_back(point_m1);
-		sample_indices_m2.push_back(point_m2);
-	}
-
-	std::vector<float> line_points; 
-
-	//sample from meshes
-	for (size_t i = 0; i < division_no; i++)
-	{
-		//get p1 from m1 
-		glm::vec3 p1_v3 = m1->vertices[sample_indices_m1[i]];
-		// get p2 from m2
-		glm::vec3 p2_v3 = m2->vertices[sample_indices_m2[i]];
-
-
-
-		line_points.push_back(p1_v3[0]);
-		line_points.push_back(p1_v3[1]);
-		line_points.push_back(p1_v3[2]);
-		line_points.push_back(-1.0f); //indicator for mesh1 
-
-		line_points.push_back(p2_v3[0]);
-		line_points.push_back(p2_v3[1]);
-		line_points.push_back(p2_v3[2]);
-		line_points.push_back(2.0f); //indicator for mesh2 
-
-	}
-	return line_points;
-}
-
-
-void brute_force_symmetry_extraction(MeshFactory& mesh_fac, int& selected_index)
-{
-	Mesh *m = &mesh_fac.mesh_vec[selected_index];
-
-	float epsilon_length = 1;
-	float epsilon_curvature = 1e-2;
-
-	std::vector<int> symmetry_vertex_indices;
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		std::cout << "% " <<(float)i / m->vertices.size() << std::endl;
-		for (size_t j = 0; j < m->vertices.size(); j++)
-		{
-			for (size_t k = 0; k < m->vertices.size(); k++)
-			{
-				if (i == j || i == k || j == k)
-				{
-					continue;
-				}
-				//else
-				TrilateralDescriptor t1 = generate_trilateral_descriptor(mesh_fac , selected_index , i , j, k , true );
-				
-				//find the middle vertex to add to symmetry
-				if (glm::abs(t1.lenght_1_2 - t1.lenght_1_3) <= epsilon_length)
-				{
-					//check the curvature index
-					if (glm::abs(t1.curvature_1_2 - t1.curvature_1_3) <= epsilon_curvature)
-					{
-						symmetry_vertex_indices.push_back(i);
-					}
-				}
-				else if (glm::abs(t1.lenght_2_3 - t1.lenght_1_3) <= epsilon_length)
-				{
-					//check the curvature index
-					if (glm::abs(t1.curvature_2_3 - t1.curvature_1_3) <= epsilon_curvature)
-					{
-						symmetry_vertex_indices.push_back(k);
-					}
-				}
-				else if (glm::abs(t1.lenght_1_2 - t1.lenght_2_3) <= epsilon_length)
-				{
-					//check the curvature index
-					if (glm::abs(t1.curvature_1_2 - t1.curvature_2_3) <= epsilon_curvature)
-					{
-						symmetry_vertex_indices.push_back(j);
-					}
-				}
-			}
-		}
-	}
-	std::vector<glm::vec3> new_color_buffer; 
-	for (size_t i = 0; i < m->colors.size(); i++)
-	{
-		bool is_index_present = false;
-		for (int j = 0; j < symmetry_vertex_indices.size(); j++)
-		{
-			if (symmetry_vertex_indices[j] == i)
-			{
-				//color it red
-				new_color_buffer.push_back(glm::vec3(1.0f , 0.0f ,0.0f) );
-				is_index_present = true; 
-				break; 
-			}
-		}
-
-		if (is_index_present)
-		{
-			new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-		}
-	}
-	m->colors = new_color_buffer;
 }
 
 

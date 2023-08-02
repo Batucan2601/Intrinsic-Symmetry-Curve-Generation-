@@ -21,13 +21,7 @@ public:
 	std::vector<int> vertex_indices; //fill with constructor 
 	std::vector<std::vector<std::pair<int, float>>> adjacenies; // all adjacensies for all vertices
 	std::vector<unsigned int > triangles;
-
-	//assignment 2 
-	std::vector<float > quad_vertices;
-	std::vector<unsigned int > quad_indices; // first four 
-	std::vector<float> original_vertices;
-
-	std::vector<glm::vec3> original_vertices_for_sqrt3;
+	std::vector<std::vector<unsigned int>> neighbours; 
 
 	glm::mat4 model_mat;
 	//project 

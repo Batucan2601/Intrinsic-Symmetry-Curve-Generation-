@@ -173,22 +173,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-    if (ImGui::Button("Mock eslestir"))
-    {
-        lines =  match_points_from2_mesh_mock(m_factory, selected_mesh_for_points1, selected_mesh_for_points2, partition_no);
-        is_draw_lines_activated = true; 
-        is_draw_lines_activated_once = true; 
-    }
     if (ImGui::Button("Generate Trilateral Descriptor "))
     {
        TrilateralDescriptor trilateral_descriptor =  generate_trilateral_descriptor(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index , false );
        std::cout << "area " << trilateral_descriptor.area << " " << trilateral_descriptor.lenght_1_2 << " " << trilateral_descriptor.lenght_1_3 << "  " << trilateral_descriptor.lenght_2_3 << " " << trilateral_descriptor.curvature_1_2 << "  " << trilateral_descriptor.curvature_1_3 << "  " << trilateral_descriptor.lenght_2_3 << std::endl;
-    }
-    if (ImGui::Button("Brute Force Trilateral Symmetry "))
-    {
-        brute_force_symmetry_extraction(m_factory, selected_mesh);
-        m_factory.remove_all();
-        m_factory.add_all();
     }
     ImGui::InputInt("no of samples  ", &no_of_sampling_fps);
     ImGui::SameLine();
