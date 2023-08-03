@@ -586,7 +586,7 @@ static void AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index ,
 		}
 	}
 
-	return points; 
+	//return points; 
 }
 
 struct TrilateralDescriptor

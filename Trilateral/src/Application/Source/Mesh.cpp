@@ -105,27 +105,27 @@ void Mesh::read_ply_format(char* filename)
 		bool p3_exists = false;
 		unsigned int p1 = this->triangles[i];
 		unsigned int p2 = this->triangles[i+1];
-		unsigned int p3 = this->triangles[i+3];
+		unsigned int p3 = this->triangles[i+2];
 		
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p1].size(); j++)
 		{
-			if (this->neighbours[i][j] == p2)
+			if (this->neighbours[p1][j] == p2)
 			{
 				p2_exists = true;
 			}
-			if (this->neighbours[i][j] == p3)
+			if (this->neighbours[p1][j] == p3)
 			{
 				p3_exists = true;
 			}
 		}
 		if (!p2_exists)
 		{
-			this->neighbours[i].push_back(p2);
+			this->neighbours[p1].push_back(p2);
 		}
 		if (!p3_exists)
 		{
-			this->neighbours[i].push_back(p3);
+			this->neighbours[p1].push_back(p3);
 		}
 
 		p2_exists = false;
@@ -134,22 +134,22 @@ void Mesh::read_ply_format(char* filename)
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p2].size(); j++)
 		{
-			if (this->neighbours[i][j] == p1)
+			if (this->neighbours[p2][j] == p1)
 			{
 				p1_exists = true;
 			}
-			if (this->neighbours[i][j] == p3)
+			if (this->neighbours[p2][j] == p3)
 			{
 				p3_exists = true;
 			}
 		}
 		if (!p1_exists)
 		{
-			this->neighbours[i].push_back(p1);
+			this->neighbours[p2].push_back(p1);
 		}
 		if (!p3_exists)
 		{
-			this->neighbours[i].push_back(p3);
+			this->neighbours[p2].push_back(p3);
 		}
 
 		p1_exists = false;
@@ -158,22 +158,22 @@ void Mesh::read_ply_format(char* filename)
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p3].size(); j++)
 		{
-			if (this->neighbours[i][j] == p1)
+			if (this->neighbours[p3][j] == p1)
 			{
 				p1_exists = true;
 			}
-			if (this->neighbours[i][j] == p2)
+			if (this->neighbours[p3][j] == p2)
 			{
 				p2_exists = true;
 			}
 		}
 		if (!p1_exists)
 		{
-			this->neighbours[i].push_back(p1);
+			this->neighbours[p3].push_back(p1);
 		}
 		if (!p2_exists)
 		{
-			this->neighbours[i].push_back(p2);
+			this->neighbours[p3].push_back(p2);
 		}
 
 		p1_exists = false;
@@ -281,27 +281,27 @@ void Mesh::read_off_format(char* filename)
 		bool p3_exists = false;
 		unsigned int p1 = this->triangles[i];
 		unsigned int p2 = this->triangles[i + 1];
-		unsigned int p3 = this->triangles[i + 3];
+		unsigned int p3 = this->triangles[i + 2];
 
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p1].size(); j++)
 		{
-			if (this->neighbours[i][j] == p2)
+			if (this->neighbours[p1][j] == p2)
 			{
 				p2_exists = true;
 			}
-			if (this->neighbours[i][j] == p3)
+			if (this->neighbours[p1][j] == p3)
 			{
 				p3_exists = true;
 			}
 		}
 		if (!p2_exists)
 		{
-			this->neighbours[i].push_back(p2);
+			this->neighbours[p1].push_back(p2);
 		}
 		if (!p3_exists)
 		{
-			this->neighbours[i].push_back(p3);
+			this->neighbours[p1].push_back(p3);
 		}
 
 		p2_exists = false;
@@ -310,22 +310,22 @@ void Mesh::read_off_format(char* filename)
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p2].size(); j++)
 		{
-			if (this->neighbours[i][j] == p1)
+			if (this->neighbours[p2][j] == p1)
 			{
 				p1_exists = true;
 			}
-			if (this->neighbours[i][j] == p3)
+			if (this->neighbours[p2][j] == p3)
 			{
 				p3_exists = true;
 			}
 		}
 		if (!p1_exists)
 		{
-			this->neighbours[i].push_back(p1);
+			this->neighbours[p2].push_back(p1);
 		}
 		if (!p3_exists)
 		{
-			this->neighbours[i].push_back(p3);
+			this->neighbours[p2].push_back(p3);
 		}
 
 		p1_exists = false;
@@ -334,22 +334,22 @@ void Mesh::read_off_format(char* filename)
 		//for p1 if p2 or p3 does not exists add them
 		for (size_t j = 0; j < this->neighbours[p3].size(); j++)
 		{
-			if (this->neighbours[i][j] == p1)
+			if (this->neighbours[p3][j] == p1)
 			{
 				p1_exists = true;
 			}
-			if (this->neighbours[i][j] == p2)
+			if (this->neighbours[p3][j] == p2)
 			{
 				p2_exists = true;
 			}
 		}
 		if (!p1_exists)
 		{
-			this->neighbours[i].push_back(p1);
+			this->neighbours[p3].push_back(p1);
 		}
 		if (!p2_exists)
 		{
-			this->neighbours[i].push_back(p2);
+			this->neighbours[p3].push_back(p2);
 		}
 
 		p1_exists = false;
