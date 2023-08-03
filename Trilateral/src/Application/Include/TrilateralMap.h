@@ -534,9 +534,9 @@ static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1
 	return tau_chart; 
 }*/
 
-static void AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index , int& number_of_points)
+static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index , int& number_of_points)
 {
-	std::vector<unsigned int> points; 
+	std::vector<unsigned int> agd_indices; 
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<float> agdValues( m->vertices.size() , 0 ) ;
 	// O(n * n logn )
@@ -558,7 +558,7 @@ static void AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index ,
 		{
 			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i)
 			{
-				triangleArea += glm::length(glm::cross(glm::vec3(m->vertices[j + 1] - m->vertices[j]), glm::vec3(m->vertices[j + 2] - m->vertices[j]))) /  2 ;
+				triangleArea += glm::length(glm::cross(glm::vec3(m->vertices[m->triangles[j + 1]] - m->vertices[m->triangles[j]]), glm::vec3(m->vertices[m->triangles[j + 2]] - m->vertices[m->triangles[j]]))) /  2 ;
 			}
 		}
 		triangleArea = triangleArea / 3;
@@ -576,17 +576,37 @@ static void AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index ,
 	{
 		//in order to get it traverse the original array
 		float value = temp_agd[i];
-
 		for (size_t j = 0; j < agdValues.size(); j++)
 		{
 			if (value == agdValues[j])
 			{
-				points.push_back(j);
+				agd_indices.push_back(j);
+			}
+		}
+	}
+	//now get the last number of points
+	for (size_t i = temp_agd.size() - (number_of_points/2); i < temp_agd.size(); i++)
+	{
+		//in order to get it traverse the original array
+		float value = temp_agd[i];
+		for (size_t j = 0; j < agdValues.size(); j++)
+		{
+			if (value == agdValues[j])
+			{
+				agd_indices.push_back(j);
 			}
 		}
 	}
 
-	//return points; 
+	// color the indices
+	for (size_t i = 0; i < agd_indices.size(); i++)
+	{
+		m->colors[agd_indices[i]].r = 0.0f;
+		m->colors[agd_indices[i]].g = 1.0f;
+		m->colors[agd_indices[i]].b = 0.0f;
+	}
+
+	return agd_indices;
 }
 
 struct TrilateralDescriptor

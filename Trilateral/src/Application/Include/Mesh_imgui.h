@@ -44,6 +44,7 @@ std::vector<float> histogram;
 std::vector<float> lines; 
 
 int no_of_sampling_fps = 10; 
+int no_of_agd_points = 10; 
 Plane plane; 
 std::vector<std::vector<int>> symmetry_paired_points;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
@@ -201,6 +202,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("point matching using dominant symmetry plane "))
     {
         point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_sampling_fps);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("Average AGD function"))
+    {
+        AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
         m_factory.remove_all();
         m_factory.add_all();
     }
