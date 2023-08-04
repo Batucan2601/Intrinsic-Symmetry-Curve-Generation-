@@ -565,39 +565,96 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 	}
 
 	// for now pick number_of_points/2 from least number_of_points /2 from best 
-	//copy array
-	std::vector<float> temp_agd = agdValues;
-
-	//sort the original
-	std::sort(temp_agd.begin(), temp_agd.end());
-
-	//now get the first number_of_points/2
-	for (size_t i = 0; i < number_of_points/2 ; i++)
+	std::vector<unsigned int> indexVector;
+	for (size_t i = 0; i < agdValues.size(); i++)
 	{
-		//in order to get it traverse the original array
-		float value = temp_agd[i];
-		for (size_t j = 0; j < agdValues.size(); j++)
+		indexVector.push_back(i);
+	}
+	//sort the array
+	for (size_t i = 0; i < agdValues.size(); i++)
+	{
+		int biggest_index = -1;
+		int biggest_val = -1;
+
+		for (size_t j = i; j < agdValues.size(); j++)
 		{
-			if (value == agdValues[j])
+			if (biggest_val < agdValues[j])
 			{
-				agd_indices.push_back(j);
+				biggest_val = agdValues[j];
+				biggest_index = j; 
+			}
+		}
+		//swap i and j 
+		int temp = agdValues[i];
+		agdValues[i] = agdValues[biggest_index];
+		agdValues[biggest_index] = temp;
+		//also swap the index array
+		temp = indexVector[i];
+		indexVector[i] = indexVector[biggest_index];
+		indexVector[biggest_index] = temp;
+	}
+
+	//get the biggest no_/2
+	int addedCount = 0; 
+	for (size_t i = 0; i < indexVector.size(); i++)
+	{
+		bool is_neighbour_exists = false;
+		for (size_t j = 0; j < m->neighbours[indexVector[i]].size(); j++)
+		{
+			for (size_t k = 0; k < agd_indices.size(); k++)
+			{
+				if (agd_indices[k] == m->neighbours[indexVector[i]][j])
+				{
+					is_neighbour_exists = true; 
+					break;
+				}
+			}
+			if (is_neighbour_exists)
+			{
+				break; 
+			}
+		}
+
+		if (!is_neighbour_exists)
+		{
+			agd_indices.push_back(indexVector[i]);
+			addedCount++; 
+			if (addedCount == number_of_points/2)
+			{
+				break; 
 			}
 		}
 	}
-	//now get the last number of points
-	for (size_t i = temp_agd.size() - (number_of_points/2); i < temp_agd.size(); i++)
+	addedCount = 0;
+	for (size_t i = indexVector.size()-1; i > 0; i--)
 	{
-		//in order to get it traverse the original array
-		float value = temp_agd[i];
-		for (size_t j = 0; j < agdValues.size(); j++)
+		bool is_neighbour_exists = false;
+		for (size_t j = 0; j < m->neighbours[indexVector[i]].size(); j++)
 		{
-			if (value == agdValues[j])
+			for (size_t k = 0; k < agd_indices.size(); k++)
 			{
-				agd_indices.push_back(j);
+				if (agd_indices[k] == m->neighbours[indexVector[i]][j])
+				{
+					is_neighbour_exists = true;
+					break;
+				}
+			}
+			if (is_neighbour_exists)
+			{
+				break;
+			}
+		}
+
+		if (!is_neighbour_exists)
+		{
+			agd_indices.push_back(indexVector[i]);
+			addedCount++;
+			if (addedCount == number_of_points / 2)
+			{
+				break;
 			}
 		}
 	}
-
 	// color the indices
 	for (size_t i = 0; i < agd_indices.size(); i++)
 	{

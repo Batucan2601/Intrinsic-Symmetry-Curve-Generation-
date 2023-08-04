@@ -205,6 +205,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
+    ImGui::InputInt("agd point no : ", &no_of_agd_points);
     if (ImGui::Button("Average AGD function"))
     {
         AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
