@@ -562,6 +562,7 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 			}
 		}
 		triangleArea = triangleArea / 3;
+		agdValues[i] *= triangleArea;
 	}
 
 	// for now pick number_of_points/2 from least number_of_points /2 from best 
@@ -619,14 +620,14 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 		{
 			agd_indices.push_back(indexVector[i]);
 			addedCount++; 
-			if (addedCount == number_of_points/2)
+			if (addedCount == number_of_points)
 			{
 				break; 
 			}
 		}
 	}
 	addedCount = 0;
-	for (size_t i = indexVector.size()-1; i > 0; i--)
+	/*for (size_t i = indexVector.size()-1; i > 0; i--)
 	{
 		bool is_neighbour_exists = false;
 		for (size_t j = 0; j < m->neighbours[indexVector[i]].size(); j++)
@@ -654,7 +655,7 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 				break;
 			}
 		}
-	}
+	}*/
 	// color the indices
 	for (size_t i = 0; i < agd_indices.size(); i++)
 	{
