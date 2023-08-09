@@ -537,6 +537,8 @@ static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1
 static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index , int& number_of_points)
 {
 	std::vector<unsigned int> agd_indices; 
+	std::vector<unsigned int> mgd_indices;
+
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<float> agdValues( m->vertices.size() , 0 ) ;
 	// O(n * n logn )
@@ -656,15 +658,36 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 			}
 		}
 	}*/
-	// color the indices
 	for (size_t i = 0; i < agd_indices.size(); i++)
+	{
+		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, agd_indices[i]);
+		float minimum_len = INFINITY;
+		int minimum_index = -1; 
+		//get the minimum 
+		for (size_t j = 0; j < geodesic_distances.size(); j++)
+		{
+			if (minimum_len > geodesic_distances[j] && j != agd_indices[i])
+			{
+				minimum_index = j; 
+				minimum_len = geodesic_distances[j];
+			}
+		}
+		mgd_indices.push_back(minimum_index);
+	}
+	// color the indices
+	/*for (size_t i = 0; i < agd_indices.size(); i++)
 	{
 		m->colors[agd_indices[i]].r = 0.0f;
 		m->colors[agd_indices[i]].g = 1.0f;
 		m->colors[agd_indices[i]].b = 0.0f;
+	}*/
+	for (size_t i = 0; i < agd_indices.size(); i++)
+	{
+		m->colors[mgd_indices[i]].r = 0.0f;
+		m->colors[mgd_indices[i]].g = 1.0f;
+		m->colors[mgd_indices[i]].b = 0.0f;
 	}
-
-	return agd_indices;
+	return mgd_indices;
 }
 
 struct TrilateralDescriptor
