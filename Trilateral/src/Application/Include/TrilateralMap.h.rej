@@ -1,0 +1,39 @@
+diff a/Trilateral/src/Application/Include/TrilateralMap.h b/Trilateral/src/Application/Include/TrilateralMap.h	(rejected hunks)
+@@ -666,6 +667,37 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac,
+ 
+ 	return agd_indices;
+ }
++static void minimum_geodesic_using_agd(MeshFactory &mesh_fac , int mesh_index , int point_size , std::vector<unsigned int> &agdVec)
++{
++	Mesh* m = &mesh_fac.mesh_vec[mesh_index];
++	std::vector<unsigned int> mgd_vec( point_size, 0 ); 
++	for (int i = 0; i < m->vertices.size(); i++)
++	{
++		bool is_agd = false;
++		for (size_t j = 0; j < agdVec.size(); j++)
++		{
++			if (agdVec[j] == i)
++			{
++				is_agd = true;
++				break;
++			}
++		}
++		if (is_agd)
++		{
++			continue;
++		}
++
++		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
++		// get minimum geodesic distance for each point
++		int minIndex = -1;
++		float minValue = 999999;
++		for (size_t j = 0; j < agdVec.size(); j++)
++		{
++				
++		}
++	}
++}
++
+ 
+ struct TrilateralDescriptor
+ {

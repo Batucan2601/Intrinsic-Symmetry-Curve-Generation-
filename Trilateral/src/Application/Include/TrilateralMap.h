@@ -549,6 +549,7 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 		// 2 - calculate distances for all
 		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
 		// sum 
+		agdValues[i] = 0;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
 			agdValues[i] += geodesic_distances[j];
@@ -1878,3 +1879,15 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 //	Eigen::Matrix<double, 4, 1 > p3;
 //
 //}
+
+static void reset_points(MeshFactory &mesh_fac , int meshIndex )
+{
+	Mesh* m = &mesh_fac.mesh_vec[meshIndex];
+
+	for (size_t i = 0; i < m->colors.size(); i++)
+	{
+		m->colors[i].r = 0;
+		m->colors[i].g = 0;
+		m->colors[i].b = 0;
+	}
+}

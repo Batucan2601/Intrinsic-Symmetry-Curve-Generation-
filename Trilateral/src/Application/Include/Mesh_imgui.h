@@ -209,6 +209,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("Reset Points"))
+    {
+        reset_points(m_factory, selected_mesh);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
     ImGui::End();
 }
 
