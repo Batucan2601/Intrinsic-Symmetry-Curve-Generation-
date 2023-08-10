@@ -45,8 +45,12 @@ std::vector<float> lines;
 
 int no_of_sampling_fps = 10; 
 int no_of_agd_points = 10; 
+int no_of_mgd_points = 10;
+
 Plane plane; 
 std::vector<std::vector<int>> symmetry_paired_points;
+std::vector<unsigned int> AGDIndices;
+std::vector<unsigned int> MGDIndices;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -194,7 +198,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputInt("agd point no : ", &no_of_agd_points);
     if (ImGui::Button("Average AGD function"))
     {
-        AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
+        AGDIndices = AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    ImGui::InputInt("agd point no : ", &no_of_mgd_points);
+    if (ImGui::Button("Minimum Geodesic function"))
+    {
+        MGDIndices = minimumGeodesicFunction  (m_factory, selected_mesh, no_of_mgd_points, AGDIndices);
         m_factory.remove_all();
         m_factory.add_all();
     }

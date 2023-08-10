@@ -674,22 +674,43 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 		}
 		mgd_indices.push_back(minimum_index);
 	}
-	// color the indices
-	/*for (size_t i = 0; i < agd_indices.size(); i++)
+	for (size_t i = 0; i < agd_indices.size(); i++)
 	{
 		m->colors[agd_indices[i]].r = 0.0f;
 		m->colors[agd_indices[i]].g = 1.0f;
 		m->colors[agd_indices[i]].b = 0.0f;
-	}*/
-	for (size_t i = 0; i < agd_indices.size(); i++)
+	}
+	return agd_indices;
+}
+static std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points , std::vector<unsigned int>& average_geodesic_function )
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	std::vector < unsigned int> mgd_indices; 
+	for (size_t i = 0; i < average_geodesic_function.size(); i++)
+	{
+		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, average_geodesic_function[i]);
+		float minimum_len = INFINITY;
+		int minimum_index = -1;
+		//get the minimum 
+		for (size_t j = 0; j < geodesic_distances.size(); j++)
+		{
+			if (minimum_len > geodesic_distances[j] && j != average_geodesic_function[i])
+			{
+				minimum_index = j;
+				minimum_len = geodesic_distances[j];
+			}
+		}
+		mgd_indices.push_back(minimum_index);
+	}
+	// color the indices
+	for (size_t i = 0; i < mgd_indices.size(); i++)
 	{
 		m->colors[mgd_indices[i]].r = 0.0f;
-		m->colors[mgd_indices[i]].g = 1.0f;
-		m->colors[mgd_indices[i]].b = 0.0f;
+		m->colors[mgd_indices[i]].g = 0.0f;
+		m->colors[mgd_indices[i]].b = 1.0f;
 	}
 	return mgd_indices;
 }
-
 struct TrilateralDescriptor
 {
 	double area; // ROI
