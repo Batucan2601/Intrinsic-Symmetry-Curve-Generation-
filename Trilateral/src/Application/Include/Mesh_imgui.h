@@ -43,14 +43,24 @@ std::vector<float> histogram;
 
 std::vector<float> lines; 
 
-int no_of_sampling_fps = 10; 
-int no_of_agd_points = 10; 
-int no_of_mgd_points = 10;
+//int no_of_sampling_fps = 10; 
+//int no_of_agd_points = 10; 
+int no_of_points = 10;
 
 Plane plane; 
 std::vector<std::vector<int>> symmetry_paired_points;
-std::vector<unsigned int> AGDIndices;
-std::vector<unsigned int> MGDIndices;
+std::vector<unsigned int> selectedIndices;
+std::vector<unsigned int> indices;
+std::vector<TrilateralDescriptor> trilateralDescVector; 
+
+static std::string curtrilateralItem;
+bool is_trilateral_generated = false;
+
+float trialteralCurvatureWeight = 1; 
+float trialteralGeodesicWeight = 1;
+float trialteralAreaWeight = 1;
+
+
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -63,79 +73,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputInt("vertex 2  ", &point_2_index);
     ImGui::InputInt("vertex 3  ", &point_3_index);
     ImGui::InputInt("histogram_partition  ", &partition_no);
-    //ImGui::InputFloat("tau  ", &tau);
     ImGui::InputFloat("scale  ", &scale);
-    /* if (ImGui::Button("bilateral map "))
-    {
-        if_isocurve_selected = false;
-        compute_bilateral_map(m, point_1_index, point_2_index, tau, histogram);
-    }
-    ImGui::InputInt("vertex 1  ", &point_1_index);
-    if (ImGui::Button("bilateral map according to point above "))
-    {
-        if_isocurve_selected = false;
-        compute_bilateral_map_according_to_point(m, point_1_index, tau, histogram);
-    }
-    
-    if (ImGui::Button("Isocurves with point above "))
-    {
-        iso_curve_distances = compute_iso_curves(m, point_1_index);
-        if_isocurve_selected = true; 
-    }
-    if (ImGui::Button("compute isocurve histogram "))
-    {
-        iso_curve_histogram = compute_curve_distances(m , iso_curve_distances, point_1_index );
-    }
-    if (ImGui::Button("Compute all geodesic styles "))
-    {
-        compute_all(m);
-    }
-    if (ImGui::Button("Compute from histogram "))
-    {
-        find_point_from_histogram(m, iso_curve_histogram  );
-    }
-    if (ImGui::Button("Load model 2  "))
-    {
-        Mesh off((char*)"faust-registrations//tr_reg_000.off");
-        m = off;
-        buffer_mesh(m);
-        buffer_vertices_with_triangles(m);
-        if_isocurve_selected = false;
-    }
-    
-    
-    if (ImGui::Button("Quadify mesh "))
-    {
-        is_mesh_quadified = true; 
-        quadify_mesh(m);
-        buffer_quadified_mesh(m);
-    }
-    if (ImGui::Button("Catmull mesh "))
-    {
-        is_catmull_clark = true;
-        catmull_clark_new(m);
-        buffer_after_clark(m);
-    }
-    if (ImGui::Button("Color after Clark "))
-    {
-        color_weight_according_to_distance(m);
-    }
-    if (ImGui::Button("Calculate total area quad "))
-    {
-        catmull_calculate_triangle_area(m);
-    }
-    if (ImGui::Button("sqrt(3)"))
-    {
-        sqrt_3(m);
-        buffer_sqrt31(m);
-        is_sqrt_3 = true; 
-    }
-    if (ImGui::Button("color sqrt3 algorithm "))
-    {
-        color_sqrt3(m);
-        sqrt3_calculate_triangle_area(m);
-    }
-    */
+
     if (is_polygon_filled)
     {
         if (ImGui::Button("Enable polygon mode "))
@@ -169,14 +108,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.add_all();
         activate_histogram = true; 
     }
-    ImGui::InputInt("no of samples  ", &no_of_sampling_fps);
+    ImGui::InputInt("no of samples  ", &no_of_points);
     ImGui::SameLine();
-    if (ImGui::Button("FPS sampling"))
-    {
-        furthest_point_sampling(&m_factory.mesh_vec[selected_mesh] , no_of_sampling_fps);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
     if (ImGui::Button("Laplacian generation "))
     {
         generate_L(&m_factory.mesh_vec[selected_mesh]);
@@ -191,23 +124,54 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("point matching using dominant symmetry plane "))
     {
-        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_sampling_fps);
+        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_points);
         m_factory.remove_all();
         m_factory.add_all();
     }
-    ImGui::InputInt("agd point no : ", &no_of_agd_points);
-    if (ImGui::Button("Average AGD function"))
+    //ImGui::InputInt("agd point no : ", &no_of_agd_points);
+    /*if (ImGui::Button("Average AGD function"))
     {
         AGDIndices = AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
         m_factory.remove_all();
         m_factory.add_all();
     }
-    ImGui::InputInt("agd point no : ", &no_of_mgd_points);
+    ImGui::InputInt("mgd point no : ", &no_of_mgd_points);
     if (ImGui::Button("Minimum Geodesic function"))
     {
         MGDIndices = minimumGeodesicFunction  (m_factory, selected_mesh, no_of_mgd_points, AGDIndices);
         m_factory.remove_all();
         m_factory.add_all();
+    }*/
+    if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str() )) // The second parameter is the label previewed before opening the combo.
+    {
+        bool isSelected = false; 
+        if (ImGui::Selectable( (const char*)"AGD", &isSelected))
+        {
+            selectedIndices= AverageGeodesicFunction(m_factory, selected_mesh, no_of_points);
+            //trilateralDescVector = match_points_using_trilateral_decriptor(m_factory, selected_mesh, AGDIndices);
+            curtrilateralItem = "AGD";
+            is_trilateral_generated = true; 
+        }
+        if (ImGui::Selectable((const char*)"MGD", &isSelected))
+        {
+            selectedIndices = minimumGeodesicFunction(m_factory, selected_mesh, no_of_points, selectedIndices);
+            curtrilateralItem = "MGD";
+            is_trilateral_generated = true;
+
+        }
+        if( ImGui::Selectable((const char*)"FPS", &isSelected))
+        {
+            selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points);
+            curtrilateralItem = "FPS";
+            is_trilateral_generated = true;
+        }
+        m_factory.remove_all();
+        m_factory.add_all();
+        ImGui::EndCombo();
+    }
+    if (ImGui::Button("point matching using AGD"))
+    {
+        trilateralDescVector = get_trilateral_points_using_min_distance(m_factory, selected_mesh, selectedIndices);
     }
     if (ImGui::Button("Reset Points"))
     {
@@ -223,12 +187,34 @@ void imgui_selected_mesh_properties_window(const int& selected_mesh , MeshFactor
 {
     ImGui::Begin("Mesh properties ");
     
-
     ImGui::InputFloat(" X ", &m_factory.mesh_vec[selected_mesh].model_mat[3][0]);
     ImGui::InputFloat(" Y ", &m_factory.mesh_vec[selected_mesh].model_mat[3][1]);
     ImGui::InputFloat(" Z ", &m_factory.mesh_vec[selected_mesh].model_mat[3][2]);
 
-
     ImGui::End();
+}
 
+void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_factory)
+{
+    ImGui::Begin("Trialteral Conf");
+    ImGui::InputFloat("CurvatureWeight :", &trialteralCurvatureWeight);
+    ImGui::InputFloat("GeodesicWeight :", &trialteralGeodesicWeight);
+    ImGui::InputFloat("AreaWeight :", &trialteralAreaWeight);
+    
+    if (ImGui::Button("Generate Trilateral Point Pairs Using Minimum Distance"))
+    {
+        trilateralDescVector = get_trilateral_points_using_min_distance(m_factory, selected_mesh, selectedIndices);
+    }
+    if (ImGui::Button("Generate Trilateral Features Using Points "))
+    {
+        for (size_t i = 0; i < trilateralDescVector.size() ; i++)
+        {
+            trilateralDescVector[i] = generate_trilateral_descriptor(m_factory, (int&)selected_mesh, trilateralDescVector[i].p1, trilateralDescVector[i].p2, trilateralDescVector[i].p3, false);
+        }
+    }
+    if (ImGui::Button("Point Matching Using trilateral Weights "))
+    {
+        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector );
+    }
+    ImGui::End();
 }
