@@ -60,7 +60,8 @@ float trialteralCurvatureWeight = 1;
 float trialteralGeodesicWeight = 1;
 float trialteralAreaWeight = 1;
 
-
+//spectral embedding
+std::vector<glm::vec3> embed_vertices; 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
