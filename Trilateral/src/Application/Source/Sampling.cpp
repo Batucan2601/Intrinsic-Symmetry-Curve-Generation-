@@ -1,6 +1,6 @@
 #include "../Include/Sampling.h"
 #include <stdlib.h>     /* srand, rand */
-std::vector<int>  furthest_point_sampling(Mesh* m, int no_of_samples)
+std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples)
 {
 	float* distance = new float[m->vertices.size()];
 	int* sampled = new int[no_of_samples];
@@ -43,7 +43,7 @@ std::vector<int>  furthest_point_sampling(Mesh* m, int no_of_samples)
 		sample_idx = maxIndex;
 		sampled[i] = sample_idx;
 	}
-	std::vector<int> sampled_id_vector; 
+	std::vector<unsigned int> sampled_id_vector; 
 	for (size_t i = 0; i < no_of_samples; i++)
 	{
 		sampled_id_vector.push_back(sampled[i]);

@@ -97,7 +97,7 @@ static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m,
 	return distances;
 }
 
-static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1, int p2, int p3)
+static void trilateral_map_drawing_using_three_points(MeshFactory &mesh_fac ,  int &selected_index  ,int p1, int p2, int p3 )
 {
 	Mesh m = mesh_fac.mesh_vec[selected_index];
 	//extract two paths
@@ -106,7 +106,7 @@ static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1
 	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(m, p1, p3  );
 	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(m, p2, p3  );
 
-#pragma region caluclation of distances between points 2 ,3 and 1  
+#pragma region calculation of distances between points 2 ,3 and 1  
 
 	float dist_1_2 = 0.0f ;
 	float dist_1_3 = 0.0f;
@@ -533,12 +533,72 @@ static void trilateral_map(MeshFactory &mesh_fac ,  int &selected_index  ,int p1
 	delete[] is_close;
 	return tau_chart; 
 }*/
+static std::vector<TrilateralDescriptor> get_trilateral_points_using_min_distance(MeshFactory& mesh_fac, const int& selected_index , std::vector<unsigned int>& indices )
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 
+	std::vector<TrilateralDescriptor> trilateralDesc;
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		TrilateralDescriptor desc;
+		//get two of the closed indexed points
+		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		std::vector<std::pair<float, unsigned int >> distances;
+		for (size_t j = 0; j < geodesic_distances.size(); j++)
+		{
+			bool is_in_indices = false;
+			for (size_t k = 0; k < indices.size(); k++)
+			{
+				if (j == indices[k] && j != indices[i] )
+				{
+					is_in_indices = true;
+					break; 
+				}
+			}
+
+			if ( is_in_indices)
+			{
+				float dist = geodesic_distances[j];
+				unsigned int index = j;
+				std::pair<float, unsigned int > pair;
+				pair.first = dist;
+				pair.second = j;
+				distances.push_back(pair);
+			}
+		}
+		//get first and second closest
+		float minVal = INFINITY;
+		float minIndexFirst = -1;
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (minVal > distances[j].first)
+			{
+				minIndexFirst = distances[j].second;
+				minVal = distances[j].first;
+			}
+		}
+		
+		minVal = INFINITY;
+		float minIndexSecond = -1;
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (minVal > distances[j].first && minIndexFirst !=  distances[j].second &&  distances[j].second != indices[i] )
+			{
+				minIndexSecond = distances[j].second;
+				minVal = distances[j].first;
+			}
+		}
+		desc.p1 = indices[i];
+		desc.p2 = minIndexFirst;
+		desc.p3 = minIndexSecond;
+		trilateralDesc.push_back(desc); 
+	}
+
+	return trilateralDesc; 
+}
 static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index , int& number_of_points)
 {
 	std::vector<unsigned int> agd_indices; 
-	std::vector<unsigned int> mgd_indices;
-
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<float> agdValues( m->vertices.size() , 0 ) ;
 	// O(n * n logn )
@@ -549,9 +609,13 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 		// 2 - calculate distances for all
 		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
 		// sum 
+		agdValues[i] = 0;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
-			agdValues[i] += geodesic_distances[j];
+			if (i != j)
+			{
+				agdValues[i] += geodesic_distances[j];
+			}
 		}
 		// multiply it with one ring area
 		// for that look through triangles
@@ -672,7 +736,6 @@ static std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, 
 				minimum_len = geodesic_distances[j];
 			}
 		}
-		mgd_indices.push_back(minimum_index);
 	}
 	for (size_t i = 0; i < agd_indices.size(); i++)
 	{
@@ -711,17 +774,7 @@ static std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, 
 	}
 	return mgd_indices;
 }
-struct TrilateralDescriptor
-{
-	double area; // ROI
-	double total_length;
-	double lenght_1_2;//  geodesic length between 1 - 2
-	double lenght_1_3;//  length between 1 - 3
-	double lenght_2_3;//  length between 2 - 3
-	double curvature_1_2; // (geodesic / euclidiean)
-	double curvature_1_3;
-	double curvature_2_3;
-};
+
 
 
 static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no , bool & is_visited_interior )
@@ -1073,9 +1126,9 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 	TrilateralDescriptor trilateral_descriptor;//trialteral descriptor 
 	//init descriptor
 	trilateral_descriptor.area = 0;
-	trilateral_descriptor.lenght_1_2 = 0;
-	trilateral_descriptor.lenght_1_3 = 0;
-	trilateral_descriptor.lenght_2_3 = 0;
+	trilateral_descriptor.geodesic_lenght_1_2= 0;
+	trilateral_descriptor.geodesic_lenght_1_3 = 0;
+	trilateral_descriptor.geodesic_lenght_2_3 = 0;
 		
 
 	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
@@ -1086,13 +1139,13 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
 
 	// get distances
-	trilateral_descriptor.lenght_1_2 = distance_matrix_p1[point_index2];
-	trilateral_descriptor.lenght_1_3 = distance_matrix_p1[point_index3];
-	trilateral_descriptor.lenght_2_3 = distance_matrix_p2[point_index3];
+	trilateral_descriptor.geodesic_lenght_1_2 = distance_matrix_p1[point_index2];
+	trilateral_descriptor.geodesic_lenght_1_3 = distance_matrix_p1[point_index3];
+	trilateral_descriptor.geodesic_lenght_2_3 = distance_matrix_p2[point_index3];
 
-	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.lenght_1_2 / glm::distance(m->vertices[point_index1] , m->vertices[point_index2]);
-	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.lenght_1_3 /  glm::distance(m->vertices[point_index1] , m->vertices[point_index3]);
-	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.lenght_2_3 / glm::distance(m->vertices[point_index2] , m->vertices[point_index3]);
+	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / glm::distance(m->vertices[point_index2] , m->vertices[point_index3]);
 	
 	//for only brute force research 
 	if (is_simplified)
@@ -1241,11 +1294,17 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 
 	return trilateral_descriptor;
 }
+static void point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec )
+{
+	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+
+
+}
 static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , int sampling_no  )
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	
-	std::vector<int> vertex_indices = furthest_point_sampling(mesh,sampling_no);
+	std::vector<unsigned int> vertex_indices = furthest_point_sampling(mesh,sampling_no);
 	// divide the points in two 
 	std::vector<int> vertex_indices_right;
 	std::vector<int> vertex_indices_left;
@@ -1338,7 +1397,7 @@ static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, i
 				float roi_len_dif = std::abs(descriptors[i].total_length - descriptors[j].total_length);
 				// easy sum for now
 				float curv_dif = std::abs(descriptors[i].curvature_1_2 + descriptors[i].curvature_1_3 + descriptors[i].curvature_2_3 - descriptors[j].curvature_1_2 - descriptors[j].curvature_1_3 - descriptors[j].curvature_2_3);
-				float dist_dif = std::abs(descriptors[i].lenght_1_2+ descriptors[i].lenght_1_3+ descriptors[i].lenght_2_3 - descriptors[j].lenght_1_2- descriptors[j].lenght_1_3- descriptors[j].lenght_2_3);
+				float dist_dif = std::abs(descriptors[i].geodesic_lenght_1_2+ descriptors[i].geodesic_lenght_1_3+ descriptors[i].geodesic_lenght_2_3 - descriptors[j].geodesic_lenght_1_2- descriptors[j].geodesic_lenght_1_3- descriptors[j].geodesic_lenght_2_3);
 
 				if (area_dif + roi_len_dif + curv_dif + dist_dif <  min_diff_score)
 				{
@@ -1961,3 +2020,15 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 //	Eigen::Matrix<double, 4, 1 > p3;
 //
 //}
+
+static void reset_points(MeshFactory &mesh_fac , int meshIndex )
+{
+	Mesh* m = &mesh_fac.mesh_vec[meshIndex];
+
+	for (size_t i = 0; i < m->colors.size(); i++)
+	{
+		m->colors[i].r = 0;
+		m->colors[i].g = 0;
+		m->colors[i].b = 0;
+	}
+}
