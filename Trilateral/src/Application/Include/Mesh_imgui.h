@@ -60,7 +60,8 @@ float trilateralCurvatureWeight = 1;
 float trilateralGeodesicWeight = 1;
 float trilateralAreaWeight = 1;
 
-
+//spectral embedding
+std::vector<glm::vec3> embed_vertices; 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -179,7 +180,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if(ImGui::Button("Generate spectral embedding"))
+    {
+        embed_vertices = generate_spectral_embedding(m_factory, selected_mesh);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
     ImGui::End();
+        
 }
 
 //display the attributes of selected mesh 

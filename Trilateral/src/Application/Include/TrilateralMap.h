@@ -1867,6 +1867,89 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	m2->colors = m2_colors;
 }
 
+//from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
+static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index  )
+{
+	int k = 3; 
+
+	Mesh* m = &meshFac.mesh_vec[mesh_index];
+	Eigen::MatrixXf affinity_A(m->vertices.size(), m->vertices.size());
+	Eigen::MatrixXf affinity_B(m->vertices.size(), m->vertices.size());
+
+	// 1 - generate affinitiy matrix
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		for (size_t j = 0; j < m->vertices.size(); j++)
+		{
+			affinity_A(i, j) = distance_matrix_p1[j];
+		}
+
+	}
+	//diagonal 0 
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		affinity_A(i, i) = 0;
+	}
+	// R = AAt
+	Eigen::MatrixXf R(m->vertices.size(), m->vertices.size());
+	R = affinity_A * affinity_A.transpose();
+
+	//eigenvectors of A 
+	Eigen::MatrixXf eigen_A(m->vertices.size(), m->vertices.size());
+	//solves the eignevector
+	Eigen::EigenSolver<Eigen::MatrixXf> eigensolver;
+	eigensolver.compute(affinity_A);
+	Eigen::VectorXf eigen_values = eigensolver.eigenvalues().real();
+	Eigen::MatrixXf eigen_vectors = eigensolver.eigenvectors().real();
+
+	//sort them to descending order !!!!
+	std::vector<std::tuple<float, Eigen::VectorXf>> eigen_vectors_and_values;
+
+	for (int i = 0; i < eigen_values.size(); i++) {
+		std::tuple<float, Eigen::VectorXf> vec_and_val(eigen_values[i], eigen_vectors.row(i));
+		eigen_vectors_and_values.push_back(vec_and_val);
+	}
+	std::sort(eigen_vectors_and_values.begin(), eigen_vectors_and_values.end(),
+		[&](const std::tuple<float, Eigen::VectorXf>& a, const std::tuple<float, Eigen::VectorXf>& b) -> bool {
+			return std::get<0>(a) <= std::get<0>(b);
+		});
+	int index = 0;
+	for (auto const vect : eigen_vectors_and_values) {
+		eigen_values(index) = std::get<0>(vect);
+		eigen_vectors.row(index) = std::get<1>(vect);
+		index++;
+	}
+
+
+	//make eigenvalues in diagonal  matrix form
+	Eigen::MatrixXf eigen_values_diag_matrix(k, k);
+	for (size_t i = 0; i < k; i++)
+	{
+		eigen_values_diag_matrix(i, i) = eigen_vectors(i);
+	}
+	//get get 2 3 and 4'th eigenvector 
+	Eigen::MatrixXf first_k_eigen_vectors(m->vertices.size(), k);
+	for (size_t i = 0; i < k; i++)
+	{
+		for (size_t j = 0; j < m->vertices.size(); j++)
+		{
+			first_k_eigen_vectors(i, j) = eigen_vectors(i+1, j); // +1 is because of 2 , 3 and 4 th eigenvectors 
+		}
+	}
+	// end of 4.1 
+	Eigen::MatrixXf A_k( k , m->vertices.size());
+	A_k = eigen_values_diag_matrix * first_k_eigen_vectors.transpose();
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->vertices[i] = glm::vec3(A_k(0 , i ) , A_k(1 , i ) , A_k(2 ,i ));
+	}
+	std::vector<glm::vec3> embed_vertices;
+	embed_vertices = m->vertices; 
+	return embed_vertices; 
+}
+
+
 
 //// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
 //
