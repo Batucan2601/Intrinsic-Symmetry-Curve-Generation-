@@ -8,6 +8,7 @@
 #include <eigen/Eigen/Dense>
 #include "Sampling.h"
 #include "CoreTypeDefs.h"
+#include <src/Application/Include/CoreTypeDefs.h>
 
 #pragma once
 static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
@@ -1295,9 +1296,17 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 	return trilateral_descriptor;
 }
 static void point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec  , const float& curvWeight, 
-	const float& geodesicWeight , const float& areaWeight  , ComparisonMethod& compMethod)
+	const float& geodesicWeight , const float& areaWeight  , ComparisonMethod compMethod)
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	
+	std::vector<std::pair<unsigned int, float> > resemblances;
+	for (size_t i = 0; i < trilateralDescVec.size(); i++)
+	{
+		float resemblance_value = 0;
+		//calculate resemblance value
+	}
 
 	if (compMethod == absoulute_dif)
 	{
@@ -1868,18 +1877,19 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 }
 
 //from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
-static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index  )
+static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index  , std::vector<unsigned int> landmark_vertices )
 {
-	int k = 3; 
 
+	int k = 3; // 2 , 3 and  4th eignvectors 
+ 
 	Mesh* m = &meshFac.mesh_vec[mesh_index];
-	Eigen::MatrixXf affinity_A(m->vertices.size(), m->vertices.size());
-	Eigen::MatrixXf affinity_B(m->vertices.size(), m->vertices.size());
+	Eigen::MatrixXf affinity_A(landmark_vertices.size(), landmark_vertices.size());
+	Eigen::MatrixXf affinity_B(landmark_vertices.size(), landmark_vertices.size());
 
 	// 1 - generate affinitiy matrix
-	for (size_t i = 0; i < m->vertices.size(); i++)
+	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
-		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, landmark_vertices[i]);
 		for (size_t j = 0; j < m->vertices.size(); j++)
 		{
 			affinity_A(i, j) = distance_matrix_p1[j];
@@ -1887,16 +1897,16 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 
 	}
 	//diagonal 0 
-	for (size_t i = 0; i < m->vertices.size(); i++)
+	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		affinity_A(i, i) = 0;
 	}
 	// R = AAt
-	Eigen::MatrixXf R(m->vertices.size(), m->vertices.size());
+	Eigen::MatrixXf R(landmark_vertices.size(), landmark_vertices.size());
 	R = affinity_A * affinity_A.transpose();
 
 	//eigenvectors of A 
-	Eigen::MatrixXf eigen_A(m->vertices.size(), m->vertices.size());
+	Eigen::MatrixXf eigen_A(landmark_vertices.size(), landmark_vertices.size());
 	//solves the eignevector
 	Eigen::EigenSolver<Eigen::MatrixXf> eigensolver;
 	eigensolver.compute(affinity_A);
@@ -1929,24 +1939,31 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		eigen_values_diag_matrix(i, i) = eigen_vectors(i);
 	}
 	//get get 2 3 and 4'th eigenvector 
-	Eigen::MatrixXf first_k_eigen_vectors(m->vertices.size(), k);
+	Eigen::MatrixXf first_k_eigen_vectors(landmark_vertices.size(), k);
 	for (size_t i = 0; i < k; i++)
 	{
-		for (size_t j = 0; j < m->vertices.size(); j++)
+		for (size_t j = 0; j < landmark_vertices.size(); j++)
 		{
 			first_k_eigen_vectors(i, j) = eigen_vectors(i+1, j); // +1 is because of 2 , 3 and 4 th eigenvectors 
 		}
 	}
 	// end of 4.1 
-	Eigen::MatrixXf A_k( k , m->vertices.size());
+	// fill the landmark vector 
+	std::vector<glm::vec3> embedded_points_vec(m->vertices.size());
+	
+	Eigen::MatrixXf A_k( k , landmark_vertices.size());
 	A_k = eigen_values_diag_matrix * first_k_eigen_vectors.transpose();
-	for (size_t i = 0; i < m->vertices.size(); i++)
+	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
-		m->vertices[i] = glm::vec3(A_k(0 , i ) , A_k(1 , i ) , A_k(2 ,i ));
+		embedded_points_vec[landmark_vertices[i]] = glm::vec3(A_k(0 , i ) , A_k(1 , i ) , A_k(2 ,i ));
 	}
-	std::vector<glm::vec3> embed_vertices;
-	embed_vertices = m->vertices; 
-	return embed_vertices; 
+	//now landmark points have been filled
+
+	// continuing with Sparse multidimensional scaling
+	// using landmark points Silva et al 2004 
+
+
+	return embedded_points_vec;
 }
 
 

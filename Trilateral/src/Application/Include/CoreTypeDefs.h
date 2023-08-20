@@ -24,10 +24,10 @@ struct TrilateralDescriptor
 	unsigned int p3;
 };
 
-enum ComparisonMethod
+enum  ComparisonMethod
 {
-	absoulute_dif = 0,
-	quadratic_dif = 1,
+	absoulute_dif,
+	quadratic_dif,
 };
 Mesh generate_mesh_from_plane( Plane* plane , glm::vec3 * m  );
 float get_point_status_from_plane(Plane* plane, glm::vec3* point);

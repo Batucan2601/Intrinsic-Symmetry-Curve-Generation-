@@ -4,7 +4,7 @@
 #include "../Include/Sampling.h"
 #include "../Include/Laplace-Beltrami.h"
 #include <src/Application/Include/DominantSymmetry.h>
-
+#include "../Include/CoreTypeDefs.h"
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -182,7 +182,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if(ImGui::Button("Generate spectral embedding"))
     {
-        embed_vertices = generate_spectral_embedding(m_factory, selected_mesh);
+        embed_vertices = generate_spectral_embedding(m_factory, selected_mesh , selectedIndices);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -222,7 +222,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     if (ImGui::Button("Point Matching Using trilateral Weights "))
     {
-        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
+        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight , quadratic_dif);
     }
     ImGui::End();
 }
