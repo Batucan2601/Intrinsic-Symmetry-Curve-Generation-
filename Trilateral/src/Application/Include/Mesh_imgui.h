@@ -56,9 +56,9 @@ std::vector<TrilateralDescriptor> trilateralDescVector;
 static std::string curtrilateralItem;
 bool is_trilateral_generated = false;
 
-float trialteralCurvatureWeight = 1; 
-float trialteralGeodesicWeight = 1;
-float trialteralAreaWeight = 1;
+float trilateralCurvatureWeight = 1; 
+float trilateralGeodesicWeight = 1;
+float trilateralAreaWeight = 1;
 
 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
@@ -197,9 +197,9 @@ void imgui_selected_mesh_properties_window(const int& selected_mesh , MeshFactor
 void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_factory)
 {
     ImGui::Begin("Trialteral Conf");
-    ImGui::InputFloat("CurvatureWeight :", &trialteralCurvatureWeight);
-    ImGui::InputFloat("GeodesicWeight :", &trialteralGeodesicWeight);
-    ImGui::InputFloat("AreaWeight :", &trialteralAreaWeight);
+    ImGui::InputFloat("CurvatureWeight :", &trilateralCurvatureWeight);
+    ImGui::InputFloat("GeodesicWeight :", &trilateralGeodesicWeight);
+    ImGui::InputFloat("AreaWeight :", &trilateralAreaWeight);
     
     if (ImGui::Button("Generate Trilateral Point Pairs Using Minimum Distance"))
     {
@@ -214,7 +214,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     if (ImGui::Button("Point Matching Using trilateral Weights "))
     {
-        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector );
+        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
     }
     ImGui::End();
 }

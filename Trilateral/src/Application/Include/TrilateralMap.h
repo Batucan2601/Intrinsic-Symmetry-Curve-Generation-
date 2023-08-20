@@ -1294,11 +1294,16 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 
 	return trilateral_descriptor;
 }
-static void point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec )
+static void point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec  , const float& curvWeight, 
+	const float& geodesicWeight , const float& areaWeight  , ComparisonMethod& compMethod)
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 
+	if (compMethod == absoulute_dif)
+	{
 
+	}
+	
 }
 static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , int sampling_no  )
 {
