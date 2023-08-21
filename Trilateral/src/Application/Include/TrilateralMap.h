@@ -1896,7 +1896,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		}
 
 	}
-	//diagonal 0 
+	//diagonal 0 because diagonal is distance to itself
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		affinity_A(i, i) = 0;
@@ -1950,6 +1950,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	// end of 4.1 
 	// fill the landmark vector 
 	std::vector<glm::vec3> embedded_points_vec(m->vertices.size());
+	std::fill(embedded_points_vec.begin(), embedded_points_vec.end(), glm::vec3(0,0,0));
 	
 	Eigen::MatrixXf A_k( k , landmark_vertices.size());
 	A_k = eigen_values_diag_matrix * first_k_eigen_vectors.transpose();
@@ -1961,7 +1962,46 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 
 	// continuing with Sparse multidimensional scaling
 	// using landmark points Silva et al 2004 
+	Eigen::MatrixXf sigma( m->vertices.size() , landmark_vertices.size() ); //sigma
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		glm::vec3 p1 = m->vertices[landmark_vertices[i]];
+		for (size_t j = 0; j < landmark_vertices.size(); j++)
+		{
+			float dist = glm::distance(p1, m->vertices[landmark_vertices[j]]);
+			sigma(i, j) = dist; 
+		}
+	}
+	//calculate mean of sigma
+	Eigen::VectorXf mean_sigma(landmark_vertices.size());
+	mean_sigma.setZero();
+	for (size_t i = 0; i < landmark_vertices.size() ; i++)
+	{
+		mean_sigma += sigma.row(i);
+	}
+	mean_sigma /= landmark_vertices.size(); 
 
+
+	Eigen::MatrixXf L_pseudo_inv(k, landmark_vertices.size());
+	//fill l pseudo inv 
+	for (size_t i = 0; i < k; i++)
+	{
+		for (size_t j = 0; j < landmark_vertices.size(); j++)
+		{
+			L_pseudo_inv(i, j) = first_k_eigen_vectors(i, j) / sqrt(eigen_values(i));
+		}
+	}
+
+	//for each point calculate the embedding vector
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		// if not landmark already 
+		if (embedded_points_vec[i] != glm::vec3(0,0,0))
+		{
+			Eigen::MatrixXf embed_vec = L_pseudo_inv * (sigma.row(i) - mean_sigma);
+			embedded_points_vec[i] = glm::vec3(embed_vec(0,0) , embed_vec(1,0), embed_vec(2,0));
+		}
+	}
 
 	return embedded_points_vec;
 }
