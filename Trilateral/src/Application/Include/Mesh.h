@@ -1,8 +1,10 @@
 #pragma once
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include "glm/glm.hpp"
 using std::ofstream;
+using std::ifstream;
 #define INFINITE 10000000
 
 struct Edge
@@ -22,7 +24,7 @@ public:
 	std::vector<std::vector<std::pair<int, float>>> adjacenies; // all adjacensies for all vertices
 	std::vector<unsigned int > triangles;
 	std::vector<std::vector<unsigned int>> neighbours; 
-
+	std::vector<std::pair<unsigned int, unsigned int>> symmetry_pairs; // for ground truth 
 	glm::mat4 model_mat;
 	//project 
 	bool off_format = false;
@@ -39,4 +41,4 @@ public:
 	void read_off_format(char* filename);
 };
 
-
+void read_symmetry_format(char* filename, Mesh* m);

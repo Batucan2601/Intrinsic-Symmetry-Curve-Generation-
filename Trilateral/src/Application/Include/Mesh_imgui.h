@@ -172,7 +172,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("point matching using AGD"))
     {
-        trilateralDescVector = get_trilateral_points_using_min_distance(m_factory, selected_mesh, selectedIndices);
+        trilateralDescVector = get_trilateral_points_using_closest_pairs(m_factory, selected_mesh, selectedIndices);
     }
     if (ImGui::Button("Reset Points"))
     {
@@ -185,6 +185,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         embed_vertices = generate_spectral_embedding(m_factory, selected_mesh , selectedIndices);
         m_factory.remove_all();
         m_factory.add_all();
+    }
+    if (ImGui::Button("Read symmetry values"))
+    {
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
     }
     ImGui::End();
         

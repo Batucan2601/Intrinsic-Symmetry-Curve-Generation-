@@ -534,7 +534,7 @@ static void trilateral_map_drawing_using_three_points(MeshFactory &mesh_fac ,  i
 	delete[] is_close;
 	return tau_chart; 
 }*/
-static std::vector<TrilateralDescriptor> get_trilateral_points_using_min_distance(MeshFactory& mesh_fac, const int& selected_index , std::vector<unsigned int>& indices )
+static std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index , std::vector<unsigned int>& indices )
 {
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 
@@ -1920,11 +1920,11 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	Eigen::VectorXf eigen_values = eigensolver.eigenvalues().real();
 	Eigen::MatrixXf eigen_vectors = eigensolver.eigenvectors().real();
 	
-	std::cout << "eigen values before sorted  " << std::endl;
+	/*std::cout << "eigen values before sorted  " << std::endl;
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		std::cout << eigen_values(i) << std::endl;
-	}
+	}*/
 	//sort them to descending order !!!!
 	std::vector<unsigned int> sorted_eigen_vertices(landmark_vertices.size()); 
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
@@ -1945,11 +1945,11 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		eigen_values(i) = eigen_values(biggest_index);
 		eigen_values(biggest_index) = temp;
 	}
-	std::cout << "eigen values sorted  " << std::endl;
+	/*std::cout << "eigen values sorted  " << std::endl;
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		std::cout << eigen_values(i) << std::endl;
-	}
+	}*/
 	// now sort eigen_vectors
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
@@ -1980,7 +1980,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	Eigen::MatrixXf A_k( k , landmark_vertices.size());
 	A_k = eigen_values_diag_matrix * first_k_eigen_vectors.transpose();
 	std::cout << " eigen values diag matrix " << std::endl;
-	for (size_t i = 0; i < k; i++)
+	/*for (size_t i = 0; i < k; i++)
 	{
 		for (size_t j = 0; j < k; j++)
 		{
@@ -2002,7 +2002,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		{
 			std::cout << i << " " << j << " " << A_k(i, j) << std::endl;
 		}
-	}
+	}*/
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		embedded_points_vec[landmark_vertices[i]] = glm::vec3(A_k(0 , i ) , A_k(1 , i ) , A_k(2 ,i ));
@@ -2030,11 +2030,11 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	}
 	mean_sigma /= landmark_vertices.size(); 
 
-	std::cout << " mean sigma " << std::endl;
+	/*std::cout << " mean sigma " << std::endl;
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
 		std::cout << mean_sigma(i) << std::endl;
-	}
+	}*/
 
 
 	Eigen::MatrixXf L_pseudo_inv(k, landmark_vertices.size());
@@ -2047,14 +2047,14 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 			std::cout << first_k_eigen_vectors(j, i) << " " << sqrt(eigen_values(i)) << std::endl;;
 		}
 	}
-	std::cout << " L_pseudor inv " << std::endl;
+	/*std::cout << " L_pseudor inv " << std::endl;
 	for (size_t i = 0; i < k; i++)
 	{
 		for (size_t j = 0; j < landmark_vertices.size(); j++)
 		{
 			std::cout << i << " " << j << " " << L_pseudo_inv(i, j) << std::endl;
 		}
-	}
+	}*/
 	//for each point calculate the embedding vector
 	int landmark_vertices_index = 0;
 	for (size_t i = 0; i < m->vertices.size(); i++)
@@ -2073,6 +2073,10 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 			}
 
 		}
+	}
+	for (size_t i = 0; i < m->vertices.size() ; i++)
+	{
+		m->vertices[i] = glm::vec3(embedded_points_vec[i].x * m->vertices[i].x , embedded_points_vec[i].y * m->vertices[i].y , embedded_points_vec[i].z * m->vertices[i].z);
 	}
 
 	// try to create these vecs

@@ -391,3 +391,20 @@ glm::mat4 Mesh::scale_mesh(glm::vec3 scale)
 	glm::mat4 temp = glm::scale(glm::mat4(1.0f), scale);
 	return temp;
 }
+
+
+void read_symmetry_format(char* filename, Mesh* m)
+{
+	std::ifstream symFile(filename);
+	double number = 0;
+	int index = 0;
+	while (symFile >> number)
+	{
+		std::pair<unsigned int, unsigned int> sym_pair;
+		sym_pair.first = index;
+		sym_pair.second = (unsigned int)number;
+		index++;
+		m->symmetry_pairs.push_back(sym_pair);
+	}
+
+}

@@ -275,12 +275,18 @@ int main(void)
 
 // SUGGESTED MESHES 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/faust/tr_reg_018.off");
+    /*Mesh m1((char*)"../../Trilateral/Mesh/faust/tr_reg_018.off");
     Mesh m2((char*)"../../Trilateral/Mesh/faust/tr_reg_000.off");
     Mesh m3((char*)"../../Trilateral/Mesh/meshes2/man0.off");
     Mesh m4((char*)"../../Trilateral/Mesh/meshes2/bunny.off");
-    Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");
+    Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
+
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.1.off");
+    //Mesh m2((char*)"../../Trilateral/Mesh/faust/tr_reg_000.off");
+    //Mesh m3((char*)"../../Trilateral/Mesh/meshes2/man0.off");
+    //Mesh m4((char*)"../../Trilateral/Mesh/meshes2/bunny.off");
+    //Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");
     MeshFactory mesh_fac;
     mesh_fac.add_mesh(m1);
     //mesh_fac.add_mesh(m2);
