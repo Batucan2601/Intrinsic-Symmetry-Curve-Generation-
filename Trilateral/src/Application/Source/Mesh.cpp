@@ -402,9 +402,17 @@ void read_symmetry_format(char* filename, Mesh* m)
 	{
 		std::pair<unsigned int, unsigned int> sym_pair;
 		sym_pair.first = index;
-		sym_pair.second = (unsigned int)number;
+		sym_pair.second = (unsigned int)number-1;
 		index++;
 		m->symmetry_pairs.push_back(sym_pair);
 	}
+	/*while (symFile >> number)
+	{
+		std::pair<unsigned int, unsigned int> sym_pair;
+		sym_pair.first = (unsigned int)number; 
+		symFile >> number;
+		sym_pair.second= (unsigned int)number;
+		m->symmetry_pairs.push_back(sym_pair);
+	}*/
 
 }

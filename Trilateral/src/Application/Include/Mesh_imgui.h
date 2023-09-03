@@ -61,7 +61,8 @@ float trilateralGeodesicWeight = 1;
 float trilateralAreaWeight = 1;
 
 //spectral embedding
-std::vector<glm::vec3> embed_vertices; 
+std::vector<glm::vec3> embed_vertices;
+std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -129,20 +130,6 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-    //ImGui::InputInt("agd point no : ", &no_of_agd_points);
-    /*if (ImGui::Button("Average AGD function"))
-    {
-        AGDIndices = AverageGeodesicFunction(m_factory , selected_mesh , no_of_agd_points);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
-    ImGui::InputInt("mgd point no : ", &no_of_mgd_points);
-    if (ImGui::Button("Minimum Geodesic function"))
-    {
-        MGDIndices = minimumGeodesicFunction  (m_factory, selected_mesh, no_of_mgd_points, AGDIndices);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }*/
     if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str() )) // The second parameter is the label previewed before opening the combo.
     {
         bool isSelected = false; 
@@ -164,6 +151,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         {
             selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points);
             curtrilateralItem = "FPS";
+            is_trilateral_generated = true;
+        }
+        if (ImGui::Selectable((const char*)"Random Symmetry Pairs", &isSelected))
+        {
+            selectedIndices = random_symmetry_indices_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points);
+            curtrilateralItem = "Random Symmetry Pairs";
             is_trilateral_generated = true;
         }
         m_factory.remove_all();
@@ -213,20 +206,18 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     ImGui::InputFloat("GeodesicWeight :", &trilateralGeodesicWeight);
     ImGui::InputFloat("AreaWeight :", &trilateralAreaWeight);
     
+    // get each point  p_i and 2 others with minimal geoesic distance for p_i
     if (ImGui::Button("Generate Trilateral Point Pairs Using Minimum Distance"))
     {
-        trilateralDescVector = get_trilateral_points_using_min_distance(m_factory, selected_mesh, selectedIndices);
-    }
-    if (ImGui::Button("Generate Trilateral Features Using Points "))
-    {
-        for (size_t i = 0; i < trilateralDescVector.size() ; i++)
-        {
-            trilateralDescVector[i] = generate_trilateral_descriptor(m_factory, (int&)selected_mesh, trilateralDescVector[i].p1, trilateralDescVector[i].p2, trilateralDescVector[i].p3, false);
-        }
+        trilateralDescVector = get_trilateral_points_using_closest_pairs(m_factory, selected_mesh, selectedIndices);
     }
     if (ImGui::Button("Point Matching Using trilateral Weights "))
     {
-        point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight , quadratic_dif);
+        calculated_symmetry_pairs = point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
+    }
+    if (ImGui::Button("Display Accuracy"))
+    {
+        display_accuracy(m_factory, (int&)selected_mesh, calculated_symmetry_pairs);
     }
     ImGui::End();
 }

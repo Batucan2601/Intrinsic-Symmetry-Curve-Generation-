@@ -79,3 +79,49 @@ std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples)
 
 	return sampled_id_vector;
 }
+
+std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_samples)
+{
+	std::vector<unsigned int> random_sym_pairs;
+	std::vector<bool> is_sample_exists(m->vertices.size(), 0);
+	for (size_t i = 0; i < no_of_samples / 2 ; i++)
+	{
+
+		int random_no;
+		while (true)
+		{
+			random_no = rand() % (m->vertices.size());
+			if (!is_sample_exists[random_no])
+			{
+				is_sample_exists[random_no] = true; 
+				break; 
+			}
+		}
+		for (size_t j = 0; j < m->symmetry_pairs.size(); j++)
+		{
+			if (m->symmetry_pairs[j].first == random_no )
+			{
+				random_sym_pairs.push_back(m->symmetry_pairs[j].first);
+				random_sym_pairs.push_back(m->symmetry_pairs[j].second);
+				is_sample_exists[m->symmetry_pairs[j].second] = true; 
+			}
+		}
+	}
+
+	m->colors.clear();
+	// color
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		if (is_sample_exists[i])
+		{
+			m->colors.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+		}
+		else
+		{
+			m->colors.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+		}
+	}
+
+	return random_sym_pairs; 
+}
+

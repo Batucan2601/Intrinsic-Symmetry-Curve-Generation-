@@ -11,6 +11,9 @@
 #include <src/Application/Include/CoreTypeDefs.h>
 
 #pragma once
+
+static TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);
+
 static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
 	//create min heap
@@ -543,7 +546,7 @@ static std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pai
 	{
 		TrilateralDescriptor desc;
 		//get two of the closed indexed points
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
 		std::vector<std::pair<float, unsigned int >> distances;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
@@ -592,6 +595,10 @@ static std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pai
 		desc.p1 = indices[i];
 		desc.p2 = minIndexFirst;
 		desc.p3 = minIndexSecond;
+
+		int mesh_no = selected_index; //casting problems 
+		
+		desc = generate_trilateral_descriptor(mesh_fac, mesh_no, desc.p1, desc.p2, desc.p3 , true  ); // do not compute area for now
 		trilateralDesc.push_back(desc); 
 	}
 
@@ -1089,9 +1096,6 @@ std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int
 			float min_dist_from_p3 = std::min(distance_matrix_p1[m->triangles[i+2]], distance_matrix_p2[m->triangles[i+2]]);
 			min_dist_from_p3 = std::min(min_dist_from_p3, distance_matrix_p3[m->triangles[i+2]]);
 
-			p1 *= 1e5;
-			p2 *= 1e5;
-			p3 *= 1e5;
 			float area = compute_triangle_area(p1 , p2, p3);
 
 			int hist_no_p1 = min_dist_from_p1 / step; 
@@ -1110,7 +1114,6 @@ std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int
 			{
 				hist_no_p3 = division_no;
 			}
-			area /= (3  * 1e5);
 			histogram[hist_no_p1] += area;
 			histogram[hist_no_p2] += area;
 			histogram[hist_no_p3] += area;
@@ -1148,6 +1151,19 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
 	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / glm::distance(m->vertices[point_index2] , m->vertices[point_index3]);
 	
+	trilateral_descriptor.euclidian_lenght_1_2 = glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+	trilateral_descriptor.euclidian_lenght_1_3 = glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+	trilateral_descriptor.euclidian_lenght_2_3 = glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
+
+	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / trilateral_descriptor.euclidian_lenght_1_2;
+	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / trilateral_descriptor.euclidian_lenght_1_3;
+	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / trilateral_descriptor.euclidian_lenght_2_3;
+
+	trilateral_descriptor.p1 = point_index1;
+	trilateral_descriptor.p2 = point_index2;
+	trilateral_descriptor.p3 = point_index3;
+
+
 	//for only brute force research 
 	if (is_simplified)
 	{
@@ -1281,39 +1297,171 @@ static TrilateralDescriptor  generate_trilateral_descriptor(  MeshFactory& mesh_
 			float min_dist_from_p3 = std::min(distance_matrix_p1[m->triangles[i + 2]], distance_matrix_p2[m->triangles[i + 2]]);
 			min_dist_from_p3 = std::min(min_dist_from_p3, distance_matrix_p3[m->triangles[i + 2]]);
 
-			p1 *= 1e5;
-			p2 *= 1e5;
-			p3 *= 1e5;
 			float area = compute_triangle_area(p1, p2, p3);
 
-
-
-			area /= (3 * 1e5);
 			trilateral_descriptor.area += area; // get area
+
+		
 		}
 	}
 
+
 	return trilateral_descriptor;
 }
-static void point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec  , const float& curvWeight, 
-	const float& geodesicWeight , const float& areaWeight  , ComparisonMethod compMethod)
+
+// 1 - use area error
+// 2 - use geodesic error
+// 3 - use euclidean error
+// 4 - use curvature error
+struct TrilateralError
+{
+	float areaError;
+	float geodesicError;
+	float euclideanError;
+	float curvatureError;
+};
+static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec  , const float& curvWeight,
+	const float& geodesicWeight , const float& areaWeight )
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
 	
-	std::vector<std::pair<unsigned int, float> > resemblances;
+	std::vector< TrilateralError>  errorVector;
 	for (size_t i = 0; i < trilateralDescVec.size(); i++)
 	{
-		float resemblance_value = 0;
-		//calculate resemblance value
-	}
+		TrilateralDescriptor desc_i = trilateralDescVec[i];
+		float least_error = INFINITY;
+		int least_error_index = -1; 
+		for (size_t j = 0; j < trilateralDescVec.size(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			TrilateralDescriptor desc_j = trilateralDescVec[j];
+			float areaError = abs(desc_j.area - desc_i.area) / std::max(desc_j.area , desc_i.area);
+			areaError = 0;
+			
+			//check for each point
+			//p1
+			float curvErrorP1P2 = abs(desc_j.curvature_1_2- desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2 , desc_i.curvature_1_2);
+			float euclideanErrorP1P2 = abs(desc_j.euclidian_lenght_1_2- desc_i.euclidian_lenght_1_2) / std::max(desc_j.euclidian_lenght_1_2, desc_i.euclidian_lenght_1_2);
+			float geodesicErrorP1P2 = abs(desc_j.geodesic_lenght_1_2- desc_i.geodesic_lenght_1_2) / std::max(desc_j.geodesic_lenght_1_2, desc_i.geodesic_lenght_1_2);
+			
+			float curvErrorP1P3 = abs(desc_j.curvature_1_3 - desc_i.curvature_1_3) / std::max(desc_j.curvature_1_3, desc_i.curvature_1_3);
+			float euclideanErrorP1P3 = abs(desc_j.euclidian_lenght_1_3 - desc_i.euclidian_lenght_1_3) / std::max(desc_j.euclidian_lenght_1_3, desc_i.euclidian_lenght_1_3);
+			float geodesicErrorP1P3 = abs(desc_j.geodesic_lenght_1_3 - desc_i.geodesic_lenght_1_3) / std::max(desc_j.geodesic_lenght_1_3, desc_i.geodesic_lenght_1_3);
+			
+			//p2 
+			float curvErrorP2P1 = abs(desc_j.curvature_1_2 - desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2, desc_i.curvature_1_2);
+			float euclideanErrorP2P1 = abs(desc_j.euclidian_lenght_1_2 - desc_i.euclidian_lenght_1_2) / std::max(desc_j.euclidian_lenght_1_2, desc_i.euclidian_lenght_1_2);
+			float geodesicErrorP2P1 = abs(desc_j.geodesic_lenght_1_2 - desc_i.geodesic_lenght_1_2) / std::max(desc_j.geodesic_lenght_1_2, desc_i.geodesic_lenght_1_2);
 
-	if (compMethod == absoulute_dif)
-	{
+			float curvErrorP2P3 = abs(desc_j.curvature_2_3 - desc_i.curvature_2_3) / std::max(desc_j.curvature_2_3, desc_i.curvature_2_3);
+			float euclideanErrorP2P3 = abs(desc_j.euclidian_lenght_2_3- desc_i.euclidian_lenght_2_3) / std::max(desc_j.euclidian_lenght_2_3, desc_i.euclidian_lenght_2_3);
+			float geodesicErrorP2P3 = abs(desc_j.geodesic_lenght_2_3 - desc_i.geodesic_lenght_2_3) / std::max(desc_j.geodesic_lenght_2_3, desc_i.geodesic_lenght_2_3);
+
+			//p3 
+			float curvErrorP3P1 = curvErrorP1P3;
+			float euclideanErrorP3P1 = euclideanErrorP1P3;
+			float geodesicErrorP3P1 = geodesicErrorP1P3;
+
+			float curvErrorP3P2 = curvErrorP2P3;
+			float euclideanErrorP3P2 = euclideanErrorP2P3;
+			float geodesicErrorP3P2 = geodesicErrorP2P3;
+			
+
+			
+			//check with each
+			// p1 
+			if (least_error > (areaError + curvErrorP1P2 + curvErrorP1P3 + geodesicErrorP1P2 + geodesicErrorP1P3 + euclideanErrorP1P2 + euclideanErrorP1P3))
+			{
+				if ( desc_j.p1 != desc_i.p2 && desc_j.p2 != desc_i.p1)
+				{
+					least_error = areaError + curvErrorP1P2 + curvErrorP1P3 + geodesicErrorP1P2 + geodesicErrorP1P3 + euclideanErrorP1P2 + euclideanErrorP1P3;
+					least_error_index = desc_j.p1;
+				}
+			}
+			//p2
+			if (least_error > (areaError + curvErrorP2P1 + curvErrorP2P3 + geodesicErrorP2P1 + geodesicErrorP2P3 + euclideanErrorP2P1 + euclideanErrorP2P3))
+			{
+				if (desc_j.p2 != desc_i.p3 && desc_j.p3 != desc_i.p2)
+				{
+					least_error = areaError + curvErrorP2P1 + curvErrorP2P3 + geodesicErrorP2P1 + geodesicErrorP2P3 + euclideanErrorP2P1 + euclideanErrorP2P3;
+					least_error_index = desc_j.p2;
+				}
+			}
+			//p3
+			if (least_error > (areaError + curvErrorP3P1 + curvErrorP3P2 + geodesicErrorP3P1 + geodesicErrorP3P2 + euclideanErrorP3P1 + euclideanErrorP3P2))
+			{
+				if (desc_j.p3 != desc_i.p1 && desc_j.p1 != desc_i.p3)
+				{
+					least_error = areaError + curvErrorP3P1 + curvErrorP3P2 + geodesicErrorP3P1 + geodesicErrorP3P2 + euclideanErrorP3P1 + euclideanErrorP3P2;
+					least_error_index = desc_j.p3;
+				}
+			}
+
+		}
+		resemblance_pairs.push_back(std::pair<unsigned int , unsigned int >(trilateralDescVec[i].p1, least_error_index));
 
 	}
-	
+	return resemblance_pairs;
 }
+static void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs)
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	int correct_sample = 0;
+	int total_sample = calculated_symmetry_pairs.size();
+
+	std::vector<std::pair<unsigned int, unsigned int>> relevant_symmetry_pairs;
+	// 1 - first fect the relevant symmetry pairs 
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		for (size_t j = 0;  j < calculated_symmetry_pairs.size();  j++)
+		{
+			if ( (m->symmetry_pairs[i].first == calculated_symmetry_pairs[j].first
+				&& m->symmetry_pairs[i].second == calculated_symmetry_pairs[j].second) 
+				|| (m->symmetry_pairs[i].second == calculated_symmetry_pairs[j].first
+					&& m->symmetry_pairs[i].first == calculated_symmetry_pairs[j].second))
+			{
+				correct_sample += 1;
+				break; 
+			}
+		}
+	}
+
+	std::vector<float> pairdata;
+	glBindBuffer(GL_ARRAY_BUFFER, 3); // VBO will lok into that later 
+	mesh_fac.mesh_point_pairs.clear();
+	for (int i = 0; i < calculated_symmetry_pairs.size(); i++)
+	{
+		glm::vec3 p1 = m->vertices[m->symmetry_pairs[i].first];
+		glm::vec3 p2 = m->vertices[m->symmetry_pairs[i].second];
+		pairdata.push_back(p1.x);
+		pairdata.push_back(p1.y);
+		pairdata.push_back(p1.z);
+
+		pairdata.push_back(255);
+		pairdata.push_back(255);
+		pairdata.push_back(255);
+
+
+		pairdata.push_back(p2.x);
+		pairdata.push_back(p2.y);
+		pairdata.push_back(p2.z);
+
+		pairdata.push_back(255);
+		pairdata.push_back(255);
+		pairdata.push_back(255);
+	}
+	glBufferData(GL_ARRAY_BUFFER, pairdata.size() * sizeof(float), &pairdata[0], GL_STATIC_DRAW);
+	MeshPointPairs p;
+	p.point_pairs = pairdata;
+	mesh_fac.mesh_point_pairs.push_back(p);
+
+	std::cout << " total accuracy " << correct_sample / total_sample  << std::endl;
+}
+
 static void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane  , int sampling_no  )
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
