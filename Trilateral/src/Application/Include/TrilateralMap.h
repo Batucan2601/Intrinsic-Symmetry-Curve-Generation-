@@ -5,6 +5,7 @@
 #include <queue>
 #include <stack>
 #include <algorithm> 
+#include <math.h>
 #include <eigen/Eigen/Dense>
 #include "Sampling.h"
 #include "CoreTypeDefs.h"
@@ -1332,6 +1333,7 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 		TrilateralDescriptor desc_i = trilateralDescVec[i];
 		float least_error = INFINITY;
 		int least_error_index = -1; 
+		float least_among_three = 0;
 		for (size_t j = 0; j < trilateralDescVec.size(); j++)
 		{
 			if (i == j)
@@ -1342,9 +1344,114 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 			float areaError = abs(desc_j.area - desc_i.area) / std::max(desc_j.area , desc_i.area);
 			areaError = 0;
 			
+			//generate 4 vectors ( 2 x 2 )
+			// size here is 1 - area 2 - curv_error 3 - curv_error  4 - euclidian_error 5 - euclidian error 6 - curvError 7 - curvError
+			Eigen::VectorXf i_1(10); 
+			Eigen::VectorXf i_2(10);
+
+			Eigen::VectorXf j_1(10);
+			Eigen::VectorXf j_2(10);
+
+
+			//fil those
+			i_1(0) = desc_i.area;
+			i_2(0) = desc_i.area;
+
+			i_1(1) = desc_i.geodesic_lenght_1_2;
+			i_1(2) = desc_i.geodesic_lenght_1_3;
+
+			i_2(1) = desc_i.geodesic_lenght_1_3;
+			i_2(2) = desc_i.geodesic_lenght_1_2;
+			
+			i_1(3) = desc_i.euclidian_lenght_1_2;
+			i_1(4) = desc_i.euclidian_lenght_1_3;
+
+			i_2(3) = desc_i.euclidian_lenght_1_3;
+			i_2(4) = desc_i.euclidian_lenght_1_2;
+
+			i_1(5) = desc_i.curvature_1_2;
+			i_1(6) = desc_i.curvature_1_3;
+
+			i_2(5) = desc_i.curvature_1_3;
+			i_2(6) = desc_i.curvature_1_2;
+
+			i_1(7) = desc_i.geodesic_lenght_2_3;
+			i_1(8) = desc_i.euclidian_lenght_2_3;
+			i_1(9) = desc_i.curvature_2_3;
+
+			i_2(7) = desc_i.geodesic_lenght_2_3;
+			i_2(8) = desc_i.euclidian_lenght_2_3;
+			i_2(9) = desc_i.curvature_2_3;
+
+			//fill j 
+			j_1(0) = desc_j.area;
+			j_2(0) = desc_j.area;
+
+			j_1(1) = desc_j.geodesic_lenght_1_2;
+			j_1(2) = desc_j.geodesic_lenght_1_3;
+
+			j_2(2) = desc_j.geodesic_lenght_1_2;
+			j_2(1) = desc_j.geodesic_lenght_1_3;
+
+			j_1(3) = desc_j.euclidian_lenght_1_2;
+			j_1(4) = desc_j.euclidian_lenght_1_3;
+
+			j_2(3) = desc_j.euclidian_lenght_1_3;
+			j_2(4) = desc_j.euclidian_lenght_1_2;
+
+			j_1(5) = desc_j.curvature_1_2;
+			j_1(6) = desc_j.curvature_1_3;
+
+			j_2(5) = desc_j.curvature_1_3;
+			j_2(6) = desc_j.curvature_1_2;
+
+			j_1(7) = desc_j.geodesic_lenght_2_3;
+			j_1(8) = desc_j.euclidian_lenght_2_3;
+			j_1(9) = desc_j.curvature_2_3;
+
+			j_2(7) = desc_j.geodesic_lenght_2_3;
+			j_2(8) = desc_j.euclidian_lenght_2_3;
+			j_2(9) = desc_j.curvature_2_3;
+
+			//normalize 4 vectors
+			i_1 = i_1.normalized();
+			i_2 = i_2.normalized();
+			j_1 = j_1.normalized();
+			j_2 = j_2.normalized();
+
+			float dist_i_j_1_1 = sqrt( pow((i_1(0) - j_1(0)),2) + pow((i_1(1) - j_1(1)), 2)+ pow((i_1(2) - j_1(2)), 2)+ pow((i_1(3) - j_1(3)), 2) + pow((i_1(4) - j_1(4)), 2)
+			+	pow((i_1(5) - j_1(5)), 2) + pow((i_1(6) - j_1(6)), 2) + pow((i_1(7) - j_1(7)), 2) + pow((i_1(8) - j_1(8)), 2) + pow((i_1(9) - j_1(9)), 2) );
+			float dist_i_j_1_2 = sqrt(pow((i_1(0) - j_2(0)), 2) + pow((i_1(1) - j_2(1)), 2) + pow((i_1(2) - j_2(2)), 2) + pow((i_1(3) - j_2(3)), 2) + pow((i_1(4) - j_2(4)), 2)
+				+ pow((i_1(5) - j_2(5)), 2) + pow((i_1(6) - j_2(6)), 2) + pow((i_1(7) - j_2(7)), 2) + pow((i_1(8) - j_2(8)), 2) + pow((i_1(9) - j_2(9)), 2));
+			float dist_i_j_2_1 = sqrt(pow((i_2(0) - j_1(0)), 2) + pow((i_2(1) - j_1(1)), 2) + pow((i_2(2) - j_1(2)), 2) + pow((i_2(3) - j_1(3)), 2) + pow((i_2(4) - j_1(4)), 2)
+				+ pow((i_2(5) - j_1(5)), 2) + pow((i_2(6) - j_1(6)), 2) + pow((i_2(7) - j_1(7)), 2) + pow((i_2(8) - j_1(8)), 2) + pow((i_2(9) - j_1(9)), 2));
+			float dist_i_j_2_2 = sqrt(pow((i_2(0) - j_2(0)), 2) + pow((i_2(1) - j_2(1)), 2) + pow((i_2(2) - j_2(2)), 2) + pow((i_2(3) - j_2(3)), 2) + pow((i_2(4) - j_2(4)), 2)
+				+ pow((i_2(5) - j_2(5)), 2) + pow((i_2(6) - j_2(6)), 2) + pow((i_2(7) - j_2(7)), 2) + pow((i_2(8) - j_2(8)), 2) + pow((i_2(9) - j_2(9)), 2));
+			
+			if (dist_i_j_1_1 <= dist_i_j_1_2 && dist_i_j_1_1 <= dist_i_j_2_1 && dist_i_j_1_1 <= dist_i_j_2_2 )
+			{
+				least_among_three = dist_i_j_1_1;
+			}
+			else if (dist_i_j_1_2 <= dist_i_j_1_1 && dist_i_j_1_2 <= dist_i_j_2_1 && dist_i_j_1_2 <= dist_i_j_2_2)
+			{
+				least_among_three = dist_i_j_1_2;
+			}
+			if (dist_i_j_2_1 <= dist_i_j_1_2 && dist_i_j_2_1 <= dist_i_j_1_1 && dist_i_j_1_1 <= dist_i_j_2_2)
+			{
+				least_among_three = dist_i_j_2_1;
+			}
+			if (dist_i_j_2_2 <= dist_i_j_1_2 && dist_i_j_1_1 <= dist_i_j_2_1 && dist_i_j_2_2 <= dist_i_j_1_1)
+			{
+				least_among_three = dist_i_j_2_2;
+			}
+			if (least_among_three < least_error)
+			{
+				least_error = least_among_three;
+				least_error_index = j;
+			}
 			//check for each point
 			//p1
-			float curvErrorP1P2 = abs(desc_j.curvature_1_2- desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2 , desc_i.curvature_1_2);
+			/*float curvErrorP1P2 = abs(desc_j.curvature_1_2- desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2 , desc_i.curvature_1_2);
 			float euclideanErrorP1P2 = abs(desc_j.euclidian_lenght_1_2- desc_i.euclidian_lenght_1_2) / std::max(desc_j.euclidian_lenght_1_2, desc_i.euclidian_lenght_1_2);
 			float geodesicErrorP1P2 = abs(desc_j.geodesic_lenght_1_2- desc_i.geodesic_lenght_1_2) / std::max(desc_j.geodesic_lenght_1_2, desc_i.geodesic_lenght_1_2);
 			
@@ -1399,10 +1506,10 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 					least_error = areaError + curvErrorP3P1 + curvErrorP3P2 + geodesicErrorP3P1 + geodesicErrorP3P2 + euclideanErrorP3P1 + euclideanErrorP3P2;
 					least_error_index = desc_j.p3;
 				}
-			}
+			}*/
 
 		}
-		resemblance_pairs.push_back(std::pair<unsigned int , unsigned int >(trilateralDescVec[i].p1, least_error_index));
+		resemblance_pairs.push_back(std::pair<unsigned int , unsigned int >(trilateralDescVec[i].p1, trilateralDescVec[least_error_index].p1 ));
 
 	}
 	return resemblance_pairs;
@@ -1410,10 +1517,11 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 static void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs)
 {
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
-	int correct_sample = 0;
-	int total_sample = calculated_symmetry_pairs.size();
+	float correct_sample = 0;
+	float total_sample = calculated_symmetry_pairs.size();
 
 	std::vector<std::pair<unsigned int, unsigned int>> relevant_symmetry_pairs;
+	std::vector<bool> is_sample_correct(calculated_symmetry_pairs.size() , false);
 	// 1 - first fect the relevant symmetry pairs 
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
@@ -1425,6 +1533,7 @@ static void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::ve
 					&& m->symmetry_pairs[i].first == calculated_symmetry_pairs[j].second))
 			{
 				correct_sample += 1;
+				is_sample_correct[j] = true; 
 				break; 
 			}
 		}
@@ -1435,24 +1544,43 @@ static void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::ve
 	mesh_fac.mesh_point_pairs.clear();
 	for (int i = 0; i < calculated_symmetry_pairs.size(); i++)
 	{
-		glm::vec3 p1 = m->vertices[m->symmetry_pairs[i].first];
-		glm::vec3 p2 = m->vertices[m->symmetry_pairs[i].second];
+		glm::vec3 p1 = m->vertices[calculated_symmetry_pairs[i].first];
+		glm::vec3 p2 = m->vertices[calculated_symmetry_pairs[i].second];
 		pairdata.push_back(p1.x);
 		pairdata.push_back(p1.y);
 		pairdata.push_back(p1.z);
 
-		pairdata.push_back(255);
-		pairdata.push_back(255);
-		pairdata.push_back(255);
+		if (is_sample_correct[i])
+		{
+			pairdata.push_back(255);
+			pairdata.push_back(255);
+			pairdata.push_back(255);
+		}
+		else
+		{
+			pairdata.push_back(255);
+			pairdata.push_back(0);
+			pairdata.push_back(0);
+		}
+
 
 
 		pairdata.push_back(p2.x);
 		pairdata.push_back(p2.y);
 		pairdata.push_back(p2.z);
+		if (is_sample_correct[i])
+		{
+			pairdata.push_back(255);
+			pairdata.push_back(255);
+			pairdata.push_back(255);
+		}
+		else
+		{
+			pairdata.push_back(255);
+			pairdata.push_back(0);
+			pairdata.push_back(0);
+		}
 
-		pairdata.push_back(255);
-		pairdata.push_back(255);
-		pairdata.push_back(255);
 	}
 	glBufferData(GL_ARRAY_BUFFER, pairdata.size() * sizeof(float), &pairdata[0], GL_STATIC_DRAW);
 	MeshPointPairs p;

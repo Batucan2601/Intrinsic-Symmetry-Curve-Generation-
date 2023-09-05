@@ -82,6 +82,7 @@ std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples)
 
 std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_samples)
 {
+	srand(time(NULL));
 	std::vector<unsigned int> random_sym_pairs;
 	std::vector<bool> is_sample_exists(m->vertices.size(), 0);
 	for (size_t i = 0; i < no_of_samples / 2 ; i++)
