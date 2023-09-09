@@ -1,3 +1,4 @@
+#pragma once 
 #include "MeshFactory.h"
 #include <vector>
 

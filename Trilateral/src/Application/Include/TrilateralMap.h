@@ -2234,27 +2234,31 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		eigen_vectors.col(sorted_eigen_vertices[i]) = temp;
 	}
 
-	//make eigenvalues in diagonal  matrix form
-	Eigen::MatrixXf eigen_values_diag_matrix(k, k);
-	eigen_values_diag_matrix.setZero();
-	for (size_t i = 0; i < k; i++)
-	{
-		eigen_values_diag_matrix(i, i) = eigen_values(i);
-	}
+	
 	//get get 2 3 and 4'th eigenvector 
 	Eigen::MatrixXf first_k_eigen_vectors(landmark_vertices.size(), k);
 	for (size_t i = 0; i < k; i++)
 	{
 			first_k_eigen_vectors.col(i) = eigen_vectors.col(i+1); // +1 is because of 2 , 3 and 4 th eigenvectors 
 	}
+	//make eigenvalues in diagonal  matrix form
+	Eigen::MatrixXf eigen_values_diag_matrix(k, k);
+	eigen_values_diag_matrix.setZero();
+	for (size_t i = 0; i < k; i++)
+	{
+		eigen_values_diag_matrix(i, i) = eigen_values(i + 1);// +1 is because of 2 , 3 and 4 th eigenvectors
+	}
 
-	// end of 4.1 
 	// fill the landmark vector 
 	std::vector<glm::vec3> embedded_points_vec(m->vertices.size());
 	std::fill(embedded_points_vec.begin(), embedded_points_vec.end(), glm::vec3(0,0,0));
 	
 	Eigen::MatrixXf A_k( k , landmark_vertices.size());
 	A_k = eigen_values_diag_matrix * first_k_eigen_vectors.transpose();
+
+	// end of 4.1 
+
+
 	std::cout << " eigen values diag matrix " << std::endl;
 	/*for (size_t i = 0; i < k; i++)
 	{
@@ -2287,24 +2291,24 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 
 	// continuing with Sparse multidimensional scaling
 	// using landmark points Silva et al 2004 
-	Eigen::MatrixXf sigma( m->vertices.size() , landmark_vertices.size() ); //sigma
+	Eigen::MatrixXf sigma( landmark_vertices.size() , m->vertices.size()); //sigma
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		glm::vec3 p1 = m->vertices[i];
 		for (size_t j = 0; j < landmark_vertices.size(); j++)
 		{
-			float dist = glm::distance(p1, m->vertices[landmark_vertices[j]]);
-			sigma(i, j) = dist; 
+			float dist = glm::distance(p1, embedded_points_vec[landmark_vertices[j]]);
+			sigma(j , i ) = dist; 
 		}
 	}
 	//calculate mean of sigma
 	Eigen::VectorXf mean_sigma(landmark_vertices.size());
 	mean_sigma.setZero();
-	for (size_t i = 0; i < landmark_vertices.size() ; i++)
+	for (size_t i = 0; i < m->vertices.size() ; i++)
 	{
-		mean_sigma += sigma.row(i);
+		mean_sigma += sigma.col(i);
 	}
-	mean_sigma /= landmark_vertices.size(); 
+	mean_sigma /= m->vertices.size();
 
 	/*std::cout << " mean sigma " << std::endl;
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
@@ -2317,11 +2321,13 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	//fill l pseudo inv 
 	for (size_t i = 0; i < k; i++)
 	{
-		for (size_t j = 0; j < landmark_vertices.size(); j++)
+		L_pseudo_inv.row(i) = first_k_eigen_vectors.col(i) * sqrt(eigen_values_diag_matrix(i, i));
+
+		/*for (size_t j = 0; j < landmark_vertices.size(); j++)
 		{
 			L_pseudo_inv(i, j) = first_k_eigen_vectors(j , i ) / sqrt(eigen_values(i));
 			std::cout << first_k_eigen_vectors(j, i) << " " << sqrt(eigen_values(i)) << std::endl;;
-		}
+		}*/
 	}
 	/*std::cout << " L_pseudor inv " << std::endl;
 	for (size_t i = 0; i < k; i++)
@@ -2338,7 +2344,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 		// if not landmark already 
 		if ( i != landmark_vertices[landmark_vertices_index])
 		{
-			Eigen::MatrixXf embed_vec = L_pseudo_inv * (sigma.row(i).transpose() - mean_sigma);
+			Eigen::MatrixXf embed_vec = L_pseudo_inv * (sigma.col(i) - mean_sigma);
 			embedded_points_vec[i] = glm::vec3(embed_vec(0,0) , embed_vec(1,0), embed_vec(2,0));
 		}
 		else

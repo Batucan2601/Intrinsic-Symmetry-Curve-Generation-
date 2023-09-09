@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include "Include/Sampling.h"
 #include "Include/Mesh_imgui.h"
 //include prototypes
 #include "Include/Prototypes.h"
@@ -283,18 +284,47 @@ int main(void)
 
 
     Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.1.off");
-    //Mesh m2((char*)"../../Trilateral/Mesh/faust/tr_reg_000.off");
-    //Mesh m3((char*)"../../Trilateral/Mesh/meshes2/man0.off");
-    //Mesh m4((char*)"../../Trilateral/Mesh/meshes2/bunny.off");
-    //Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");
+   
+    
+    
+    
     MeshFactory mesh_fac;
     mesh_fac.add_mesh(m1);
-    //mesh_fac.add_mesh(m2);
-    //mesh_fac.add_mesh(m3);
-    //mesh_fac.add_mesh(m4);
-    //mesh_fac.add_mesh(m5);
 
 
+
+    // test 
+    /*Mesh m2((char*)"../../Trilateral/Mesh/off/0001.isometry.2.off");
+    Mesh m3((char*)"../../Trilateral/Mesh/off/0001.isometry.3.off");
+    Mesh m4((char*)"../../Trilateral/Mesh/off/0001.isometry.4.off");
+    Mesh m5((char*)"../../Trilateral/Mesh/off/0001.isometry.5.off");
+    Mesh m6((char*)"../../Trilateral/Mesh/off/0001.isometry.6.off");
+    Mesh m7((char*)"../../Trilateral/Mesh/off/0001.isometry.7.off");
+    Mesh m8((char*)"../../Trilateral/Mesh/off/0001.isometry.8.off");
+    Mesh m9((char*)"../../Trilateral/Mesh/off/0001.isometry.9.off");
+    Mesh m10((char*)"../../Trilateral/Mesh/off/0001.isometry.10.off");
+    mesh_fac.add_mesh(m2);
+    mesh_fac.add_mesh(m2);
+    mesh_fac.add_mesh(m3);
+    mesh_fac.add_mesh(m4);
+    mesh_fac.add_mesh(m5);
+    mesh_fac.add_mesh(m6);
+    mesh_fac.add_mesh(m7);
+    mesh_fac.add_mesh(m8);
+    mesh_fac.add_mesh(m9);
+    mesh_fac.add_mesh(m10);
+    for ( int i = 0; i < 10; i++)
+    {
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &mesh_fac.mesh_vec[i]);
+        int no_of_points = 100; 
+        std::vector<unsigned int> rand_indices =  random_symmetry_indices_sampling(&mesh_fac.mesh_vec[i], no_of_points);
+        std::vector<TrilateralDescriptor> tr =    get_trilateral_points_using_closest_pairs(mesh_fac, i, rand_indices);
+        int temp1 = 1;
+        int temp2 = 1;
+        int temp3 = 1;
+        std::vector<std::pair<unsigned int, unsigned int>> pairs = point_match_trilateral_weights(mesh_fac, i, tr, temp1, temp2, temp3);
+        display_accuracy(mesh_fac, i, pairs);
+    }*/
 
 
 
@@ -385,7 +415,6 @@ int main(void)
             mesh_fac.draw_mesh(i);
         }
        
-
         glBindVertexArray(VAO_matching_points);
         for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
         {
