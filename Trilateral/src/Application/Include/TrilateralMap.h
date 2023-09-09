@@ -2341,21 +2341,10 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	int landmark_vertices_index = 0;
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
-		// if not landmark already 
-		if ( i != landmark_vertices[landmark_vertices_index])
-		{
-			Eigen::MatrixXf embed_vec = L_pseudo_inv * (sigma.col(i) - mean_sigma);
-			embedded_points_vec[i] = glm::vec3(embed_vec(0,0) , embed_vec(1,0), embed_vec(2,0));
-		}
-		else
-		{
-			if (landmark_vertices_index + 1 != landmark_vertices.size())
-			{
-				landmark_vertices_index += 1;
-			}
-
-		}
+		Eigen::MatrixXf embed_vec = L_pseudo_inv * (sigma.col(i) - mean_sigma);
+		embedded_points_vec[i] = glm::vec3(embed_vec(0,0) , embed_vec(1,0), embed_vec(2,0));
 	}
+
 	for (size_t i = 0; i < m->vertices.size() ; i++)
 	{
 		m->vertices[i] = glm::vec3(embedded_points_vec[i].x * m->vertices[i].x , embedded_points_vec[i].y * m->vertices[i].y , embedded_points_vec[i].z * m->vertices[i].z);
