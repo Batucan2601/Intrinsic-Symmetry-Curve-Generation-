@@ -139,7 +139,7 @@ glm::mat4 proj;
 glm::mat4 view;
 glm::mat4 model;
 glm::vec3 direction;
-const float cameraSpeed = 1.0f;// speed of the camera
+const float cameraSpeed = 10.0f;// speed of the camera
 bool camera_mouse_lock = true; // mouse callback lock for up and down movement
 // mvp matrix
 glm::mat4 MVP;
@@ -283,7 +283,7 @@ int main(void)
     Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.1.off");
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.5.off");
    
     
     

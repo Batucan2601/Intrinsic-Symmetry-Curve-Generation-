@@ -63,6 +63,7 @@ float trilateralAreaWeight = 1;
 //spectral embedding
 std::vector<glm::vec3> embed_vertices;
 std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
+Mesh m1, m2;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -124,12 +125,22 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-    if (ImGui::Button("point matching using dominant symmetry plane "))
+    if (ImGui::Button("separate mesh with dominant symmetry plane "))
+    {
+        generate_two_separate_mesh_using_dominant_symmetry_plane(plane , &m_factory.mesh_vec[selected_mesh] , &m1 , &m2  ) ;
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("match two separated meshes with FPS  "))
+    {
+        //match_two_meshes_with_fps(&m1, &m2)
+    }
+    /*if (ImGui::Button("point matching using dominant symmetry plane "))
     {
         point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_points);
         m_factory.remove_all();
         m_factory.add_all();
-    }
+    }*/
     if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str() )) // The second parameter is the label previewed before opening the combo.
     {
         bool isSelected = false; 

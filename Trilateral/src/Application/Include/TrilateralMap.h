@@ -1363,25 +1363,25 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 			i_2(1) = desc_i.geodesic_lenght_1_3;
 			i_2(2) = desc_i.geodesic_lenght_1_2;
 			
-			i_1(3) = desc_i.euclidian_lenght_1_2;
-			i_1(4) = desc_i.euclidian_lenght_1_3;
+			i_1(3) = 0;//desc_i.euclidian_lenght_1_2;
+			i_1(4) = 0;//desc_i.euclidian_lenght_1_3;
 
-			i_2(3) = desc_i.euclidian_lenght_1_3;
-			i_2(4) = desc_i.euclidian_lenght_1_2;
+			i_2(3) = 0;//desc_i.euclidian_lenght_1_3;
+			i_2(4) = 0;//desc_i.euclidian_lenght_1_2;
 
-			i_1(5) = desc_i.curvature_1_2;
-			i_1(6) = desc_i.curvature_1_3;
+			i_1(5) = 0;//desc_i.curvature_1_2;
+			i_1(6) = 0;//desc_i.curvature_1_3;
 
-			i_2(5) = desc_i.curvature_1_3;
-			i_2(6) = desc_i.curvature_1_2;
+			i_2(5) = 0;//desc_i.curvature_1_3;
+			i_2(6) = 0;//desc_i.curvature_1_2;
 
 			i_1(7) = desc_i.geodesic_lenght_2_3;
-			i_1(8) = desc_i.euclidian_lenght_2_3;
-			i_1(9) = desc_i.curvature_2_3;
+			i_1(8) = 0;//desc_i.euclidian_lenght_2_3;
+			i_1(9) = 0;//desc_i.curvature_2_3;
 
 			i_2(7) = desc_i.geodesic_lenght_2_3;
-			i_2(8) = desc_i.euclidian_lenght_2_3;
-			i_2(9) = desc_i.curvature_2_3;
+			i_2(8) = 0;//desc_i.euclidian_lenght_2_3;
+			i_2(9) = 0;//desc_i.curvature_2_3;
 
 			//fill j 
 			j_1(0) = desc_j.area;
@@ -1393,25 +1393,25 @@ static std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilatera
 			j_2(2) = desc_j.geodesic_lenght_1_2;
 			j_2(1) = desc_j.geodesic_lenght_1_3;
 
-			j_1(3) = desc_j.euclidian_lenght_1_2;
-			j_1(4) = desc_j.euclidian_lenght_1_3;
+			j_1(3) = 0;//desc_j.euclidian_lenght_1_2;
+			j_1(4) = 0;//desc_j.euclidian_lenght_1_3;
 
-			j_2(3) = desc_j.euclidian_lenght_1_3;
-			j_2(4) = desc_j.euclidian_lenght_1_2;
+			j_2(3) = 0;//desc_j.euclidian_lenght_1_3;
+			j_2(4) = 0;//desc_j.euclidian_lenght_1_2;
 
-			j_1(5) = desc_j.curvature_1_2;
-			j_1(6) = desc_j.curvature_1_3;
+			j_1(5) = 0;//desc_j.curvature_1_2;
+			j_1(6) = 0;//desc_j.curvature_1_3;
 
-			j_2(5) = desc_j.curvature_1_3;
-			j_2(6) = desc_j.curvature_1_2;
+			j_2(5) = 0;//desc_j.curvature_1_3;
+			j_2(6) = 0;//desc_j.curvature_1_2;
 
 			j_1(7) = desc_j.geodesic_lenght_2_3;
-			j_1(8) = desc_j.euclidian_lenght_2_3;
-			j_1(9) = desc_j.curvature_2_3;
+			j_1(8) = 0;//desc_j.euclidian_lenght_2_3;
+			j_1(9) = 0;//desc_j.curvature_2_3;
 
 			j_2(7) = desc_j.geodesic_lenght_2_3;
-			j_2(8) = desc_j.euclidian_lenght_2_3;
-			j_2(9) = desc_j.curvature_2_3;
+			j_2(8) = 0;//desc_j.euclidian_lenght_2_3;
+			j_2(9) = 0;//desc_j.curvature_2_3;
 
 			//normalize 4 vectors
 			i_1 = i_1.normalized();
@@ -2351,7 +2351,7 @@ static std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, 
 	}
 
 	// try to create these vecs
-	m->vertices = embedded_points_vec;
+	//m->vertices = embedded_points_vec;
 	return embedded_points_vec;
 }
 

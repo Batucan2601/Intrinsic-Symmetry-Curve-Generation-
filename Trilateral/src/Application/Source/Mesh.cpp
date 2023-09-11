@@ -3,7 +3,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 
+Mesh::Mesh()
+{
 
+}
 Mesh::Mesh(char* filename)
 {
 	model_mat = glm::mat4(1.0f);

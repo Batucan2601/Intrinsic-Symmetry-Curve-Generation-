@@ -31,3 +31,5 @@ enum  ComparisonMethod
 };
 Mesh generate_mesh_from_plane( Plane* plane , glm::vec3 * m  );
 float get_point_status_from_plane(Plane* plane, glm::vec3* point);
+glm::vec3 project_point_to_plane(Plane* plane, glm::vec3* point);
+glm::vec3 symmetry_point_from_plane(Plane* plane, glm::vec3* point);
