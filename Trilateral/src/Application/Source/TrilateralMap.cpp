@@ -593,6 +593,70 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 
 	return trilateralDesc;
 }
+ std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices)
+ {
+	 std::vector<TrilateralDescriptor> trilateralDesc;
+	 for (size_t i = 0; i < indices.size(); i++)
+	 {
+		 TrilateralDescriptor desc;
+		 //get two of the closed indexed points
+		 std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		 std::vector<std::pair<float, unsigned int >> distances;
+		 for (size_t j = 0; j < geodesic_distances.size(); j++)
+		 {
+			 bool is_in_indices = false;
+			 for (size_t k = 0; k < indices.size(); k++)
+			 {
+				 if (j == indices[k] && j != indices[i])
+				 {
+					 is_in_indices = true;
+					 break;
+				 }
+			 }
+
+			 if (is_in_indices)
+			 {
+				 float dist = geodesic_distances[j];
+				 unsigned int index = j;
+				 std::pair<float, unsigned int > pair;
+				 pair.first = dist;
+				 pair.second = j;
+				 distances.push_back(pair);
+			 }
+		 }
+		 //get first and second closest
+		 float minVal = INFINITY;
+		 float minIndexFirst = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (minVal > distances[j].first)
+			 {
+				 minIndexFirst = distances[j].second;
+				 minVal = distances[j].first;
+			 }
+		 }
+
+		 minVal = INFINITY;
+		 float minIndexSecond = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (minVal > distances[j].first && minIndexFirst != distances[j].second && distances[j].second != indices[i])
+			 {
+				 minIndexSecond = distances[j].second;
+				 minVal = distances[j].first;
+			 }
+		 }
+		 desc.p1 = indices[i];
+		 desc.p2 = minIndexFirst;
+		 desc.p3 = minIndexSecond;
+
+
+		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
+		 trilateralDesc.push_back(desc);
+	 }
+
+	 return trilateralDesc;
+ }
  std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points)
 {
 	std::vector<unsigned int> agd_indices;
@@ -1297,11 +1361,192 @@ std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int
 
 	return trilateral_descriptor;
 }
+TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified)
+{
+	TrilateralDescriptor trilateral_descriptor;//trialteral descriptor 
+	//init descriptor
+	trilateral_descriptor.area = 0;
+	trilateral_descriptor.geodesic_lenght_1_2 = 0;
+	trilateral_descriptor.geodesic_lenght_1_3 = 0;
+	trilateral_descriptor.geodesic_lenght_2_3 = 0;
 
- std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
+
+	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+
+	// get distances
+	trilateral_descriptor.geodesic_lenght_1_2 = distance_matrix_p1[point_index2];
+	trilateral_descriptor.geodesic_lenght_1_3 = distance_matrix_p1[point_index3];
+	trilateral_descriptor.geodesic_lenght_2_3 = distance_matrix_p2[point_index3];
+
+	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
+
+	trilateral_descriptor.euclidian_lenght_1_2 = glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+	trilateral_descriptor.euclidian_lenght_1_3 = glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+	trilateral_descriptor.euclidian_lenght_2_3 = glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
+
+	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / trilateral_descriptor.euclidian_lenght_1_2;
+	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / trilateral_descriptor.euclidian_lenght_1_3;
+	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / trilateral_descriptor.euclidian_lenght_2_3;
+
+	trilateral_descriptor.p1 = point_index1;
+	trilateral_descriptor.p2 = point_index2;
+	trilateral_descriptor.p3 = point_index3;
+
+
+	//for only brute force research 
+	if (is_simplified)
+	{
+		return trilateral_descriptor;
+	}
+	int random_vertex_index = rand() % m->vertices.size(); // we know that this is inside the system
+
+	bool is_visited_interior = false;
+
+	//now check if this index is equal to point1 point2 or point3 
+	while ((random_vertex_index == point_index1 || random_vertex_index == point_index2 || random_vertex_index == point_index3))
+	{
+		random_vertex_index += 1;
+	}
+	//if not equal continue 
+	//create a stack for BFS ( breadth first search )
+	std::stack<int> stack;  // a stack consisting of indices
+	// get the adjacencies
+	std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
+	//lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
+	int* is_visited = new int[m->vertices.size()];
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		is_visited[i] = 0;
+	}
+	for (size_t i = 0; i < path_1_2.size(); i++)
+	{
+		is_visited[path_1_2[i]] = -1;
+	}
+	for (size_t i = 0; i < path_1_3.size(); i++)
+	{
+		is_visited[path_1_3[i]] = -1;
+	}
+	for (size_t i = 0; i < path_2_3.size(); i++)
+	{
+		is_visited[path_2_3[i]] = -1;
+	}
+
+	//push our point to stack
+	stack.push(random_vertex_index);
+	while (!stack.empty())
+	{
+		int index = stack.top();
+		stack.pop(); //vertex index popped from stack
+		if (is_visited[index] == 0) //not visited
+		{
+			is_visited[index] = 1; // now te vertex has been visited
+
+			// this region of loop assumes index is not edge, therefore add the adjacencies
+			for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
+			{
+				stack.push(mesh_adjacencies[index][i].first);
+			}
+		}
+		if (is_visited[index] == -1) //do nothing 
+		{
+			;
+		}
+	}
+
+
+
+	for (size_t i = 0; i < m->vertices.size(); i++)  //start checking with visited area , it is highly likelty that visited is outside
+	{
+		if (is_visited[i] == 1)
+		{
+			for (size_t j = i; j < m->vertices.size(); j++)
+			{
+				if (i != j)
+				{
+					std::vector<int> path_i_j = draw_with_fib_heap_implementation(*m, i, j);
+
+					for (size_t k = 0; k < path_i_j.size(); k++)
+					{
+						for (size_t t = 0; t < path_1_2.size(); t++)
+						{
+							if (path_i_j[k] == path_1_2[t])
+							{
+								is_visited_interior = true;
+							}
+						}
+						for (size_t t = 0; t < path_1_3.size(); t++)
+						{
+							if (path_i_j[k] == path_1_3[t])
+							{
+								is_visited_interior = true;
+							}
+						}
+						for (size_t t = 0; t < path_2_3.size(); t++)
+						{
+							if (path_i_j[k] == path_2_3[t])
+							{
+								is_visited_interior = true;
+							}
+						}
+						if (is_visited_interior)
+						{
+							break;
+						}
+					}
+
+					if (is_visited_interior)
+					{
+						break;
+					}
+				}
+			}
+			if (is_visited_interior)
+			{
+				break;
+			}
+		}
+	}
+
+
+	//area 
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		if (is_visited[m->triangles[i]] != 0 || is_visited[m->triangles[i + 1]] != 0 || is_visited[m->triangles[i + 2]] != 0) //if any vertex is visited
+		{
+			glm::vec3 p1 = m->vertices[m->triangles[i]];
+			glm::vec3 p2 = m->vertices[m->triangles[i + 1]];
+			glm::vec3 p3 = m->vertices[m->triangles[i + 2]];
+
+			float min_dist_from_p1 = std::min(distance_matrix_p1[m->triangles[i]], distance_matrix_p2[m->triangles[i]]);
+			min_dist_from_p1 = std::min(min_dist_from_p1, distance_matrix_p3[m->triangles[i]]);
+
+			float min_dist_from_p2 = std::min(distance_matrix_p1[m->triangles[i + 1]], distance_matrix_p2[m->triangles[i + 1]]);
+			min_dist_from_p2 = std::min(min_dist_from_p2, distance_matrix_p3[m->triangles[i + 1]]);
+
+			float min_dist_from_p3 = std::min(distance_matrix_p1[m->triangles[i + 2]], distance_matrix_p2[m->triangles[i + 2]]);
+			min_dist_from_p3 = std::min(min_dist_from_p3, distance_matrix_p3[m->triangles[i + 2]]);
+
+			float area = compute_triangle_area(p1, p2, p3);
+
+			trilateral_descriptor.area += area; // get area
+
+
+		}
+	}
+
+
+	return trilateral_descriptor;
+}
+ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh*mesh, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight)
 {
-	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
 
 	std::vector< TrilateralError>  errorVector;
@@ -1491,9 +1736,8 @@ std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int
 	}
 	return resemblance_pairs;
 }
- void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs)
+ void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs)
 {
-	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	float correct_sample = 0;
 	float total_sample = calculated_symmetry_pairs.size();
 

@@ -3,6 +3,7 @@
 #include "../../External/Include/eigen/Eigen/Core"
 #include "../../External/Include/eigen/Eigen/Eigenvalues" 
 #include "../Include/Sampling.h"
+#include "../Include/TrilateralMap.h"
 using Eigen::MatrixXd;
 Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
 {
@@ -183,10 +184,36 @@ void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh*
 
 }
 
-void match_two_meshes_with_fps(Mesh* m1, Mesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2 , int no_of_samples)
+void match_two_meshes_with_fps(Mesh* selected_mesh ,  Mesh* m1, Mesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2 , int no_of_samples)
 {
 	std::vector<unsigned int> sampled_points_m1 =  furthest_point_sampling(m1, no_of_samples);
 	std::vector<unsigned int> sampled_points_m2 =  furthest_point_sampling(m2, no_of_samples);
+	std::vector<TrilateralDescriptor> trilateral_desc_m1 = get_trilateral_points_using_closest_pairs(m1, sampled_points_m1);
+	std::vector<TrilateralDescriptor> trilateral_desc_m2 = get_trilateral_points_using_closest_pairs(m2, sampled_points_m2);
+	std::vector<TrilateralDescriptor> trilateral_desc_original_mesh;
 
-	//use mapped
+	float trilteralW1 = 1;
+	float trilteralW2 = 1;
+	float trilteralW3 = 1;
+	float trilteralW4 = 1;
+	//use mapped functions to return to original
+	for (size_t i = 0; i < trilateral_desc_m1.size(); i++)
+	{
+		trilateral_desc_m1[i].p1 = (*indices_for_m1)[trilateral_desc_m1[i].p1];
+		trilateral_desc_m1[i].p2 = (*indices_for_m1)[trilateral_desc_m1[i].p2];
+		trilateral_desc_m1[i].p3 = (*indices_for_m1)[trilateral_desc_m1[i].p3];
+		
+		trilateral_desc_original_mesh.push_back(trilateral_desc_m1[i]);
+	}
+
+	for (size_t i = 0; i < trilateral_desc_m2.size(); i++)
+	{
+		trilateral_desc_m2[i].p1 = (*indices_for_m1)[trilateral_desc_m2[i].p1];
+		trilateral_desc_m2[i].p2 = (*indices_for_m1)[trilateral_desc_m2[i].p2];
+		trilateral_desc_m2[i].p3 = (*indices_for_m1)[trilateral_desc_m2[i].p3];
+		trilateral_desc_original_mesh.push_back(trilateral_desc_m2[i]);
+	}
+
+	std::vector<std::pair<unsigned int,unsigned int>> pairs =  point_match_trilateral_weights(selected_mesh, trilateral_desc_original_mesh, trilteralW1, trilteralW2, trilteralW3);
+	display_accuracy(selected_mesh ,  pairs);
 }

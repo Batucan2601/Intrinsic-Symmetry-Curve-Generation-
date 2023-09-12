@@ -316,6 +316,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	return tau_chart; 
 }*/
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index, std::vector<unsigned int>& indices);
+std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh*m, std::vector<unsigned int>& indices);
 std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points);
 std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
@@ -325,11 +326,12 @@ std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int
 
 // the ultimate trilateral descriptor generator 
 TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);
+TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
 
 
-std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(MeshFactory& mesh_fac, int& selected_index, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
+std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh*m, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight);
-void display_accuracy(MeshFactory& mesh_fac, int& selected_index, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs);
+void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs);
 
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 

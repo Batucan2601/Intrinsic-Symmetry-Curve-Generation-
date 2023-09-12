@@ -218,6 +218,8 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     ImGui::InputFloat("GeodesicWeight :", &trilateralGeodesicWeight);
     ImGui::InputFloat("AreaWeight :", &trilateralAreaWeight);
     
+    Mesh m = m_factory.mesh_vec[selected_mesh];
+
     // get each point  p_i and 2 others with minimal geoesic distance for p_i
     if (ImGui::Button("Generate Trilateral Point Pairs Using Minimum Distance"))
     {
@@ -225,11 +227,11 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     if (ImGui::Button("Point Matching Using trilateral Weights "))
     {
-        calculated_symmetry_pairs = point_match_trilateral_weights(m_factory, (int&)selected_mesh , trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
+        calculated_symmetry_pairs = point_match_trilateral_weights(&m, trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
     }
     if (ImGui::Button("Display Accuracy"))
     {
-        display_accuracy(m_factory, (int&)selected_mesh, calculated_symmetry_pairs);
+        display_accuracy(m, calculated_symmetry_pairs);
     }
     ImGui::End();
 }
