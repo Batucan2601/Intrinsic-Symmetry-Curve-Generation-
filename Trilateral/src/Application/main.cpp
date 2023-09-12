@@ -18,6 +18,7 @@
 //#include "Mesh.h"
 #include "Include/MeshFactory.h"
 #include "Include/Shader.h"
+#include "Include/TrilateralMap.h"
 #pragma region  glcall 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();x;ASSERT(GLLogCall(#x, __FILE__, __LINE__));

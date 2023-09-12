@@ -34,6 +34,7 @@ set(Source_Files
     "src/Application/Source/Laplace-Beltrami.cpp"
     "src/Application/Source/DominantSymmetry.cpp"
     "src/Application/Source/CoreTypeDefs.cpp"
+    "src/Application/Source/TrilateralMap.cpp"
     "src/External/Include/imgui/imgui.cpp"
     "src/External/Include/imgui/imgui_demo.cpp"
     "src/External/Include/imgui/imgui_draw.cpp"

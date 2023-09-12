@@ -64,6 +64,7 @@ float trilateralAreaWeight = 1;
 std::vector<glm::vec3> embed_vertices;
 std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
 Mesh m1, m2;
+std::vector<int> m1_map_indices, m2_map_indices;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -98,7 +99,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
         
-        is_visited = trialteral_ROI(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index, partition_no , is_visited_interior);
+        //is_visited = trialteral_ROI(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index, partition_no , is_visited_interior);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -127,13 +128,13 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("separate mesh with dominant symmetry plane "))
     {
-        generate_two_separate_mesh_using_dominant_symmetry_plane(plane , &m_factory.mesh_vec[selected_mesh] , &m1 , &m2  ) ;
+        generate_two_separate_mesh_using_dominant_symmetry_plane(plane , &m_factory.mesh_vec[selected_mesh] , &m1 , &m2 , &m1_map_indices , &m2_map_indices ) ;
         m_factory.remove_all();
         m_factory.add_all();
     }
     if (ImGui::Button("match two separated meshes with FPS  "))
     {
-        //match_two_meshes_with_fps(&m1, &m2)
+        //match_two_meshes_with_fps(&m1, &m2 , m1_)
     }
     /*if (ImGui::Button("point matching using dominant symmetry plane "))
     {

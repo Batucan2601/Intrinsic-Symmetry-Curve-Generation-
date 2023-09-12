@@ -2,6 +2,7 @@
 #include "../Include/glm/glm.hpp"
 #include "../../External/Include/eigen/Eigen/Core"
 #include "../../External/Include/eigen/Eigen/Eigenvalues" 
+#include "../Include/Sampling.h"
 using Eigen::MatrixXd;
 Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
 {
@@ -112,23 +113,23 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 * m1 represents the points where you get the + sign when you plug the vertices in the plane
 * m2 represents the minus sign 
 */
-void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2)
+void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
 {
 
-	std::vector<int> indices_for_m1(mesh_to_be_separated->vertices.size(), -1); //input old index, gives new index 
-	std::vector<int> indices_for_m2(mesh_to_be_separated->vertices.size(), -1); //input old index, gives new index 
+	std::fill(indices_for_m1->begin(), indices_for_m1->end(), -1);
+	std::fill(indices_for_m2->begin(), indices_for_m2->end(), -1);
 	// separate vertices
 	for (size_t i = 0; i < mesh_to_be_separated->vertices.size(); i++)
 	{
 		if (get_point_status_from_plane( &plane , &mesh_to_be_separated->vertices[i]) > 0 )
 		{
-			indices_for_m1[i] = m1->vertices.size();
+			(*indices_for_m1)[i] = m1->vertices.size();
 
 			m1->vertices.push_back(mesh_to_be_separated->vertices[i]);
 		}
 		else
 		{
-			indices_for_m2[i] = m2->vertices.size();
+			(*indices_for_m2)[i] = m2->vertices.size();
 
 			m2->vertices.push_back(mesh_to_be_separated->vertices[i]);
 		}
@@ -148,11 +149,11 @@ void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh*
 			{
 				if (sign_i > 0)
 				{
-					adjacencies_m1.push_back(std::pair <int,float>(indices_for_m1[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
+					adjacencies_m1.push_back(std::pair <int,float>((*indices_for_m1)[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
 				}
 				if (sign_i < 0)
 				{
-					adjacencies_m2.push_back(std::pair <int, float>(indices_for_m2[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
+					adjacencies_m2.push_back(std::pair <int, float>((*indices_for_m2)[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
 				}
 			}
 		}
@@ -168,16 +169,24 @@ void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh*
 
 		if (sign_i > 0 && sign_i_1 > 0 && sign_i_2 > 0)
 		{
-			m1->triangles.push_back(indices_for_m1[i]);
-			m1->triangles.push_back(indices_for_m1[i+1]);
-			m1->triangles.push_back(indices_for_m1[i+2]);
+			m1->triangles.push_back((*indices_for_m1)[i]);
+			m1->triangles.push_back((*indices_for_m1)[i+1]);
+			m1->triangles.push_back((*indices_for_m1)[i+2]);
 		}
 		else if (sign_i < 0 && sign_i_1 < 0 && sign_i_2 < 0)
 		{
-			m2->triangles.push_back(indices_for_m2[i]);
-			m2->triangles.push_back(indices_for_m2[i + 1]);
-			m2->triangles.push_back(indices_for_m2[i + 2]);
+			m2->triangles.push_back((*indices_for_m2)[i]);
+			m2->triangles.push_back((*indices_for_m2)[i + 1]);
+			m2->triangles.push_back((*indices_for_m2)[i + 2]);
 		}
 	}
 
+}
+
+void match_two_meshes_with_fps(Mesh* m1, Mesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2 , int no_of_samples)
+{
+	std::vector<unsigned int> sampled_points_m1 =  furthest_point_sampling(m1, no_of_samples);
+	std::vector<unsigned int> sampled_points_m2 =  furthest_point_sampling(m2, no_of_samples);
+
+	//use mapped
 }
