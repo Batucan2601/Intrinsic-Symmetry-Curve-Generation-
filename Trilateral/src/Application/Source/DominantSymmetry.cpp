@@ -116,7 +116,8 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 */
 void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
 {
-
+	indices_for_m1->resize(mesh_to_be_separated->vertices.size());
+	indices_for_m2->resize(mesh_to_be_separated->vertices.size());
 	std::fill(indices_for_m1->begin(), indices_for_m1->end(), -1);
 	std::fill(indices_for_m2->begin(), indices_for_m2->end(), -1);
 	// separate vertices
@@ -146,15 +147,15 @@ void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh*
 		{
 			float sign_j = get_point_status_from_plane(&plane, &mesh_to_be_separated->vertices[j]);
 
-			if (sign_i  * sign_j > 0 )
+			if (sign_i  * sign_j >= 0 )
 			{
-				if (sign_i > 0)
+				if (sign_i >= 0)
 				{
-					adjacencies_m1.push_back(std::pair <int,float>((*indices_for_m1)[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
+					adjacencies_m1.push_back(std::pair <int,float>((*indices_for_m1)[mesh_to_be_separated->adjacenies[i][j].first], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
 				}
-				if (sign_i < 0)
+				else if (sign_i < 0)
 				{
-					adjacencies_m2.push_back(std::pair <int, float>((*indices_for_m2)[j], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
+					adjacencies_m2.push_back(std::pair <int, float>((*indices_for_m2)[mesh_to_be_separated->adjacenies[i][j].first], glm::distance(mesh_to_be_separated->vertices[i], mesh_to_be_separated->vertices[j])));
 				}
 			}
 		}
@@ -168,17 +169,17 @@ void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh*
 		float sign_i_1 = get_point_status_from_plane(&plane, &mesh_to_be_separated->vertices[mesh_to_be_separated->triangles[i+1]]);
 		float sign_i_2 = get_point_status_from_plane(&plane, &mesh_to_be_separated->vertices[mesh_to_be_separated->triangles[i+2]]);
 
-		if (sign_i > 0 && sign_i_1 > 0 && sign_i_2 > 0)
+		if (sign_i >= 0 && sign_i_1 >= 0 && sign_i_2 >= 0)
 		{
-			m1->triangles.push_back((*indices_for_m1)[i]);
-			m1->triangles.push_back((*indices_for_m1)[i+1]);
-			m1->triangles.push_back((*indices_for_m1)[i+2]);
+			m1->triangles.push_back((*indices_for_m1)[mesh_to_be_separated->triangles[i]]);
+			m1->triangles.push_back((*indices_for_m1)[mesh_to_be_separated->triangles[i+1]]);
+			m1->triangles.push_back((*indices_for_m1)[mesh_to_be_separated->triangles[i+2]]);
 		}
 		else if (sign_i < 0 && sign_i_1 < 0 && sign_i_2 < 0)
 		{
-			m2->triangles.push_back((*indices_for_m2)[i]);
-			m2->triangles.push_back((*indices_for_m2)[i + 1]);
-			m2->triangles.push_back((*indices_for_m2)[i + 2]);
+			m2->triangles.push_back((*indices_for_m2)[mesh_to_be_separated->triangles[i]]);
+			m2->triangles.push_back((*indices_for_m2)[mesh_to_be_separated->triangles[i+1]]);
+			m2->triangles.push_back((*indices_for_m2)[mesh_to_be_separated->triangles[i+2]]);
 		}
 	}
 
@@ -216,4 +217,34 @@ void match_two_meshes_with_fps(Mesh* selected_mesh ,  Mesh* m1, Mesh* m2, std::v
 
 	std::vector<std::pair<unsigned int,unsigned int>> pairs =  point_match_trilateral_weights(selected_mesh, trilateral_desc_original_mesh, trilteralW1, trilteralW2, trilteralW3);
 	display_accuracy(selected_mesh ,  pairs);
+}
+
+std::vector<TrilateralDescriptor> match_two_meshes_with_fps(Mesh* selected_mesh, Plane* plane, int no_of_samples)
+{
+	std::vector<unsigned int> sampled_points = furthest_point_sampling(selected_mesh, no_of_samples);
+	
+	std::vector<unsigned int> sampled_points_plane_right;
+	std::vector<unsigned int> sampled_points_plane_left;
+	
+
+	for (size_t i = 0; i < no_of_samples; i++)
+	{
+		float sign = get_point_status_from_plane(plane ,&selected_mesh->vertices[sampled_points[i]]);
+		if (sign >=  0)
+		{
+			sampled_points_plane_right.push_back(sampled_points[i]);
+		}
+		else
+		{
+			sampled_points_plane_left.push_back(sampled_points[i]);
+		}
+	}
+	
+	std::vector<TrilateralDescriptor> trilateral_desc_vec_right = get_trilateral_points_using_closest_pairs(selected_mesh, sampled_points_plane_right);
+	std::vector<TrilateralDescriptor> trilateral_desc_vec_left = get_trilateral_points_using_closest_pairs(selected_mesh, sampled_points_plane_left);
+	
+	std::vector<TrilateralDescriptor> trilateral_desc_vec_concat = trilateral_desc_vec_right;
+	trilateral_desc_vec_concat.insert(trilateral_desc_vec_concat.end(), trilateral_desc_vec_left.begin(), trilateral_desc_vec_left.end());
+
+	return trilateral_desc_vec_concat;
 }

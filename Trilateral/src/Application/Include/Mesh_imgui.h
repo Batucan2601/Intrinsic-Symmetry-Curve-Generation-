@@ -134,7 +134,9 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("match two separated meshes with FPS  "))
     {
-        //match_two_meshes_with_fps(&m1, &m2 , m1_)
+        //match_two_meshes_with_fps(&m_factory.mesh_vec[selected_mesh] ,&m1, &m2, &m1_map_indices, &m2_map_indices, no_of_points);
+        trilateralDescVector = match_two_meshes_with_fps(&m_factory.mesh_vec[selected_mesh], &plane, no_of_points);
+        is_trilateral_generated = true;
     }
     /*if (ImGui::Button("point matching using dominant symmetry plane "))
     {
@@ -231,7 +233,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     if (ImGui::Button("Display Accuracy"))
     {
-        display_accuracy(m, calculated_symmetry_pairs);
+        display_accuracy(&m, calculated_symmetry_pairs);
     }
     ImGui::End();
 }

@@ -1762,7 +1762,6 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 
 	std::vector<float> pairdata;
 	glBindBuffer(GL_ARRAY_BUFFER, 3); // VBO will lok into that later 
-	mesh_fac.mesh_point_pairs.clear();
 	for (int i = 0; i < calculated_symmetry_pairs.size(); i++)
 	{
 		glm::vec3 p1 = m->vertices[calculated_symmetry_pairs[i].first];
@@ -1806,7 +1805,6 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 	glBufferData(GL_ARRAY_BUFFER, pairdata.size() * sizeof(float), &pairdata[0], GL_STATIC_DRAW);
 	MeshPointPairs p;
 	p.point_pairs = pairdata;
-	mesh_fac.mesh_point_pairs.push_back(p);
 
 	std::cout << " total accuracy " << correct_sample / total_sample << std::endl;
 }
