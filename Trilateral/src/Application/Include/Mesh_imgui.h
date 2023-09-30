@@ -5,6 +5,7 @@
 #include "../Include/Laplace-Beltrami.h"
 #include <src/Application/Include/DominantSymmetry.h>
 #include "../Include/CoreTypeDefs.h"
+#include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -196,6 +197,15 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("Read symmetry values"))
     {
         read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
+    }
+    if (ImGui::Button("Symmetry Plane using Isomap"))
+    {
+        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,true , 50);
+        Mesh plane_mesh = generate_mesh_from_plane( &plane , &plane.point);
+        m_factory.add_mesh(plane_mesh);
+        
+        m_factory.remove_all();
+        m_factory.add_all();
     }
     ImGui::End();
         

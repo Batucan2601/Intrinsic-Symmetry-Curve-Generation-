@@ -60,3 +60,228 @@ glm::vec3 symmetry_point_from_plane(Plane* plane, glm::vec3* point)
 
 	return sym_point;
 }
+Plane generate_plane_from_two_vectors(const glm::vec3& vec1, const glm::vec3& vec2)
+{
+	Plane p; 
+	p.normal = glm::cross(vec1, vec2);
+	p.point = vec1; 
+	return p; 
+}
+
+
+// Check if two line segments intersect
+static bool is_line_segments_intersect(const glm::vec3& p1, const glm::vec3&  q1, const glm::vec3&  p2, const glm::vec3&  q2) {
+	glm::vec3 v1(q1.x - p1.x, q1.y - p1.y, q1.z - p1.z);
+	glm::vec3 v2(q2.x - p2.x, q2.y - p2.y, q2.z - p2.z);
+
+	glm::vec3 v = glm::vec3(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+
+	double dot1 = v.x * v1.x + v.y * v1.y + v.z * v1.z;
+	double dot2 = v.x * v2.x + v.y * v2.y + v.z * v2.z;
+
+	double len1 = v1.x * v1.x + v1.y * v1.y + v1.z * v1.z;
+	double len2 = v2.x * v2.x + v2.y * v2.y + v2.z * v2.z;
+
+	double det = len1 * len2 - dot1 * dot2;
+
+	if (fabs(det) < 1e-6) {
+		// Line segments are parallel or collinear
+		return false;
+	}
+
+	double s = (dot2 * len1 - dot1 * dot2) / det;
+	double t = (dot1 * len2 - dot1 * dot2) / det;
+
+	if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+		// Line segments intersect within their bounds
+		return true;
+	}
+
+	return false;
+}
+
+// Calculate the intersection point of two line segments
+static glm::vec3 find_intersection_point(const glm::vec3& p1, const glm::vec3&  q1, const glm::vec3&  p2, const glm::vec3& q2) {
+	glm::vec3  v1(q1.x - p1.x, q1.y - p1.y, q1.z - p1.z);
+	glm::vec3  v2(q2.x - p2.x, q2.y - p2.y, q2.z - p2.z);
+
+	glm::vec3  v = glm::vec3(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+
+	double dot1 = v.x * v1.x + v.y * v1.y + v.z * v1.z;
+	double dot2 = v.x * v2.x + v.y * v2.y + v.z * v2.z;
+
+	double len1 = v1.x * v1.x + v1.y * v1.y + v1.z * v1.z;
+	double len2 = v2.x * v2.x + v2.y * v2.y + v2.z * v2.z;
+
+	double det = len1 * len2 - dot1 * dot2;
+
+	double s = (dot2 * len1 - dot1 * dot2) / det;
+
+	double x = p1.x + s * v1.x;
+	double y = p1.y + s * v1.y;
+	double z = p1.z + s * v1.z;
+
+	return glm::vec3(x, y, z);
+}
+
+//check if they intersect given that they are in same plane 
+bool is_triangles_intersect(const glm::vec3& p1_1, const glm::vec3& p1_2, const glm::vec3& p1_3, const glm::vec3& p2_1, const glm::vec3& p2_2, const glm::vec3& p2_3)
+{
+	glm::vec3 vec1 = p1_2 - p1_1;
+	glm::vec3 vec2 = p1_3 - p1_1;
+
+	glm::vec3 cross1 = glm::cross(vec1, vec2);
+	float area = glm::length(cross1) / 2;
+
+	//chekc other 3 points
+	
+	//1 - select p2_1 
+	float triangle_area_p2_1 = 0;
+	vec1 = p1_1 - p2_1;
+	vec2 = p1_2 - p2_1;
+	triangle_area_p2_1  += glm::length(glm::cross(vec1 , vec2)) / 2;
+	vec1 = p1_1 - p2_1;
+	vec2 = p1_3 - p2_1;
+	triangle_area_p2_1 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p1_2 - p2_1;
+	vec2 = p1_3 - p2_1;
+	triangle_area_p2_1 += glm::length(glm::cross(vec1, vec2)) / 2;
+	
+	if (abs(triangle_area_p2_1 - area) < 1e-5)
+	{
+		//inside
+		return true; 
+	}
+	//2 - select p2_2 
+	float triangle_area_p2_2 = 0;
+	vec1 = p1_1 - p2_2;
+	vec2 = p1_2 - p2_2;
+	triangle_area_p2_2 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p1_1 - p2_2;
+	vec2 = p1_3 - p2_2;
+	triangle_area_p2_2 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p1_2 - p2_2;
+	vec2 = p1_3 - p2_2;
+	triangle_area_p2_2 += glm::length(glm::cross(vec1, vec2)) / 2;
+
+	if (abs(triangle_area_p2_2 - area) < 1e-5)
+	{
+		//inside
+		return true;
+	}
+
+	//1 - select p2_3 
+	float triangle_area_p2_3 = 0;
+	vec1 = p1_1 - p2_3;
+	vec2 = p1_2 - p2_3;
+	triangle_area_p2_3 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p1_1 - p2_3;
+	vec2 = p1_3 - p2_3;
+	triangle_area_p2_3 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p1_2 - p2_3;
+	vec2 = p1_3 - p2_3;
+	triangle_area_p2_3 += glm::length(glm::cross(vec1, vec2)) / 2;
+
+	if (abs(triangle_area_p2_3 - area) < 1e-5)
+	{
+		//inside
+		return true;
+	}
+
+
+	//check the opposite, but for one point 
+	//1 - select p2_3 
+	float triangle_area_p1_1 = 0;
+	vec1 = p2_1 - p1_1;
+	vec2 = p2_2 - p1_1;
+	triangle_area_p1_1 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p2_1 - p1_1;
+	vec2 = p2_3 - p1_1;
+	triangle_area_p1_1 += glm::length(glm::cross(vec1, vec2)) / 2;
+	vec1 = p2_2 - p1_1;
+	vec2 = p2_3 - p1_1;
+	triangle_area_p1_1 += glm::length(glm::cross(vec1, vec2)) / 2;
+
+	vec2 = p2_3 - p2_1;
+	vec1 = p2_2 - p2_1;
+
+	cross1 = glm::cross(vec1, vec2);
+	area = glm::length(cross1) / 2;
+
+	if (abs(triangle_area_p1_1 - area) < 1e-5)
+	{
+		//inside
+		return true;
+	}
+	
+	
+	return false; 
+}
+
+float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p1_2, const glm::vec3& p1_3, const glm::vec3& p2_1, const glm::vec3& p2_2, const glm::vec3& p2_3)
+{
+	std::vector<glm::vec3> convex_point_list;
+	// try 3 edge of triangle 1 for 3 other edge of triangle 2
+	bool is_intersect = false;
+	int hit_no = 0; 
+	// 1 - p1_1-p1_2  
+	// 1.1 - p1_1-p1_2  vs p2_1 p2_2
+	if (is_line_segments_intersect(p1_1, p1_2, p2_1, p2_2))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_2, p2_1, p2_2));
+	}
+	//1.2- p1_1 p1_2 vs p2_1 p2_3 
+	if (is_line_segments_intersect(p1_1, p1_2, p2_1, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_2, p2_1, p2_3));
+	}
+	//1.2- p1_1 p1_2 vs p2_2 p2_3 
+	if (is_line_segments_intersect(p1_1, p1_2, p2_2, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_2, p2_2, p2_3));
+	}
+
+	// 2 - p1_1-p1_3  
+	// 1.1 - p1_1-p1_3  vs p2_1 p2_2
+	if (is_line_segments_intersect(p1_1, p1_3, p2_1, p2_2))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_3, p2_1, p2_2));
+	}
+	//1.2- p1_1 p1_2 vs p2_1 p2_3 
+	if (is_line_segments_intersect(p1_1, p1_3, p2_1, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_3, p2_1, p2_3));
+	}
+	//1.2- p1_1 p1_2 vs p2_2 p2_3 
+	if (is_line_segments_intersect(p1_1, p1_2, p2_2, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_1, p1_3, p2_2, p2_3));
+	}
+
+	// 1 - p1_2-p1_3  
+	// 1.1 - p1_1-p1_2  vs p2_1 p2_2
+	if (is_line_segments_intersect(p1_2, p1_3, p2_1, p2_2))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_2, p1_3, p2_1, p2_2));
+	}
+	//1.2- p1_1 p1_2 vs p2_1 p2_3 
+	if (is_line_segments_intersect(p1_2, p1_3, p2_1, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_2, p1_3, p2_1, p2_3));
+	}
+	//1.2- p1_1 p1_2 vs p2_2 p2_3 
+	if (is_line_segments_intersect(p1_2, p1_3, p2_2, p2_3))
+	{
+		convex_point_list.push_back(find_intersection_point(p1_2, p1_3, p2_2, p2_3));
+	}
+
+	// cases
+
+	// no intersection
+	//either inside or outside 
+	if (convex_point_list.size() == 0)
+	{
+		//create 
+	}
+	return 1;
+}

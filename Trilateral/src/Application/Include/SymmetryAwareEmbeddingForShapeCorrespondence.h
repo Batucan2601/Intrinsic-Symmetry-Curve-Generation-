@@ -14,4 +14,5 @@
 #include <src/Application/Include/CoreTypeDefs.h>
 // https://geometry.stanford.edu/papers/yyg-saefsc-16/yyg-saefsc-16.pdf
 
-void generate_isomap_embedding(Mesh* mesh);
+float generate_symmetry_score(Mesh mesh, Plane* p1);
+Plane generate_isomap_embedding(Mesh* mesh, bool simplify_mesh , float simplification_percentage );
