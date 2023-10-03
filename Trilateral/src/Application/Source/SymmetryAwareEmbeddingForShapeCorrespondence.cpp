@@ -196,16 +196,16 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 		{
 			if (status_p1 >= 0)
 			{
-				triangles_positive.push_back(i);
-				triangles_positive.push_back(i+1);
-				triangles_positive.push_back(i+2);
+				triangles_positive.push_back(mesh.triangles[i]);
+				triangles_positive.push_back(mesh.triangles[i+1]);
+				triangles_positive.push_back(mesh.triangles[i+2]);
 
 			}
 			else
 			{
-				triangles_negative.push_back(i);
-				triangles_negative.push_back(i+1);
-				triangles_negative.push_back(i+2);
+				triangles_negative.push_back(mesh.triangles[i]);
+				triangles_negative.push_back(mesh.triangles[i+1]);
+				triangles_negative.push_back(mesh.triangles[i+2]);
 			}
 		}
 	}
@@ -220,11 +220,12 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 	float total_area_negative = 0;
 	float biggest_total_area = 0;
 	//calculate total area for each of the sides
-	for (size_t i = 0; i < triangles_positive.size(); i++)
+	for (size_t i = 0; i < triangles_positive.size(); i+=3)
 	{
+		//????????????????????
 		total_area_positive += compute_triangle_area(mesh.vertices[triangles_positive[i]], mesh.vertices[triangles_positive[i+1]], mesh.vertices[triangles_positive[i+2]]);
 	}
-	for (size_t i = 0; i < triangles_positive.size(); i++)
+	for (size_t i = 0; i < triangles_positive.size(); i+=3)
 	{
 		total_area_negative += compute_triangle_area(mesh.vertices[triangles_negative[i]], mesh.vertices[triangles_negative[i + 1]], mesh.vertices[triangles_negative[i + 2]]);
 	}
@@ -258,7 +259,7 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 		for (size_t j = 0; j < triangles_negative.size(); j+3)
 		{
 			bool is_intersect = is_triangles_intersect(mesh.vertices[triangles_positive[i]], mesh.vertices[triangles_positive[i + 1]], mesh.vertices[triangles_positive[i + 2]],
-				mesh.vertices[triangles_positive[j]], mesh.vertices[triangles_positive[j + 1]], mesh.vertices[triangles_positive[j + 2]]);
+				mesh.vertices[triangles_negative[j]], mesh.vertices[triangles_negative[j + 1]], mesh.vertices[triangles_negative[j + 2]]);
 			if (is_intersect)
 			{
 				intersection_area += 1; 

@@ -200,7 +200,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("Symmetry Plane using Isomap"))
     {
-        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,true , 50);
+        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,true , 10);
         Mesh plane_mesh = generate_mesh_from_plane( &plane , &plane.point);
         m_factory.add_mesh(plane_mesh);
         
