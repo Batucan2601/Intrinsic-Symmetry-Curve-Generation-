@@ -412,7 +412,7 @@ int main(void)
             MVP = proj * view * model;
             mesh_fac.mesh_vec[i].MVP = MVP;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-            //mesh_fac.mesh_vec[0].model_mat = model; 
+            mesh_fac.mesh_vec[0].model_mat = model; 
             mesh_fac.draw_mesh(i);
         }
        
