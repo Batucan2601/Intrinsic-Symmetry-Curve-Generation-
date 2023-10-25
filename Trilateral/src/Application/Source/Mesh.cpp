@@ -417,5 +417,5 @@ void read_symmetry_format(char* filename, Mesh* m)
 		sym_pair.second= (unsigned int)number;
 		m->symmetry_pairs.push_back(sym_pair);
 	}*/
-
+	return;
 }

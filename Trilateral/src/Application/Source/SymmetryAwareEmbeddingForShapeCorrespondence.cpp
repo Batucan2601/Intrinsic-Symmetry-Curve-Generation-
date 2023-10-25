@@ -16,7 +16,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 		std::vector<std::pair<unsigned int , unsigned int>> random_indices_list;
 		int size = simplified_mesh.vertices.size() * simplification_percentage / 100.0f ;
 		//new symmetry pairs
-		while( random_indices_list.size() < size / 2 )
+		/*while( random_indices_list.size() < size / 2 )
 		{
 			unsigned int rand_no = rand() % mesh->vertices.size();
 			bool is_exists = false;
@@ -47,6 +47,28 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 				}
 				random_indices_list.push_back(pair);
 			}
+
+		}*/
+		
+		std::vector<unsigned int> fps_indices = furthest_point_sampling(&simplified_mesh, size);
+		for (size_t i = 0; i < size; i++)
+		{
+			std::pair<unsigned int, unsigned int> pair;
+			pair.first = fps_indices[i];
+			for (size_t j = 0; j < size; j++)
+			{
+				if (pair.first == mesh->symmetry_pairs[j].first)
+				{
+					pair.second = mesh->symmetry_pairs[j].second;
+					break;
+				}
+				else if (pair.first == mesh->symmetry_pairs[j].second)
+				{
+					pair.second = mesh->symmetry_pairs[j].first;
+					break;
+				}
+			}
+			random_indices_list.push_back(pair);
 
 		}
 		simplified_mesh.symmetry_pairs = random_indices_list;
@@ -114,12 +136,15 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	//generate J
 	Eigen::MatrixXf J(N, N);
 	J.fill(-1.0f / (float)N);
-	J.diagonal(1 - (1.0f / (float)N) );
+	for (size_t i = 0; i < N; i++)
+	{
+		J(i, i) = 1 - (1.0f / (float)N);
+	}
 
 	//generate K
 	Eigen::MatrixXf K(N, N);
 	// K = -1/2 J delta^2 J
-	K = -1 / 2 * J * (delta * delta) * J;
+	K = -0.5 * J * (delta * delta) * J;
 
 	//eigendecompose isomap
 
@@ -177,7 +202,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	//generate 6 plane 
 
 	Plane planes[6];
-	planes[0] = generate_plane_from_two_vectors(vectors[0]  , vectors[1]);
+	planes[0] = generate_plane_from_two_vectors(vectors[0] , vectors[1]);
 	planes[1] = generate_plane_from_two_vectors(vectors[0], vectors[2]);
 	planes[2] = generate_plane_from_two_vectors(vectors[0], vectors[3]);
 
