@@ -8,14 +8,34 @@ using Eigen::MatrixXd;
 Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
 {
 	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
-	// generate PCA weights are same and 1 for now 
+	
+	Plane plane = generate_dominant_symmetry_plane(mesh);
+
 	float s = mesh.vertices.size();
-	glm::vec3 m(0.0f,0.0f,0.0f); 
+	glm::vec3 m(0.0f, 0.0f, 0.0f);
 	for (size_t i = 0; i < mesh.vertices.size(); i++)
 	{
 		m += mesh.vertices[i];
 	}
-	m = m / s; 
+
+	m = m / s;
+	Mesh plane_mesh = generate_mesh_from_plane(&plane, &m);
+	mesh_fac.add_mesh(plane_mesh);
+
+	return plane;
+	
+}
+Plane generate_dominant_symmetry_plane(Mesh mesh)
+{
+	
+	// generate PCA weights are same and 1 for now 
+	float s = mesh.vertices.size();
+	glm::vec3 m(0.0f, 0.0f, 0.0f);
+	for (size_t i = 0; i < mesh.vertices.size(); i++)
+	{
+		m += mesh.vertices[i];
+	}
+	m = m / s;
 
 	MatrixXd Co(3, 3);
 
@@ -44,19 +64,19 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 
 	//// get the eigenvectors 
 	Eigen::EigenSolver<MatrixXd> es;
-	es.compute(Co/* computeEigenvectors = */ );
+	es.compute(Co/* computeEigenvectors = */);
 	Eigen::MatrixXd eigen_vecs = es.eigenvectors().real();
 	Eigen::VectorXd eigen_values = es.eigenvalues().real();
 
 	double biggest_value = -INFINITY;
-	int biggest_index = -1; 
+	int biggest_index = -1;
 	//get the best eigen value
 	for (size_t i = 0; i < eigen_values.rows(); i++)
 	{
-		if (biggest_value < (float)eigen_values(i ))
+		if (biggest_value < (float)eigen_values(i))
 		{
 			biggest_value = (float)eigen_values(i);
-			biggest_index = i; 
+			biggest_index = i;
 		}
 	}
 	std::cout << " eigne values "
@@ -69,19 +89,19 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	planes[1].point = m;
 	planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
 	planes[2].point = m;
-	
+
 	float minimum_distances[3]; //for each plane 
-	for (size_t p = 0; p <3 ; p++) //for all planes 
+	for (size_t p = 0; p < 3; p++) //for all planes 
 	{
 		float minimum_of_di = INFINITY;
 		for (size_t i = 0; i < mesh.vertices.size(); i++)
 		{
 			// generate sir
-			glm::vec3 s_ir = symmetry_point_from_plane( &planes[p] , &mesh.vertices[i] );
+			glm::vec3 s_ir = symmetry_point_from_plane(&planes[p], &mesh.vertices[i]);
 			float s_ir_status = get_point_status_from_plane(&planes[p], &s_ir);
 			for (size_t j = 0; j < mesh.vertices.size(); j++)
 			{
-				if (s_ir_status * get_point_status_from_plane(&planes[p], &mesh.vertices[j]) >= 0 )
+				if (s_ir_status * get_point_status_from_plane(&planes[p], &mesh.vertices[j]) >= 0)
 				{
 					float dist = glm::distance(s_ir, mesh.vertices[j]);
 					if (dist < minimum_of_di)
@@ -91,24 +111,22 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 				}
 			}
 		}
-		minimum_distances[p] = minimum_of_di; 
+		minimum_distances[p] = minimum_of_di;
 	}
-	
-	int smallest_dist_index = 0; 
-	float smallest_dist = INFINITY; 
+
+	int smallest_dist_index = 0;
+	float smallest_dist = INFINITY;
 	for (size_t i = 0; i < 3; i++)
 	{
 		if (smallest_dist > minimum_distances[i])
 		{
 			smallest_dist = minimum_distances[i];
-			smallest_dist_index = i; 
+			smallest_dist_index = i;
 		}
 	}
 
-	Mesh plane_mesh = generate_mesh_from_plane(&planes[smallest_dist_index], &m);
-	mesh_fac.add_mesh(plane_mesh);
-	return planes[smallest_dist_index];
 	
+	return planes[smallest_dist_index];
 }
 /* We separate the mesh into two in order to get symmetry sets
 * m1 represents the points where you get the + sign when you plug the vertices in the plane

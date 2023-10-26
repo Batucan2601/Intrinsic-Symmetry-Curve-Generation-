@@ -16,3 +16,5 @@
 
 float generate_symmetry_score(Mesh mesh, Plane* p1);
 Plane generate_isomap_embedding(Mesh* mesh, bool simplify_mesh , float simplification_percentage );
+Eigen::MatrixXd ComputeClassicalMds(const Eigen::MatrixXd& D, const unsigned target_dim);
+Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh);

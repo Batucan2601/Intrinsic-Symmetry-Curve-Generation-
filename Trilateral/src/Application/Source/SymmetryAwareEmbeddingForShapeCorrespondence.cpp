@@ -1,4 +1,5 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+#include "../Include/DominantSymmetry.h"
 #pragma comment(linker, "/STACK:2000000")
 #pragma comment(linker, "/HEAP:1000000000")
 
@@ -14,7 +15,8 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 		srand(time(0));
 
 		std::vector<std::pair<unsigned int , unsigned int>> random_indices_list;
-		int size = simplified_mesh.vertices.size() * simplification_percentage / 100.0f ;
+		//int size = simplified_mesh.vertices.size() * simplification_percentage / 100.0f ;
+		int size = 50;
 		//new symmetry pairs
 		/*while( random_indices_list.size() < size / 2 )
 		{
@@ -74,9 +76,12 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 		simplified_mesh.symmetry_pairs = random_indices_list;
 	}
 
-	int N = simplified_mesh.symmetry_pairs.size() * 2;
+	int N = simplified_mesh.symmetry_pairs.size() ;
 
 	Eigen::MatrixXf delta(N, N);
+	Eigen::MatrixXf J(N, N);
+	Eigen::MatrixXf K(N, N);
+
 	// generate geodesic distances matrix ( delta)
 	if (!simplify_mesh)
 	{
@@ -134,7 +139,6 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	}
 
 	//generate J
-	Eigen::MatrixXf J(N, N);
 	J.fill(-1.0f / (float)N);
 	for (size_t i = 0; i < N; i++)
 	{
@@ -142,9 +146,9 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	}
 
 	//generate K
-	Eigen::MatrixXf K(N, N);
 	// K = -1/2 J delta^2 J
-	K = -0.5 * J * (delta * delta) * J;
+	Eigen::MatrixXf delta_sqr = delta.array().square();
+	K = -0.5 * J * delta_sqr * J;
 
 	//eigendecompose isomap
 
@@ -320,4 +324,86 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 
 	
 	//return intersection_area / biggest_total_area;
+}
+
+
+// Extract the N-largest eigen values and eigen vectors
+inline void ExtractNLargestEigens(unsigned n, Eigen::VectorXd& S, Eigen::MatrixXd& V)
+{
+	// Note: m is the original dimension
+	const unsigned m = S.rows();
+
+	// Copy the original matrix
+	const Eigen::MatrixXd original_V = V;
+
+	// Sort by eigenvalue
+	constexpr double                         epsilon = 1e-16;
+	std::vector<std::pair<double, unsigned>> index_value_pairs(m);
+	for (unsigned i = 0; i < m; ++i)
+	{
+		index_value_pairs[i] = std::make_pair(std::max(S(i), epsilon), i);
+	}
+	std::partial_sort(index_value_pairs.begin(),
+		index_value_pairs.begin() + n,
+		index_value_pairs.end(),
+		std::greater<std::pair<double, unsigned>>());
+
+	// Resize matrices
+	S.resize(n);
+	V.resize(m, n);
+
+	// Set values
+	for (unsigned i = 0; i < n; ++i)
+	{
+		S(i) = index_value_pairs[i].first;
+		V.col(i) = original_V.col(index_value_pairs[i].second);
+	}
+}
+
+Eigen::MatrixXd ComputeClassicalMds(const Eigen::MatrixXd& D, const unsigned target_dim)
+{
+	assert(D.rows() == D.cols());
+	assert(D.rows() >= target_dim);
+
+	const auto n = D.rows();
+	const auto ones = Eigen::VectorXd::Ones(n);
+	const auto I = Eigen::MatrixXd::Identity(n, n);
+
+	const auto H = I - (1.0 / static_cast<double>(n)) * ones * ones.transpose();
+	const auto K = -0.5 * H * D.cwiseAbs2() * H;
+
+	const Eigen::EigenSolver<Eigen::MatrixXd> solver(K);
+
+	Eigen::VectorXd S = solver.eigenvalues().real();
+	Eigen::MatrixXd V = solver.eigenvectors().real();
+
+	ExtractNLargestEigens(target_dim, S, V);
+
+	const Eigen::MatrixXd X = Eigen::DiagonalMatrix<double, Eigen::Dynamic>(S.cwiseSqrt()) * V.transpose();
+
+	return X;
+}
+
+Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
+{
+	// 1 - create classical MDS
+	// 1.1 - generate NXN distance matrix
+	int N = mesh->vertices.size();
+	Eigen::MatrixXd delta(N, N);
+
+	// 1.2generate geodesic distances matrix ( delta)
+	for (size_t i = 0; i < N; i++)
+	{
+		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, i);
+		for (size_t j = 0; j < N; j++)
+		{
+			delta(i, j) = distances[j];
+		}
+	}
+	//2 MDS 
+	Eigen::MatrixXd mds_matrix = ComputeClassicalMds(delta, 3);
+
+	// 3 give plane to dominant symmetry plane
+	Plane plane = generate_dominant_symmetry_plane(*mesh);
+	return plane; 
 }

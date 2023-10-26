@@ -200,13 +200,20 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("Symmetry Plane using Isomap"))
     {
-        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,true , 1);
+        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,false , 1);
         Mesh plane_mesh = generate_mesh_from_plane( &plane , &plane.point);
         m_factory.add_mesh(plane_mesh);
         
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("generate symmetry plane with classical MDS "))
+    {
+        generate_symmetry_plane_dividing_classical_MDS(&m_factory.mesh_vec[selected_mesh]);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    
     ImGui::End();
         
 }
