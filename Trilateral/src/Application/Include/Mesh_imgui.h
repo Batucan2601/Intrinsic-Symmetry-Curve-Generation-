@@ -213,7 +213,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-    
+    if (ImGui::Button("generate symmetry plane with landmark MDS "))
+    {
+        compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
     ImGui::End();
         
 }

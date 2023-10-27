@@ -407,3 +407,35 @@ Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
 	Plane plane = generate_dominant_symmetry_plane(*mesh);
 	return plane; 
 }
+
+Eigen::MatrixXd compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks)
+{
+	// 1 - get fps wit point determination
+	std::vector<unsigned int> landmark_vertex_indices = furthest_point_sampling(mesh, no_of_landmarks);
+
+	// 2 - create landmark matrix 
+	Eigen::MatrixXd landmark_delta(mesh->vertices.size(), no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, landmark_vertex_indices[i]);
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			landmark_delta(j, i) = distances[j];
+		}
+	}
+
+	Eigen::MatrixXd B = -0.5 * (landmark_delta * landmark_delta.transpose()) ;
+	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(mesh->vertices.size(), mesh->vertices.size()) - (1.0 / mesh->vertices.size()) * Eigen::VectorXd::Ones(mesh->vertices.size())
+		* Eigen::VectorXd::Ones(mesh->vertices.size()
+	).transpose();
+	Eigen::MatrixXd J = H * B * H;
+
+
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(J);
+	Eigen::VectorXd S = eigensolver.eigenvalues();
+	Eigen::MatrixXd V = eigensolver.eigenvectors();
+
+	ExtractNLargestEigens(target_dim, S, V);
+
+	return V; 
+}
