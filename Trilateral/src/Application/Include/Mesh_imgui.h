@@ -178,6 +178,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.add_all();
         ImGui::EndCombo();
     }
+    if (ImGui::Button("trilateral drawing "))
+    {
+        trilateral_map_drawing_using_three_points(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index);
+    }
     if (ImGui::Button("point matching using AGD"))
     {
         trilateralDescVector = get_trilateral_points_using_closest_pairs(m_factory, selected_mesh, selectedIndices);
@@ -215,7 +219,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("generate symmetry plane with landmark MDS "))
     {
-        compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        Plane plane = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
+        m_factory.add_mesh(plane_mesh);
+
         m_factory.remove_all();
         m_factory.add_all();
     }

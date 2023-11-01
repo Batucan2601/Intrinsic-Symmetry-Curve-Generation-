@@ -408,7 +408,7 @@ Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
 	return plane; 
 }
 
-Eigen::MatrixXd compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks)
+Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks)
 {
 	// 1 - get fps wit point determination
 	std::vector<unsigned int> landmark_vertex_indices = furthest_point_sampling(mesh, no_of_landmarks);
@@ -424,9 +424,9 @@ Eigen::MatrixXd compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, cons
 		}
 	}
 
-	Eigen::MatrixXd B = -0.5 * (landmark_delta * landmark_delta.transpose()) ;
-	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(mesh->vertices.size(), mesh->vertices.size()) - (1.0 / mesh->vertices.size()) * Eigen::VectorXd::Ones(mesh->vertices.size())
-		* Eigen::VectorXd::Ones(mesh->vertices.size()
+	Eigen::MatrixXd B = -0.5 * (landmark_delta.transpose() * landmark_delta) ;
+	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(no_of_landmarks, no_of_landmarks) - (1.0 / no_of_landmarks) * Eigen::VectorXd::Ones(no_of_landmarks)
+		* Eigen::VectorXd::Ones(no_of_landmarks
 	).transpose();
 	Eigen::MatrixXd J = H * B * H;
 
@@ -437,5 +437,32 @@ Eigen::MatrixXd compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, cons
 
 	ExtractNLargestEigens(target_dim, S, V);
 
-	return V; 
+	Eigen::MatrixXd L(target_dim, target_dim);
+	for (size_t i = 0; i < target_dim; i++)
+	{
+		L(i,0) = S(i) *  V(i,0);
+		L(i,1) = S(i) *  V(i,1);
+		L(i,2) = S(i) *  V(i,2);
+	}
+
+	Mesh landmark_mesh = *mesh;
+	landmark_mesh.vertices.clear();
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		glm::vec3 p = mesh->vertices[landmark_vertex_indices[i]];
+		Eigen::VectorXd p_mat(target_dim);;
+		p_mat(0)= p[0];
+		p_mat(1)= p[1];
+		p_mat(2)= p[2];
+
+		Eigen::VectorXd result_p = L *  p_mat;
+		landmark_mesh.vertices.push_back(  glm::vec3(result_p(0,0) , result_p(1, 0), result_p(2, 0)) );
+	}
+
+	std::cout << " V dim " << V.rows() << " " << V.cols() << std::endl; 
+
+	Plane plane = generate_dominant_symmetry_plane(landmark_mesh);
+	return plane;
+
+
 }
