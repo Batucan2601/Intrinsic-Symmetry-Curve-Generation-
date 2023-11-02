@@ -330,33 +330,69 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 // Extract the N-largest eigen values and eigen vectors
 inline void ExtractNLargestEigens(unsigned n, Eigen::VectorXd& S, Eigen::MatrixXd& V)
 {
-	// Note: m is the original dimension
-	const unsigned m = S.rows();
+	//// Note: m is the original dimension
+	//const unsigned m = S.rows();
 
-	// Copy the original matrix
-	const Eigen::MatrixXd original_V = V;
+	//// Copy the original matrix
+	//const Eigen::MatrixXd original_V = V;
 
-	// Sort by eigenvalue
-	constexpr double                         epsilon = 1e-16;
-	std::vector<std::pair<double, unsigned>> index_value_pairs(m);
-	for (unsigned i = 0; i < m; ++i)
+	//// Sort by eigenvalue
+	//constexpr double                         epsilon = 1e-16;
+	//std::vector<std::pair<double, unsigned>> index_value_pairs(m);
+	//for (unsigned i = 0; i < m; ++i)
+	//{
+	//	index_value_pairs[i] = std::make_pair(std::max(S(i), epsilon), i);
+	//}
+	//std::partial_sort(index_value_pairs.begin(),
+	//	index_value_pairs.begin() + n,
+	//	index_value_pairs.end(),
+	//	std::greater<std::pair<double, unsigned>>());
+
+	//// Resize matrices
+	//S.resize(n);
+	//V.resize(m, n);
+
+	//// Set values
+	//for (unsigned i = 0; i < n; ++i)
+	//{
+	//	S(i) = index_value_pairs[i].first;
+	//	V.col(i) = original_V.col(index_value_pairs[i].second);
+	//}
+	std::vector<unsigned int> indices;
+	for (size_t i = 0; i < n; i++)
 	{
-		index_value_pairs[i] = std::make_pair(std::max(S(i), epsilon), i);
+		int best_value = -INFINITY;
+		int best_index = -1;
+		for (size_t j = 0; j < S.rows(); j++)
+		{
+			if (best_value < S(j))
+			{
+				bool is_already_selected = false; 
+				for (size_t k = 0; k < indices.size(); k++)
+				{
+					if (indices[k] == j)
+					{
+						is_already_selected = true; 
+						break; 
+					}
+				}
+				if (!is_already_selected)
+				{
+					best_index = j;
+					best_value = S(j);
+				}
+			}
+			
+		}
+		indices.push_back(best_index);
 	}
-	std::partial_sort(index_value_pairs.begin(),
-		index_value_pairs.begin() + n,
-		index_value_pairs.end(),
-		std::greater<std::pair<double, unsigned>>());
-
-	// Resize matrices
-	S.resize(n);
-	V.resize(m, n);
-
-	// Set values
-	for (unsigned i = 0; i < n; ++i)
+	
+	for (size_t i = 0; i < n; i++)
 	{
-		S(i) = index_value_pairs[i].first;
-		V.col(i) = original_V.col(index_value_pairs[i].second);
+		float temp = S(indices[i]);
+		S(i) = temp;
+
+		V.col(i) = V.col(indices[i]);
 	}
 }
 
@@ -459,8 +495,48 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 		landmark_mesh.vertices.push_back(  glm::vec3(result_p(0,0) , result_p(1, 0), result_p(2, 0)) );
 	}
 
+	// distance based triangulation
+
+	//find n x n matrix
+	Eigen::MatrixXd delta_n(no_of_landmarks, no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		for (size_t j = 0; j < no_of_landmarks; j++)
+		{
+			double distance = glm::distance(landmark_mesh.vertices[i], landmark_mesh.vertices[j]);
+			delta_n(i, j) = distance; 
+		}
+	}
+	//compute mean 
+	Eigen::VectorXd delta_n_mean(no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		delta_n_mean = delta_n_mean + delta_n.col(i);
+	}
+	delta_n_mean /= no_of_landmarks;
+
+	//pseudo inverse transpose
+	Eigen::MatrixXd L_k(target_dim, target_dim);
+	for (size_t i = 0; i < target_dim; i++)
+	{
+		L_k(i, 0) = V(i, 0)/sqrt(S(i));
+		L_k(i, 1) = V(i, 1)/sqrt(S(i));
+		L_k(i, 2) = V(i, 2)/sqrt(S(i))  ;
+	}
 	std::cout << " V dim " << V.rows() << " " << V.cols() << std::endl; 
 
+	
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		Eigen::VectorXd delta_a(no_of_landmarks);
+		for (size_t j = 0; j < no_of_landmarks; j++)
+		{
+			delta_a(j) = glm::distance(mesh->vertices[i], landmark_mesh.vertices[j]);
+		}
+		Eigen::VectorXd x_a_eigen = -1.0 / 2.0 * L_k * (delta_n_mean - delta_a);
+		glm::vec3 x_a(x_a_eigen(0) , x_a_eigen(1) , x_a_eigen(2));
+		landmark_mesh.vertices.push_back(x_a);
+	}
 	Plane plane = generate_dominant_symmetry_plane(landmark_mesh);
 	return plane;
 
