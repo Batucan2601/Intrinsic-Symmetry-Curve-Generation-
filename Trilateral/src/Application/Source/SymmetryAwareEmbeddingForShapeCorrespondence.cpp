@@ -440,9 +440,9 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	Eigen::MatrixXd L(target_dim, target_dim);
 	for (size_t i = 0; i < target_dim; i++)
 	{
-		L(i,0) = S(i) *  V(i,0);
-		L(i,1) = S(i) *  V(i,1);
-		L(i,2) = S(i) *  V(i,2);
+		L(i,0) = sqrt(S(i)) *  V(i,0);
+		L(i,1) = sqrt(S(i)) *  V(i,1);
+		L(i,2) = sqrt(S(i)) *  V(i,2);
 	}
 
 	Mesh landmark_mesh = *mesh;
