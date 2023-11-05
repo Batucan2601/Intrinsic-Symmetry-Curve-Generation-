@@ -330,38 +330,38 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 // Extract the N-largest eigen values and eigen vectors
 inline void ExtractNLargestEigens(unsigned n, Eigen::VectorXd& S, Eigen::MatrixXd& V)
 {
-	//// Note: m is the original dimension
-	//const unsigned m = S.rows();
+	// Note: m is the original dimension
+	const unsigned m = S.rows();
 
-	//// Copy the original matrix
-	//const Eigen::MatrixXd original_V = V;
+	// Copy the original matrix
+	const Eigen::MatrixXd original_V = V;
 
-	//// Sort by eigenvalue
-	//constexpr double                         epsilon = 1e-16;
-	//std::vector<std::pair<double, unsigned>> index_value_pairs(m);
-	//for (unsigned i = 0; i < m; ++i)
-	//{
-	//	index_value_pairs[i] = std::make_pair(std::max(S(i), epsilon), i);
-	//}
-	//std::partial_sort(index_value_pairs.begin(),
-	//	index_value_pairs.begin() + n,
-	//	index_value_pairs.end(),
-	//	std::greater<std::pair<double, unsigned>>());
+	// Sort by eigenvalue
+	constexpr double                         epsilon = 1e-16;
+	std::vector<std::pair<double, unsigned>> index_value_pairs(m);
+	for (unsigned i = 0; i < m; ++i)
+	{
+		index_value_pairs[i] = std::make_pair(std::max(S(i), epsilon), i);
+	}
+	std::partial_sort(index_value_pairs.begin(),
+		index_value_pairs.begin() + n,
+		index_value_pairs.end(),
+		std::greater<std::pair<double, unsigned>>());
 
-	//// Resize matrices
-	//S.resize(n);
-	//V.resize(m, n);
+	// Resize matrices
+	S.resize(n);
+	V.resize(m, n);
 
-	//// Set values
-	//for (unsigned i = 0; i < n; ++i)
-	//{
-	//	S(i) = index_value_pairs[i].first;
-	//	V.col(i) = original_V.col(index_value_pairs[i].second);
-	//}
-	std::vector<unsigned int> indices;
+	// Set values
+	for (unsigned i = 0; i < n; ++i)
+	{
+		S(i) = index_value_pairs[i].first;
+		V.col(i) = original_V.col(index_value_pairs[i].second);
+	}
+	/*std::vector<unsigned int> indices;
 	for (size_t i = 0; i < n; i++)
 	{
-		int best_value = -INFINITY;
+		float best_value = -INFINITY;
 		int best_index = -1;
 		for (size_t j = 0; j < S.rows(); j++)
 		{
@@ -390,10 +390,14 @@ inline void ExtractNLargestEigens(unsigned n, Eigen::VectorXd& S, Eigen::MatrixX
 	for (size_t i = 0; i < n; i++)
 	{
 		float temp = S(indices[i]);
+		S(indices[i]) = S(i);
 		S(i) = temp;
 
-		V.col(i) = V.col(indices[i]);
-	}
+		Eigen::VectorXd temp_mat = V.col(indices[i]);
+		V.col(indices[i]) = V.col(i);
+		V.col(i) = temp_mat;
+	}*/
+
 }
 
 Eigen::MatrixXd ComputeClassicalMds(const Eigen::MatrixXd& D, const unsigned target_dim)
@@ -450,17 +454,17 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	std::vector<unsigned int> landmark_vertex_indices = furthest_point_sampling(mesh, no_of_landmarks);
 
 	// 2 - create landmark matrix 
-	Eigen::MatrixXd landmark_delta(mesh->vertices.size(), no_of_landmarks);
+	Eigen::MatrixXd landmark_delta(no_of_landmarks, no_of_landmarks);
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
 		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, landmark_vertex_indices[i]);
-		for (size_t j = 0; j < distances.size(); j++)
+		for (size_t j = 0; j < no_of_landmarks; j++)
 		{
-			landmark_delta(j, i) = distances[j];
+			landmark_delta(i, j) = distances[landmark_vertex_indices[j]] * distances[landmark_vertex_indices[j]];
 		}
 	}
 
-	Eigen::MatrixXd B = -0.5 * (landmark_delta.transpose() * landmark_delta) ;
+	Eigen::MatrixXd B = -0.5 * landmark_delta ;
 	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(no_of_landmarks, no_of_landmarks) - (1.0 / no_of_landmarks) * Eigen::VectorXd::Ones(no_of_landmarks)
 		* Eigen::VectorXd::Ones(no_of_landmarks
 	).transpose();
@@ -473,26 +477,17 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 
 	ExtractNLargestEigens(target_dim, S, V);
 
-	Eigen::MatrixXd L(target_dim, target_dim);
+	Eigen::MatrixXd L(target_dim, no_of_landmarks);
 	for (size_t i = 0; i < target_dim; i++)
 	{
-		L(i,0) = sqrt(S(i)) *  V(i,0);
-		L(i,1) = sqrt(S(i)) *  V(i,1);
-		L(i,2) = sqrt(S(i)) *  V(i,2);
-	}
+		L.row(i) = sqrt(S(i)) * V.col(i).transpose();
 
+	}
 	Mesh landmark_mesh = *mesh;
 	landmark_mesh.vertices.clear();
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
-		glm::vec3 p = mesh->vertices[landmark_vertex_indices[i]];
-		Eigen::VectorXd p_mat(target_dim);;
-		p_mat(0)= p[0];
-		p_mat(1)= p[1];
-		p_mat(2)= p[2];
-
-		Eigen::VectorXd result_p = L *  p_mat;
-		landmark_mesh.vertices.push_back(  glm::vec3(result_p(0,0) , result_p(1, 0), result_p(2, 0)) );
+		landmark_mesh.vertices.push_back(glm::vec3(L(0,i) , L(1, i) , L(2, i)) );
 	}
 
 	// distance based triangulation
@@ -504,11 +499,15 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 		for (size_t j = 0; j < no_of_landmarks; j++)
 		{
 			double distance = glm::distance(landmark_mesh.vertices[i], landmark_mesh.vertices[j]);
-			delta_n(i, j) = distance; 
+			delta_n(i, j) = distance * distance ; 
 		}
 	}
 	//compute mean 
 	Eigen::VectorXd delta_n_mean(no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		delta_n_mean(i) = 0;
+	}
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
 		delta_n_mean = delta_n_mean + delta_n.col(i);
@@ -516,12 +515,10 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	delta_n_mean /= no_of_landmarks;
 
 	//pseudo inverse transpose
-	Eigen::MatrixXd L_k(target_dim, target_dim);
+	Eigen::MatrixXd L_k(target_dim, no_of_landmarks);
 	for (size_t i = 0; i < target_dim; i++)
 	{
-		L_k(i, 0) = V(i, 0)/sqrt(S(i));
-		L_k(i, 1) = V(i, 1)/sqrt(S(i));
-		L_k(i, 2) = V(i, 2)/sqrt(S(i))  ;
+		L_k.row(i) = V.col(i).transpose() / sqrt(S(i));
 	}
 	std::cout << " V dim " << V.rows() << " " << V.cols() << std::endl; 
 
@@ -529,15 +526,31 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
 		Eigen::VectorXd delta_a(no_of_landmarks);
+		bool is_point_landmark = false; 
 		for (size_t j = 0; j < no_of_landmarks; j++)
 		{
+			if (landmark_vertex_indices[j] == i)
+			{
+				is_point_landmark = true; 
+				break;
+			}
 			delta_a(j) = glm::distance(mesh->vertices[i], landmark_mesh.vertices[j]);
 		}
 		Eigen::VectorXd x_a_eigen = -1.0 / 2.0 * L_k * (delta_n_mean - delta_a);
 		glm::vec3 x_a(x_a_eigen(0) , x_a_eigen(1) , x_a_eigen(2));
-		landmark_mesh.vertices.push_back(x_a);
+		if (!is_point_landmark)
+		{
+			landmark_mesh.vertices.push_back(x_a);
+		}
 	}
-	Plane plane = generate_dominant_symmetry_plane(landmark_mesh);
+	//get the center point from mesh
+	glm::vec3 plane_center(0, 0, 0);
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		plane_center += mesh->vertices[i];
+	}
+	plane_center /= mesh->vertices.size();
+	Plane plane = generate_dominant_symmetry_plane(/*plane_center , */ landmark_mesh);
 	return plane;
 
 
