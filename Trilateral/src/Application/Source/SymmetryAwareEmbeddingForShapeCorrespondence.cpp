@@ -464,14 +464,13 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 		}
 	}
 
-	Eigen::MatrixXd B = -0.5 * landmark_delta ;
 	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(no_of_landmarks, no_of_landmarks) - (1.0 / no_of_landmarks) * Eigen::VectorXd::Ones(no_of_landmarks)
 		* Eigen::VectorXd::Ones(no_of_landmarks
 	).transpose();
-	Eigen::MatrixXd J = H * B * H;
+	Eigen::MatrixXd B = -0.5 * H * landmark_delta * H;
 
 
-	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(J);
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(B);
 	Eigen::VectorXd S = eigensolver.eigenvalues();
 	Eigen::MatrixXd V = eigensolver.eigenvectors();
 
@@ -487,7 +486,8 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	landmark_mesh.vertices.clear();
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
-		landmark_mesh.vertices.push_back(glm::vec3(L(0,i) , L(1, i) , L(2, i)) );
+		//landmark_mesh.vertices.push_back(glm::vec3(L(0,i) , L(1, i) , L(2, i)) );
+	    landmark_mesh.vertices.push_back(mesh->vertices[landmark_vertex_indices[i]]);
 	}
 
 	// distance based triangulation
@@ -522,35 +522,35 @@ Plane compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_o
 	}
 	std::cout << " V dim " << V.rows() << " " << V.cols() << std::endl; 
 
-	
+	std::vector<glm::vec3> temp_vertices;
 	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
 		Eigen::VectorXd delta_a(no_of_landmarks);
 		bool is_point_landmark = false; 
-		for (size_t j = 0; j < no_of_landmarks; j++)
+		size_t j = 0;
+		for (j = 0; j < no_of_landmarks; j++)
 		{
-			if (landmark_vertex_indices[j] == i)
-			{
-				is_point_landmark = true; 
-				break;
-			}
-			delta_a(j) = glm::distance(mesh->vertices[i], landmark_mesh.vertices[j]);
+			float dist = glm::distance(mesh->vertices[i], landmark_mesh.vertices[j]);
+			delta_a(j) = dist * dist;
 		}
-		Eigen::VectorXd x_a_eigen = -1.0 / 2.0 * L_k * (delta_n_mean - delta_a);
+		Eigen::VectorXd x_a_eigen = -1.0 / 2.0 * L_k * (delta_a  - delta_n_mean  );
 		glm::vec3 x_a(x_a_eigen(0) , x_a_eigen(1) , x_a_eigen(2));
-		if (!is_point_landmark)
-		{
-			landmark_mesh.vertices.push_back(x_a);
-		}
+		temp_vertices.push_back(x_a);
 	}
+	landmark_mesh.vertices = temp_vertices;
 	//get the center point from mesh
+	
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		mesh->vertices[i] = landmark_mesh.vertices[i];
+	}
 	glm::vec3 plane_center(0, 0, 0);
 	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
 		plane_center += mesh->vertices[i];
 	}
 	plane_center /= mesh->vertices.size();
-	Plane plane = generate_dominant_symmetry_plane(/*plane_center , */ landmark_mesh);
+	Plane plane = generate_dominant_symmetry_plane(plane_center ,  landmark_mesh);
 	return plane;
 
 
