@@ -219,12 +219,21 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("generate symmetry plane with landmark MDS "))
     {
-        Plane plane = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        Mesh  landmark_mesh = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        m_factory.mesh_vec.clear();
+        m_factory.add_mesh(landmark_mesh);
+
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("generate  trilateral descriptors from symmetry plane with landmark MDS "))
+    {
+        /*Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3);
         Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
         m_factory.add_mesh(plane_mesh);
 
         m_factory.remove_all();
-        m_factory.add_all();
+        m_factory.add_all();*/
     }
     ImGui::End();
         

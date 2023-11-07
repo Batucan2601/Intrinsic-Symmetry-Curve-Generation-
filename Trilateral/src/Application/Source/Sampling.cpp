@@ -126,3 +126,35 @@ std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_s
 	return random_sym_pairs; 
 }
 
+//furthest points sampling in specific part of a mesh decided by vector partial points 
+std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, int no_of_samples, std::vector<unsigned int>& partial_points)
+{
+	// generate a new mesh from existing mesh
+	Mesh partial_mesh = *m;
+	// create a boolean vector in order to select partial indices for O(1) selection
+	std::vector<bool> is_point_on_partial_mesh(m->vertices.size() , false);
+	for (size_t i = 0; i < partial_points.size(); i++)
+	{
+		is_point_on_partial_mesh[partial_points[i]] = true;
+	}
+	partial_mesh.vertices.clear();
+	partial_mesh.adjacenies.clear();
+	partial_mesh.colors.clear();
+	for (size_t i = 0; i < partial_points.size(); i++)
+	{
+		partial_mesh.vertices.push_back(m->vertices[partial_points[i]]);
+	}
+	for (size_t i = 0; i < partial_points.size(); i++)
+	{
+		for (size_t j = 0; j < m->adjacenies[partial_points[i]].size(); j++)
+		{
+			if (is_point_on_partial_mesh[m->adjacenies[partial_points[i]][j].first ])
+			{
+				std::pair<int, float> adjacency;
+				
+				//adjacency.first = 
+				//partial_mesh.adjacenies.push_back()
+			}
+		}
+	}
+}
