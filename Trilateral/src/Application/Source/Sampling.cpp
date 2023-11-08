@@ -1,6 +1,6 @@
 #include "../Include/Sampling.h"
 #include <stdlib.h>     /* srand, rand */
-std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples)
+std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, bool is_points_colored )
 {
 	float* distance = new float[m->vertices.size()];
 	int* sampled = new int[no_of_samples];
@@ -137,6 +137,12 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, in
 	{
 		is_point_on_partial_mesh[partial_points[i]] = true;
 	}
+	std::vector<unsigned int> partial_points_index(m->vertices.size(), -1);
+	for (size_t i = 0; i < partial_points.size(); i++)
+	{
+		partial_points_index[partial_points[i]] = i;
+	}
+
 	partial_mesh.vertices.clear();
 	partial_mesh.adjacenies.clear();
 	partial_mesh.colors.clear();
@@ -146,15 +152,29 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, in
 	}
 	for (size_t i = 0; i < partial_points.size(); i++)
 	{
+		partial_mesh.adjacenies.push_back(std::vector<std::pair<int, float>>());
 		for (size_t j = 0; j < m->adjacenies[partial_points[i]].size(); j++)
 		{
 			if (is_point_on_partial_mesh[m->adjacenies[partial_points[i]][j].first ])
 			{
 				std::pair<int, float> adjacency;
-				
-				//adjacency.first = 
-				//partial_mesh.adjacenies.push_back()
+				adjacency.first = partial_points_index[m->adjacenies[partial_points[i]][j].first];
+				adjacency.second = m->adjacenies[partial_points[i]][j].second;
+				partial_mesh.adjacenies[i].push_back(adjacency);
 			}
 		}
+		partial_mesh.colors.push_back(glm::vec3(0, 0, 0));
 	}
+
+	//now with the new mesh, do furthespoint search 
+	std::vector<unsigned int>  fps_points =  furthest_point_sampling(&partial_mesh, no_of_samples , false);
+	//convert the points back 
+	std::vector<unsigned int> fps_points_corrected;
+	for (size_t i = 0; i < fps_points.size(); i++)
+	{
+		unsigned int fps_index_for_partial_point = partial_points[fps_points[i]];
+		unsigned int fps_index_for_original_mesh = partial_points_index[fps_index_for_partial_point];
+		fps_points_corrected.push_back(fps_index_for_original_mesh);
+	}
+	return fps_points; 
 }

@@ -1,5 +1,6 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/DominantSymmetry.h"
+#include "../Include/TrilateralMap.h"
 #pragma comment(linker, "/STACK:2000000")
 #pragma comment(linker, "/HEAP:1000000000")
 
@@ -544,7 +545,7 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 
 	return landmark_mesh; 
 }
-void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks)
+void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points)
 {
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, target_dim);
 	//calculate center of the plane 
@@ -570,5 +571,21 @@ void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned
 			points_plane_negative.push_back(i);
 		}
 	}
+	// now do two distinct fps
+	std::vector<unsigned int > fps_positive =  furthest_point_sampling_on_partial_points(&L_MDS_mesh, no_of_trilateral_points, points_plane_positive);
+	std::vector<unsigned int > fps_negative =  furthest_point_sampling_on_partial_points(&L_MDS_mesh, no_of_trilateral_points, points_plane_negative);
+
+
+	for (size_t i = 0; i < no_of_trilateral_points; i++)
+	{
+		L_MDS_mesh.colors[fps_positive[i]] = glm::vec3(1.0, 0.0, 0.0);
+		L_MDS_mesh.colors[fps_negative[i]] = glm::vec3(0.0, 1.0, 0.0);
+	}
+
+	// trilateral computation
+	std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh ,fps_positive);
+	std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh, fps_negative);
+
+	// write a function for comparing two descriptor
 
 }

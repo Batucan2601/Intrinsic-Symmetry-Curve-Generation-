@@ -26,6 +26,7 @@ struct TrilateralError
 };
 
 //static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index);
 
 void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selected_index, int p1, int p2, int p3);
