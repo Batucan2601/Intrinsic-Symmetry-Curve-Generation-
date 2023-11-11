@@ -1,6 +1,7 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/DominantSymmetry.h"
 #include "../Include/TrilateralMap.h"
+#include "../Include/MetricCalculations.h"
 #pragma comment(linker, "/STACK:2000000")
 #pragma comment(linker, "/HEAP:1000000000")
 
@@ -587,5 +588,35 @@ void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned
 	std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh, fps_negative);
 
 	// write a function for comparing two descriptor
+	//irrelevant constants 
+	float const1 = 0;
+	float const2 = 0;
+	float const3 = 0;
+	std::vector<std::pair<unsigned int , unsigned int>> resemblance_pairs =  point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+	
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+	
+	// now use fps points to get maximum distance in order to compare to 
+	float maximum_geodesic_distance = 0;
+	for (size_t i = 0; i < fps_positive.size(); i++)
+	{
+		std::vector<float> distances  = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (maximum_geodesic_distance < distances[j])
+			{
+				maximum_geodesic_distance = distances[j];
+			}
+		}
+	}
 
+	std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl; 
 }

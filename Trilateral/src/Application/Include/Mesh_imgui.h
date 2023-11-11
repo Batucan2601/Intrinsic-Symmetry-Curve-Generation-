@@ -234,6 +234,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 
         m_factory.remove_all();
         m_factory.add_all();*/
+
+        trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3 , 100 , 100 );
     }
     ImGui::End();
         
