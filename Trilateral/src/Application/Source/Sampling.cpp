@@ -53,29 +53,33 @@ std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, b
 
 
 	// redrawing part
-	std::vector<glm::vec3> new_color_buffer;
-	for (size_t i = 0; i < m->colors.size(); i++)
+	if (is_points_colored)
 	{
-		bool is_sampled = false; 
-		for (size_t j = 0; j < no_of_samples; j++)
+		std::vector<glm::vec3> new_color_buffer;
+		for (size_t i = 0; i < m->colors.size(); i++)
 		{
-			if (sampled_id_vector[j] == i)
+			bool is_sampled = false;
+			for (size_t j = 0; j < no_of_samples; j++)
 			{
-				is_sampled = true; 
-				break;
+				if (sampled_id_vector[j] == i)
+				{
+					is_sampled = true;
+					break;
+				}
 			}
+			if (is_sampled)
+			{
+				new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+			}
+			else
+			{
+				new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+			}
+
 		}
-		if (is_sampled ) 
-		{
-			new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-		}
-		else
-		{
-			new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-		}
-		
+		m->colors = new_color_buffer;
 	}
-	m->colors = new_color_buffer;
+	
 
 	return sampled_id_vector;
 }
@@ -176,5 +180,5 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, in
 		unsigned int fps_index_for_original_mesh = partial_points_index[fps_index_for_partial_point];
 		fps_points_corrected.push_back(fps_index_for_original_mesh);
 	}
-	return fps_points; 
+	return fps_points_corrected;
 }

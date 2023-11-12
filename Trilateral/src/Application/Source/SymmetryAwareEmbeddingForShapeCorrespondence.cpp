@@ -546,14 +546,14 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 
 	return landmark_mesh; 
 }
-void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points)
+Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points)
 {
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, target_dim);
 	//calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
-	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
 	{
-		plane_center += mesh->vertices[i];
+		plane_center += L_MDS_mesh.vertices[i];
 	}
 	plane_center /= mesh->vertices.size();
 	Plane plane = generate_dominant_symmetry_plane(plane_center , L_MDS_mesh);
@@ -618,5 +618,21 @@ void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned
 		}
 	}
 
+	// color left red
+	std::vector<unsigned int> is_selected(mesh->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		mesh->colors[resemblance_pairs[i].first].r = 255;
+		mesh->colors[resemblance_pairs[i].first].g = 0;
+		mesh->colors[resemblance_pairs[i].first].b = 0;
+
+		mesh->colors[resemblance_pairs[i].second].r = 0;
+		mesh->colors[resemblance_pairs[i].second].g = 0;
+		mesh->colors[resemblance_pairs[i].second].b = 255;
+	}
+	/*L_MDS_mesh.colors = mesh->colors;
+	*mesh = L_MDS_mesh;*/
+	//color right  blue 
 	std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl; 
+	return plane;
 }
