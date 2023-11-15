@@ -633,6 +633,23 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	/*L_MDS_mesh.colors = mesh->colors;
 	*mesh = L_MDS_mesh;*/
 	//color right  blue 
+
+	/*L_MDS_mesh.colors.clear();
+	for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	{
+		if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		{
+			L_MDS_mesh.colors.push_back(glm::vec3(255.0 , 0.0 , 0.0 ) );
+		}
+		else
+		{
+			L_MDS_mesh.colors.push_back(glm::vec3(0, 255, 0.0));
+		}
+	}
+	*mesh = L_MDS_mesh;*/
+
 	std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl; 
 	return plane;
 }
+
+
