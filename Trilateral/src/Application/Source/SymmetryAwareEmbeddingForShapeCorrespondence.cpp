@@ -576,12 +576,20 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	std::vector<unsigned int > fps_positive =  furthest_point_sampling_on_partial_points(&L_MDS_mesh, no_of_trilateral_points, points_plane_positive);
 	std::vector<unsigned int > fps_negative =  furthest_point_sampling_on_partial_points(&L_MDS_mesh, no_of_trilateral_points, points_plane_negative);
 
-
-	for (size_t i = 0; i < no_of_trilateral_points; i++)
+	/*std::vector<unsigned int > fps_points =  furthest_point_sampling(&L_MDS_mesh, no_of_trilateral_points * 2 , true  );
+	fps_positive.clear();
+	fps_negative.clear();
+	for (size_t i = 0; i < fps_points.size(); i++)
 	{
-		L_MDS_mesh.colors[fps_positive[i]] = glm::vec3(1.0, 0.0, 0.0);
-		L_MDS_mesh.colors[fps_negative[i]] = glm::vec3(0.0, 1.0, 0.0);
-	}
+		if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		{
+			fps_positive.push_back(i);
+		}
+		else
+		{
+			fps_negative.push_back(i);
+		}
+	}*/
 
 	// trilateral computation
 	std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh ,fps_positive);
@@ -630,8 +638,8 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 		mesh->colors[resemblance_pairs[i].second].g = 0;
 		mesh->colors[resemblance_pairs[i].second].b = 255;
 	}
-	/*L_MDS_mesh.colors = mesh->colors;
-	*mesh = L_MDS_mesh;*/
+	//L_MDS_mesh.colors = mesh->colors;
+	//*mesh = L_MDS_mesh;
 	//color right  blue 
 
 	/*L_MDS_mesh.colors.clear();

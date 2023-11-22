@@ -131,39 +131,39 @@ std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_s
 }
 
 //furthest points sampling in specific part of a mesh decided by vector partial points 
-std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, int no_of_samples, std::vector<unsigned int>& partial_points)
+std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, int no_of_samples, std::vector<unsigned int>& map_partial_to_original)
 {
 	// generate a new mesh from existing mesh
 	Mesh partial_mesh = *m;
 	// create a boolean vector in order to select partial indices for O(1) selection
 	std::vector<bool> is_point_on_partial_mesh(m->vertices.size() , false);
-	for (size_t i = 0; i < partial_points.size(); i++)
+	for (size_t i = 0; i < map_partial_to_original.size(); i++)
 	{
-		is_point_on_partial_mesh[partial_points[i]] = true;
+		is_point_on_partial_mesh[map_partial_to_original[i]] = true;
 	}
-	std::vector<unsigned int> partial_points_index(m->vertices.size(), -1);
-	for (size_t i = 0; i < partial_points.size(); i++)
+	std::vector<unsigned int> map_original_to_partial(m->vertices.size(), -1);
+	for (size_t i = 0; i < map_partial_to_original.size(); i++)
 	{
-		partial_points_index[partial_points[i]] = i;
+		map_original_to_partial[map_partial_to_original[i]] = i;
 	}
 
 	partial_mesh.vertices.clear();
 	partial_mesh.adjacenies.clear();
 	partial_mesh.colors.clear();
-	for (size_t i = 0; i < partial_points.size(); i++)
+	for (size_t i = 0; i < map_partial_to_original.size(); i++)
 	{
-		partial_mesh.vertices.push_back(m->vertices[partial_points[i]]);
+		partial_mesh.vertices.push_back(m->vertices[map_partial_to_original[i]]);
 	}
-	for (size_t i = 0; i < partial_points.size(); i++)
+	for (size_t i = 0; i < map_partial_to_original.size(); i++)
 	{
 		partial_mesh.adjacenies.push_back(std::vector<std::pair<int, float>>());
-		for (size_t j = 0; j < m->adjacenies[partial_points[i]].size(); j++)
+		for (size_t j = 0; j < m->adjacenies[map_partial_to_original[i]].size(); j++)
 		{
-			if (is_point_on_partial_mesh[m->adjacenies[partial_points[i]][j].first ])
+			if (is_point_on_partial_mesh[m->adjacenies[map_partial_to_original[i]][j].first ])
 			{
 				std::pair<int, float> adjacency;
-				adjacency.first = partial_points_index[m->adjacenies[partial_points[i]][j].first];
-				adjacency.second = m->adjacenies[partial_points[i]][j].second;
+				adjacency.first = map_original_to_partial[m->adjacenies[map_partial_to_original[i]][j].first];
+				adjacency.second = m->adjacenies[map_partial_to_original[i]][j].second;
 				partial_mesh.adjacenies[i].push_back(adjacency);
 			}
 		}
@@ -171,14 +171,19 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, in
 	}
 
 	//now with the new mesh, do furthespoint search 
-	std::vector<unsigned int>  fps_points =  furthest_point_sampling(&partial_mesh, no_of_samples , false);
+	std::vector<unsigned int>  partial_mesh_fps_points =  furthest_point_sampling(&partial_mesh, no_of_samples , false);
 	//convert the points back 
 	std::vector<unsigned int> fps_points_corrected;
-	for (size_t i = 0; i < fps_points.size(); i++)
+	for (size_t i = 0; i < partial_mesh_fps_points.size(); i++)
 	{
-		unsigned int fps_index_for_partial_point = partial_points[fps_points[i]];
-		unsigned int fps_index_for_original_mesh = partial_points_index[fps_index_for_partial_point];
-		fps_points_corrected.push_back(fps_index_for_original_mesh);
+		unsigned int fps_index_for_partial_point = map_partial_to_original[partial_mesh_fps_points[i]];
+		//unsigned int fps_index_for_original_mesh = map_original_to_partial[fps_index_for_partial_point];
+
+		if (!is_point_on_partial_mesh[fps_index_for_partial_point])
+		{
+			exit(1);
+		}
+		fps_points_corrected.push_back(fps_index_for_partial_point);
 	}
 	return fps_points_corrected;
 }

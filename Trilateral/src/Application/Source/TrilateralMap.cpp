@@ -1750,10 +1750,7 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 		float least_among_three = 0;
 		for (size_t j = 0; j < trilateralDescVecRight.size(); j++)
 		{
-			if (i == j)
-			{
-				continue;
-			}
+
 			TrilateralDescriptor desc_j = trilateralDescVecRight[j];
 			float areaError = abs(desc_j.area - desc_i.area) / std::max(desc_j.area, desc_i.area);
 			areaError = 0;
