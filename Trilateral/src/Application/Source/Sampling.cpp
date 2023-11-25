@@ -177,12 +177,7 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, in
 	for (size_t i = 0; i < partial_mesh_fps_points.size(); i++)
 	{
 		unsigned int fps_index_for_partial_point = map_partial_to_original[partial_mesh_fps_points[i]];
-		//unsigned int fps_index_for_original_mesh = map_original_to_partial[fps_index_for_partial_point];
-
-		if (!is_point_on_partial_mesh[fps_index_for_partial_point])
-		{
-			exit(1);
-		}
+		
 		fps_points_corrected.push_back(fps_index_for_partial_point);
 	}
 	return fps_points_corrected;

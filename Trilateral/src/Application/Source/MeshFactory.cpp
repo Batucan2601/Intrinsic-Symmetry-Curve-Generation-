@@ -56,18 +56,53 @@ void MeshFactory::buffer_meshes()
 	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size()    * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, point_indices.size()  * sizeof(int), &point_indices[0], GL_STATIC_DRAW);
 
+	glBindVertexArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, 3); // VBO will lok into that later 
 	float_points_vec.clear();
-	for (int i = 0; i < mesh_point_pairs.size(); i++ )
+	for (int i = 0; i < this->mesh_vec.size(); i++)
 	{
-		for (int j = 0; j < mesh_point_pairs[i].point_pairs.size(); j++)
+
+		for (int j = 0; j < this->mesh_vec[i].calculated_symmetry_pairs.size(); j++)
 		{
-			float_points_vec.push_back(mesh_point_pairs[i].point_pairs[j]);
+			int index1 = this->mesh_vec[i].calculated_symmetry_pairs[j].first;
+			glm::vec3 p1 = this->mesh_vec[i].vertices[index1];
+			int index2 = this->mesh_vec[i].calculated_symmetry_pairs[j].second;
+			glm::vec3 p2 = this->mesh_vec[i].vertices[index2];
+
+			glm::vec3 color;
+			// check if they are matched
+			if (this->mesh_vec[i].symmetry_pairs_map[index1] == index2)
+			{
+				color.r = 0;
+				color.g = 255;
+				color.b = 0;
+			}
+			else
+			{
+				color.r = 255;
+				color.g = 0;
+				color.b = 0;
+			}
+			float_points_vec.push_back(p1.x );
+			float_points_vec.push_back(p1.y );
+			float_points_vec.push_back(p1.z );
+
+			float_points_vec.push_back(color.r);
+			float_points_vec.push_back(color.g);
+			float_points_vec.push_back(color.b);
+
+			float_points_vec.push_back(p2.x);
+			float_points_vec.push_back(p2.y);
+			float_points_vec.push_back(p2.z);
+
+			float_points_vec.push_back(color.r);
+			float_points_vec.push_back(color.g);
+			float_points_vec.push_back(color.b);
 
 		}
 		
 	}
-	if(mesh_point_pairs.size( )> 0 )
+	if(float_points_vec.size( )> 0 )
 	glBufferData(GL_ARRAY_BUFFER, float_points_vec.size() * sizeof(float), &float_points_vec[0], GL_STATIC_DRAW);
 
 

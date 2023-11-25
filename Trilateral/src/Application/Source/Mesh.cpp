@@ -408,7 +408,17 @@ void read_symmetry_format(char* filename, Mesh* m)
 		sym_pair.second = (unsigned int)number-1;
 		index++;
 		m->symmetry_pairs.push_back(sym_pair);
+
 	}
+	m->symmetry_pairs_map = std::vector<unsigned int>(m->symmetry_pairs.size());
+	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
+	{
+		m->symmetry_pairs_map[m->symmetry_pairs[i].first] = m->symmetry_pairs[i].second;
+	}
+	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
+	{
+		m->symmetry_pairs_map[m->symmetry_pairs[i].second] = m->symmetry_pairs[i].first;
+	}	
 	/*while (symFile >> number)
 	{
 		std::pair<unsigned int, unsigned int> sym_pair;

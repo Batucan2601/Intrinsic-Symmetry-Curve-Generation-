@@ -210,7 +210,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
 	planes[2].point = m;
 
-	float minimum_distances[3]; //for each plane 
+	float minimum_distances[3] = { 0 , 0 ,0 }; //for each plane 
 	for (size_t p = 0; p < 3; p++) //for all planes 
 	{
 		float minimum_of_di = INFINITY;
@@ -230,8 +230,9 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 					}
 				}
 			}
+			minimum_distances[p] += minimum_of_di;
 		}
-		minimum_distances[p] = minimum_of_di;
+		//minimum_distances[p] = minimum_of_di;
 	}
 
 	int smallest_dist_index = 0;

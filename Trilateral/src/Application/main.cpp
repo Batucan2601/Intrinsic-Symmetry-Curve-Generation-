@@ -284,7 +284,7 @@ int main(void)
     Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.10.off");
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.6.off");
    
     
     
@@ -415,17 +415,20 @@ int main(void)
             mesh_fac.mesh_vec[0].model_mat = model; 
             mesh_fac.draw_mesh(i);
         }
-       
-        glBindVertexArray(VAO_matching_points);
-        for (size_t i = 0; i < mesh_fac.mesh_point_pairs.size(); i++)
-        {
-             
-            glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
-            MVP = proj * view * model;
-            glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-             
 
-            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_point_pairs[i].point_pairs.size() / 6 * 2 );
+        glBindVertexArray(VAO_matching_points);
+        for (size_t i = 0; i < mesh_fac.mesh_vec.size(); i++)
+        {
+            if (mesh_fac.mesh_vec[i].calculated_symmetry_pairs.size() > 0)
+            {
+                glm::mat4 model = mesh_fac.mesh_vec[i].model_mat;
+                MVP = proj * view * model;
+                mesh_fac.mesh_vec[i].MVP = MVP;
+                glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+
+                glDrawArrays(GL_LINES, 0, mesh_fac.mesh_vec[i].calculated_symmetry_pairs.size() * 2);
+            }
+            
         }
 
         glBindVertexArray(0);
