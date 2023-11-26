@@ -482,7 +482,7 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 //from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
 std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index, std::vector<unsigned int> landmark_vertices);
 
-
+float get_one_ring_area(Mesh*m , float point_index );
 
 //// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
 //

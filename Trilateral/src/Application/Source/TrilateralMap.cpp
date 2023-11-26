@@ -654,7 +654,6 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
 		 trilateralDesc.push_back(desc);
 	 }
-
 	 return trilateralDesc;
  }
  std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points)
@@ -1774,25 +1773,25 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			i_2(1) = desc_i.geodesic_lenght_1_3;
 			i_2(2) = desc_i.geodesic_lenght_1_2;
 
-			i_1(3) = 0;//desc_i.euclidian_lenght_1_2;
-			i_1(4) = 0;//desc_i.euclidian_lenght_1_3;
+			i_1(3) = desc_i.euclidian_lenght_1_2;
+			i_1(4) = desc_i.euclidian_lenght_1_3;
 
-			i_2(3) = 0;//desc_i.euclidian_lenght_1_3;
-			i_2(4) = 0;//desc_i.euclidian_lenght_1_2;
+			i_2(3) = desc_i.euclidian_lenght_1_3;
+			i_2(4) = desc_i.euclidian_lenght_1_2;
 
-			i_1(5) = 0;//desc_i.curvature_1_2;
-			i_1(6) = 0;//desc_i.curvature_1_3;
+			i_1(5) = desc_i.curvature_1_2;
+			i_1(6) = desc_i.curvature_1_3;
 
-			i_2(5) = 0;//desc_i.curvature_1_3;
-			i_2(6) = 0;//desc_i.curvature_1_2;
+			i_2(5) = desc_i.curvature_1_3;
+			i_2(6) = desc_i.curvature_1_2;
 
 			i_1(7) = desc_i.geodesic_lenght_2_3;
-			i_1(8) = 0;//desc_i.euclidian_lenght_2_3;
-			i_1(9) = 0;//desc_i.curvature_2_3;
+			i_1(8) = desc_i.euclidian_lenght_2_3;
+			i_1(9) = desc_i.curvature_2_3;
 
 			i_2(7) = desc_i.geodesic_lenght_2_3;
-			i_2(8) = 0;//desc_i.euclidian_lenght_2_3;
-			i_2(9) = 0;//desc_i.curvature_2_3;
+			i_2(8) = desc_i.euclidian_lenght_2_3;
+			i_2(9) = desc_i.curvature_2_3;
 
 			//fill j 
 			j_1(0) = desc_j.area;
@@ -1804,25 +1803,25 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			j_2(2) = desc_j.geodesic_lenght_1_2;
 			j_2(1) = desc_j.geodesic_lenght_1_3;
 
-			j_1(3) = 0;//desc_j.euclidian_lenght_1_2;
-			j_1(4) = 0;//desc_j.euclidian_lenght_1_3;
+			j_1(3) = desc_j.euclidian_lenght_1_2;
+			j_1(4) = desc_j.euclidian_lenght_1_3;
 
-			j_2(3) = 0;//desc_j.euclidian_lenght_1_3;
-			j_2(4) = 0;//desc_j.euclidian_lenght_1_2;
+			j_2(3) = desc_j.euclidian_lenght_1_3;
+			j_2(4) = desc_j.euclidian_lenght_1_2;
 
-			j_1(5) = 0;//desc_j.curvature_1_2;
-			j_1(6) = 0;//desc_j.curvature_1_3;
+			j_1(5) = desc_j.curvature_1_2;
+			j_1(6) = desc_j.curvature_1_3;
 
-			j_2(5) = 0;//desc_j.curvature_1_3;
-			j_2(6) = 0;//desc_j.curvature_1_2;
+			j_2(5) = desc_j.curvature_1_3;
+			j_2(6) = desc_j.curvature_1_2;
 
 			j_1(7) = desc_j.geodesic_lenght_2_3;
-			j_1(8) = 0;//desc_j.euclidian_lenght_2_3;
-			j_1(9) = 0;//desc_j.curvature_2_3;
+			j_1(8) = desc_j.euclidian_lenght_2_3;
+			j_1(9) = desc_j.curvature_2_3;
 
 			j_2(7) = desc_j.geodesic_lenght_2_3;
-			j_2(8) = 0;//desc_j.euclidian_lenght_2_3;
-			j_2(9) = 0;//desc_j.curvature_2_3;
+			j_2(8) = desc_j.euclidian_lenght_2_3;
+			j_2(9) = desc_j.curvature_2_3;
 
 			//normalize 4 vectors
 			i_1 = i_1.normalized();
@@ -1860,64 +1859,7 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 				least_error = least_among_three;
 				least_error_index = j;
 			}
-			//check for each point
-			//p1
-			/*float curvErrorP1P2 = abs(desc_j.curvature_1_2- desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2 , desc_i.curvature_1_2);
-			float euclideanErrorP1P2 = abs(desc_j.euclidian_lenght_1_2- desc_i.euclidian_lenght_1_2) / std::max(desc_j.euclidian_lenght_1_2, desc_i.euclidian_lenght_1_2);
-			float geodesicErrorP1P2 = abs(desc_j.geodesic_lenght_1_2- desc_i.geodesic_lenght_1_2) / std::max(desc_j.geodesic_lenght_1_2, desc_i.geodesic_lenght_1_2);
-
-			float curvErrorP1P3 = abs(desc_j.curvature_1_3 - desc_i.curvature_1_3) / std::max(desc_j.curvature_1_3, desc_i.curvature_1_3);
-			float euclideanErrorP1P3 = abs(desc_j.euclidian_lenght_1_3 - desc_i.euclidian_lenght_1_3) / std::max(desc_j.euclidian_lenght_1_3, desc_i.euclidian_lenght_1_3);
-			float geodesicErrorP1P3 = abs(desc_j.geodesic_lenght_1_3 - desc_i.geodesic_lenght_1_3) / std::max(desc_j.geodesic_lenght_1_3, desc_i.geodesic_lenght_1_3);
-
-			//p2
-			float curvErrorP2P1 = abs(desc_j.curvature_1_2 - desc_i.curvature_1_2) / std::max(desc_j.curvature_1_2, desc_i.curvature_1_2);
-			float euclideanErrorP2P1 = abs(desc_j.euclidian_lenght_1_2 - desc_i.euclidian_lenght_1_2) / std::max(desc_j.euclidian_lenght_1_2, desc_i.euclidian_lenght_1_2);
-			float geodesicErrorP2P1 = abs(desc_j.geodesic_lenght_1_2 - desc_i.geodesic_lenght_1_2) / std::max(desc_j.geodesic_lenght_1_2, desc_i.geodesic_lenght_1_2);
-
-			float curvErrorP2P3 = abs(desc_j.curvature_2_3 - desc_i.curvature_2_3) / std::max(desc_j.curvature_2_3, desc_i.curvature_2_3);
-			float euclideanErrorP2P3 = abs(desc_j.euclidian_lenght_2_3- desc_i.euclidian_lenght_2_3) / std::max(desc_j.euclidian_lenght_2_3, desc_i.euclidian_lenght_2_3);
-			float geodesicErrorP2P3 = abs(desc_j.geodesic_lenght_2_3 - desc_i.geodesic_lenght_2_3) / std::max(desc_j.geodesic_lenght_2_3, desc_i.geodesic_lenght_2_3);
-
-			//p3
-			float curvErrorP3P1 = curvErrorP1P3;
-			float euclideanErrorP3P1 = euclideanErrorP1P3;
-			float geodesicErrorP3P1 = geodesicErrorP1P3;
-
-			float curvErrorP3P2 = curvErrorP2P3;
-			float euclideanErrorP3P2 = euclideanErrorP2P3;
-			float geodesicErrorP3P2 = geodesicErrorP2P3;
-
-
-
-			//check with each
-			// p1
-			if (least_error > (areaError + curvErrorP1P2 + curvErrorP1P3 + geodesicErrorP1P2 + geodesicErrorP1P3 + euclideanErrorP1P2 + euclideanErrorP1P3))
-			{
-				if ( desc_j.p1 != desc_i.p2 && desc_j.p2 != desc_i.p1)
-				{
-					least_error = areaError + curvErrorP1P2 + curvErrorP1P3 + geodesicErrorP1P2 + geodesicErrorP1P3 + euclideanErrorP1P2 + euclideanErrorP1P3;
-					least_error_index = desc_j.p1;
-				}
-			}
-			//p2
-			if (least_error > (areaError + curvErrorP2P1 + curvErrorP2P3 + geodesicErrorP2P1 + geodesicErrorP2P3 + euclideanErrorP2P1 + euclideanErrorP2P3))
-			{
-				if (desc_j.p2 != desc_i.p3 && desc_j.p3 != desc_i.p2)
-				{
-					least_error = areaError + curvErrorP2P1 + curvErrorP2P3 + geodesicErrorP2P1 + geodesicErrorP2P3 + euclideanErrorP2P1 + euclideanErrorP2P3;
-					least_error_index = desc_j.p2;
-				}
-			}
-			//p3
-			if (least_error > (areaError + curvErrorP3P1 + curvErrorP3P2 + geodesicErrorP3P1 + geodesicErrorP3P2 + euclideanErrorP3P1 + euclideanErrorP3P2))
-			{
-				if (desc_j.p3 != desc_i.p1 && desc_j.p1 != desc_i.p3)
-				{
-					least_error = areaError + curvErrorP3P1 + curvErrorP3P2 + geodesicErrorP3P1 + geodesicErrorP3P2 + euclideanErrorP3P1 + euclideanErrorP3P2;
-					least_error_index = desc_j.p3;
-				}
-			}*/
+			
 
 		}
 		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(trilateralDescVecLeft[i].p1, trilateralDescVecRight[least_error_index].p1));
@@ -2851,3 +2793,15 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 		m->colors[i].b = 0;
 	}
 }
+
+ float get_one_ring_area(Mesh* m, float point_index)
+ {
+	 for (size_t i = 0; i < m->adjacenies[point_index].size(); i++)
+	 {
+		 int adjacent_index = m->adjacenies[point_index];
+		 for (size_t j = 0; j < length; j++)
+		 {
+
+		 }
+	 }
+ }

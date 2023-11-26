@@ -66,6 +66,7 @@ std::vector<glm::vec3> embed_vertices;
 std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
 Mesh m1, m2;
 std::vector<int> m1_map_indices, m2_map_indices;
+std::string KIDS_text_file_name;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -229,14 +230,35 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("generate  trilateral descriptors from symmetry plane with landmark MDS "))
     {
         //Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3);
-
-        Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3 , 100 , 100 );
+        float error_percentage;
+        Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3 , 100 , 100 , error_percentage);
         Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
         m_factory.add_mesh(plane_mesh);
         m_factory.remove_all();
         m_factory.add_all();
     }
-    
+    if (ImGui::InputText("textfile_name_for_kids_dataset" , &KIDS_text_file_name ))
+    {
+
+    }
+    if (ImGui::Button("generate  trilateral descriptors w sym plane w KIDS dataset "))
+    {
+        // total of 15 + 15 meshes 
+        std::vector<Mesh> mesh_vector; 
+        for (size_t i = 0; i < 15 +15; i++)
+        {
+            std::string path("../../Trilateral/Mesh/off/");
+            std::string isometry_batch_no( "000" + std::to_string((i / 15) + 1));
+            std::string isometry_no(std::to_string(i % 15 + 1) );
+            // read the meshes.
+            path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
+            Mesh m((char*)path.c_str() );
+            //read the symmetry format
+            read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
+            mesh_vector.push_back(m);
+        }
+        create_trilateral_sym_w_landmarl_with_planes(mesh_vector, 3, 100, 100, "../../Results/" + KIDS_text_file_name);
+    }
     ImGui::End();
         
 }

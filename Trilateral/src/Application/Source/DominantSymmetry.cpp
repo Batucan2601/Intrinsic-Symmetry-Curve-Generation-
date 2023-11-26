@@ -199,8 +199,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 			biggest_index = i;
 		}
 	}
-	std::cout << " eigne values "
-		<< std::endl << es.eigenvalues().col(0).real() << std::endl;
+
 	// generate the 3 planes
 	Plane planes[3];
 	planes[0].normal = glm::vec3(eigen_vecs.col(0).real()(0), eigen_vecs.col(0).real()(1), eigen_vecs.col(0).real()(2));

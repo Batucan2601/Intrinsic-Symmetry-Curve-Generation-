@@ -546,7 +546,7 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 
 	return landmark_mesh; 
 }
-Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points)
+Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points , float& error_percentage)
 {
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, target_dim);
 	//calculate center of the plane 
@@ -645,7 +645,22 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	*mesh = L_MDS_mesh;*/
 
 	std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl; 
+	error_percentage = (float)total_error / maximum_geodesic_distance;
 	return plane;
 }
+void create_trilateral_sym_w_landmarl_with_planes(std::vector<Mesh>mesh_vector, const unsigned target_dim, const int no_of_landmarks, const int no_of_trilateral_points, std::string filename)
+{
+
+	//create a file
+	ofstream txtFile(filename);
+	for (size_t i = 0; i < mesh_vector.size(); i++)
+	{
+		float error_percentage;
+		trilateral_symmetry_with_landmark_MDS_with_plane(&mesh_vector[i], target_dim, no_of_landmarks, no_of_trilateral_points , error_percentage);
+		txtFile << " Mesh " + std::to_string(i) + " error_percentage " + std::to_string(error_percentage) + "\n";
+	}
+	txtFile.close();
+}
+
 
 
