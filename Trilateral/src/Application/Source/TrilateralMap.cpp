@@ -1398,7 +1398,9 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 	trilateral_descriptor.p2 = point_index2;
 	trilateral_descriptor.p3 = point_index3;
 
-
+	trilateral_descriptor.n_ring_area_p1 = get_N_ring_area(m, trilateral_descriptor.p1, 1);
+	trilateral_descriptor.n_ring_area_p2 = get_N_ring_area(m, trilateral_descriptor.p2, 1);
+	trilateral_descriptor.n_ring_area_p3 = get_N_ring_area(m, trilateral_descriptor.p3, 1);
 	//for only brute force research 
 	if (is_simplified)
 	{
@@ -1756,12 +1758,13 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 
 			//generate 4 vectors ( 2 x 2 )
 			// size here is 1 - area 2 - curv_error 3 - curv_error  4 - euclidian_error 5 - euclidian error 6 - curvError 7 - curvError
-			Eigen::VectorXf i_1(10);
-			Eigen::VectorXf i_2(10);
+			Eigen::VectorXf i_1(13);
+			Eigen::VectorXf i_2(13);
 
-			Eigen::VectorXf j_1(10);
-			Eigen::VectorXf j_2(10);
+			Eigen::VectorXf j_1(13);
+			Eigen::VectorXf j_2(13);
 
+			//calculate  one ring area ( here for now )
 
 			//fil those
 			i_1(0) = desc_i.area;
@@ -1785,7 +1788,7 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			i_2(5) = desc_i.curvature_1_3;
 			i_2(6) = desc_i.curvature_1_2;
 
-			i_1(7) = desc_i.geodesic_lenght_2_3;
+			i_1(7) = desc_i.geodesic_lenght_2_3 ;
 			i_1(8) = desc_i.euclidian_lenght_2_3;
 			i_1(9) = desc_i.curvature_2_3;
 
@@ -1793,6 +1796,13 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			i_2(8) = desc_i.euclidian_lenght_2_3;
 			i_2(9) = desc_i.curvature_2_3;
 
+
+			i_1(10) = 0;//desc_i.n_ring_area_p1;
+			i_1(11) = 0;//desc_i.n_ring_area_p2;
+			i_1(12) = 0;//desc_i.n_ring_area_p3;
+			i_2(10) = 0;//desc_i.n_ring_area_p1;
+			i_2(11) = 0;//desc_i.n_ring_area_p3;
+			i_2(12) = 0;//desc_i.n_ring_area_p2;
 			//fill j 
 			j_1(0) = desc_j.area;
 			j_2(0) = desc_j.area;
@@ -1823,6 +1833,12 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			j_2(8) = desc_j.euclidian_lenght_2_3;
 			j_2(9) = desc_j.curvature_2_3;
 
+			j_1(10) = 0;//desc_j.n_ring_area_p1;
+			j_1(11) = 0;//desc_j.n_ring_area_p2;
+			j_1(12) = 0;//desc_j.n_ring_area_p3;
+			j_2(10) = 0;//desc_j.n_ring_area_p1;
+			j_2(11) = 0;//desc_j.n_ring_area_p3;
+			j_2(12) = 0;//desc_j.n_ring_area_p2;
 			//normalize 4 vectors
 			i_1 = i_1.normalized();
 			i_2 = i_2.normalized();
@@ -1830,14 +1846,17 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 			j_2 = j_2.normalized();
 
 			float dist_i_j_1_1 = sqrt(pow((i_1(0) - j_1(0)), 2) + pow((i_1(1) - j_1(1)), 2) + pow((i_1(2) - j_1(2)), 2) + pow((i_1(3) - j_1(3)), 2) + pow((i_1(4) - j_1(4)), 2)
-				+ pow((i_1(5) - j_1(5)), 2) + pow((i_1(6) - j_1(6)), 2) + pow((i_1(7) - j_1(7)), 2) + pow((i_1(8) - j_1(8)), 2) + pow((i_1(9) - j_1(9)), 2));
+				+ pow((i_1(5) - j_1(5)), 2) + pow((i_1(6) - j_1(6)), 2) + pow((i_1(7) - j_1(7)), 2) + pow((i_1(8) - j_1(8)), 2) + pow((i_1(9) - j_1(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
 			float dist_i_j_1_2 = sqrt(pow((i_1(0) - j_2(0)), 2) + pow((i_1(1) - j_2(1)), 2) + pow((i_1(2) - j_2(2)), 2) + pow((i_1(3) - j_2(3)), 2) + pow((i_1(4) - j_2(4)), 2)
-				+ pow((i_1(5) - j_2(5)), 2) + pow((i_1(6) - j_2(6)), 2) + pow((i_1(7) - j_2(7)), 2) + pow((i_1(8) - j_2(8)), 2) + pow((i_1(9) - j_2(9)), 2));
+				+ pow((i_1(5) - j_2(5)), 2) + pow((i_1(6) - j_2(6)), 2) + pow((i_1(7) - j_2(7)), 2) + pow((i_1(8) - j_2(8)), 2) + pow((i_1(9) - j_2(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
 			float dist_i_j_2_1 = sqrt(pow((i_2(0) - j_1(0)), 2) + pow((i_2(1) - j_1(1)), 2) + pow((i_2(2) - j_1(2)), 2) + pow((i_2(3) - j_1(3)), 2) + pow((i_2(4) - j_1(4)), 2)
-				+ pow((i_2(5) - j_1(5)), 2) + pow((i_2(6) - j_1(6)), 2) + pow((i_2(7) - j_1(7)), 2) + pow((i_2(8) - j_1(8)), 2) + pow((i_2(9) - j_1(9)), 2));
+				+ pow((i_2(5) - j_1(5)), 2) + pow((i_2(6) - j_1(6)), 2) + pow((i_2(7) - j_1(7)), 2) + pow((i_2(8) - j_1(8)), 2) + pow((i_2(9) - j_1(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
 			float dist_i_j_2_2 = sqrt(pow((i_2(0) - j_2(0)), 2) + pow((i_2(1) - j_2(1)), 2) + pow((i_2(2) - j_2(2)), 2) + pow((i_2(3) - j_2(3)), 2) + pow((i_2(4) - j_2(4)), 2)
-				+ pow((i_2(5) - j_2(5)), 2) + pow((i_2(6) - j_2(6)), 2) + pow((i_2(7) - j_2(7)), 2) + pow((i_2(8) - j_2(8)), 2) + pow((i_2(9) - j_2(9)), 2));
-
+				+ pow((i_2(5) - j_2(5)), 2) + pow((i_2(6) - j_2(6)), 2) + pow((i_2(7) - j_2(7)), 2) + pow((i_2(8) - j_2(8)), 2) + pow((i_2(9) - j_2(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
 			if (dist_i_j_1_1 <= dist_i_j_1_2 && dist_i_j_1_1 <= dist_i_j_2_1 && dist_i_j_1_1 <= dist_i_j_2_2)
 			{
 				least_among_three = dist_i_j_1_1;
@@ -2705,83 +2724,6 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	return embedded_points_vec;
 }
 
-
-
-//// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
-//
-//Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)
-//{
-//
-//	Mesh mesh = mesh_fac.mesh_vec[selected_index]; //mesh itself
-//	
-//	int mesh_size = mesh.vertices.size();
-//	//initialise the wights for the mesh
-//	std::vector<double> mesh_weights;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		mesh_weights.push_back(1.0); //assume every vertex is the same 
-//	}
-//	//double mesh_weights[mesh.vertices.size()]; //initialise weights according to paper 
-//	// steps
-//	// 1 - get centroid
-//	glm::vec3 centroid(0.0f,0.f,0.0f); //initialisiation
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		centroid += mesh.vertices[i];
-//	}
-//	centroid /= mesh_size; //now we got the centroid 
-//	// now convert the centrid glm vec to matrix
-//	Eigen::Matrix<double, 3, 1 > centroid_mat;
-//	centroid_mat(0) = centroid[0];
-//	centroid_mat(1) = centroid[1];
-//	centroid_mat(2) = centroid[2];
-//	// get the covariance matrix
-//	Eigen::Matrix<double, 3, 3> covariance; //covariance mtrix
-//	//fill covariance matrix
-//	covariance(0, 0) = 0.0;
-//	covariance(0, 1) = 0.0;
-//	covariance(0, 2) = 0.0;
-//	covariance(1, 0) = 0.0;
-//	covariance(1, 1) = 0.0;
-//	covariance(1, 2) = 0.0;
-//	covariance(2, 0) = 0.0;
-//	covariance(2, 1) = 0.0;
-//	covariance(2, 2) = 0.0;
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		//get P_i and turn it to a matrix 
-//		Eigen::Matrix<double, 3, 1 > p_i;
-//		p_i(0) = mesh.vertices[i][0];
-//		p_i(1) = mesh.vertices[i][1];
-//		p_i(2) = mesh.vertices[i][2];
-//
-//		Eigen::Matrix<double, 3, 1 > p_i_minus_centroid = (p_i - centroid_mat);
-//
-//		Eigen::Matrix<double, 3, 3 > covariance_i =  mesh_weights[i] * p_i_minus_centroid * p_i_minus_centroid.transpose();
-//		
-//		covariance += covariance_i;
-//	}
-//	double s = 0;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		s += mesh_weights[i];
-//	}
-//	covariance /= s; //covariance is ready for the first part 
-//
-//	return covariance;
-//}
-//
-//void plane_calculations_from_covariance(Eigen::Matrix<double, 3, 3 >& covariance)
-//{
-//	//define planes 
-//	Eigen::Matrix<double, 4, 1 > p1; 
-//	Eigen::Matrix<double, 4, 1 > p2; 
-//	Eigen::Matrix<double, 4, 1 > p3;
-//
-//}
-
  void reset_points(MeshFactory& mesh_fac, int meshIndex)
 {
 	Mesh* m = &mesh_fac.mesh_vec[meshIndex];
@@ -2794,14 +2736,38 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	}
 }
 
- float get_one_ring_area(Mesh* m, float point_index)
+ float get_N_ring_area(Mesh* m, float point_index , int N )
  {
-	 for (size_t i = 0; i < m->adjacenies[point_index].size(); i++)
+	 float area = 0;
+	 std::vector<unsigned int> indices;
+	 std::vector<bool> is_vertex_on_ring(m->vertices.size() , false);
+	 for (size_t i = 0; i < N+1; i++)
 	 {
-		 int adjacent_index = m->adjacenies[point_index];
-		 for (size_t j = 0; j < length; j++)
+		 if (i == 0) // one ring 
 		 {
-
+			 indices.push_back(point_index);
+			 is_vertex_on_ring[point_index] = true;
+			 continue;
+		 }
+		 int static_indices_size = indices.size();
+		 for (size_t j = 0; j < static_indices_size; j++)
+		 {
+			 for (size_t k = 0; k < m->adjacenies[indices[j]].size(); k++)
+			 {
+				 if (!is_vertex_on_ring[m->adjacenies[indices[j]][k].first] )
+				 {
+					 is_vertex_on_ring[m->adjacenies[indices[j]][k].first] = true; 
+					 indices.push_back(m->adjacenies[indices[j]][k].first);
+				 }
+			 }
 		 }
 	 }
+	 for (size_t i = 0; i < m->triangles.size(); i += 3)
+	 {
+		 if(is_vertex_on_ring[m->triangles[i]] || is_vertex_on_ring[m->triangles[i + 1]] || is_vertex_on_ring[m->triangles[i + 2]] )
+		 {
+			 area += compute_triangle_area(m->vertices[m->triangles[i]], m->vertices[m->triangles[i + 1]], m->vertices[m->triangles[i + 2]]);
+		 }
+	 }
+	 return area;
  }

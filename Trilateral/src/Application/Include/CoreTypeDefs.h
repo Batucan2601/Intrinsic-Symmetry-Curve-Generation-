@@ -22,6 +22,11 @@ struct TrilateralDescriptor
 	unsigned int p1; //point indices
 	unsigned int p2;
 	unsigned int p3;
+	// extras
+	float n_ring_area_p1;
+	float n_ring_area_p2;
+	float n_ring_area_p3;
+
 };
 
 enum  ComparisonMethod

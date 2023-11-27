@@ -484,6 +484,8 @@ std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mes
 
 float get_one_ring_area(Mesh*m , float point_index );
 
+float get_N_ring_area(Mesh* m, float point_index , int N );
+
 //// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
 //
 //Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)

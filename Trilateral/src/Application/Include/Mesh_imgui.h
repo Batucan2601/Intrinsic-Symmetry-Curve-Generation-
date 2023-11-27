@@ -259,6 +259,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         }
         create_trilateral_sym_w_landmarl_with_planes(mesh_vector, 3, 100, 100, "../../Results/" + KIDS_text_file_name);
     }
+    if (ImGui::Button("get n ring "))
+    {
+        get_N_ring_area(&m_factory.mesh_vec[selected_mesh], 100, 1);
+    }
     ImGui::End();
         
 }
