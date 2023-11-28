@@ -41,3 +41,4 @@ glm::vec3 symmetry_point_from_plane(Plane* plane, glm::vec3* point);
 Plane generate_plane_from_two_vectors(const glm::vec3& vec1 , const glm::vec3& vec2);
 bool is_triangles_intersect(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3& p3_1, const glm::vec3& p1_2, const glm::vec3& p2_2, const glm::vec3& p2_3);
 float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3&  p3_1 , const glm::vec3& p1_2 , const glm::vec3& p2_2 , const glm::vec3& p2_3  );
+void get_coefficients_from_plane(const Plane& plane , float& A , float& B , float& C , float& D);

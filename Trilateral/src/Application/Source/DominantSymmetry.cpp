@@ -155,7 +155,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	// generate PCA weights are same and 1 for now 
 	float s = mesh.vertices.size();
 	glm::vec3 m(0.0f, 0.0f, 0.0f);
-
+	int N = mesh.vertices.size();
 	m = plane_point;
 
 	MatrixXd Co(3, 3);
@@ -169,7 +169,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	Co(2, 0) = 0;
 	Co(2, 1) = 0;
 	Co(2, 2) = 0;
-	for (size_t i = 0; i < mesh.vertices.size(); i++)
+	for (size_t i = 0; i < N; i++)
 	{
 		glm::vec3 pi_m;
 		pi_m = mesh.vertices[i] - m;
@@ -209,6 +209,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
 	planes[2].point = m;
 
+	std::vector<float> distances;
 	float minimum_distances[3] = { 0 , 0 ,0 }; //for each plane 
 	for (size_t p = 0; p < 3; p++) //for all planes 
 	{
@@ -229,6 +230,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 					}
 				}
 			}
+			distances.push_back(minimum_of_di); //for median calculation
 			minimum_distances[p] += minimum_of_di;
 		}
 		//minimum_distances[p] = minimum_of_di;
@@ -245,8 +247,227 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 		}
 	}
 
+	//just return the one, easy way 
+	// return planes[smallest_dist_index];
 
-	return planes[smallest_dist_index];
+	Plane best_plane_A = planes[smallest_dist_index];
+	
+	
+	// last part
+	// do this one more time for second plane
+
+	// median
+	std::sort(distances.begin(), distances.end());
+	float median_di = distances[distances.size() / 2];
+	float c = 1.5;
+	float sigma = c * median_di;
+
+	// gave every point a weight
+	std::vector<float> weights(N);
+	for (size_t i = 0; i < N; i++)
+	{
+		if (distances[i] >= sigma)
+		{
+			weights[i] = 0;
+		}
+		else
+		{
+			weights[i] = (2 * pow(sigma, 2)) / (pow(pow(distances[i], 2) + pow(sigma, 2), 2));
+		}
+	}
+	// redo symmetry plane with new weights
+	Co(0, 0) = 0;
+	Co(0, 1) = 0;
+	Co(0, 2) = 0;
+	Co(1, 0) = 0;
+	Co(1, 1) = 0;
+	Co(1, 2) = 0;
+	Co(2, 0) = 0;
+	Co(2, 1) = 0;
+	Co(2, 2) = 0;
+	for (size_t i = 0; i < N; i++)
+	{
+		glm::vec3 pi_m;
+		pi_m = mesh.vertices[i] - m;
+		Eigen::VectorXd pi(3);
+		pi(0) = pi_m.x;
+		pi(1) = pi_m.y;
+		pi(2) = pi_m.z;
+
+		pi = pi * weights[i];
+		Eigen::MatrixXd  Co_i = pi * pi.transpose();
+		Co = Co + Co_i;
+	}
+	Co = Co / s;
+	Plane planesB[3];
+	planesB[0].normal = glm::vec3(eigen_vecs.col(0).real()(0), eigen_vecs.col(0).real()(1), eigen_vecs.col(0).real()(2));
+	planesB[0].point = m;
+	planesB[1].normal = glm::vec3(eigen_vecs.col(1).real()(0), eigen_vecs.col(1).real()(1), eigen_vecs.col(1).real()(2));
+	planesB[1].point = m;
+	planesB[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+	planesB[2].point = m;
+
+	distances.clear();
+	weights.clear();
+	minimum_distances[0] = 0; //for each plane 
+	minimum_distances[1] = 0; 
+	minimum_distances[2] = 0; 
+	for (size_t p = 0; p < 3; p++) //for all planes 
+	{
+		float minimum_of_di = INFINITY;
+		for (size_t i = 0; i < mesh.vertices.size(); i++)
+		{
+			// generate sir
+			glm::vec3 s_ir = symmetry_point_from_plane(&planesB[p], &mesh.vertices[i]);
+			float s_ir_status = get_point_status_from_plane(&planesB[p], &s_ir);
+			for (size_t j = 0; j < mesh.vertices.size(); j++)
+			{
+				if (s_ir_status * get_point_status_from_plane(&planesB[p], &mesh.vertices[j]) >= 0)
+				{
+					float dist = glm::distance(s_ir, mesh.vertices[j]);
+					if (dist < minimum_of_di)
+					{
+						minimum_of_di = dist;
+					}
+				}
+			}
+			distances.push_back(minimum_of_di); //for median calculation
+			minimum_distances[p] += minimum_of_di;
+		}
+		//minimum_distances[p] = minimum_of_di;
+	}
+	smallest_dist_index = 0;
+	smallest_dist = INFINITY;
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (smallest_dist > minimum_distances[i])
+		{
+			smallest_dist = minimum_distances[i];
+			smallest_dist_index = i;
+		}
+	}
+	Plane best_plane_B =  planesB[smallest_dist_index];
+
+	glm::vec4 plane_coeff_A;
+	glm::vec4 plane_coeff_B;
+	get_coefficients_from_plane(best_plane_A , plane_coeff_A.x , plane_coeff_A.y , plane_coeff_A.z , plane_coeff_A.w);
+	get_coefficients_from_plane(best_plane_A , plane_coeff_B.x , plane_coeff_B.y , plane_coeff_B.z , plane_coeff_B.w);
+	
+	glm::vec4 dif_plane = plane_coeff_A - plane_coeff_B;
+	float plane_dif_epsilon = sqrt(pow(dif_plane.x, 2) +  pow(dif_plane.y, 2) + pow(dif_plane.z, 2) + pow(dif_plane.w, 2));
+	const float epsilon_const = 0.1;
+	
+	Plane plane_current;
+	Plane plane_prev = best_plane_B;
+	//base case 
+	if (plane_dif_epsilon < epsilon_const)
+	{
+		return plane_prev;
+	}
+	while (plane_dif_epsilon < epsilon_const)
+	{
+		distances.clear();
+		weights.clear();
+
+		//new weights
+		std::sort(distances.begin(), distances.end());
+		median_di = distances[distances.size() / 2];
+		c = 1.5;
+		sigma = c * median_di;
+		for (size_t i = 0; i < N; i++)
+		{
+			if (distances[i] >= sigma)
+			{
+				weights[i] = 0;
+			}
+			else
+			{
+				weights[i] = (2 * pow(sigma, 2)) / (pow(pow(distances[i], 2) + pow(sigma, 2), 2));
+			}
+		}
+		Co(0, 0) = 0;
+		Co(0, 1) = 0;
+		Co(0, 2) = 0;
+		Co(1, 0) = 0;
+		Co(1, 1) = 0;
+		Co(1, 2) = 0;
+		Co(2, 0) = 0;
+		Co(2, 1) = 0;
+		Co(2, 2) = 0;
+		for (size_t i = 0; i < N; i++)
+		{
+			glm::vec3 pi_m;
+			pi_m = mesh.vertices[i] - m;
+			Eigen::VectorXd pi(3);
+			pi(0) = pi_m.x;
+			pi(1) = pi_m.y;
+			pi(2) = pi_m.z;
+
+			pi = pi * weights[i];
+			Eigen::MatrixXd  Co_i = pi * pi.transpose();
+			Co = Co + Co_i;
+		}
+		Co = Co / s;
+		Plane planesB[3];
+		planesB[0].normal = glm::vec3(eigen_vecs.col(0).real()(0), eigen_vecs.col(0).real()(1), eigen_vecs.col(0).real()(2));
+		planesB[0].point = m;
+		planesB[1].normal = glm::vec3(eigen_vecs.col(1).real()(0), eigen_vecs.col(1).real()(1), eigen_vecs.col(1).real()(2));
+		planesB[1].point = m;
+		planesB[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+		planesB[2].point = m;
+
+
+		minimum_distances[0] = 0; //for each plane 
+		minimum_distances[1] = 0;
+		minimum_distances[2] = 0;
+		for (size_t p = 0; p < 3; p++) //for all planes 
+		{
+			float minimum_of_di = INFINITY;
+			for (size_t i = 0; i < mesh.vertices.size(); i++)
+			{
+				// generate sir
+				glm::vec3 s_ir = symmetry_point_from_plane(&planesB[p], &mesh.vertices[i]);
+				float s_ir_status = get_point_status_from_plane(&planesB[p], &s_ir);
+				for (size_t j = 0; j < mesh.vertices.size(); j++)
+				{
+					if (s_ir_status * get_point_status_from_plane(&planesB[p], &mesh.vertices[j]) >= 0)
+					{
+						float dist = glm::distance(s_ir, mesh.vertices[j]);
+						if (dist < minimum_of_di)
+						{
+							minimum_of_di = dist;
+						}
+					}
+				}
+				distances.push_back(minimum_of_di); //for median calculation
+				minimum_distances[p] += minimum_of_di;
+			}
+			//minimum_distances[p] = minimum_of_di;
+		}
+		smallest_dist_index = 0;
+		smallest_dist = INFINITY;
+		for (size_t i = 0; i < 3; i++)
+		{
+			if (smallest_dist > minimum_distances[i])
+			{
+				smallest_dist = minimum_distances[i];
+				smallest_dist_index = i;
+			}
+		}
+		plane_current = planesB[smallest_dist_index];
+
+		glm::vec4 plane_coeff_cur;
+		glm::vec4 plane_coeff_prev;
+		get_coefficients_from_plane(plane_current, plane_coeff_cur.x, plane_coeff_cur.y, plane_coeff_cur.z, plane_coeff_cur.w);
+		get_coefficients_from_plane(plane_prev, plane_coeff_prev.x, plane_coeff_prev.y, plane_coeff_prev.z, plane_coeff_prev.w);
+
+		glm::vec4 dif_plane = plane_coeff_cur - plane_coeff_prev;
+		plane_dif_epsilon = sqrt(pow(dif_plane.x, 2) + pow(dif_plane.y, 2) + pow(dif_plane.z, 2) + pow(dif_plane.w, 2));
+
+		plane_prev = plane_current;
+	}
+
+	return plane_current;
 }
 /* We separate the mesh into two in order to get symmetry sets
 * m1 represents the points where you get the + sign when you plug the vertices in the plane

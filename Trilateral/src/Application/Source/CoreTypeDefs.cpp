@@ -285,3 +285,12 @@ float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p1_2
 	}
 	return 1;
 }
+
+void get_coefficients_from_plane(const Plane& plane, float& A, float& B, float& C, float& D)
+{
+	A = plane.normal.x;
+	B = plane.normal.y;
+	C = plane.normal.z;
+
+	D = -1 * (plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z);
+}
