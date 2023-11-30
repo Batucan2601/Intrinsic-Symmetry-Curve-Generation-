@@ -318,6 +318,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 }*/
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index, std::vector<unsigned int>& indices);
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh*m, std::vector<unsigned int>& indices);
+std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh*m, std::vector<unsigned int>& indices);
 std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points);
 std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
@@ -482,7 +483,6 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 //from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
 std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index, std::vector<unsigned int> landmark_vertices);
 
-float get_one_ring_area(Mesh*m , float point_index );
 
 float get_N_ring_area(Mesh* m, float point_index , int N );
 

@@ -577,8 +577,8 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	std::vector<unsigned int > fps_negative =  furthest_point_sampling_on_partial_points(&L_MDS_mesh, no_of_trilateral_points, points_plane_negative);
 
 	// trilateral computation
-	std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh ,fps_positive);
-	std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&L_MDS_mesh, fps_negative);
+	std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh ,fps_positive);
+	std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_negative);
 
 	// write a function for comparing two descriptor
 	//irrelevant constants 

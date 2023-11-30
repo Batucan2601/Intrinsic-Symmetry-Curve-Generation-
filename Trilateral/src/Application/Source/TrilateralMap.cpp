@@ -656,6 +656,69 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	 }
 	 return trilateralDesc;
  }
+ std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices)
+ {
+	 std::vector<TrilateralDescriptor> trilateralDesc;
+	 for (size_t i = 0; i < indices.size(); i++)
+	 {
+		 TrilateralDescriptor desc;
+		 //get two of the closed indexed points
+		 std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		 std::vector<std::pair<float, unsigned int >> distances;
+		 for (size_t j = 0; j < geodesic_distances.size(); j++)
+		 {
+			 bool is_in_indices = false;
+			 for (size_t k = 0; k < indices.size(); k++)
+			 {
+				 if (j == indices[k] && j != indices[i])
+				 {
+					 is_in_indices = true;
+					 break;
+				 }
+			 }
+
+			 if (is_in_indices)
+			 {
+				 float dist = geodesic_distances[j];
+				 unsigned int index = j;
+				 std::pair<float, unsigned int > pair;
+				 pair.first = dist;
+				 pair.second = j;
+				 distances.push_back(pair);
+			 }
+		 }
+		 //get first and second farthest
+		 float maxVal = -INFINITY;
+		 float maxIndexFirst = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maxVal < distances[j].first)
+			 {
+				 maxIndexFirst = distances[j].second;
+				 maxVal = distances[j].first;
+			 }
+		 }
+
+		 maxVal = -INFINITY;
+		 float maxIndexSecond = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maxVal < distances[j].first && maxIndexFirst != distances[j].second && distances[j].second != indices[i])
+			 {
+				 maxIndexSecond = distances[j].second;
+				 maxVal = distances[j].first;
+			 }
+		 }
+		 desc.p1 = indices[i];
+		 desc.p2 = maxIndexFirst;
+		 desc.p3 = maxIndexSecond;
+
+
+		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
+		 trilateralDesc.push_back(desc);
+	 }
+	 return trilateralDesc;
+ }
  std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points)
 {
 	std::vector<unsigned int> agd_indices;
