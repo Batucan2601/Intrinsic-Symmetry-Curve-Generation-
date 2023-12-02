@@ -303,3 +303,15 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     ImGui::End();
 }
+
+void imgui_N_Lateral_Parameters()
+{
+    float N;
+    ImGui::Begin("N lateral Params ");
+    ImGui::InputFloat("N parameter in N lateral:", &N);
+    ImGui::InputFloat(":", &N);
+    ImGui::InputFloat("N parameter in N lateral:", &N);
+
+    ImGui::End();
+
+}
