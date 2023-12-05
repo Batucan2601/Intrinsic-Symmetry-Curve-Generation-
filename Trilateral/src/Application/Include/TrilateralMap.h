@@ -562,3 +562,5 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
 //}
 
  void reset_points(MeshFactory& mesh_fac, int meshIndex);
+ void start_n_lateral_algorithm(Mesh* m ,const  int N,  const int no_of_n_lateral_points, const std::string& method_name , const std::vector<bool>& parameter_checkbox
+, const std::vector<bool>& parameter_weights, const std::vector<std::string>& parameter_names );

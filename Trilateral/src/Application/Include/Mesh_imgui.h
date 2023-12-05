@@ -304,14 +304,77 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     ImGui::End();
 }
 
-void imgui_N_Lateral_Parameters()
+
+float N; 
+#define BOOL_CONTROL_SIZE 2 
+bool n_1_bool_control[BOOL_CONTROL_SIZE];
+std::string method_name;
+//parameters
+#define NUMBER_OF_PARAMETERS 9 
+bool  parameter_checkbox[NUMBER_OF_PARAMETERS];
+float parameter_weights[NUMBER_OF_PARAMETERS];
+std::string parameter_names[NUMBER_OF_PARAMETERS];
+void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
     float N;
+
+    //init arrays
+    for (size_t i = 0; i < BOOL_CONTROL_SIZE; i++)
+    {
+        n_1_bool_control[i] = false; 
+    }
+    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
+    {
+        parameter_checkbox[i] = false;
+    }
+    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
+    {
+        parameter_weights[i] = 1.0;
+    }
     ImGui::Begin("N lateral Params ");
     ImGui::InputFloat("N parameter in N lateral:", &N);
-    ImGui::InputFloat(":", &N);
-    ImGui::InputFloat("N parameter in N lateral:", &N);
 
+// point selection algorithm
+    ImGui::Text(" Select which way to fetch other n-1 lateral points for each.");
+    if (ImGui::Checkbox("closest points", &n_1_bool_control[0]))
+    {
+        n_1_bool_control[0] != n_1_bool_control[0];
+        method_name = "closest points";
+    }
+    if (ImGui::Checkbox("furthest points", &n_1_bool_control[1]))
+    {
+        n_1_bool_control[1] != n_1_bool_control[1];
+        method_name = "furthest points";
+    }
+// parameters
+    parameter_names[0] = "area";
+    parameter_names[1] = "euclidian distance";
+    parameter_names[2] = "geodesic distance";
+    parameter_names[3] = "curvature";
+    parameter_names[4] = "Heat Kernel Signature";
+    parameter_names[5] = "X";
+    parameter_names[6] = "X";
+    parameter_names[7] = "X";
+    parameter_names[8] = "X";
+
+    ImGui::Text("Select required paramters and give them weights ");
+    
+    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
+    {
+        if (ImGui::Checkbox(parameter_names[i].c_str(), &parameter_checkbox[i])) {}
+        ImGui::SameLine();
+        if (ImGui::InputFloat("weight = ", &parameter_weights[i])) {}
+    }
+    
+    Mesh* m = &m_factory.mesh_vec[selected_mesh];
+    if (ImGui::Button("Start algorithm for current mesh"))
+    {
+        //start_n_lateral_algorithm(m, N, method_name, parameter_checkbox, parameter_weights, parameter_names);
+    }
+    if (ImGui::Button("Start algorithm for all of the dataset"))
+    {
+
+    }
     ImGui::End();
 
 }

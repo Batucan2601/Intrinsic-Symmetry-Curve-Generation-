@@ -248,9 +248,13 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 		}
 	}
 
+#pragma region rotation around 3 degree
+
+#pragma endregion 
 	//just return the one, easy way 
 	 return planes[smallest_dist_index];
 
+#pragma region iteration
 	//Plane best_plane_A = planes[smallest_dist_index];
 	//
 	//
@@ -487,6 +491,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	//}
 
 	//return plane_current;
+#pragma endregion
 }
 /* We separate the mesh into two in order to get symmetry sets
 * m1 represents the points where you get the + sign when you plug the vertices in the plane
@@ -625,4 +630,9 @@ std::vector<TrilateralDescriptor> match_two_meshes_with_fps(Mesh* selected_mesh,
 	trilateral_desc_vec_concat.insert(trilateral_desc_vec_concat.end(), trilateral_desc_vec_left.begin(), trilateral_desc_vec_left.end());
 
 	return trilateral_desc_vec_concat;
+}
+
+static Plane rotate_plane(Plane plane , float rotation_degree)
+{
+	Plane rotated_plane; 
 }

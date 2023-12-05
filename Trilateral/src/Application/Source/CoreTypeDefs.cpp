@@ -1,4 +1,5 @@
 #include "../Include/CoreTypeDefs.h"
+#include <src/Application/Include/TrilateralMap.h>
 
 Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 {
@@ -294,3 +295,77 @@ void get_coefficients_from_plane(const Plane& plane, float& A, float& B, float& 
 
 	D = -1 * (plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z);
 }
+
+#pragma region Nlateral struct
+
+NLateralDescriptor::NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N)
+{
+	this->point_indices = point_indices;
+	this->N = N;
+	int point_size = point_indices.size();
+	this->mesh = &mesh;
+}
+
+void NLateralDescriptor::get_euclidian_distances()
+{
+	//euclidian
+	int point_size = this->point_indices.size();
+	for (size_t i = 0; i < point_size; i++)
+	{
+		this->euclidian_distances.push_back(std::vector<double>());
+		for (size_t j = 0; j < point_size; j++)
+		{
+			float euclidian_dist = 0;
+			euclidian_dist = glm::distance(mesh->vertices[point_indices[i]], mesh->vertices[point_indices[j]]);
+			this->euclidian_distances[i].push_back(euclidian_dist);
+		}
+	}
+}
+void NLateralDescriptor::get_geodesic_distances()
+{
+	//geodesic
+	int point_size = this->point_indices.size();
+	for (size_t i = 0; i < point_size; i++)
+	{
+		this->geodesic_distances.push_back(std::vector<double>());
+		std::vector<float> geodesic_dist = compute_geodesic_distances_min_heap_distances((Mesh&)mesh, this->point_indices[i]);
+
+		for (size_t j = 0; j < point_size; j++)
+		{
+			this->geodesic_distances[i].push_back(geodesic_dist[this->point_indices[j]]);
+		}
+	}
+}
+void NLateralDescriptor::get_curvatures()
+{
+	//curvature
+	int point_size = this->point_indices.size();
+	for (size_t i = 0; i < point_size; i++)
+	{
+		curvatures.push_back(std::vector<double>());
+
+		for (size_t j = 0; j < point_size; j++)
+		{
+			if (i == j)
+			{
+				curvatures[i].push_back(0);
+			}
+			else
+			{
+				curvatures[i].push_back(this->euclidian_distances[i][j] / this->geodesic_distances[i][j]);
+			}
+		}
+	}
+}
+void NLateralDescriptor::get_k_ring_areas()
+{
+	//k-ring-area
+	int point_size = this->point_indices.size();
+	for (size_t i = 0; i < point_size; i++)
+	{
+		float k_ring_area = get_N_ring_area(mesh, this->point_indices[i], 1);
+		this->k_ring_areas.push_back(k_ring_area);
+	}
+}
+
+#pragma endregion

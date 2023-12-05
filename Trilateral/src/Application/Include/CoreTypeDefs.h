@@ -28,7 +28,23 @@ struct TrilateralDescriptor
 	float n_ring_area_p3;
 
 };
+struct NLateralDescriptor
+{
+	int N;
+	std::vector<unsigned int> point_indices;
+	std::vector<std::vector<double>> euclidian_distances;
+	std::vector<std::vector<double>>  geodesic_distances;
+	std::vector<std::vector<double>>  curvatures;
+	// extras
+	std::vector<double> k_ring_areas;
+	Mesh* mesh;
+	NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N);
 
+	void get_euclidian_distances();
+	void get_geodesic_distances();
+	void get_curvatures();
+	void get_k_ring_areas();
+};
 enum  ComparisonMethod
 {
 	absoulute_dif,

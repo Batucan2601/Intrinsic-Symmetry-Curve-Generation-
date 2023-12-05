@@ -1,5 +1,7 @@
 #include "../Include/TrilateralMap.h"
-
+#include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+#include "../Include/DominantSymmetry.h"
+#include "../Include/MetricCalculations.h"
 
 
 
@@ -2834,3 +2836,127 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	 }
 	 return area;
  }
+
+ void start_n_lateral_algorithm(Mesh* mesh, const int N , const int number_of_n_lateral_points , const std::string& method_name, const std::vector<bool>& parameter_checkbox
+	 , const std::vector<bool>& parameter_weights, const std::vector<std::string>& parameter_names)
+{
+
+	 // 1 - part one is same for now, generate a symmetry plane 
+#pragma region symmetry plane 
+	 Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3);
+	 //calculate center of the plane 
+	 glm::vec3 plane_center(0, 0, 0);
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 plane_center += L_MDS_mesh.vertices[i];
+	 }
+	 plane_center /= mesh->vertices.size();
+	 Plane plane = generate_dominant_symmetry_plane(plane_center, L_MDS_mesh);
+#pragma endregion
+
+#pragma region separation of points on the mesh from plane 
+	 std::vector<unsigned int> points_plane_positive;
+	 std::vector<unsigned int> points_plane_negative;
+	 //now separate the points into two sides of the plane 
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		 {
+			 points_plane_positive.push_back(i);
+		 }
+		 else
+		 {
+			 points_plane_negative.push_back(i);
+		 }
+	 }
+#pragma endregion
+
+#pragma region do point sampling on partial regions 
+	 // now do two distinct fps
+	 if (method_name == std::string("furthest"))
+	 {
+		 std::vector<unsigned int > fps_positive = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
+		 std::vector<unsigned int > fps_negative = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+	 }
+	 else if (method_name == std::string("furthest"))
+	 {
+		 std::vector<unsigned int > fps_positive = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
+		 std::vector<unsigned int > fps_negative = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+
+	 }
+#pragma endregion
+
+#pragma region n_lateral_algorithm
+		
+	 // n_lateral computation
+	 std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_positive);
+	 std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_negative);
+#pragma endregion
+	 // write a function for comparing two descriptor
+	 //irrelevant constants 
+	 float const1 = 0;
+	 float const2 = 0;
+	 float const3 = 0;
+	 std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+
+	 //forge it into two list
+	 std::vector<unsigned int> left_correspondences;
+	 std::vector<unsigned int> right_correspondences;
+	 for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	 {
+		 left_correspondences.push_back(resemblance_pairs[i].first);
+		 right_correspondences.push_back(resemblance_pairs[i].second);
+	 }
+	 float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+
+	 // now use fps points to get maximum distance in order to compare to 
+	 float maximum_geodesic_distance = 0;
+	 for (size_t i = 0; i < fps_positive.size(); i++)
+	 {
+		 std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maximum_geodesic_distance < distances[j])
+			 {
+				 maximum_geodesic_distance = distances[j];
+			 }
+		 }
+	 }
+
+	 // color left red
+	 std::vector<unsigned int> is_selected(mesh->vertices.size(), 0);
+	 for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	 {
+		 mesh->colors[resemblance_pairs[i].first].r = 255;
+		 mesh->colors[resemblance_pairs[i].first].g = 0;
+		 mesh->colors[resemblance_pairs[i].first].b = 0;
+
+		 mesh->colors[resemblance_pairs[i].second].r = 0;
+		 mesh->colors[resemblance_pairs[i].second].g = 0;
+		 mesh->colors[resemblance_pairs[i].second].b = 255;
+	 }
+
+	 mesh->calculated_symmetry_pairs = resemblance_pairs;
+
+	 //L_MDS_mesh.colors = mesh->colors;
+	 //*mesh = L_MDS_mesh;
+	 //color right  blue 
+
+	 /*L_MDS_mesh.colors.clear();
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		 {
+			 L_MDS_mesh.colors.push_back(glm::vec3(255.0 , 0.0 , 0.0 ) );
+		 }
+		 else
+		 {
+			 L_MDS_mesh.colors.push_back(glm::vec3(0, 255, 0.0));
+		 }
+	 }
+	 *mesh = L_MDS_mesh;*/
+
+	 std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl;
+	 float error_percentage = (float)total_error / maximum_geodesic_distance;
+	 return plane;
+}

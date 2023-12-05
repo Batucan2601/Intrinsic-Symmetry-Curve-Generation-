@@ -445,6 +445,7 @@ int main(void)
                 //imgui new frame
         imgui_mesh_window(selected_mesh, mesh_fac);
         imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
+        imgui_N_Lateral_Parameters();
         if (is_trilateral_generated)
         {
             imgui_trilateralConfiguration(selected_mesh , mesh_fac);
