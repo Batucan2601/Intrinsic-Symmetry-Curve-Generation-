@@ -2872,7 +2872,11 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 #pragma endregion
 
 #pragma region do point sampling on partial regions 
+
+	 std::vector<unsigned int > fps_positive;
+	 std::vector<unsigned int > fps_negative;
 	 // now do two distinct fps
+	 
 	 if (method_name == std::string("furthest"))
 	 {
 		 std::vector<unsigned int > fps_positive = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
@@ -2880,8 +2884,8 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	 }
 	 else if (method_name == std::string("furthest"))
 	 {
-		 std::vector<unsigned int > fps_positive = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
-		 std::vector<unsigned int > fps_negative = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+		 //std::vector<unsigned int > fps_positive = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
+		 //std::vector<unsigned int > fps_negative = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
 
 	 }
 #pragma endregion
@@ -2958,5 +2962,5 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 
 	 std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl;
 	 float error_percentage = (float)total_error / maximum_geodesic_distance;
-	 return plane;
+	 //return plane;
 }

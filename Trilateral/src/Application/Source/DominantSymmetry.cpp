@@ -4,7 +4,11 @@
 #include "../../External/Include/eigen/Eigen/Eigenvalues" 
 #include "../Include/Sampling.h"
 #include "../Include/TrilateralMap.h"
+#include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 using Eigen::MatrixXd;
+
+static Plane rotate_plane(Plane plane, float rotation_degree);
+
 Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
 {
 	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
@@ -249,7 +253,72 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 	}
 
 #pragma region rotation around 3 degree
-
+	float symmetry_correspondence_score = -INFINITY;
+	int symmetry_correspondence_index = 0;
+	Plane rot_planes[9];
+	for (int p = 0; p < 3; p++)
+	{
+		// itself
+		// 1 - rotate +3 degree
+		// 2 - rotate -3 degree 
+		float degree = -3;
+		for (int i = 0; i < 3; i++)
+		{
+			Plane rotated_plane = rotate_plane(planes[p], degree);
+			rot_planes[p * 3 + i] = rotated_plane;
+			float symm_score = generate_symmetry_score( mesh ,&rotated_plane);
+			if (symm_score > symmetry_correspondence_score)
+			{
+				symmetry_correspondence_score = symm_score;
+				symmetry_correspondence_index = p * 3 + i;
+			}
+			degree += 3; 
+		}
+	}
+	// translate in both normal and normal's opposite direction 
+	Plane best_plane = rot_planes[symmetry_correspondence_index];
+	float step_size = 0.01f;
+	float prev_sym_score = symmetry_correspondence_score;
+	Plane temp_best_plane_normal_dir = best_plane;
+	float sym_score_normal_dir = 0;
+	while (1)
+	{
+		// move plane by normal with step size
+		temp_best_plane_normal_dir.point += glm::normalize(temp_best_plane_normal_dir.normal) * step_size;
+		float symm_score = generate_symmetry_score(mesh, &temp_best_plane_normal_dir);
+		if (symm_score < prev_sym_score)
+		{
+			sym_score_normal_dir = symm_score;
+			temp_best_plane_normal_dir.point -= glm::normalize(temp_best_plane_normal_dir.normal) * step_size;
+			break;
+		}
+		prev_sym_score = symm_score;
+	}
+	prev_sym_score = symmetry_correspondence_score;
+	Plane temp_best_plane_opposite_normal_dir = best_plane;
+	float sym_score_opposite_normal_dir = 0;
+	while (1)
+	{
+		// move plane by normal with step size
+		temp_best_plane_opposite_normal_dir.point += glm::normalize(temp_best_plane_opposite_normal_dir.normal) * step_size;
+		float symm_score = generate_symmetry_score(mesh, &temp_best_plane_opposite_normal_dir);
+		if (symm_score < prev_sym_score)
+		{
+			sym_score_opposite_normal_dir = symm_score;
+			temp_best_plane_opposite_normal_dir.point -= glm::normalize(temp_best_plane_opposite_normal_dir.normal) * step_size;
+			break;
+		}
+		prev_sym_score = symm_score;
+	}
+	if (sym_score_normal_dir > sym_score_opposite_normal_dir)
+	{
+		return temp_best_plane_normal_dir;
+	}
+	else
+	{
+		return temp_best_plane_opposite_normal_dir;
+	}
+	return rot_planes[symmetry_correspondence_index];
 #pragma endregion 
 	//just return the one, easy way 
 	 return planes[smallest_dist_index];
@@ -634,5 +703,14 @@ std::vector<TrilateralDescriptor> match_two_meshes_with_fps(Mesh* selected_mesh,
 
 static Plane rotate_plane(Plane plane , float rotation_degree)
 {
-	Plane rotated_plane; 
+	Plane rotated_plane = plane;
+
+	//rotate normal around point m ? 
+
+	glm::mat4 rot_mat = glm::rotate(glm::mat4(1.0f), glm::radians(rotation_degree), plane.point);
+	
+	rotated_plane.normal = glm::vec3(glm::vec4(rotated_plane.normal,1) * rot_mat);
+
+	return rotated_plane;
+	
 }
