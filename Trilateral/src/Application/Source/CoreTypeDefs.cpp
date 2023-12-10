@@ -296,76 +296,19 @@ void get_coefficients_from_plane(const Plane& plane, float& A, float& B, float& 
 	D = -1 * (plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z);
 }
 
-#pragma region Nlateral struct
-
-NLateralDescriptor::NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N)
+std::vector<int> getNumberFromString(std::string s)
 {
-	this->point_indices = point_indices;
-	this->N = N;
-	int point_size = point_indices.size();
-	this->mesh = &mesh;
-}
-
-void NLateralDescriptor::get_euclidian_distances()
-{
-	//euclidian
-	int point_size = this->point_indices.size();
-	for (size_t i = 0; i < point_size; i++)
-	{
-		this->euclidian_distances.push_back(std::vector<double>());
-		for (size_t j = 0; j < point_size; j++)
-		{
-			float euclidian_dist = 0;
-			euclidian_dist = glm::distance(mesh->vertices[point_indices[i]], mesh->vertices[point_indices[j]]);
-			this->euclidian_distances[i].push_back(euclidian_dist);
+	std::stringstream str_strm;
+	str_strm << s; //convert the string s into stringstream
+	std::string temp_str;
+	std::vector<int> num_vec; 
+	int temp_int;
+	while (!str_strm.eof()) {
+		str_strm >> temp_str; //take words into temp_str one by one
+		if (std::stringstream(temp_str) >> temp_int) { //try to convert string to int
+			num_vec.push_back(temp_int);
 		}
+		temp_str = ""; //clear temp string
 	}
+	return num_vec;
 }
-void NLateralDescriptor::get_geodesic_distances()
-{
-	//geodesic
-	int point_size = this->point_indices.size();
-	for (size_t i = 0; i < point_size; i++)
-	{
-		this->geodesic_distances.push_back(std::vector<double>());
-		std::vector<float> geodesic_dist = compute_geodesic_distances_min_heap_distances((Mesh&)mesh, this->point_indices[i]);
-
-		for (size_t j = 0; j < point_size; j++)
-		{
-			this->geodesic_distances[i].push_back(geodesic_dist[this->point_indices[j]]);
-		}
-	}
-}
-void NLateralDescriptor::get_curvatures()
-{
-	//curvature
-	int point_size = this->point_indices.size();
-	for (size_t i = 0; i < point_size; i++)
-	{
-		curvatures.push_back(std::vector<double>());
-
-		for (size_t j = 0; j < point_size; j++)
-		{
-			if (i == j)
-			{
-				curvatures[i].push_back(0);
-			}
-			else
-			{
-				curvatures[i].push_back(this->euclidian_distances[i][j] / this->geodesic_distances[i][j]);
-			}
-		}
-	}
-}
-void NLateralDescriptor::get_k_ring_areas()
-{
-	//k-ring-area
-	int point_size = this->point_indices.size();
-	for (size_t i = 0; i < point_size; i++)
-	{
-		float k_ring_area = get_N_ring_area(mesh, this->point_indices[i], 1);
-		this->k_ring_areas.push_back(k_ring_area);
-	}
-}
-
-#pragma endregion

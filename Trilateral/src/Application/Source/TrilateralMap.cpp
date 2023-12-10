@@ -2837,8 +2837,8 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	 return area;
  }
 
- void start_n_lateral_algorithm(Mesh* mesh, const int N , const int number_of_n_lateral_points , const std::string& method_name, const std::vector<bool>& parameter_checkbox
-	 , const std::vector<bool>& parameter_weights, const std::vector<std::string>& parameter_names)
+ void start_n_lateral_algorithm(Mesh* mesh, const int N , const int number_of_n_lateral_points , const std::string& method_name, const bool* parameter_checkbox
+	 , const float* parameter_weights, const std::string* parameter_names)
 {
 
 	 // 1 - part one is same for now, generate a symmetry plane 

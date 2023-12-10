@@ -314,6 +314,8 @@ std::string method_name;
 bool  parameter_checkbox[NUMBER_OF_PARAMETERS];
 float parameter_weights[NUMBER_OF_PARAMETERS];
 std::string parameter_names[NUMBER_OF_PARAMETERS];
+#define K_RING_POS 5
+int no_of_n_lateral_points = 100; 
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
     float N;
@@ -352,7 +354,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     parameter_names[2] = "geodesic distance";
     parameter_names[3] = "curvature";
     parameter_names[4] = "Heat Kernel Signature";
-    parameter_names[5] = "X";
+    parameter_names[K_RING_POS] = "k ring area = ";
     parameter_names[6] = "X";
     parameter_names[7] = "X";
     parameter_names[8] = "X";
@@ -364,12 +366,25 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         if (ImGui::Checkbox(parameter_names[i].c_str(), &parameter_checkbox[i])) {}
         ImGui::SameLine();
         if (ImGui::InputFloat("weight = ", &parameter_weights[i])) {}
+
+        if (i == K_RING_POS)
+        {
+            ImGui::SameLine();
+            int k_no;
+            if (ImGui::InputInt("K in K ring = ", &k_no))
+            {
+                parameter_names[K_RING_POS] += std::to_string(k_no);
+            }
+
+        }
     }
     
-    Mesh* m = &m_factory.mesh_vec[selected_mesh];
     if (ImGui::Button("Start algorithm for current mesh"))
     {
-        //start_n_lateral_algorithm(m, N, method_name, parameter_checkbox, parameter_weights, parameter_names);
+        Mesh* m = &m_factory.mesh_vec[selected_mesh];
+
+
+       start_n_lateral_algorithm(m, N , no_of_n_lateral_points , method_name , parameter_checkbox , parameter_weights , parameter_names);
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {

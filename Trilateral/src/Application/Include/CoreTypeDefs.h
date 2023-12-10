@@ -28,23 +28,7 @@ struct TrilateralDescriptor
 	float n_ring_area_p3;
 
 };
-struct NLateralDescriptor
-{
-	int N;
-	std::vector<unsigned int> point_indices;
-	std::vector<std::vector<double>> euclidian_distances;
-	std::vector<std::vector<double>>  geodesic_distances;
-	std::vector<std::vector<double>>  curvatures;
-	// extras
-	std::vector<double> k_ring_areas;
-	Mesh* mesh;
-	NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N);
 
-	void get_euclidian_distances();
-	void get_geodesic_distances();
-	void get_curvatures();
-	void get_k_ring_areas();
-};
 enum  ComparisonMethod
 {
 	absoulute_dif,
@@ -58,3 +42,4 @@ Plane generate_plane_from_two_vectors(const glm::vec3& vec1 , const glm::vec3& v
 bool is_triangles_intersect(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3& p3_1, const glm::vec3& p1_2, const glm::vec3& p2_2, const glm::vec3& p2_3);
 float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3&  p3_1 , const glm::vec3& p1_2 , const glm::vec3& p2_2 , const glm::vec3& p2_3  );
 void get_coefficients_from_plane(const Plane& plane , float& A , float& B , float& C , float& D);
+std::vector<int> getNumberFromString(std::string s);
