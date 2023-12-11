@@ -6,6 +6,7 @@
 #include <src/Application/Include/DominantSymmetry.h>
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+#include "../Include/NLateralDescriptor.h"
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -305,78 +306,52 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 }
 
 
-float N; 
-#define BOOL_CONTROL_SIZE 2 
-bool n_1_bool_control[BOOL_CONTROL_SIZE];
-std::string method_name;
-//parameters
-#define NUMBER_OF_PARAMETERS 9 
-bool  parameter_checkbox[NUMBER_OF_PARAMETERS];
-float parameter_weights[NUMBER_OF_PARAMETERS];
-std::string parameter_names[NUMBER_OF_PARAMETERS];
-#define K_RING_POS 5
-int no_of_n_lateral_points = 100; 
+
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
-    float N;
-
-    //init arrays
-    for (size_t i = 0; i < BOOL_CONTROL_SIZE; i++)
-    {
-        n_1_bool_control[i] = false; 
-    }
-    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
-    {
-        parameter_checkbox[i] = false;
-    }
-    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
-    {
-        parameter_weights[i] = 1.0;
-    }
+   
     ImGui::Begin("N lateral Params ");
-    ImGui::InputFloat("N parameter in N lateral:", &N);
+    ImGui::InputInt("N parameter in N lateral:", &N_LATERAL_PARAMETERS.N);
 
 // point selection algorithm
     ImGui::Text(" Select which way to fetch other n-1 lateral points for each.");
-    if (ImGui::Checkbox("closest points", &n_1_bool_control[0]))
+    static const char* current_point_Selection_method = N_LATERAL_PARAMETERS.n_lateral_construction_methods[0].c_str();
+    if (ImGui::BeginCombo("combobox", current_point_Selection_method))
     {
-        n_1_bool_control[0] != n_1_bool_control[0];
-        method_name = "closest points";
+        for (int n = 0; n < N_LATERAL_PARAMETERS.N_LATERAL_CONSTRUCTION_METHOD_NO; n++)
+        {
+            bool is_selected = (current_point_Selection_method == N_LATERAL_PARAMETERS.n_lateral_construction_methods[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(N_LATERAL_PARAMETERS.n_lateral_construction_methods[n].c_str(), is_selected))
+                current_point_Selection_method = N_LATERAL_PARAMETERS.n_lateral_construction_methods[n].c_str();
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
     }
-    if (ImGui::Checkbox("furthest points", &n_1_bool_control[1]))
-    {
-        n_1_bool_control[1] != n_1_bool_control[1];
-        method_name = "furthest points";
-    }
-// parameters
-    parameter_names[0] = "area";
-    parameter_names[1] = "euclidian distance";
-    parameter_names[2] = "geodesic distance";
-    parameter_names[3] = "curvature";
-    parameter_names[4] = "Heat Kernel Signature";
-    parameter_names[K_RING_POS] = "k ring area = ";
-    parameter_names[6] = "X";
-    parameter_names[7] = "X";
-    parameter_names[8] = "X";
+
+    N_LATERAL_PARAMETERS.current_n_lateral_construction_method = current_point_Selection_method;
 
     ImGui::Text("Select required paramters and give them weights ");
     
-    for (size_t i = 0; i < NUMBER_OF_PARAMETERS; i++)
+    for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
     {
-        if (ImGui::Checkbox(parameter_names[i].c_str(), &parameter_checkbox[i])) {}
+        bool temp = N_LATERAL_PARAMETERS.parameter_checkbox[i];
+        if (ImGui::Checkbox(N_LATERAL_PARAMETERS.parameter_names[i].c_str(), &temp  )) {}
         ImGui::SameLine();
-        if (ImGui::InputFloat("weight = ", &parameter_weights[i])) {}
+        if (ImGui::InputFloat("weight = ", &N_LATERAL_PARAMETERS.parameter_weights[i])) {}
 
-        if (i == K_RING_POS)
+        if (i == N_LATERAL_PARAMETERS.K_RING_POS)
         {
             ImGui::SameLine();
             int k_no;
             if (ImGui::InputInt("K in K ring = ", &k_no))
             {
-                parameter_names[K_RING_POS] += std::to_string(k_no);
+                N_LATERAL_PARAMETERS.parameter_names[N_LATERAL_PARAMETERS.K_RING_POS] += std::to_string(k_no);
             }
 
         }
+
+        N_LATERAL_PARAMETERS.parameter_checkbox[i] = temp;
     }
     
     if (ImGui::Button("Start algorithm for current mesh"))
@@ -384,7 +359,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-       start_n_lateral_algorithm(m, N , no_of_n_lateral_points , method_name , parameter_checkbox , parameter_weights , parameter_names);
+       start_n_lateral_algorithm(m, N ,);
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {

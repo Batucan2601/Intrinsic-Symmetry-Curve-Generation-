@@ -353,10 +353,7 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
 
  void reset_points(MeshFactory& mesh_fac, int meshIndex);
 
-// NLATERAL
 
 
- void start_n_lateral_algorithm(Mesh* m ,const  int N,  const int no_of_n_lateral_points, const std::string& method_name_for_point_selection , const bool* parameter_checkbox
-, const float* parameter_weights, const std::string* parameter_names );
 
 
