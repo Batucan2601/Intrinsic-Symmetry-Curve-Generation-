@@ -10,7 +10,7 @@ NLateralDescriptor::NLateralDescriptor(Mesh& mesh, const std::vector<unsigned in
 	this->point_indices = point_indices;
 	this->N = N;
 	int point_size = point_indices.size();
-	this->mesh = &mesh;
+	this->mesh = mesh;
 }
 
 void NLateralDescriptor::get_euclidian_distances()
@@ -22,12 +22,13 @@ void NLateralDescriptor::get_euclidian_distances()
 		this->euclidian_distances.push_back(std::vector<double>());
 		for (size_t j = 0; j < point_size; j++)
 		{
+			
+			float euclidian_dist = 0;
+			euclidian_dist = glm::distance(mesh.vertices[point_indices[i]], mesh.vertices[point_indices[j]]);
 			if (i == j)
 			{
-				continue;
+				euclidian_dist = 0;
 			}
-			float euclidian_dist = 0;
-			euclidian_dist = glm::distance(mesh->vertices[point_indices[i]], mesh->vertices[point_indices[j]]);
 			this->euclidian_distances[i].push_back(euclidian_dist);
 		}
 	}
@@ -39,15 +40,19 @@ void NLateralDescriptor::get_geodesic_distances()
 	for (size_t i = 0; i < point_size; i++)
 	{
 		this->geodesic_distances.push_back(std::vector<double>());
-		std::vector<float> geodesic_dist = compute_geodesic_distances_min_heap_distances((Mesh&)mesh, this->point_indices[i]);
+		std::vector<float> geodesic_dist = compute_geodesic_distances_min_heap_distances(mesh, this->point_indices[i]);
 
 		for (size_t j = 0; j < point_size; j++)
 		{
 			if (i == j)
 			{
-				continue;
+				this->geodesic_distances[i].push_back(0);
+
 			}
-			this->geodesic_distances[i].push_back(geodesic_dist[this->point_indices[j]]);
+			else
+			{
+				this->geodesic_distances[i].push_back(geodesic_dist[this->point_indices[j]]);
+			}
 		}
 	}
 }
@@ -63,7 +68,7 @@ void NLateralDescriptor::get_curvatures()
 		{
 			if (i == j)
 			{
-				continue;
+				curvatures[i].push_back(0);
 			}
 			else
 			{
@@ -78,7 +83,7 @@ void NLateralDescriptor::get_k_ring_areas(int K)
 	int point_size = this->point_indices.size();
 	for (size_t i = 0; i < point_size; i++)
 	{
-		float k_ring_area = get_N_ring_area(mesh, this->point_indices[i], K);
+		float k_ring_area = get_N_ring_area(&mesh, this->point_indices[i], K);
 		this->k_ring_areas.push_back(k_ring_area);
 	}
 }
@@ -124,8 +129,10 @@ NLateralDescriptor generate_NLateralDescriptor(Mesh* m, const std::vector<unsign
 	return nlateralDescriptor;
 }
 
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices, int N  )
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices
+, NLateralParameters N_LATERAL_PARAMETERS)
 {
+	int N = N_LATERAL_PARAMETERS.N;
 	std::vector<NLateralDescriptor> nLateralDescVec;
 	for (size_t i = 0; i < indices.size(); i++)
 	{
@@ -166,13 +173,14 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Me
 			float maxIndexFirst = -1;
 			for (size_t k = 0; k < distances.size(); k++)
 			{
-				if (maxVal < distances[k].first && !is_already_selected[k])
+				if (maxVal < distances[k].first && !is_already_selected[distances[k].second])
 				{
 					maxIndexFirst = distances[k].second;
 					maxVal = distances[k].first;
 				}
 			}
 			selected_indices.push_back(maxIndexFirst);
+			is_already_selected[(int)maxIndexFirst] = true;
 		}
 		
 		NLateralDescriptor desc = generate_NLateralDescriptor(m, selected_indices, N_LATERAL_PARAMETERS.parameter_checkbox,
@@ -181,8 +189,9 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Me
 	}
 	return nLateralDescVec;
 }
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices, int N)
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices,  NLateralParameters N_LATERAL_PARAMETERS )
 {
+	int N = N_LATERAL_PARAMETERS.N;
 	std::vector<NLateralDescriptor> nLateralDescVec;
 	for (size_t i = 0; i < indices.size(); i++)
 	{
@@ -223,13 +232,14 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mes
 			float maxIndexFirst = -1;
 			for (size_t k = 0; k < distances.size(); k++)
 			{
-				if (maxVal > distances[k].first && !is_already_selected[k])
+				if (maxVal > distances[k].first && !is_already_selected[ distances[k].second])
 				{
 					maxIndexFirst = distances[k].second;
 					maxVal = distances[k].first;
 				}
 			}
 			selected_indices.push_back(maxIndexFirst);
+			is_already_selected[(int)maxIndexFirst] = true;
 		}
 
 		NLateralDescriptor desc = generate_NLateralDescriptor(m, selected_indices, N_LATERAL_PARAMETERS.parameter_checkbox,
@@ -271,7 +281,7 @@ NLateralParameters::NLateralParameters()
 }
 
 
-void start_n_lateral_algorithm(Mesh* mesh)
+void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMETERS)
 {
 
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3); // 3 is as always 
@@ -307,13 +317,13 @@ void start_n_lateral_algorithm(Mesh* mesh)
 	std::vector<NLateralDescriptor> negative_mesh_N_lateral_descriptor;
 	if (N_LATERAL_PARAMETERS.current_n_lateral_construction_method.find("closest") != std::string::npos)
 	{
-		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS.N);
-		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS.N);
+		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
+		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
 	}
 	else if (N_LATERAL_PARAMETERS.current_n_lateral_construction_method.find("furthest") != std::string::npos)
 	{
-		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS.N);
-		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS.N);
+		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
+		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
 	}
 
 	// write a function for comparing two descriptor
@@ -321,7 +331,8 @@ void start_n_lateral_algorithm(Mesh* mesh)
 	float const1 = 0;
 	float const2 = 0;
 	float const3 = 0;
-	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_n_lateral_descriptors(&L_MDS_mesh, positive_mesh_N_lateral_descriptor, negative_mesh_N_lateral_descriptor);
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_n_lateral_descriptors(&L_MDS_mesh, positive_mesh_N_lateral_descriptor, negative_mesh_N_lateral_descriptor
+	, N_LATERAL_PARAMETERS);
 
 	//forge it into two list
 	std::vector<unsigned int> left_correspondences;
@@ -384,10 +395,11 @@ void start_n_lateral_algorithm(Mesh* mesh)
 	std::endl;
 }
 
-std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors(Mesh* m, const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right)
+std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors(Mesh* m, const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right,
+	NLateralParameters N_LATERAL_PARAMETERS)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-
+	int a = 1;
 
 	//first get the vector size with checkboxed parameters 
 	int size_of_vector = 0;
@@ -418,8 +430,8 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 		}
 	}
 	// need to get all of the permuations as vectors
-	std::vector<unsigned int> permutation_vector(N_LATERAL_PARAMETERS.N - 1);
-	for (size_t i = 0; i < N_LATERAL_PARAMETERS.N - 1; i++)
+	std::vector<unsigned int> permutation_vector;
+	for (size_t i = 0; i < N_LATERAL_PARAMETERS.N; i++)
 	{
 		permutation_vector.push_back(i);
 	}
@@ -431,7 +443,6 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
 
 
-	
 	for (size_t i = 0; i < nlateral_vec_left.size(); i++)
 	{
 		//for comparisons in the end
@@ -464,14 +475,14 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("geodesic"))
 					{
-						for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
+						for (int t = 0; t < desc_i.geodesic_distances.size(); t++)
 						{
 							desc_i_vectors[j](current_size++) = desc_i.geodesic_distances[0][all_permutations[j][t]];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("curvature"))
 					{
-						for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
+						for (int t = 0; t < desc_i.curvatures.size(); t++)
 						{
 							desc_i_vectors[j](current_size++) = desc_i.curvatures[0][all_permutations[j][t]];
 						}
@@ -494,10 +505,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 
 		for (size_t j = 0; j < n_lateral_vec_right.size(); j++)
 		{
-			if (i == j)
-			{
-				continue;
-			}
+			
 			NLateralDescriptor desc_j = n_lateral_vec_right[j];
 
 			std::vector<Eigen::VectorXd>desc_j_vectors(all_permutations.size()); //size is number of permutations 
@@ -518,35 +526,35 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 					{
 						if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian"))
 						{
-							for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
+							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
 							{
-								desc_j_vectors[k](current_size++) = desc_i.euclidian_distances[0][all_permutations[k][t]];
+								desc_j_vectors[k](current_size++) = desc_j.euclidian_distances[0][all_permutations[k][t]];
 							}
 						}
 						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic"))
 						{
-							for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
+							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
 							{
-								desc_j_vectors[k](current_size++) = desc_i.geodesic_distances[0][all_permutations[k][t]];
+								desc_j_vectors[k](current_size++) = desc_j.geodesic_distances[0][all_permutations[k][t]];
 							}
 						}
 						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature"))
 						{
-							for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
+							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
 							{
-								desc_j_vectors[k](current_size++) = desc_i.curvatures[0][all_permutations[k][t]];
+								desc_j_vectors[k](current_size++) = desc_j.curvatures[0][all_permutations[k][t]];
 							}
 						}
 						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring"))
 						{
-							for (int t = 0; t < desc_i.k_ring_areas.size(); t++)
+							for (int t = 0; t < desc_j.k_ring_areas.size(); t++)
 							{
-								desc_j_vectors[k](current_size++) = desc_i.k_ring_areas[all_permutations[k][t]];
+								desc_j_vectors[k](current_size++) = desc_j.k_ring_areas[all_permutations[k][t]];
 							}
 						}
 						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area"))
 						{
-							desc_j_vectors[k](current_size++) = desc_i.area;
+							desc_j_vectors[k](current_size++) = desc_j.area;
 						}
 					}
 				}
@@ -572,7 +580,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 
 		}
 
-		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[smallest_pair.first].point_indices[0], nlateral_vec_left[smallest_pair.second].point_indices[0]));
+		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[smallest_pair.first].point_indices[0], n_lateral_vec_right[smallest_pair.second].point_indices[0]));
 
 	}
 	return resemblance_pairs;

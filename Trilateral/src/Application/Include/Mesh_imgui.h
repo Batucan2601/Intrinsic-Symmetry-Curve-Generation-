@@ -360,7 +360,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-       start_n_lateral_algorithm(m);
+       start_n_lateral_algorithm(m , N_LATERAL_PARAMETERS);
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {

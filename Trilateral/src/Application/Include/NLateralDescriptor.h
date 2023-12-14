@@ -10,7 +10,7 @@ struct NLateralDescriptor
 	double area;
 	// extras
 	std::vector<double> k_ring_areas;
-	Mesh* mesh;
+	Mesh mesh;
 	NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N);
 
 	void get_euclidian_distances();
@@ -49,9 +49,10 @@ static NLateralParameters N_LATERAL_PARAMETERS;
 NLateralDescriptor generate_NLateralDescriptor(Mesh* m, const std::vector<unsigned int>& mesh_indices, const std::vector<bool>& parameter_checkbox
 	, const std::vector<bool>& parameter_weights, const std::vector<std::string>& parameter_names);
 
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices, int N  );
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices, int N );
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices,  NLateralParameters N_LATERAL_PARAMETERS);
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices, NLateralParameters N_LATERAL_PARAMETERS);
 
-std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors( Mesh* m ,const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right);
+std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors( Mesh* m ,const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right
+, NLateralParameters N_LATERAL_PARAMETERS);
 
-void start_n_lateral_algorithm(Mesh* m);
+void start_n_lateral_algorithm(Mesh* m , NLateralParameters N_LATERAL_PARAMETERS);
