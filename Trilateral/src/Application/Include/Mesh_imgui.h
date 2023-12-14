@@ -312,6 +312,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
    
     ImGui::Begin("N lateral Params ");
     ImGui::InputInt("N parameter in N lateral:", &N_LATERAL_PARAMETERS.N);
+    ImGui::InputInt("no of n latearl points ", &N_LATERAL_PARAMETERS.no_of_N_lateral_pairs);
 
 // point selection algorithm
     ImGui::Text(" Select which way to fetch other n-1 lateral points for each.");
@@ -359,7 +360,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-       start_n_lateral_algorithm(m, N ,);
+       start_n_lateral_algorithm(m);
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {

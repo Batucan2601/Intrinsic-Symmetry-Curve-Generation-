@@ -271,7 +271,7 @@ NLateralParameters::NLateralParameters()
 }
 
 
-void start_n_lateral_algorithm(Mesh* mesh, const  int N, const std::vector<NLateralDescriptor>& nlateral_vec)
+void start_n_lateral_algorithm(Mesh* mesh)
 {
 
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3); // 3 is as always 
@@ -389,7 +389,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
 
 
-	//first get the vector size
+	//first get the vector size with checkboxed parameters 
 	int size_of_vector = 0;
 	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
 	{
@@ -430,16 +430,18 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 		all_permutations.push_back(permutation_vector);
 	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
 
+
+	
 	for (size_t i = 0; i < nlateral_vec_left.size(); i++)
 	{
+		//for comparisons in the end
+		float smallest_dif = INFINITY;
+		std::pair<unsigned int, unsigned int> smallest_pair; // in terms of indices
+
+
 		NLateralDescriptor desc_i = nlateral_vec_left[i];
 		std::vector<Eigen::VectorXd>desc_i_vectors(all_permutations.size()); //size is number of permutations 
-		//init all their size
-		for (size_t j = 0; j < all_permutations.size(); j++)
-		{
-			desc_i_vectors[j] = Eigen::VectorXd(N_LATERAL_PARAMETERS.N - 1);
-		}
-		
+
 		// generate vectors for all of the permutations
 		for (size_t j = 0; j < all_permutations.size(); j++)
 		{
@@ -499,11 +501,6 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 			NLateralDescriptor desc_j = n_lateral_vec_right[j];
 
 			std::vector<Eigen::VectorXd>desc_j_vectors(all_permutations.size()); //size is number of permutations 
-			//init all their size
-			for (size_t k = 0; k < all_permutations.size(); k++)
-			{
-				desc_j_vectors[k] = Eigen::VectorXd(N_LATERAL_PARAMETERS.N - 1);
-			}
 
 			// generate vectors for all of the permutations
 			for (size_t k = 0; k < all_permutations.size(); k++)
@@ -557,11 +554,25 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 			}
 
 
-			//compare
 			
+			//compare all
+			for (size_t k = 0; k < all_permutations.size(); k++)
+			{
+				for (size_t t = 0; t < all_permutations.size(); t++)
+				{
+					float dist = (desc_i_vectors[k] - desc_j_vectors[t]).norm();
+					if (dist < smallest_dif)
+					{
+						dist = smallest_dif;
+						smallest_pair.first = i;
+						smallest_pair.second = j;
+					}
+				}
+			}
 
 		}
-		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(trilateralDescVecLeft[i].p1, trilateralDescVecRight[least_error_index].p1));
+
+		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[smallest_pair.first].point_indices[0], nlateral_vec_left[smallest_pair.second].point_indices[0]));
 
 	}
 	return resemblance_pairs;

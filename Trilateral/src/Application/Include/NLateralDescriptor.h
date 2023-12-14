@@ -54,4 +54,4 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mes
 
 std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors( Mesh* m ,const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right);
 
-void start_n_lateral_algorithm(Mesh* m, const  int N , );
+void start_n_lateral_algorithm(Mesh* m);
