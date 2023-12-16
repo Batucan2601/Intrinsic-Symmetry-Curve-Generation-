@@ -318,12 +318,12 @@ void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMET
 	if (N_LATERAL_PARAMETERS.current_n_lateral_construction_method.find("closest") != std::string::npos)
 	{
 		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
-		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
+		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(&L_MDS_mesh, fps_negative, N_LATERAL_PARAMETERS);
 	}
 	else if (N_LATERAL_PARAMETERS.current_n_lateral_construction_method.find("furthest") != std::string::npos)
 	{
 		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
-		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_positive, N_LATERAL_PARAMETERS);
+		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_negative, N_LATERAL_PARAMETERS);
 	}
 
 	// write a function for comparing two descriptor
@@ -568,10 +568,11 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 			{
 				for (size_t t = 0; t < all_permutations.size(); t++)
 				{
-					float dist = (desc_i_vectors[k] - desc_j_vectors[t]).norm();
+					Eigen::VectorXd dif_vec = desc_i_vectors[k] - desc_j_vectors[t];
+					double dist = dif_vec.norm();
 					if (dist < smallest_dif)
 					{
-						dist = smallest_dif;
+						smallest_dif = dist;
 						smallest_pair.first = i;
 						smallest_pair.second = j;
 					}
