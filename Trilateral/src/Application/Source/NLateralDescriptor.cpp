@@ -399,8 +399,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	NLateralParameters N_LATERAL_PARAMETERS)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-	int a = 1;
-
+	std::vector<std::vector<Eigen::VectorXd>> n_lateral_right_vectors;
 	//first get the vector size with checkboxed parameters 
 	int size_of_vector = 0;
 	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
@@ -443,6 +442,65 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
 
 
+
+	//calculate nlateral_vec_right for once
+	for (size_t i = 0; i < n_lateral_vec_right.size(); i++)
+	{
+		NLateralDescriptor desc_j = n_lateral_vec_right[i];
+
+		std::vector<Eigen::VectorXd>desc_j_vectors(all_permutations.size()); //size is number of permutations 
+
+		// generate vectors for all of the permutations
+		for (size_t k = 0; k < all_permutations.size(); k++)
+		{
+			desc_j_vectors[k] = Eigen::VectorXd(size_of_vector);
+		}
+
+
+		for (size_t k = 0; k < all_permutations.size(); k++)
+		{
+			int current_size = 0;
+			for (size_t t = 0; t < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; t++)
+			{
+				if (N_LATERAL_PARAMETERS.parameter_checkbox[t])
+				{
+					if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian"))
+					{
+						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						{
+							desc_j_vectors[k](current_size++) = desc_j.euclidian_distances[0][all_permutations[k][t]];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic"))
+					{
+						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						{
+							desc_j_vectors[k](current_size++) = desc_j.geodesic_distances[0][all_permutations[k][t]];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature"))
+					{
+						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						{
+							desc_j_vectors[k](current_size++) = desc_j.curvatures[0][all_permutations[k][t]];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring"))
+					{
+						for (int t = 0; t < desc_j.k_ring_areas.size(); t++)
+						{
+							desc_j_vectors[k](current_size++) = desc_j.k_ring_areas[all_permutations[k][t]];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area"))
+					{
+						desc_j_vectors[k](current_size++) = desc_j.area;
+					}
+				}
+			}
+		}
+		n_lateral_right_vectors.push_back(desc_j_vectors);
+	}
 	for (size_t i = 0; i < nlateral_vec_left.size(); i++)
 	{
 		//for comparisons in the end
@@ -503,72 +561,14 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 		
 		}
 
-		for (size_t j = 0; j < n_lateral_vec_right.size(); j++)
+		for (size_t j = 0; j < n_lateral_right_vectors.size(); j++)
 		{
-			
-			NLateralDescriptor desc_j = n_lateral_vec_right[j];
-
-			std::vector<Eigen::VectorXd>desc_j_vectors(all_permutations.size()); //size is number of permutations 
-
-			// generate vectors for all of the permutations
-			for (size_t k = 0; k < all_permutations.size(); k++)
-			{
-				desc_j_vectors[k] = Eigen::VectorXd(size_of_vector);
-			}
-
-
-			for (size_t k = 0; k < all_permutations.size(); k++)
-			{
-				int current_size = 0;
-				for (size_t t = 0; t < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; t++)
-				{
-					if (N_LATERAL_PARAMETERS.parameter_checkbox[t])
-					{
-						if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian"))
-						{
-							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
-							{
-								desc_j_vectors[k](current_size++) = desc_j.euclidian_distances[0][all_permutations[k][t]];
-							}
-						}
-						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic"))
-						{
-							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
-							{
-								desc_j_vectors[k](current_size++) = desc_j.geodesic_distances[0][all_permutations[k][t]];
-							}
-						}
-						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature"))
-						{
-							for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
-							{
-								desc_j_vectors[k](current_size++) = desc_j.curvatures[0][all_permutations[k][t]];
-							}
-						}
-						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring"))
-						{
-							for (int t = 0; t < desc_j.k_ring_areas.size(); t++)
-							{
-								desc_j_vectors[k](current_size++) = desc_j.k_ring_areas[all_permutations[k][t]];
-							}
-						}
-						else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area"))
-						{
-							desc_j_vectors[k](current_size++) = desc_j.area;
-						}
-					}
-				}
-
-			}
-
-
-			
 			//compare all
 			for (size_t k = 0; k < all_permutations.size(); k++)
 			{
 				for (size_t t = 0; t < all_permutations.size(); t++)
 				{
-					Eigen::VectorXd dif_vec = desc_i_vectors[k] - desc_j_vectors[t];
+					Eigen::VectorXd dif_vec = desc_i_vectors[k] - n_lateral_right_vectors[j][t];
 					double dist = dif_vec.norm();
 					if (dist < smallest_dif)
 					{
@@ -578,9 +578,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 					}
 				}
 			}
-
 		}
-
 		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[smallest_pair.first].point_indices[0], n_lateral_vec_right[smallest_pair.second].point_indices[0]));
 
 	}

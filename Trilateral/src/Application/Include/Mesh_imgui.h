@@ -361,6 +361,8 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
 
 
        start_n_lateral_algorithm(m , N_LATERAL_PARAMETERS);
+       m_factory.remove_all();
+       m_factory.add_all();
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {
