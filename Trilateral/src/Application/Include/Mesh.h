@@ -28,6 +28,7 @@ public:
 	std::vector<unsigned int> symmetry_pairs_map; // for ground truth hashmap for pairs
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
 	glm::mat4 model_mat;
+	std::string file_name; 
 	//project 
 	bool off_format = false;
 	bool ply_format = false;

@@ -1,4 +1,5 @@
 #include "glm/glm.hpp"
+#include <map>
 #include "Mesh.h"
 struct NLateralDescriptor
 {
@@ -33,9 +34,11 @@ struct NLateralParameters
 	int no_of_N_lateral_pairs =  100;
 	std::string current_n_lateral_construction_method;
 	int N;
+	static const int N_RING_NO = 1 ; // how many layer of breadth first search.
 
 	std::vector<std::string> parameter_names;
 	std::vector<float> parameter_weights;
+	std::map<std::string, float> parameter_maximums; //holds maximums of each descriptor to norrmalzie it
 	std::vector<std::string> n_lateral_construction_methods;
 
 	// logic of imgui
@@ -56,3 +59,5 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 , NLateralParameters N_LATERAL_PARAMETERS);
 
 void start_n_lateral_algorithm(Mesh* m , NLateralParameters N_LATERAL_PARAMETERS);
+
+void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);

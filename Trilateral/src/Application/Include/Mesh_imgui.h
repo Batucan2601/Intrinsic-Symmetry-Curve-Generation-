@@ -354,7 +354,10 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
 
         N_LATERAL_PARAMETERS.parameter_checkbox[i] = temp;
     }
-    
+    if (ImGui::Button("Read symmetry values"))
+    {
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
+    }
     if (ImGui::Button("Start algorithm for current mesh"))
     {
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
@@ -366,6 +369,22 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {
+
+        // total of 15 + 15 meshes 
+        std::vector<Mesh> mesh_vector;
+        for (size_t i = 0; i < 15 + 15; i++)
+        {
+            std::string path("../../Trilateral/Mesh/off/");
+            std::string isometry_batch_no("000" + std::to_string((i / 15) + 1));
+            std::string isometry_no(std::to_string(i % 15 + 1));
+            // read the meshes.
+            path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
+            Mesh m((char*)path.c_str());
+            //read the symmetry format
+            read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
+            mesh_vector.push_back(m);
+            //start_n_lateral_algorithm(&m, N_LATERAL_PARAMETERS);
+        }
 
     }
     ImGui::End();

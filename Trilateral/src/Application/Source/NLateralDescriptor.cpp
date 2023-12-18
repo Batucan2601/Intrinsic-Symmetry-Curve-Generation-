@@ -221,6 +221,8 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mes
 			}
 		}
 
+
+		
 		//get n-1 closest
 		std::vector<bool> is_already_selected(m->vertices.size(), false);
 		std::vector<unsigned int> selected_indices;
@@ -326,11 +328,11 @@ void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMET
 		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_furthest_pairs(&L_MDS_mesh, fps_negative, N_LATERAL_PARAMETERS);
 	}
 
+	// calculate the maximums
+	NLateral_parameters_calculate_maximums(&L_MDS_mesh, N_LATERAL_PARAMETERS, fps_positive, fps_negative);
+
+
 	// write a function for comparing two descriptor
-	//irrelevant constants 
-	float const1 = 0;
-	float const2 = 0;
-	float const3 = 0;
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_n_lateral_descriptors(&L_MDS_mesh, positive_mesh_N_lateral_descriptor, negative_mesh_N_lateral_descriptor
 	, N_LATERAL_PARAMETERS);
 
@@ -391,8 +393,27 @@ void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMET
 	}
 	*mesh = L_MDS_mesh;*/
 
-	std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance <<  " " << total_error / maximum_geodesic_distance <<
-	std::endl;
+	// file creating
+	ofstream txtFile( "C:/Users/BATU/source/repos/Trilateral/Results/" + mesh->file_name + ".txt");
+	// 
+	txtFile << "===============================================================================" << std::endl;
+	txtFile << " N lateral " << std::endl;
+	//first write the N_lateral parameters
+	txtFile << " N ===== " << N_LATERAL_PARAMETERS.N << std::endl;
+	txtFile << "number of sampled pairs  " << N_LATERAL_PARAMETERS.no_of_N_lateral_pairs  <<   "  " << N_LATERAL_PARAMETERS.no_of_N_lateral_pairs * 2.0  / 
+	mesh->vertices.size() << std::endl;
+	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
+	{
+		if (N_LATERAL_PARAMETERS.parameter_checkbox[i])
+		{
+			txtFile << N_LATERAL_PARAMETERS.parameter_names[i] << "  " << N_LATERAL_PARAMETERS.parameter_weights[i] << std::endl; 
+		}
+	}
+	txtFile << "===============================================================================" << std::endl;
+	float error_percentage = total_error / maximum_geodesic_distance;
+	txtFile <<  " geodesic error " + std::to_string(error_percentage) + "\n";
+	txtFile.close();
+
 }
 
 std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors(Mesh* m, const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right,
@@ -466,30 +487,34 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 				{
 					if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian"))
 					{
-						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						for (int p = 0; p < desc_j.euclidian_distances.size(); p++)
 						{
-							desc_j_vectors[k](current_size++) = desc_j.euclidian_distances[0][all_permutations[k][t]];
+							desc_j_vectors[k](current_size++) = ( desc_j.euclidian_distances[0][all_permutations[k][p]] 
+							/  N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] ) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic"))
 					{
-						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						for (int p = 0; p < desc_j.geodesic_distances.size(); p++)
 						{
-							desc_j_vectors[k](current_size++) = desc_j.geodesic_distances[0][all_permutations[k][t]];
+							desc_j_vectors[k](current_size++) = (desc_j.geodesic_distances[0][all_permutations[k][p]]
+								/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature"))
 					{
-						for (int t = 0; t < desc_j.euclidian_distances.size(); t++)
+						for (int p = 0; p < desc_j.curvatures.size(); p++)
 						{
-							desc_j_vectors[k](current_size++) = desc_j.curvatures[0][all_permutations[k][t]];
+							desc_j_vectors[k](current_size++) = (desc_j.curvatures[0][all_permutations[k][p]]
+								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring"))
 					{
-						for (int t = 0; t < desc_j.k_ring_areas.size(); t++)
+						for (int p = 0; p < desc_j.k_ring_areas.size(); p++)
 						{
-							desc_j_vectors[k](current_size++) = desc_j.k_ring_areas[all_permutations[k][t]];
+							desc_j_vectors[k](current_size++) = (desc_j.k_ring_areas[all_permutations[k][p]]
+							/ N_LATERAL_PARAMETERS.parameter_maximums["ring"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area"))
@@ -528,28 +553,32 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 					{
 						for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
 						{
-							desc_i_vectors[j](current_size++) = desc_i.euclidian_distances[0][all_permutations[j][t]];
+							desc_i_vectors[j](current_size++) = (desc_i.euclidian_distances[0][all_permutations[j][t]]
+							/ N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] )* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("geodesic"))
 					{
 						for (int t = 0; t < desc_i.geodesic_distances.size(); t++)
 						{
-							desc_i_vectors[j](current_size++) = desc_i.geodesic_distances[0][all_permutations[j][t]];
+							desc_i_vectors[j](current_size++) = (desc_i.geodesic_distances[0][all_permutations[j][t]]
+							/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("curvature"))
 					{
 						for (int t = 0; t < desc_i.curvatures.size(); t++)
 						{
-							desc_i_vectors[j](current_size++) = desc_i.curvatures[0][all_permutations[j][t]];
+							desc_i_vectors[j](current_size++) = (desc_i.curvatures[0][all_permutations[j][t]]
+								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("ring"))
 					{
 						for (int t = 0; t < desc_i.k_ring_areas.size(); t++)
 						{
-							desc_i_vectors[j](current_size++) = desc_i.k_ring_areas[all_permutations[j][t]];
+							desc_i_vectors[j](current_size++) = (desc_i.k_ring_areas[all_permutations[j][t]]
+								/ N_LATERAL_PARAMETERS.parameter_maximums["ring"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
 					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("area"))
@@ -583,4 +612,75 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 
 	}
 	return resemblance_pairs;
+}
+
+void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters N_LATERAL_PARAMETERS , std::vector<unsigned int>& left , std::vector<unsigned int>& right)
+{
+	// for each parameter calculate the maximum in order to normalize the parameters to give them meaningfull weights
+	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
+	{
+		if (N_LATERAL_PARAMETERS.parameter_checkbox[i])
+		{
+			if (N_LATERAL_PARAMETERS.parameter_names[i].find("euclidian"))
+			{
+				float maximum_dist = -INFINITY; 
+				//calculate the maximum euclidian distances
+				for (size_t j = 0; j < left.size(); j++)
+				{
+					for (size_t k = 0; k < right.size(); k++)
+					{
+						if (maximum_dist < glm::distance(m->vertices[left[i]], m->vertices[right[j]]))
+						{
+							maximum_dist = glm::distance(m->vertices[left[i]], m->vertices[right[j]]);
+						}
+					}
+				}
+				N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] = maximum_dist;
+			}
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("geodesic"))
+			{
+				float maximum_dist = -INFINITY;
+				//calculate the maximum euclidian distances
+				std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*m, left[i]);
+				for (size_t j = 0; j < distances.size(); j++)
+				{
+					if (maximum_dist < distances[j])
+					{
+						maximum_dist = distances[j];
+					}
+				}
+				N_LATERAL_PARAMETERS.parameter_maximums["geodesic"] = maximum_dist;
+			}
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("curvature"))
+			{
+				N_LATERAL_PARAMETERS.parameter_maximums["curvature"] = 1.0;
+			}
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("ring"))
+			{
+				float maximum_area = -INFINITY;
+				for (size_t j = 0; j < left.size(); j++)
+				{
+					float area = get_N_ring_area(m, left[j], N_LATERAL_PARAMETERS.N_RING_NO);
+					if (maximum_area < area)
+					{
+						maximum_area = area; 
+					}
+				}
+				for (size_t j = 0; j < right.size(); j++)
+				{
+					float area = get_N_ring_area(m, right[j], N_LATERAL_PARAMETERS.N_RING_NO);
+					if (maximum_area < area)
+					{
+						maximum_area = area;
+					}
+				}
+				N_LATERAL_PARAMETERS.parameter_maximums["ring"] = 1.0;
+
+			}
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area"))
+			{
+
+			}
+		}
+	}
 }
