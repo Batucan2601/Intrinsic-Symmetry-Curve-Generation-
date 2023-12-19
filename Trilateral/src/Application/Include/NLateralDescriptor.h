@@ -60,4 +60,4 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 
 void start_n_lateral_algorithm(Mesh* m , NLateralParameters N_LATERAL_PARAMETERS);
 
-void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);
+void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);

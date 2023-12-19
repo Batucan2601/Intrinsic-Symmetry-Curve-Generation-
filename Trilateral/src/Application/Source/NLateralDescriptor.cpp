@@ -614,7 +614,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	return resemblance_pairs;
 }
 
-void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters N_LATERAL_PARAMETERS , std::vector<unsigned int>& left , std::vector<unsigned int>& right)
+void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>& left , std::vector<unsigned int>& right)
 {
 	// for each parameter calculate the maximum in order to normalize the parameters to give them meaningfull weights
 	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
