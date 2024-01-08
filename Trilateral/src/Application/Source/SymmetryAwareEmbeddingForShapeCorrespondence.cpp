@@ -146,6 +146,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	// stated 1-2 1-3 1-4  2-1 3-1 4-1
 	//generate 6 plane 
 
+	
 	Plane planes[6];
 	planes[0] = generate_plane_from_two_vectors(vectors[0]  , vectors[1]);
 	planes[1] = generate_plane_from_two_vectors(vectors[0], vectors[2]);
@@ -155,15 +156,29 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	planes[4] = generate_plane_from_two_vectors(vectors[2], vectors[0]);
 	planes[5] = generate_plane_from_two_vectors(vectors[3], vectors[0]);
 
+
+	//generating symmetry scores from planes functin is costly. therefore I will eradicate the extra points 
+	std::vector<bool> is_vertex_exist_vector; 
+
+	if (simplify_mesh)
+	{
+		is_vertex_exist_vector = std::vector<bool>(simplified_mesh.vertices.size(), false);
+
+		for (size_t i = 0; i < simplified_mesh.symmetry_pairs.size(); i++)
+		{
+			is_vertex_exist_vector[simplified_mesh.symmetry_pairs[i].first] = true;
+			is_vertex_exist_vector[simplified_mesh.symmetry_pairs[i].second] = true;
+		}
+	}
 	float scores[6];
 	
-	scores[0] = generate_symmetry_score(*mesh, &planes[0]);
-	scores[1]= generate_symmetry_score(*mesh,  &planes[1]);
-	scores[2] = generate_symmetry_score(*mesh, &planes[2]);
+	scores[0] = generate_symmetry_score(*mesh, &planes[0], simplify_mesh , &is_vertex_exist_vector);
+	scores[1]= generate_symmetry_score(*mesh,  &planes[1], simplify_mesh , &is_vertex_exist_vector);
+	scores[2] = generate_symmetry_score(*mesh, &planes[2], simplify_mesh , &is_vertex_exist_vector);
 
-	scores[3]= generate_symmetry_score(*mesh, &planes[3]);
-	scores[4]= generate_symmetry_score(*mesh, &planes[4]);
-	scores[5]= generate_symmetry_score(*mesh, &planes[5]);
+	scores[3]= generate_symmetry_score(*mesh, &planes[3], simplify_mesh , &is_vertex_exist_vector);
+	scores[4]= generate_symmetry_score(*mesh, &planes[4], simplify_mesh , &is_vertex_exist_vector);
+	scores[5]= generate_symmetry_score(*mesh, &planes[5], simplify_mesh , &is_vertex_exist_vector);
 
 
 	float best_score = -INFINITY; 
@@ -180,7 +195,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	return planes[best_index];
 }
 
-float generate_symmetry_score(Mesh mesh, Plane* p1 )
+float generate_symmetry_score(Mesh mesh, Plane* p1, bool is_simplify_active, std::vector<bool>* is_vertex_exist_vector)
 {
 	// 1-  project the mesh triangles into the plane p1 
 	std::vector<unsigned int> triangles_positive;
@@ -188,6 +203,15 @@ float generate_symmetry_score(Mesh mesh, Plane* p1 )
 	// project the triangles only that are on the same side
 	for (size_t i = 0; i < mesh.triangles.size(); i+=3 )
 	{
+		if (is_simplify_active)
+		{
+			// if none of them in sampling array 
+			if ( !( (*is_vertex_exist_vector)[mesh.triangles[i]] || (*is_vertex_exist_vector)[mesh.triangles[i+1]] || 
+			(*is_vertex_exist_vector)[mesh.triangles[i + 2]] )  )
+			{
+				continue;
+			}
+		}
 		float status_p1 = get_point_status_from_plane(p1 , &mesh.vertices[mesh.triangles[i]]);
 		float status_p2 = get_point_status_from_plane(p1 , &mesh.vertices[mesh.triangles[i+1]]);
 		float status_p3 = get_point_status_from_plane(p1 , &mesh.vertices[mesh.triangles[i+2]]);

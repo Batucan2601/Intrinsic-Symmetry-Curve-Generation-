@@ -14,5 +14,5 @@
 #include <src/Application/Include/CoreTypeDefs.h>
 // https://geometry.stanford.edu/papers/yyg-saefsc-16/yyg-saefsc-16.pdf
 
-float generate_symmetry_score(Mesh mesh, Plane* p1);
+float generate_symmetry_score(Mesh mesh, Plane* p1 , bool is_simplify_active, std::vector<bool>* is_vertex_exist_vector  );
 Plane generate_isomap_embedding(Mesh* mesh, bool simplify_mesh , float simplification_percentage );

@@ -6,6 +6,7 @@
 #include <src/Application/Include/DominantSymmetry.h>
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+#include "../Include/Skeleton.h"
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -246,4 +247,14 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
         display_accuracy(&m, calculated_symmetry_pairs);
     }
     ImGui::End();
+}
+
+
+void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
+{
+    std::vector<float> bounding_box;
+    if (ImGui::Button("Generate Bounding Box For mesh"))
+    {
+        bounding_box = generate_bounding_box("0001.isometry.4.txt");
+    }
 }

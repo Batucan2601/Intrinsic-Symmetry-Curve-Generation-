@@ -284,7 +284,7 @@ int main(void)
     Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.5.off");
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.4.off");
    
     
     
@@ -442,6 +442,7 @@ int main(void)
                 //imgui new frame
         imgui_mesh_window(selected_mesh, mesh_fac);
         imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
+        imgui_KIDS_skeleton(selected_mesh, mesh_fac);
         if (is_trilateral_generated)
         {
             imgui_trilateralConfiguration(selected_mesh , mesh_fac);
