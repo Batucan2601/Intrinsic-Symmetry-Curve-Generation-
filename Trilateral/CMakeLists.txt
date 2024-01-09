@@ -21,13 +21,10 @@ set(Header_Files
     "src/Application/Include/DominantSymmetry.h"
     "src/Application/Include/CoreTypeDefs.h"
     "src/Application/Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
-<<<<<<< HEAD
     "src/Application/Include/Skeleton.h"
-=======
     "src/Application/Include/MetricCalculations.h"
     "src/Application/Include/NLateralDescriptor.h"
 
->>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 
 )
 source_group("Header Files" FILES ${Header_Files})
@@ -54,12 +51,9 @@ set(Source_Files
     "src/External/Include/imgui/implot_demo.cpp"
     "src/External/Include/imgui/implot_items.cpp"
     "src/Application/Source/SymmetryAwareEmbeddingForShapeCorrespondence.cpp"
-<<<<<<< HEAD
     "src/Application/Source/Skeleton.cpp"
-=======
     "src/Application/Source/MetricCalculations.cpp"
     "src/Application/Source/NLateralDescriptor.cpp"
->>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 
 
 )

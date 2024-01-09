@@ -6,11 +6,8 @@
 #include <src/Application/Include/DominantSymmetry.h>
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
-<<<<<<< HEAD
 #include "../Include/Skeleton.h"
-=======
 #include "../Include/NLateralDescriptor.h"
->>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -310,7 +307,6 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 }
 
 
-<<<<<<< HEAD
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
 void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
@@ -327,8 +323,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     {
         match_skeleton_keypoints(&m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
     }
-=======
-
+}
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
    
@@ -411,5 +406,4 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     }
     ImGui::End();
 
->>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 }
