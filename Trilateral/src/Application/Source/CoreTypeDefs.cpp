@@ -1,4 +1,5 @@
 #include "../Include/CoreTypeDefs.h"
+#include <src/Application/Include/TrilateralMap.h>
 
 Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 {
@@ -10,24 +11,24 @@ Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 	glm::vec3 p4;
 
 	//increase x by two  increase y by two
-	p1.x = m->x + 20.0f;
-	p1.y = m->y + 20.0f;
-	p1.z = (plane->normal.x * (p1.x - m->x) + plane->normal.y * (p1.y - m->y)) / plane->normal.z + m->z;
+	p1.x = m->x + 200.0f;
+	p1.y = m->y + 200.0f;
+	p1.z = -(plane->normal.x * (p1.x - m->x) + plane->normal.y * (p1.y - m->y)) / plane->normal.z + m->z;
 
 	// increase x by two  decrease y by two 
-	p2.x = m->x + 20.0f;
-	p2.y = m->y - 20.0f;
-	p2.z = (plane->normal.x * (p2.x - m->x) + plane->normal.y * (p2.y - m->y)) / plane->normal.z + m->z;
+	p2.x = m->x + 200.0f;
+	p2.y = m->y - 200.0f;
+	p2.z = -(plane->normal.x * (p2.x - m->x) + plane->normal.y * (p2.y - m->y)) / plane->normal.z + m->z;
 
 	// decrease x by two  decrease y by two 
-	p3.x = m->x - 20.0f ;
-	p3.y = m->y - 20.0f;
-	p3.z = (plane->normal.x * (p3.x - m->x) + plane->normal.y * (p3.y - m->y)) / plane->normal.z + m->z;
+	p3.x = m->x - 200.0f ;
+	p3.y = m->y - 200.0f;
+	p3.z = -(plane->normal.x * (p3.x - m->x) + plane->normal.y * (p3.y - m->y)) / plane->normal.z + m->z;
 
 	// decrease x by two increase y by two 
-	p4.x = m->x - 20.0f;
-	p4.y = m->y + 20.0f;
-	p4.z = (plane->normal.x * (p4.x - m->x) + plane->normal.y * (p4.y - m->y)) / plane->normal.z + m->z;
+	p4.x = m->x - 200.0f;
+	p4.y = m->y + 200.0f;
+	p4.z = -(plane->normal.x * (p4.x - m->x) + plane->normal.y * (p4.y - m->y)) / plane->normal.z + m->z;
 
 	Mesh plane_mesh(&p1,&p2,&p3,&p4); 
 	return plane_mesh;
@@ -284,4 +285,30 @@ float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p1_2
 		//create 
 	}
 	return 1;
+}
+
+void get_coefficients_from_plane(const Plane& plane, float& A, float& B, float& C, float& D)
+{
+	A = plane.normal.x;
+	B = plane.normal.y;
+	C = plane.normal.z;
+
+	D = -1 * (plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z);
+}
+
+std::vector<int> getNumberFromString(std::string s)
+{
+	std::stringstream str_strm;
+	str_strm << s; //convert the string s into stringstream
+	std::string temp_str;
+	std::vector<int> num_vec; 
+	int temp_int;
+	while (!str_strm.eof()) {
+		str_strm >> temp_str; //take words into temp_str one by one
+		if (std::stringstream(temp_str) >> temp_int) { //try to convert string to int
+			num_vec.push_back(temp_int);
+		}
+		temp_str = ""; //clear temp string
+	}
+	return num_vec;
 }

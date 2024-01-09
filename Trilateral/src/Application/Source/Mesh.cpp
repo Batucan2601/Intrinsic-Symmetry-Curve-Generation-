@@ -23,6 +23,17 @@ Mesh::Mesh(char* filename)
 		read_ply_format(filename);
 
 	}
+	this->file_name = filename;
+	//get without slashes
+	int slash_index = -1;
+	for (size_t i = 0; i < this->file_name.size(); i++)
+	{
+		if (this->file_name[i] == '/' || this->file_name[i] == '\\')
+		{
+			slash_index = i;
+		}
+	}
+	this->file_name = this->file_name.substr( slash_index+1, this->file_name.size());
 }
 void Mesh::read_ply_format(char* filename)
 {
@@ -408,7 +419,17 @@ void read_symmetry_format(char* filename, Mesh* m)
 		sym_pair.second = (unsigned int)number-1;
 		index++;
 		m->symmetry_pairs.push_back(sym_pair);
+
 	}
+	m->symmetry_pairs_map = std::vector<unsigned int>(m->symmetry_pairs.size());
+	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
+	{
+		m->symmetry_pairs_map[m->symmetry_pairs[i].first] = m->symmetry_pairs[i].second;
+	}
+	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
+	{
+		m->symmetry_pairs_map[m->symmetry_pairs[i].second] = m->symmetry_pairs[i].first;
+	}	
 	/*while (symFile >> number)
 	{
 		std::pair<unsigned int, unsigned int> sym_pair;
@@ -417,5 +438,5 @@ void read_symmetry_format(char* filename, Mesh* m)
 		sym_pair.second= (unsigned int)number;
 		m->symmetry_pairs.push_back(sym_pair);
 	}*/
-
+	return;
 }

@@ -26,6 +26,7 @@ struct TrilateralError
 };
 
 //static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index);
 
 void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selected_index, int p1, int p2, int p3);
@@ -317,6 +318,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 }*/
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index, std::vector<unsigned int>& indices);
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh*m, std::vector<unsigned int>& indices);
+std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh*m, std::vector<unsigned int>& indices);
 std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points);
 std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
@@ -331,6 +333,8 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 
 std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh*m, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight);
+std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh* m, std::vector<TrilateralDescriptor>& trilateralDescVecLeft, std::vector<TrilateralDescriptor>& trilateralDescVecRight,const float& curvWeight,
+	const float& geodesicWeight, const float& areaWeight);
 void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs);
 
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
@@ -338,222 +342,18 @@ void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& sel
 // sampling
 void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int sample_size, int division_no);
 
-//void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int sample_size, int division_no) // sample size must be bigger than 3 
-//{
-//
-//	Mesh* m1 = &mesh_fac.mesh_vec[mesh_index1];
-//	Mesh* m2 = &mesh_fac.mesh_vec[mesh_index2];
-//	srand(time(NULL));
-//	std::vector<int> sample_indices_m1;
-//	std::vector<int> sample_indices_m2;
-//	srand(time(NULL));
-//	for (size_t i = 0; i < sample_size; i++)
-//	{
-//		int point_m1 = rand() % m1->vertices.size();
-//		int point_m2 = rand() % m2->vertices.size();
-//
-//		sample_indices_m1.push_back(point_m1);
-//		sample_indices_m2.push_back(point_m2);
-//	}
-//	std::vector<std::pair<int , std::vector<std::vector<float>>>> m1_histograms;
-//	
-//	//creations 
-//	std::vector<std::pair<int , std::vector<std::vector<float>>>> m2_histograms;
-//	for (size_t i = 0; i < sample_size; i++) // mesh 1 
-//	{
-//		std::vector<std::vector<float>> float_vec; 
-//		for (size_t j = 0; j < sample_size - 1 ; j++)
-//		{
-//			std::vector<float> histogram_vec;
-//			float_vec.push_back(histogram_vec);
-//		}
-//		auto p1 = std::make_pair(sample_indices_m1[i], float_vec);
-//		m1_histograms.push_back(p1);
-//	}
-//	for (size_t i = 0; i < sample_size; i++) // mesh 1 
-//	{
-//		std::vector<std::vector<float>> float_vec;
-//		for (size_t j = 0; j < sample_size - 1; j++)
-//		{
-//			std::vector<float> histogram_vec;
-//			float_vec.push_back(histogram_vec);
-//		}
-//		auto p1 = std::make_pair(sample_indices_m2[i], float_vec);
-//		m2_histograms.push_back(p1);
-//	}
-//
-//	//generate histograms
-//	for (size_t i = 0; i < sample_size; i++) // for every point i 
-//	{
-//		for (size_t j = 0; j < sample_size ; j++) // for every point  j 
-//		{
-//			for (size_t k = 0; k < sample_size; k++) //for every point k 
-//			{
-//				if (i != j && i != k && j != k) //if points are different
-//				{
-//					bool is_visited_interior = false;
-//					int* is_visited = trialteral_ROI(mesh_fac, mesh_index1, m1_histograms[i].first, m1_histograms[j].first, m1_histograms[k].first, division_no, is_visited_interior);
-//					std::vector<float> histogram_vec =  histogramROi(mesh_fac, mesh_index1, m1_histograms[i].first, m1_histograms[j].first, m1_histograms[k].first, division_no, is_visited, is_visited_interior);
-//					m1_histograms[i].second.push_back(histogram_vec);
-//				}
-//			}
-//		}
-//	}
-//	for (size_t i = 0; i < sample_size; i++) // for every point i 
-//	{
-//		for (size_t j = 0; j < sample_size; j++) // for every point  j 
-//		{
-//			for (size_t k = 0; k < sample_size; k++) //for every point k 
-//			{
-//				if (i != j && i != k && j != k) //if points are different
-//				{
-//					bool is_visited_interior = false;
-//					int* is_visited = trialteral_ROI(mesh_fac, mesh_index2, m2_histograms[i].first, m2_histograms[j].first, m2_histograms[k].first, division_no, is_visited_interior);
-//					std::vector<float> histogram_vec = histogramROi(mesh_fac, mesh_index2, m2_histograms[i].first, m2_histograms[j].first, m2_histograms[k].first, division_no, is_visited, is_visited_interior);
-//					m2_histograms[i].second.push_back(histogram_vec);
-//				}
-//			}
-//		}
-//	}
-//	std::vector<std::vector<float>> m1; 
-//	for (size_t i = 0; i < division_no; i++) // init 
-//	{
-//		std::vector<float> v1;
-//		for (size_t j = 0; j < division_no; j++)
-//		{
-//			v1.push_back(0);
-//		}
-//		closeness_of_points.push_back(v1);
-//	}
-//
-//
-//	//comparison of each histogram
-//	for(size_t i = 0; i < m1_histograms.size(); i++) // for every point
-//	{
-//		std::vector<float> total_histogram_m1;
-//		float total_size_m1 = 0;
-//		for (size_t j = 0; j < m1_histograms[i].second.size(); j++) //fill it with 0's 
-//		{
-//			total_histogram_m1.push_back(0);
-//		}
-//		for (size_t j = 0; j < m1_histograms[i].second.size(); j++) //sum up everyone		
-//		{
-//			std::vector<float> histogram  = m1_histograms[i].second[j];
-//			for (size_t k = 0; k < division_no; k++)
-//			{
-//				total_histogram_m1[k] += histogram[k];
-//				total_size_m1 += histogram[k];
-//			}
-//		}
-//		for (size_t j = 0; j < m1_histograms[i].second.size(); j++) //normalize 		
-//		{
-//			total_histogram_m1[j] /= total_size_m1; 
-//		}
-//
-//		//repeat for  histogram m2 
-//		std::vector<float> total_histogram_m2;
-//		float total_size_m2 = 0;
-//		for (size_t j = 0; j < m2_histograms[i].second.size(); j++) //fill it with 0's 
-//		{
-//			total_histogram_m2.push_back(0);
-//		}
-//		for (size_t j = 0; j < m2_histograms[i].second.size(); j++) //sum up everyone		
-//		{
-//			std::vector<float> histogram = m2_histograms[i].second[j];
-//			for (size_t k = 0; k < division_no; k++)
-//			{
-//				total_histogram_m2[k] += histogram[k];
-//				total_size_m2 += histogram[k];
-//			}
-//		}
-//		for (size_t j = 0; j < m2_histograms[i].second.size(); j++) //normalize 		
-//		{
-//			total_histogram_m2[j] /= total_size_m2;
-//		}
-//
-//		closeness_of_points[i][j] = 
-//	}
-//}
 void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int division_no);
 
 //from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
 std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index, std::vector<unsigned int> landmark_vertices);
 
 
+float get_N_ring_area(Mesh* m, float point_index , int N );
 
-//// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
-//
-//Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)
-//{
-//
-//	Mesh mesh = mesh_fac.mesh_vec[selected_index]; //mesh itself
-//	
-//	int mesh_size = mesh.vertices.size();
-//	//initialise the wights for the mesh
-//	std::vector<double> mesh_weights;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		mesh_weights.push_back(1.0); //assume every vertex is the same 
-//	}
-//	//double mesh_weights[mesh.vertices.size()]; //initialise weights according to paper 
-//	// steps
-//	// 1 - get centroid
-//	glm::vec3 centroid(0.0f,0.f,0.0f); //initialisiation
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		centroid += mesh.vertices[i];
-//	}
-//	centroid /= mesh_size; //now we got the centroid 
-//	// now convert the centrid glm vec to matrix
-//	Eigen::Matrix<double, 3, 1 > centroid_mat;
-//	centroid_mat(0) = centroid[0];
-//	centroid_mat(1) = centroid[1];
-//	centroid_mat(2) = centroid[2];
-//	// get the covariance matrix
-//	Eigen::Matrix<double, 3, 3> covariance; //covariance mtrix
-//	//fill covariance matrix
-//	covariance(0, 0) = 0.0;
-//	covariance(0, 1) = 0.0;
-//	covariance(0, 2) = 0.0;
-//	covariance(1, 0) = 0.0;
-//	covariance(1, 1) = 0.0;
-//	covariance(1, 2) = 0.0;
-//	covariance(2, 0) = 0.0;
-//	covariance(2, 1) = 0.0;
-//	covariance(2, 2) = 0.0;
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		//get P_i and turn it to a matrix 
-//		Eigen::Matrix<double, 3, 1 > p_i;
-//		p_i(0) = mesh.vertices[i][0];
-//		p_i(1) = mesh.vertices[i][1];
-//		p_i(2) = mesh.vertices[i][2];
-//
-//		Eigen::Matrix<double, 3, 1 > p_i_minus_centroid = (p_i - centroid_mat);
-//
-//		Eigen::Matrix<double, 3, 3 > covariance_i =  mesh_weights[i] * p_i_minus_centroid * p_i_minus_centroid.transpose();
-//		
-//		covariance += covariance_i;
-//	}
-//	double s = 0;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		s += mesh_weights[i];
-//	}
-//	covariance /= s; //covariance is ready for the first part 
-//
-//	return covariance;
-//}
-//
-//void plane_calculations_from_covariance(Eigen::Matrix<double, 3, 3 >& covariance)
-//{
-//	//define planes 
-//	Eigen::Matrix<double, 4, 1 > p1; 
-//	Eigen::Matrix<double, 4, 1 > p2; 
-//	Eigen::Matrix<double, 4, 1 > p3;
-//
-//}
 
  void reset_points(MeshFactory& mesh_fac, int meshIndex);
+
+
+
+
+

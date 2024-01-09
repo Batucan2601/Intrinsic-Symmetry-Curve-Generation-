@@ -1,5 +1,7 @@
 #include "../Include/TrilateralMap.h"
-
+#include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+#include "../Include/DominantSymmetry.h"
+#include "../Include/MetricCalculations.h"
 
 
 
@@ -654,7 +656,69 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
 		 trilateralDesc.push_back(desc);
 	 }
+	 return trilateralDesc;
+ }
+ std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices)
+ {
+	 std::vector<TrilateralDescriptor> trilateralDesc;
+	 for (size_t i = 0; i < indices.size(); i++)
+	 {
+		 TrilateralDescriptor desc;
+		 //get two of the closed indexed points
+		 std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		 std::vector<std::pair<float, unsigned int >> distances;
+		 for (size_t j = 0; j < geodesic_distances.size(); j++)
+		 {
+			 bool is_in_indices = false;
+			 for (size_t k = 0; k < indices.size(); k++)
+			 {
+				 if (j == indices[k] && j != indices[i])
+				 {
+					 is_in_indices = true;
+					 break;
+				 }
+			 }
 
+			 if (is_in_indices)
+			 {
+				 float dist = geodesic_distances[j];
+				 unsigned int index = j;
+				 std::pair<float, unsigned int > pair;
+				 pair.first = dist;
+				 pair.second = j;
+				 distances.push_back(pair);
+			 }
+		 }
+		 //get first and second farthest
+		 float maxVal = -INFINITY;
+		 float maxIndexFirst = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maxVal < distances[j].first)
+			 {
+				 maxIndexFirst = distances[j].second;
+				 maxVal = distances[j].first;
+			 }
+		 }
+
+		 maxVal = -INFINITY;
+		 float maxIndexSecond = -1;
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maxVal < distances[j].first && maxIndexFirst != distances[j].second && distances[j].second != indices[i])
+			 {
+				 maxIndexSecond = distances[j].second;
+				 maxVal = distances[j].first;
+			 }
+		 }
+		 desc.p1 = indices[i];
+		 desc.p2 = maxIndexFirst;
+		 desc.p3 = maxIndexSecond;
+
+
+		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
+		 trilateralDesc.push_back(desc);
+	 }
 	 return trilateralDesc;
  }
  std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points)
@@ -1399,7 +1463,9 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 	trilateral_descriptor.p2 = point_index2;
 	trilateral_descriptor.p3 = point_index3;
 
-
+	trilateral_descriptor.n_ring_area_p1 = get_N_ring_area(m, trilateral_descriptor.p1, 1);
+	trilateral_descriptor.n_ring_area_p2 = get_N_ring_area(m, trilateral_descriptor.p2, 1);
+	trilateral_descriptor.n_ring_area_p3 = get_N_ring_area(m, trilateral_descriptor.p3, 1);
 	//for only brute force research 
 	if (is_simplified)
 	{
@@ -1732,6 +1798,155 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 
 		}
 		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(trilateralDescVec[i].p1, trilateralDescVec[least_error_index].p1));
+
+	}
+	return resemblance_pairs;
+}
+std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh* m, std::vector<TrilateralDescriptor>& trilateralDescVecLeft, std::vector<TrilateralDescriptor>& trilateralDescVecRight, const float& curvWeight,
+	const float& geodesicWeight, const float& areaWeight)
+{
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+
+	std::vector< TrilateralError>  errorVector;
+	for (size_t i = 0; i < trilateralDescVecLeft.size(); i++)
+	{
+		TrilateralDescriptor desc_i = trilateralDescVecLeft[i];
+		float least_error = INFINITY;
+		int least_error_index = -1;
+		float least_among_three = 0;
+		for (size_t j = 0; j < trilateralDescVecRight.size(); j++)
+		{
+
+			TrilateralDescriptor desc_j = trilateralDescVecRight[j];
+			float areaError = abs(desc_j.area - desc_i.area) / std::max(desc_j.area, desc_i.area);
+			areaError = 0;
+
+			//generate 4 vectors ( 2 x 2 )
+			// size here is 1 - area 2 - curv_error 3 - curv_error  4 - euclidian_error 5 - euclidian error 6 - curvError 7 - curvError
+			Eigen::VectorXf i_1(13);
+			Eigen::VectorXf i_2(13);
+
+			Eigen::VectorXf j_1(13);
+			Eigen::VectorXf j_2(13);
+
+			//calculate  one ring area ( here for now )
+
+			//fil those
+			i_1(0) = desc_i.area;
+			i_2(0) = desc_i.area;
+
+			i_1(1) = desc_i.geodesic_lenght_1_2;
+			i_1(2) = desc_i.geodesic_lenght_1_3;
+
+			i_2(1) = desc_i.geodesic_lenght_1_3;
+			i_2(2) = desc_i.geodesic_lenght_1_2;
+
+			i_1(3) = desc_i.euclidian_lenght_1_2;
+			i_1(4) = desc_i.euclidian_lenght_1_3;
+
+			i_2(3) = desc_i.euclidian_lenght_1_3;
+			i_2(4) = desc_i.euclidian_lenght_1_2;
+
+			i_1(5) = desc_i.curvature_1_2;
+			i_1(6) = desc_i.curvature_1_3;
+
+			i_2(5) = desc_i.curvature_1_3;
+			i_2(6) = desc_i.curvature_1_2;
+
+			i_1(7) = desc_i.geodesic_lenght_2_3 ;
+			i_1(8) = desc_i.euclidian_lenght_2_3;
+			i_1(9) = desc_i.curvature_2_3;
+
+			i_2(7) = desc_i.geodesic_lenght_2_3;
+			i_2(8) = desc_i.euclidian_lenght_2_3;
+			i_2(9) = desc_i.curvature_2_3;
+
+
+			i_1(10) = 0;//desc_i.n_ring_area_p1;
+			i_1(11) = 0;//desc_i.n_ring_area_p2;
+			i_1(12) = 0;//desc_i.n_ring_area_p3;
+			i_2(10) = 0;//desc_i.n_ring_area_p1;
+			i_2(11) = 0;//desc_i.n_ring_area_p3;
+			i_2(12) = 0;//desc_i.n_ring_area_p2;
+			//fill j 
+			j_1(0) = desc_j.area;
+			j_2(0) = desc_j.area;
+
+			j_1(1) = desc_j.geodesic_lenght_1_2;
+			j_1(2) = desc_j.geodesic_lenght_1_3;
+
+			j_2(2) = desc_j.geodesic_lenght_1_2;
+			j_2(1) = desc_j.geodesic_lenght_1_3;
+
+			j_1(3) = desc_j.euclidian_lenght_1_2;
+			j_1(4) = desc_j.euclidian_lenght_1_3;
+
+			j_2(3) = desc_j.euclidian_lenght_1_3;
+			j_2(4) = desc_j.euclidian_lenght_1_2;
+
+			j_1(5) = desc_j.curvature_1_2;
+			j_1(6) = desc_j.curvature_1_3;
+
+			j_2(5) = desc_j.curvature_1_3;
+			j_2(6) = desc_j.curvature_1_2;
+
+			j_1(7) = desc_j.geodesic_lenght_2_3;
+			j_1(8) = desc_j.euclidian_lenght_2_3;
+			j_1(9) = desc_j.curvature_2_3;
+
+			j_2(7) = desc_j.geodesic_lenght_2_3;
+			j_2(8) = desc_j.euclidian_lenght_2_3;
+			j_2(9) = desc_j.curvature_2_3;
+
+			j_1(10) = 0;//desc_j.n_ring_area_p1;
+			j_1(11) = 0;//desc_j.n_ring_area_p2;
+			j_1(12) = 0;//desc_j.n_ring_area_p3;
+			j_2(10) = 0;//desc_j.n_ring_area_p1;
+			j_2(11) = 0;//desc_j.n_ring_area_p3;
+			j_2(12) = 0;//desc_j.n_ring_area_p2;
+			//normalize 4 vectors
+			i_1 = i_1.normalized();
+			i_2 = i_2.normalized();
+			j_1 = j_1.normalized();
+			j_2 = j_2.normalized();
+
+			float dist_i_j_1_1 = sqrt(pow((i_1(0) - j_1(0)), 2) + pow((i_1(1) - j_1(1)), 2) + pow((i_1(2) - j_1(2)), 2) + pow((i_1(3) - j_1(3)), 2) + pow((i_1(4) - j_1(4)), 2)
+				+ pow((i_1(5) - j_1(5)), 2) + pow((i_1(6) - j_1(6)), 2) + pow((i_1(7) - j_1(7)), 2) + pow((i_1(8) - j_1(8)), 2) + pow((i_1(9) - j_1(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
+			float dist_i_j_1_2 = sqrt(pow((i_1(0) - j_2(0)), 2) + pow((i_1(1) - j_2(1)), 2) + pow((i_1(2) - j_2(2)), 2) + pow((i_1(3) - j_2(3)), 2) + pow((i_1(4) - j_2(4)), 2)
+				+ pow((i_1(5) - j_2(5)), 2) + pow((i_1(6) - j_2(6)), 2) + pow((i_1(7) - j_2(7)), 2) + pow((i_1(8) - j_2(8)), 2) + pow((i_1(9) - j_2(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
+			float dist_i_j_2_1 = sqrt(pow((i_2(0) - j_1(0)), 2) + pow((i_2(1) - j_1(1)), 2) + pow((i_2(2) - j_1(2)), 2) + pow((i_2(3) - j_1(3)), 2) + pow((i_2(4) - j_1(4)), 2)
+				+ pow((i_2(5) - j_1(5)), 2) + pow((i_2(6) - j_1(6)), 2) + pow((i_2(7) - j_1(7)), 2) + pow((i_2(8) - j_1(8)), 2) + pow((i_2(9) - j_1(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
+			float dist_i_j_2_2 = sqrt(pow((i_2(0) - j_2(0)), 2) + pow((i_2(1) - j_2(1)), 2) + pow((i_2(2) - j_2(2)), 2) + pow((i_2(3) - j_2(3)), 2) + pow((i_2(4) - j_2(4)), 2)
+				+ pow((i_2(5) - j_2(5)), 2) + pow((i_2(6) - j_2(6)), 2) + pow((i_2(7) - j_2(7)), 2) + pow((i_2(8) - j_2(8)), 2) + pow((i_2(9) - j_2(9)), 2)
+				+ pow((i_1(10) - j_1(10)), 2) + +pow((i_1(10) - j_1(10)), 2) + pow((i_1(10) - j_1(10)), 2));
+			if (dist_i_j_1_1 <= dist_i_j_1_2 && dist_i_j_1_1 <= dist_i_j_2_1 && dist_i_j_1_1 <= dist_i_j_2_2)
+			{
+				least_among_three = dist_i_j_1_1;
+			}
+			else if (dist_i_j_1_2 <= dist_i_j_1_1 && dist_i_j_1_2 <= dist_i_j_2_1 && dist_i_j_1_2 <= dist_i_j_2_2)
+			{
+				least_among_three = dist_i_j_1_2;
+			}
+			if (dist_i_j_2_1 <= dist_i_j_1_2 && dist_i_j_2_1 <= dist_i_j_1_1 && dist_i_j_1_1 <= dist_i_j_2_2)
+			{
+				least_among_three = dist_i_j_2_1;
+			}
+			if (dist_i_j_2_2 <= dist_i_j_1_2 && dist_i_j_1_1 <= dist_i_j_2_1 && dist_i_j_2_2 <= dist_i_j_1_1)
+			{
+				least_among_three = dist_i_j_2_2;
+			}
+			if (least_among_three < least_error)
+			{
+				least_error = least_among_three;
+				least_error_index = j;
+			}
+			
+
+		}
+		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(trilateralDescVecLeft[i].p1, trilateralDescVecRight[least_error_index].p1));
 
 	}
 	return resemblance_pairs;
@@ -2574,83 +2789,6 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	return embedded_points_vec;
 }
 
-
-
-//// from the paper Dominant Symmetry Plane Detection for Point-Based 3D Models
-//
-//Eigen::Matrix<double ,  3 ,3 > symmetry_finding_with_centroid(MeshFactory& mesh_fac, int& selected_index)
-//{
-//
-//	Mesh mesh = mesh_fac.mesh_vec[selected_index]; //mesh itself
-//	
-//	int mesh_size = mesh.vertices.size();
-//	//initialise the wights for the mesh
-//	std::vector<double> mesh_weights;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		mesh_weights.push_back(1.0); //assume every vertex is the same 
-//	}
-//	//double mesh_weights[mesh.vertices.size()]; //initialise weights according to paper 
-//	// steps
-//	// 1 - get centroid
-//	glm::vec3 centroid(0.0f,0.f,0.0f); //initialisiation
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		centroid += mesh.vertices[i];
-//	}
-//	centroid /= mesh_size; //now we got the centroid 
-//	// now convert the centrid glm vec to matrix
-//	Eigen::Matrix<double, 3, 1 > centroid_mat;
-//	centroid_mat(0) = centroid[0];
-//	centroid_mat(1) = centroid[1];
-//	centroid_mat(2) = centroid[2];
-//	// get the covariance matrix
-//	Eigen::Matrix<double, 3, 3> covariance; //covariance mtrix
-//	//fill covariance matrix
-//	covariance(0, 0) = 0.0;
-//	covariance(0, 1) = 0.0;
-//	covariance(0, 2) = 0.0;
-//	covariance(1, 0) = 0.0;
-//	covariance(1, 1) = 0.0;
-//	covariance(1, 2) = 0.0;
-//	covariance(2, 0) = 0.0;
-//	covariance(2, 1) = 0.0;
-//	covariance(2, 2) = 0.0;
-//
-//	for (size_t i = 0; i < mesh_size; i++)
-//	{
-//		//get P_i and turn it to a matrix 
-//		Eigen::Matrix<double, 3, 1 > p_i;
-//		p_i(0) = mesh.vertices[i][0];
-//		p_i(1) = mesh.vertices[i][1];
-//		p_i(2) = mesh.vertices[i][2];
-//
-//		Eigen::Matrix<double, 3, 1 > p_i_minus_centroid = (p_i - centroid_mat);
-//
-//		Eigen::Matrix<double, 3, 3 > covariance_i =  mesh_weights[i] * p_i_minus_centroid * p_i_minus_centroid.transpose();
-//		
-//		covariance += covariance_i;
-//	}
-//	double s = 0;
-//	for (int i = 0; i < mesh_size; i++)
-//	{
-//		s += mesh_weights[i];
-//	}
-//	covariance /= s; //covariance is ready for the first part 
-//
-//	return covariance;
-//}
-//
-//void plane_calculations_from_covariance(Eigen::Matrix<double, 3, 3 >& covariance)
-//{
-//	//define planes 
-//	Eigen::Matrix<double, 4, 1 > p1; 
-//	Eigen::Matrix<double, 4, 1 > p2; 
-//	Eigen::Matrix<double, 4, 1 > p3;
-//
-//}
-
  void reset_points(MeshFactory& mesh_fac, int meshIndex)
 {
 	Mesh* m = &mesh_fac.mesh_vec[meshIndex];
@@ -2661,4 +2799,168 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 		m->colors[i].g = 0;
 		m->colors[i].b = 0;
 	}
+}
+
+ float get_N_ring_area(Mesh* m, float point_index , int N )
+ {
+	 float area = 0;
+	 std::vector<unsigned int> indices;
+	 std::vector<bool> is_vertex_on_ring(m->vertices.size() , false);
+	 for (size_t i = 0; i < N+1; i++)
+	 {
+		 if (i == 0) // one ring 
+		 {
+			 indices.push_back(point_index);
+			 is_vertex_on_ring[point_index] = true;
+			 continue;
+		 }
+		 int static_indices_size = indices.size();
+		 for (size_t j = 0; j < static_indices_size; j++)
+		 {
+			 for (size_t k = 0; k < m->adjacenies[indices[j]].size(); k++)
+			 {
+				 if (!is_vertex_on_ring[m->adjacenies[indices[j]][k].first] )
+				 {
+					 is_vertex_on_ring[m->adjacenies[indices[j]][k].first] = true; 
+					 indices.push_back(m->adjacenies[indices[j]][k].first);
+				 }
+			 }
+		 }
+	 }
+	 for (size_t i = 0; i < m->triangles.size(); i += 3)
+	 {
+		 if(is_vertex_on_ring[m->triangles[i]] || is_vertex_on_ring[m->triangles[i + 1]] || is_vertex_on_ring[m->triangles[i + 2]] )
+		 {
+			 area += compute_triangle_area(m->vertices[m->triangles[i]], m->vertices[m->triangles[i + 1]], m->vertices[m->triangles[i + 2]]);
+		 }
+	 }
+	 return area;
+ }
+
+ void start_n_lateral_algorithm(Mesh* mesh, const int N , const int number_of_n_lateral_points , const std::string& method_name, const bool* parameter_checkbox
+	 , const float* parameter_weights, const std::string* parameter_names)
+{
+
+	 // 1 - part one is same for now, generate a symmetry plane 
+#pragma region symmetry plane 
+	 Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3);
+	 //calculate center of the plane 
+	 glm::vec3 plane_center(0, 0, 0);
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 plane_center += L_MDS_mesh.vertices[i];
+	 }
+	 plane_center /= mesh->vertices.size();
+	 Plane plane = generate_dominant_symmetry_plane(plane_center, L_MDS_mesh);
+#pragma endregion
+
+#pragma region separation of points on the mesh from plane 
+	 std::vector<unsigned int> points_plane_positive;
+	 std::vector<unsigned int> points_plane_negative;
+	 //now separate the points into two sides of the plane 
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		 {
+			 points_plane_positive.push_back(i);
+		 }
+		 else
+		 {
+			 points_plane_negative.push_back(i);
+		 }
+	 }
+#pragma endregion
+
+#pragma region do point sampling on partial regions 
+
+	 std::vector<unsigned int > fps_positive;
+	 std::vector<unsigned int > fps_negative;
+	 // now do two distinct fps
+	 
+	 if (method_name == std::string("furthest"))
+	 {
+		 std::vector<unsigned int > fps_positive = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
+		 std::vector<unsigned int > fps_negative = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+	 }
+	 else if (method_name == std::string("furthest"))
+	 {
+		 //std::vector<unsigned int > fps_positive = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
+		 //std::vector<unsigned int > fps_negative = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+
+	 }
+#pragma endregion
+
+#pragma region n_lateral_algorithm
+		
+	 // n_lateral computation
+	 std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_positive);
+	 std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_negative);
+#pragma endregion
+	 // write a function for comparing two descriptor
+	 //irrelevant constants 
+	 float const1 = 0;
+	 float const2 = 0;
+	 float const3 = 0;
+	 std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+
+	 //forge it into two list
+	 std::vector<unsigned int> left_correspondences;
+	 std::vector<unsigned int> right_correspondences;
+	 for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	 {
+		 left_correspondences.push_back(resemblance_pairs[i].first);
+		 right_correspondences.push_back(resemblance_pairs[i].second);
+	 }
+	 float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+
+	 // now use fps points to get maximum distance in order to compare to 
+	 float maximum_geodesic_distance = 0;
+	 for (size_t i = 0; i < fps_positive.size(); i++)
+	 {
+		 std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		 for (size_t j = 0; j < distances.size(); j++)
+		 {
+			 if (maximum_geodesic_distance < distances[j])
+			 {
+				 maximum_geodesic_distance = distances[j];
+			 }
+		 }
+	 }
+
+	 // color left red
+	 std::vector<unsigned int> is_selected(mesh->vertices.size(), 0);
+	 for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	 {
+		 mesh->colors[resemblance_pairs[i].first].r = 255;
+		 mesh->colors[resemblance_pairs[i].first].g = 0;
+		 mesh->colors[resemblance_pairs[i].first].b = 0;
+
+		 mesh->colors[resemblance_pairs[i].second].r = 0;
+		 mesh->colors[resemblance_pairs[i].second].g = 0;
+		 mesh->colors[resemblance_pairs[i].second].b = 255;
+	 }
+
+	 mesh->calculated_symmetry_pairs = resemblance_pairs;
+
+	 //L_MDS_mesh.colors = mesh->colors;
+	 //*mesh = L_MDS_mesh;
+	 //color right  blue 
+
+	 /*L_MDS_mesh.colors.clear();
+	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 {
+		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		 {
+			 L_MDS_mesh.colors.push_back(glm::vec3(255.0 , 0.0 , 0.0 ) );
+		 }
+		 else
+		 {
+			 L_MDS_mesh.colors.push_back(glm::vec3(0, 255, 0.0));
+		 }
+	 }
+	 *mesh = L_MDS_mesh;*/
+
+	 std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl;
+	 float error_percentage = (float)total_error / maximum_geodesic_distance;
+	 //return plane;
 }

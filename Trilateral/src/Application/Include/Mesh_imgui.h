@@ -6,7 +6,11 @@
 #include <src/Application/Include/DominantSymmetry.h>
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
+<<<<<<< HEAD
 #include "../Include/Skeleton.h"
+=======
+#include "../Include/NLateralDescriptor.h"
+>>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -67,6 +71,7 @@ std::vector<glm::vec3> embed_vertices;
 std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
 Mesh m1, m2;
 std::vector<int> m1_map_indices, m2_map_indices;
+std::string KIDS_text_file_name;
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -179,6 +184,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.add_all();
         ImGui::EndCombo();
     }
+    if (ImGui::Button("trilateral drawing "))
+    {
+        trilateral_map_drawing_using_three_points(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index);
+    }
     if (ImGui::Button("point matching using AGD"))
     {
         trilateralDescVector = get_trilateral_points_using_closest_pairs(m_factory, selected_mesh, selectedIndices);
@@ -201,12 +210,63 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("Symmetry Plane using Isomap"))
     {
-        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,true , 10);
+        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,false , 1);
         Mesh plane_mesh = generate_mesh_from_plane( &plane , &plane.point);
         m_factory.add_mesh(plane_mesh);
         
         m_factory.remove_all();
         m_factory.add_all();
+    }
+    if (ImGui::Button("generate symmetry plane with classical MDS "))
+    {
+        generate_symmetry_plane_dividing_classical_MDS(&m_factory.mesh_vec[selected_mesh]);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("generate symmetry plane with landmark MDS "))
+    {
+        Mesh  landmark_mesh = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        m_factory.mesh_vec.clear();
+        m_factory.add_mesh(landmark_mesh);
+
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("generate  trilateral descriptors from symmetry plane with landmark MDS "))
+    {
+        //Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3);
+        float error_percentage;
+        Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3 , 100 , 100 , error_percentage);
+        Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
+        m_factory.add_mesh(plane_mesh);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::InputText("textfile_name_for_kids_dataset" , &KIDS_text_file_name ))
+    {
+
+    }
+    if (ImGui::Button("generate  trilateral descriptors w sym plane w KIDS dataset "))
+    {
+        // total of 15 + 15 meshes 
+        std::vector<Mesh> mesh_vector; 
+        for (size_t i = 0; i < 15 +15; i++)
+        {
+            std::string path("../../Trilateral/Mesh/off/");
+            std::string isometry_batch_no( "000" + std::to_string((i / 15) + 1));
+            std::string isometry_no(std::to_string(i % 15 + 1) );
+            // read the meshes.
+            path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
+            Mesh m((char*)path.c_str() );
+            //read the symmetry format
+            read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
+            mesh_vector.push_back(m);
+        }
+        create_trilateral_sym_w_landmarl_with_planes(mesh_vector, 3, 100, 100, "../../Results/" + KIDS_text_file_name);
+    }
+    if (ImGui::Button("get n ring "))
+    {
+        get_N_ring_area(&m_factory.mesh_vec[selected_mesh], 100, 1);
     }
     ImGui::End();
         
@@ -250,6 +310,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 }
 
 
+<<<<<<< HEAD
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
 void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
@@ -266,4 +327,89 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     {
         match_skeleton_keypoints(&m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
     }
+=======
+
+void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
+{
+   
+    ImGui::Begin("N lateral Params ");
+    ImGui::InputInt("N parameter in N lateral:", &N_LATERAL_PARAMETERS.N);
+    ImGui::InputInt("no of n latearl points ", &N_LATERAL_PARAMETERS.no_of_N_lateral_pairs);
+
+// point selection algorithm
+    ImGui::Text(" Select which way to fetch other n-1 lateral points for each.");
+    static const char* current_point_Selection_method = N_LATERAL_PARAMETERS.n_lateral_construction_methods[0].c_str();
+    if (ImGui::BeginCombo("combobox", current_point_Selection_method))
+    {
+        for (int n = 0; n < N_LATERAL_PARAMETERS.N_LATERAL_CONSTRUCTION_METHOD_NO; n++)
+        {
+            bool is_selected = (current_point_Selection_method == N_LATERAL_PARAMETERS.n_lateral_construction_methods[n]); // You can store your selection however you want, outside or inside your objects
+            if (ImGui::Selectable(N_LATERAL_PARAMETERS.n_lateral_construction_methods[n].c_str(), is_selected))
+                current_point_Selection_method = N_LATERAL_PARAMETERS.n_lateral_construction_methods[n].c_str();
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+        }
+        ImGui::EndCombo();
+    }
+
+    N_LATERAL_PARAMETERS.current_n_lateral_construction_method = current_point_Selection_method;
+
+    ImGui::Text("Select required paramters and give them weights ");
+    
+    for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
+    {
+        bool temp = N_LATERAL_PARAMETERS.parameter_checkbox[i];
+        if (ImGui::Checkbox(N_LATERAL_PARAMETERS.parameter_names[i].c_str(), &temp  )) {}
+        ImGui::SameLine();
+        if (ImGui::InputFloat("weight = ", &N_LATERAL_PARAMETERS.parameter_weights[i])) {}
+
+        if (i == N_LATERAL_PARAMETERS.K_RING_POS)
+        {
+            ImGui::SameLine();
+            int k_no;
+            if (ImGui::InputInt("K in K ring = ", &k_no))
+            {
+                N_LATERAL_PARAMETERS.parameter_names[N_LATERAL_PARAMETERS.K_RING_POS] += std::to_string(k_no);
+            }
+
+        }
+
+        N_LATERAL_PARAMETERS.parameter_checkbox[i] = temp;
+    }
+    if (ImGui::Button("Read symmetry values"))
+    {
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
+    }
+    if (ImGui::Button("Start algorithm for current mesh"))
+    {
+        Mesh* m = &m_factory.mesh_vec[selected_mesh];
+
+
+       start_n_lateral_algorithm(m , N_LATERAL_PARAMETERS);
+       m_factory.remove_all();
+       m_factory.add_all();
+    }
+    if (ImGui::Button("Start algorithm for all of the dataset"))
+    {
+
+        // total of 15 + 15 meshes 
+        std::vector<Mesh> mesh_vector;
+        for (size_t i = 0; i < 15 + 15; i++)
+        {
+            std::string path("../../Trilateral/Mesh/off/");
+            std::string isometry_batch_no("000" + std::to_string((i / 15) + 1));
+            std::string isometry_no(std::to_string(i % 15 + 1));
+            // read the meshes.
+            path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
+            Mesh m((char*)path.c_str());
+            //read the symmetry format
+            read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
+            mesh_vector.push_back(m);
+            //start_n_lateral_algorithm(&m, N_LATERAL_PARAMETERS);
+        }
+
+    }
+    ImGui::End();
+
+>>>>>>> dcb91313844aaf23ad91ec868618123f94b673f1
 }
