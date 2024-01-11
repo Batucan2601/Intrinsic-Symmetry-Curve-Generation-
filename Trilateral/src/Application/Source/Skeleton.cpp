@@ -154,6 +154,35 @@ void match_skeleton_keypoints(Mesh* m , std::vector<float>& skeleton_bounding_bo
 		(bb_mesh[4] - bb_mesh[1]) / (skeleton_bounding_box[4] - skeleton_bounding_box[1]),
 		(bb_mesh[5] - bb_mesh[2]) / (skeleton_bounding_box[5] - skeleton_bounding_box[2]));
 
+	
 
+	//find the smallest dif to point and select it as l ankle
+
+	std::map<std::string, glm::vec3>::iterator it = keypoints.begin();
+
+	while (it != keypoints.end())
+	{
+		// lets take the first for example 
+		glm::vec3 l_ankle_pos = keypoints[it->first];
+
+		glm::vec3 l_ankle_subtract_minimum = l_ankle_pos - start_point;
+
+		glm::vec3 pos = glm::vec3(l_ankle_subtract_minimum.x * skeleton_to_world_space_axis.x, l_ankle_subtract_minimum.y * skeleton_to_world_space_axis.y,
+			l_ankle_subtract_minimum.z * skeleton_to_world_space_axis.z);
+
+		float min_dif = INFINITY;
+		int index = -1;
+		for (size_t i = 0; i < m->vertices.size(); i++)
+		{
+			if (glm::distance(pos, m->vertices[i]) < min_dif)
+			{
+				min_dif = glm::distance(pos, m->vertices[i]);
+				index = i;
+			}
+		}
+		m->colors[index] = glm::vec3(255, 0, 0);
+
+		it++;
+	}
 
 }

@@ -322,6 +322,8 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     if (ImGui::Button("Match skeleton"))
     {
         match_skeleton_keypoints(&m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
+        m_factory.remove_all();
+        m_factory.add_all();
     }
 }
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
