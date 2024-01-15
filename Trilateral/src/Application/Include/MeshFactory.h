@@ -243,7 +243,9 @@ public:
 	std::vector<glm::vec3> colors;
 	std::vector<int> point_indices;
 	std::vector<std::pair<int, int>> correspondence_lines;
-
+	//skeleton part 
+	std::vector<float> mesh_skeleton_vec;
+	unsigned int skeleton_VAO; 
 	// 
 	glm::mat4 view;
 	glm::mat4 projection;

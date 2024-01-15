@@ -430,6 +430,20 @@ int main(void)
             }
             
         }
+       glBindVertexArray(mesh_fac.skeleton_VAO);
+        if (mesh_fac.mesh_skeleton_vec.size() > 0)
+        {
+            glm::mat4 model = mesh_fac.mesh_vec[0].model_mat;
+            model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+            MVP = proj * view * model;
+            mesh_fac.mesh_vec[0].MVP = MVP;
+            glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+
+            glLineWidth(5.0f);
+            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_skeleton_vec.size() );
+            glLineWidth(1.0f);
+
+        }
 
         glBindVertexArray(0);
 
@@ -447,6 +461,7 @@ int main(void)
         imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
         imgui_KIDS_skeleton(selected_mesh, mesh_fac);
         imgui_N_Lateral_Parameters(selected_mesh, mesh_fac);
+        imgui_debug_layer(cameraPos, cameraFront, cameraUp);
         //imgui_N_Lateral_Parameters();
         if (is_trilateral_generated)
         {

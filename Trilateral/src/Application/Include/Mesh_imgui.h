@@ -309,7 +309,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
-void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
+void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
     {
@@ -321,7 +321,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("Match skeleton"))
     {
-        match_skeleton_keypoints(&m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
+        match_skeleton_keypoints(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -406,6 +406,16 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         }
 
     }
+    ImGui::End();
+
+}
+
+void imgui_debug_layer(glm::vec3 cameraPos, glm::vec3 cameraDir, glm::vec3 up )
+{
+    ImGui::Begin("DEBUG layer");
+    ImGui::Text(" camerapos is %f %f %f ", cameraPos.x, cameraPos.y, cameraPos.z);
+    ImGui::Text(" cameraDir is %f %f %f ", cameraDir.x, cameraDir.y, cameraDir.z);
+    ImGui::Text(" cameraUp is %f %f %f ", up.x, up.y, up.z);
     ImGui::End();
 
 }
