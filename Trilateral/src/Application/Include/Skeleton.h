@@ -11,3 +11,7 @@ std::map<std::string, glm::vec3 > generate_skeleton_keypoints(std::string file_n
 
 void match_skeleton_keypoints( MeshFactory& meshFactory, Mesh* m, std::vector<float>& skeleton_bounding_box, std::map<std::string, glm::vec3>& keypoints);
 
+
+void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>& skeleton_bounding_box, std::vector<float> skeleton_lines);
+
+std::vector<float> generate_skeleton_lines(std::string file_name);

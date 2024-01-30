@@ -309,19 +309,22 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
+static std::vector<float> skeleton_lines; 
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
     {
-        bounding_box = generate_bounding_box("0001.isometry.4.txt");
+        bounding_box = generate_bounding_box("0001.isometry.1.txt");
     }
     if (ImGui::Button("Generate Skeleton Keypoints for mesh"))
     {
-        key_points = generate_skeleton_keypoints("0001.isometry.4.txt");
+        //key_points = generate_skeleton_keypoints("0001.isometry.1.txt");
+        skeleton_lines = generate_skeleton_lines("0001.isometry.1.txt");
     }
     if (ImGui::Button("Match skeleton"))
     {
-        match_skeleton_keypoints(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
+        //match_skeleton_keypoints(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
+        match_skeleton_lines(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, skeleton_lines);
         m_factory.remove_all();
         m_factory.add_all();
     }

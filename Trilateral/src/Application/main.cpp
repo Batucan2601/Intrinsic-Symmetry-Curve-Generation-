@@ -284,7 +284,7 @@ int main(void)
     Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.4.off");
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.1.off");
    
     
     
@@ -434,7 +434,6 @@ int main(void)
         if (mesh_fac.mesh_skeleton_vec.size() > 0)
         {
             glm::mat4 model = mesh_fac.mesh_vec[0].model_mat;
-            model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
             MVP = proj * view * model;
             mesh_fac.mesh_vec[0].MVP = MVP;
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
