@@ -314,12 +314,12 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
     {
-        bounding_box = generate_bounding_box("0001.isometry.1.txt");
+        bounding_box = generate_bounding_box("0001.isometry.12.txt");
     }
     if (ImGui::Button("Generate Skeleton Keypoints for mesh"))
     {
         //key_points = generate_skeleton_keypoints("0001.isometry.1.txt");
-        skeleton_lines = generate_skeleton_lines("0001.isometry.1.txt");
+        skeleton_lines = generate_skeleton_lines("0001.isometry.12.txt");
     }
     if (ImGui::Button("Match skeleton"))
     {

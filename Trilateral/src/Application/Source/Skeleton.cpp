@@ -602,7 +602,7 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 		(bb_mesh[4] - bb_mesh[1]) / (skeleton_bounding_box[4] - skeleton_bounding_box[1]),
 		(bb_mesh[5] - bb_mesh[2]) / (skeleton_bounding_box[5] - skeleton_bounding_box[2]));
 
-
+	//skeleton_to_world_space_axis = skeleton_to_world_space_axis * -1; 
 
 	//find the smallest dif to point and select it as l ankle
 
