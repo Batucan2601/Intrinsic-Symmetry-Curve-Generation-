@@ -439,7 +439,7 @@ int main(void)
             glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
 
             glLineWidth(5.0f);
-            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_skeleton_vec.size() );
+            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_skeleton_vec.size()/2 );
             glLineWidth(1.0f);
 
         }

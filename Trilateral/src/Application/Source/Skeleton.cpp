@@ -633,11 +633,48 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 			l_keypoint_subtract_minimum.z * skeleton_to_world_space_axis.z);
 
 		pos = pos + glm::vec3(bb_mesh[0], bb_mesh[1], bb_mesh[2]);
+		//float min_dif = INFINITY;
+		//int index = -1;
+		//for (size_t j = 0; j < m->vertices.size(); j++)
+		//{
+		//	glm::vec3 offsetted_vertex = m->vertices[j] - glm::vec3(bb_mesh[0], bb_mesh[1], bb_mesh[2]);
+
+		//	if (glm::distance(pos, /*m->vertices[j]*/ offsetted_vertex) < min_dif)
+		//	{
+		//		min_dif = glm::distance(pos,/* m->vertices[j]*/ offsetted_vertex);
+		//		index = j;
+		//	}
+		//}
+		//m->colors[index] = glm::vec3(255, 0, 0);
+	}
+
+	std::vector<float> offsetted_skeleton_lines; 
+	for (size_t i = 0; i < skeleton_lines.size(); i+=6)
+	{
+		glm::vec3 key_point_pos = glm::vec3(skeleton_lines[i], skeleton_lines[i + 1], skeleton_lines[i + 2]);
+
+		start_point = glm::vec3((skeleton_bounding_box[0] + skeleton_bounding_box[3]) / 2, (skeleton_bounding_box[1] + skeleton_bounding_box[4]) / 2, (skeleton_bounding_box[2] + skeleton_bounding_box[5]) / 2);
+
+		glm::vec3 skeleton_line_offsetted = key_point_pos - start_point;
+
+		glm::vec3 pos = glm::vec3(skeleton_line_offsetted.x * skeleton_to_world_space_axis.x, skeleton_line_offsetted.y * skeleton_to_world_space_axis.y,
+			skeleton_line_offsetted.z * skeleton_to_world_space_axis.z);
+
+		//new approach
+		//glm::vec3 pos = skeleton_line_offsetted * (glm::length(skeleton_to_world_space_axis));
+		offsetted_skeleton_lines.push_back(pos.x);
+		offsetted_skeleton_lines.push_back(pos.y);
+		offsetted_skeleton_lines.push_back(pos.z);
+
+		offsetted_skeleton_lines.push_back(255);
+		offsetted_skeleton_lines.push_back(0);
+		offsetted_skeleton_lines.push_back(0);
+
 		float min_dif = INFINITY;
 		int index = -1;
 		for (size_t j = 0; j < m->vertices.size(); j++)
 		{
-			glm::vec3 offsetted_vertex = m->vertices[j] - glm::vec3(bb_mesh[0], bb_mesh[1], bb_mesh[2]);
+			glm::vec3 offsetted_vertex = m->vertices[j] - glm::vec3((bb_mesh[0] + bb_mesh[3] ) / 2 , (bb_mesh[1] + bb_mesh[4]) / 2, (bb_mesh[2] + bb_mesh[5]) / 2);
 
 			if (glm::distance(pos, /*m->vertices[j]*/ offsetted_vertex) < min_dif)
 			{
@@ -646,28 +683,6 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 			}
 		}
 		m->colors[index] = glm::vec3(255, 0, 0);
-	}
-
-	std::vector<float> offsetted_skeleton_lines; 
-	for (size_t i = 0; i < skeleton_lines.size(); i+=6)
-	{
-		glm::vec3 key_point_pos = glm::vec3(skeleton_lines[i], skeleton_lines[i + 1], skeleton_lines[i + 2]);
-
-
-		glm::vec3 skeleton_line_offsetted = key_point_pos - start_point;
-
-		glm::vec3 pos = glm::vec3(skeleton_line_offsetted.x * skeleton_to_world_space_axis.x, skeleton_line_offsetted.y * skeleton_to_world_space_axis.y,
-			skeleton_line_offsetted.z * skeleton_to_world_space_axis.z);
-
-		//new approach
-		pos = skeleton_line_offsetted * glm::length(skeleton_to_world_space_axis);
-		offsetted_skeleton_lines.push_back(pos.x);
-		offsetted_skeleton_lines.push_back(pos.y);
-		offsetted_skeleton_lines.push_back(pos.z);
-
-		offsetted_skeleton_lines.push_back(255);
-		offsetted_skeleton_lines.push_back(0);
-		offsetted_skeleton_lines.push_back(0);
 
 	}
 
