@@ -536,9 +536,6 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 {
 	meshFactory.mesh_skeleton_vec = skeleton_lines;
 
-	
-
-
 	std::vector<float> bb_mesh;
 	/*
 	1 - min_x
@@ -597,31 +594,23 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 	//assume we start from lower left corner (x_min y_min z_min)
 	glm::vec3 start_point(skeleton_bounding_box[0], skeleton_bounding_box[1], skeleton_bounding_box[2]);
 
+	//swap axises
+	// x and z 
+	/*for (size_t i = 0; i < skeleton_lines.size(); i+=6)
+	{
+		float temp = skeleton_lines[i];
+		skeleton_lines[i]  = skeleton_lines[i + 2 ];
+		skeleton_lines[i + 2] = temp; 
+	}*/
+
+
 	// converts 1 unit of skeleton's object space to world space in the application I guess
 	glm::vec3 skeleton_to_world_space_axis((bb_mesh[3] - bb_mesh[0]) / (skeleton_bounding_box[3] - skeleton_bounding_box[0]),
 		(bb_mesh[4] - bb_mesh[1]) / (skeleton_bounding_box[4] - skeleton_bounding_box[1]),
 		(bb_mesh[5] - bb_mesh[2]) / (skeleton_bounding_box[5] - skeleton_bounding_box[2]));
 
-	//skeleton_to_world_space_axis = skeleton_to_world_space_axis * -1; 
-
-	//find the smallest dif to point and select it as l ankle
-
-
-
-	// change of axis 
-
-	// 1 - swap -x and z 
-	/*it = keypoints.begin();
-	while (it != keypoints.end())
-	{
-		glm::vec3 temp = it->second;
-
-		float temp_f = temp.y;
-		temp.y = temp.z;
-		temp.z = temp_f;
-		it->second = temp;
-		it++;
-	}*/
+	
+	
 
 	for( int i =0; i < skeleton_lines.size(); i += 6   ) // 3 pos 3 color 
 	{

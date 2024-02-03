@@ -53,6 +53,13 @@ void poll_keys()
                  cameraFront = glm::vec3(-1.0f, 0.0f, 0.0f);
                  cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
             }
+            else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+            {
+                cameraPos = glm::vec3(0.0f, 1.25f, 70.0f); // where camera starts
+                cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+                cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+            }
+
         }
         
         
