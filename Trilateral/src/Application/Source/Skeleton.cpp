@@ -6,6 +6,8 @@
 #include <src/Application/Include/MeshFactory.h>
 #include <GL/glew.h>
 
+
+#pragma region VIDEO-TO-POSE 3D repo functions legacy for now
 using std::ifstream;
 std::vector<float> generate_bounding_box(std::string file_name)
 {
@@ -693,3 +695,97 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 
 
 }
+#pragma endregion VIDEO-TO-POSE 3D repo functions legacy for now
+
+
+
+
+void skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
+{
+	std::vector<SkeletonFormat> skeletonPoints;
+	ifstream indata; // indata is like cin
+	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
+	if (!indata)
+	{
+		return;
+	}
+	std::string line;
+	while (std::getline(indata, line))
+	{
+		if (line.find('#') == std::string::npos && line.size() > 1 )
+		{
+			SkeletonFormat point; 
+			float point_no;
+			POINT_LABEL label_point;
+			int soma_point;
+			int parent; 
+			float radius; 
+			//read the points 
+			std::stringstream ss(line);
+
+			ss >> point_no;
+			ss >> soma_point;
+
+			ss >> point.point.x;
+			ss >> point.point.y;
+			ss >> point.point.z;
+
+			ss >> radius; 
+
+			ss >> point.parent;
+
+
+			point.label = (POINT_LABEL)soma_point;
+			skeletonPoints.push_back(point);
+		}
+
+	}
+
+	std::vector<float> skeleton_lines; 
+	// another pass needed to generate lines with according parent
+	for (size_t i = 0; i < skeletonPoints.size(); i++)
+	{
+		glm::vec3 point = skeletonPoints[i].point;
+		int parent = skeletonPoints[i].parent;
+		if (parent > 0)
+		{
+			glm::vec3 parent_point = skeletonPoints[parent].point;
+
+			skeleton_lines.push_back(point.x);
+			skeleton_lines.push_back(point.y);
+			skeleton_lines.push_back(point.z);
+			
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(0.0f);
+
+			skeleton_lines.push_back(parent_point.x);
+			skeleton_lines.push_back(parent_point.y);
+			skeleton_lines.push_back(parent_point.z);
+
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(0.0f);
+
+		}
+	}
+	meshFactory.mesh_skeleton_vec = skeleton_lines;
+
+	unsigned int skeleton_vao, skeleton_vbo;
+	glGenVertexArrays(1, &skeleton_vao);
+	glGenBuffers(1, &skeleton_vbo);
+
+	glBindVertexArray(skeleton_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glBufferData(GL_ARRAY_BUFFER, meshFactory.mesh_skeleton_vec.size() * sizeof(float), &meshFactory.mesh_skeleton_vec[0], GL_STATIC_DRAW);
+
+	meshFactory.skeleton_VAO = skeleton_vao;
+
+	glBindVertexArray(0);
+}
+
+

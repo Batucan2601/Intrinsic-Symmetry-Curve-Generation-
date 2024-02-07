@@ -328,6 +328,11 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
     }
+    ImGui::LabelText("Skeleton generation with Cohen-Or's method" , "Value");
+    if (ImGui::Button("Generate Skeleton"))
+    {
+        skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
+    }
 }
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
@@ -409,6 +414,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         }
 
     }
+   
     ImGui::End();
 
 }
@@ -422,3 +428,5 @@ void imgui_debug_layer(glm::vec3 cameraPos, glm::vec3 cameraDir, glm::vec3 up )
     ImGui::End();
 
 }
+
+

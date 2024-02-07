@@ -244,6 +244,10 @@ public:
 	std::vector<int> point_indices;
 	std::vector<std::pair<int, int>> correspondence_lines;
 	//skeleton part 
+
+	
+	
+	// for skeleton detection from pose  video-to-pose
 	std::vector<float> mesh_skeleton_vec;
 	unsigned int skeleton_VAO; 
 	// 
