@@ -700,7 +700,7 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 
 
 
-void skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
+std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 {
 	std::vector<SkeletonFormat> skeletonPoints;
 	ifstream indata; // indata is like cin
@@ -751,21 +751,41 @@ void skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 		{
 			glm::vec3 parent_point = skeletonPoints[parent].point;
 
+			
 			skeleton_lines.push_back(point.x);
 			skeleton_lines.push_back(point.y);
 			skeleton_lines.push_back(point.z);
 			
-			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(0.0f);
+			if (skeletonPoints[i].label == END)
+			{
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(255.0f);
+			}
+			else
+			{
+				skeleton_lines.push_back(255.0f);
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(0.0f);
+			}
+
 
 			skeleton_lines.push_back(parent_point.x);
 			skeleton_lines.push_back(parent_point.y);
 			skeleton_lines.push_back(parent_point.z);
 
-			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(0.0f);
+			if (skeletonPoints[parent].label == END)
+			{
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(255.0f);
+			}
+			else
+			{
+				skeleton_lines.push_back(255.0f);
+				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(0.0f);
+			}
 
 		}
 	}
@@ -786,6 +806,97 @@ void skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	meshFactory.skeleton_VAO = skeleton_vao;
 
 	glBindVertexArray(0);
+	return skeletonPoints;
 }
 
 
+float skeleton_calculate_distances(std::vector<SkeletonFormat> skeletonFormat, int index1, int index2)
+{
+
+}
+
+std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat)
+{
+	// run dijkstra
+	
+	//dijkstra table
+	std::vector<std::vector<float>> distances_table;
+	//create an adjacency array
+	std::vector<std::vector<bool>> adjacencies;
+	//create an distances array
+	std::vector<std::vector<float>> distances;
+
+	//init dijkstra table
+	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	{
+		std::vector<float> distance_table_i(skeletonFormat.size() , INFINITY);
+		distance_table_i[i] = 0;
+		distances_table.push_back(distance_table_i);
+	}
+	// just to be sure make them all false
+	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	{
+		std::vector<bool> adjacency_i;
+		for (size_t j = 0; j < skeletonFormat.size(); j++)
+		{
+			adjacency_i.push_back(false);
+		}
+		adjacencies.push_back(adjacency_i);
+	}
+
+	//fill adjacencies
+	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	{
+		int parent_index = skeletonFormat[i].parent;
+		adjacencies[i][parent_index] = true; 
+		adjacencies[parent_index][i] = true; 
+	}
+	//fill distances
+	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	{
+		std::vector<float> distances_i;
+		glm::vec3 pi = skeletonFormat[i].point;
+		for (size_t j = 0; j < skeletonFormat.size(); j++)
+		{
+			if (adjacencies[i][j])
+			{
+				glm::vec3 pj = skeletonFormat[skeletonFormat[i].parent].point;
+				float distance = glm::distance(pi,pj);
+				distances_i.push_back(distance);
+			}
+			else
+			{
+				distances_i.push_back(INFINITY);
+
+			}
+		}
+	}
+	
+	//step 2 do dijkstra for ALL vertices
+	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	{
+		std::vector<bool> is_explored(skeletonFormat.size(), false);
+		is_explored[i] = true;
+		int number_of_explored_vertices = 1;
+		while (number_of_explored_vertices < skeletonFormat.size())
+		{
+			//select neighbours
+			for (size_t j = 0; j < skeletonFormat.size(); j++)
+			{
+				if (adjacencies[i][j]) // if adjacent
+				{
+					if (!is_explored[j])
+					{
+						is_explored[j] = true;
+						distances_table[i][j] = glm::distance(skeletonFormat[i].point, skeletonFormat[j].point);
+
+					}
+				}
+			}
+			number_of_explored_vertices++;
+		}
+
+		
+	}
+	
+}

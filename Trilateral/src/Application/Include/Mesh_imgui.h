@@ -310,6 +310,8 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
 static std::vector<float> skeleton_lines; 
+static std::vector<SkeletonFormat> skeletonFormat;
+
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
@@ -331,7 +333,16 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     ImGui::LabelText("Skeleton generation with Cohen-Or's method" , "Value");
     if (ImGui::Button("Generate Skeleton"))
     {
-        skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
+        skeletonFormat = skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
+    }
+    if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
+    {
+        Mesh* m = &m_factory.mesh_vec[selected_mesh];
+
+
+        start_n_lateral_algorithm(m, N_LATERAL_PARAMETERS);
+        m_factory.remove_all();
+        m_factory.add_all();
     }
 }
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)

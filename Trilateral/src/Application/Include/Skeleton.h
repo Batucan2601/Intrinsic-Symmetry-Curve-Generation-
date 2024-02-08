@@ -25,4 +25,6 @@ typedef struct
 	glm::vec3 point;
 }SkeletonFormat;
 
-void skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
+std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat);
+float skeleton_calculate_distances(std::vector<SkeletonFormat> skeletonFormat, int index1, int index2);
+std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);

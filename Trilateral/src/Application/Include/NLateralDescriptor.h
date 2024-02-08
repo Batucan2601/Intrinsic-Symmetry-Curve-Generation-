@@ -1,6 +1,7 @@
 #include "glm/glm.hpp"
 #include <map>
 #include "Mesh.h"
+#include "../Include/Skeleton.h"
 struct NLateralDescriptor
 {
 	int N;
@@ -59,5 +60,6 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 , NLateralParameters N_LATERAL_PARAMETERS);
 
 void start_n_lateral_algorithm(Mesh* m , NLateralParameters N_LATERAL_PARAMETERS);
+void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& mesh, NLateralParameters N_LATERAL_PARAMETERS);
 
 void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);
