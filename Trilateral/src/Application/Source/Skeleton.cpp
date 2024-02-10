@@ -700,14 +700,15 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 
 
 
-std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
+Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 {
+	Skeleton skeleton; 
 	std::vector<SkeletonFormat> skeletonPoints;
 	ifstream indata; // indata is like cin
 	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
-		return;
+		return skeleton;
 	}
 	std::string line;
 	while (std::getline(indata, line))
@@ -741,6 +742,22 @@ std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std:
 
 	}
 
+	//adjacencies
+	// just to be sure make them all false
+	std::vector<std::vector<bool>> adjacencies; 
+ 	for (size_t i = 0; i < skeletonPoints.size(); i++)
+	{
+		std::vector<bool> adjacency_i(skeletonPoints.size(),false);
+		for (size_t j = 0; j < skeletonPoints.size(); j++)
+		{
+			if (skeletonPoints[j].parent == i )
+			{
+				adjacency_i[j] = true; 
+			}
+		}
+		adjacencies.push_back(adjacency_i);
+	}
+
 	std::vector<float> skeleton_lines; 
 	// another pass needed to generate lines with according parent
 	for (size_t i = 0; i < skeletonPoints.size(); i++)
@@ -762,6 +779,12 @@ std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std:
 				skeleton_lines.push_back(0.0f);
 				skeleton_lines.push_back(255.0f);
 			}
+			else if (skeletonPoints[i].parent == -1)
+			{
+				skeleton_lines.push_back(255.0f);
+				skeleton_lines.push_back(255.0f);
+				skeleton_lines.push_back(255.0f);
+			}
 			else
 			{
 				skeleton_lines.push_back(255.0f);
@@ -778,6 +801,12 @@ std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std:
 			{
 				skeleton_lines.push_back(0.0f);
 				skeleton_lines.push_back(0.0f);
+				skeleton_lines.push_back(255.0f);
+			}
+			else if (skeletonPoints[i].parent == -1)
+			{
+				skeleton_lines.push_back(255.0f);
+				skeleton_lines.push_back(255.0f);
 				skeleton_lines.push_back(255.0f);
 			}
 			else
@@ -806,97 +835,254 @@ std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory,std:
 	meshFactory.skeleton_VAO = skeleton_vao;
 
 	glBindVertexArray(0);
-	return skeletonPoints;
+
+
+	skeleton.skeletonFormat = skeletonPoints;
+	skeleton.adjacencies = adjacencies;
+	return skeleton;
 }
 
 
-float skeleton_calculate_distances(std::vector<SkeletonFormat> skeletonFormat, int index1, int index2)
+void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1, int index2,float& dist,
+	std::vector<unsigned int>& vertex_list, std::vector<float>& dijkstra_distances)
 {
-
-}
-
-std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat)
-{
-	// run dijkstra
+	int N = skeleton.skeletonFormat.size();
+	//run a dijkstra from index1 
+	std::vector<float> distances(N, INFINITY);
+	distances[index1] = 0.0f;
 	
-	//dijkstra table
-	std::vector<std::vector<float>> distances_table;
-	//create an adjacency array
-	std::vector<std::vector<bool>> adjacencies;
-	//create an distances array
-	std::vector<std::vector<float>> distances;
+	std::vector<bool> discovered_vertices(N , false);
+	discovered_vertices[index1] = true; 
+	int no_of_discovered = 1;
 
-	//init dijkstra table
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
+	std::vector<unsigned int> predecessors(N, -1);
+	while (no_of_discovered < N )
 	{
-		std::vector<float> distance_table_i(skeletonFormat.size() , INFINITY);
-		distance_table_i[i] = 0;
-		distances_table.push_back(distance_table_i);
-	}
-	// just to be sure make them all false
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
-	{
-		std::vector<bool> adjacency_i;
-		for (size_t j = 0; j < skeletonFormat.size(); j++)
+		float minimum_distance = INFINITY;
+		unsigned int minimum_distance_index = -1;
+		unsigned int discovered_vertex = -1; 
+		//check adjacent non_discovered points
+		for (size_t i = 0; i < N; i++)
 		{
-			adjacency_i.push_back(false);
-		}
-		adjacencies.push_back(adjacency_i);
-	}
-
-	//fill adjacencies
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
-	{
-		int parent_index = skeletonFormat[i].parent;
-		adjacencies[i][parent_index] = true; 
-		adjacencies[parent_index][i] = true; 
-	}
-	//fill distances
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
-	{
-		std::vector<float> distances_i;
-		glm::vec3 pi = skeletonFormat[i].point;
-		for (size_t j = 0; j < skeletonFormat.size(); j++)
-		{
-			if (adjacencies[i][j])
+			if (discovered_vertices[i])
 			{
-				glm::vec3 pj = skeletonFormat[skeletonFormat[i].parent].point;
-				float distance = glm::distance(pi,pj);
-				distances_i.push_back(distance);
-			}
-			else
-			{
-				distances_i.push_back(INFINITY);
-
-			}
-		}
-	}
-	
-	//step 2 do dijkstra for ALL vertices
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
-	{
-		std::vector<bool> is_explored(skeletonFormat.size(), false);
-		is_explored[i] = true;
-		int number_of_explored_vertices = 1;
-		while (number_of_explored_vertices < skeletonFormat.size())
-		{
-			//select neighbours
-			for (size_t j = 0; j < skeletonFormat.size(); j++)
-			{
-				if (adjacencies[i][j]) // if adjacent
+				//check adjacencies
+				for (size_t j = 0; j < N; j++)
 				{
-					if (!is_explored[j])
+					if( skeleton.adjacencies[i][j]  && !discovered_vertices[j] && i != j )
 					{
-						is_explored[j] = true;
-						distances_table[i][j] = glm::distance(skeletonFormat[i].point, skeletonFormat[j].point);
-
+						//check distance and compare
+						float dist = glm::distance(skeleton.skeletonFormat[i].point, skeleton.skeletonFormat[j].point);
+						if (dist < minimum_distance)
+						{
+							minimum_distance = dist; 
+							minimum_distance_index = j;
+						}
 					}
 				}
 			}
-			number_of_explored_vertices++;
 		}
 
-		
+		discovered_vertices[minimum_distance_index] = true; 
+		if ( (distances[discovered_vertex] + minimum_distance) < distances[minimum_distance_index])
+		{
+			distances[minimum_distance_index] = distances[discovered_vertex] + minimum_distance;
+			predecessors[minimum_distance_index] = discovered_vertex;
+
+		}
+
+		no_of_discovered += 1;
 	}
+
+	dist = distances[index2];
 	
+	int temp = index2; 
+	while (true)
+	{
+		if (predecessors[temp] == -1)
+		{
+			break;
+		}
+		vertex_list.push_back(predecessors[temp]);
+	}
+	dijkstra_distances = distances;
+	return; 
+}
+
+//std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat)
+//{
+//	// run dijkstra
+//	
+//	//dijkstra table
+//	std::vector<std::vector<float>> distances_table;
+//	//create an adjacency array
+//	std::vector<std::vector<bool>> adjacencies;
+//	//create an distances array
+//	std::vector<std::vector<float>> distances;
+//
+//	//init dijkstra table
+//	for (size_t i = 0; i < skeletonFormat.size(); i++)
+//	{
+//		std::vector<float> distance_table_i(skeletonFormat.size() , INFINITY);
+//		distance_table_i[i] = 0;
+//		distances_table.push_back(distance_table_i);
+//	}
+//	// just to be sure make them all false
+//	for (size_t i = 0; i < skeletonFormat.size(); i++)
+//	{
+//		std::vector<bool> adjacency_i;
+//		for (size_t j = 0; j < skeletonFormat.size(); j++)
+//		{
+//			adjacency_i.push_back(false);
+//		}
+//		adjacencies.push_back(adjacency_i);
+//	}
+//
+//	//fill adjacencies
+//	for (size_t i = 0; i < skeletonFormat.size(); i++)
+//	{
+//		int parent_index = skeletonFormat[i].parent;
+//		adjacencies[i][parent_index] = true; 
+//		adjacencies[parent_index][i] = true; 
+//	}
+//	//fill distances
+//	for (size_t i = 0; i < skeletonFormat.size(); i++)
+//	{
+//		std::vector<float> distances_i;
+//		glm::vec3 pi = skeletonFormat[i].point;
+//		for (size_t j = 0; j < skeletonFormat.size(); j++)
+//		{
+//			if (adjacencies[i][j])
+//			{
+//				glm::vec3 pj = skeletonFormat[skeletonFormat[i].parent].point;
+//				float distance = glm::distance(pi,pj);
+//				distances_i.push_back(distance);
+//			}
+//			else
+//			{
+//				distances_i.push_back(INFINITY);
+//
+//			}
+//		}
+//	}
+//	
+//	//step 2 do dijkstra for ALL vertices
+//	for (size_t i = 0; i < skeletonFormat.size(); i++)
+//	{
+//		std::vector<bool> is_explored(skeletonFormat.size(), false);
+//		is_explored[i] = true;
+//		int number_of_explored_vertices = 1;
+//		while (number_of_explored_vertices < skeletonFormat.size())
+//		{
+//			//select neighbours
+//			for (size_t j = 0; j < skeletonFormat.size(); j++)
+//			{
+//				if (adjacencies[i][j]) // if adjacent
+//				{
+//					if (!is_explored[j])
+//					{
+//						is_explored[j] = true;
+//						distances_table[i][j] = glm::distance(skeletonFormat[i].point, skeletonFormat[j].point);
+//
+//					}
+//				}
+//			}
+//			number_of_explored_vertices++;
+//		}
+//	}
+//	
+//}
+
+void skeleton_generate_backbone(Skeleton skeleton)
+{
+	
+	int N = skeleton.skeletonFormat.size();
+	std::vector<unsigned int> end_point_indices;
+
+	for (size_t i = 0; i < N; i++)
+	{
+		if (skeleton.skeletonFormat[i].label == END)
+		{
+			end_point_indices.push_back(i);
+		}
+	}
+	int N_end_points = end_point_indices.size();
+	// brute force generating backbone
+	std::vector<BackBone> candidate_backbones; 
+	for (size_t i = 0; i < N_end_points/2 + 1; i++)
+	{
+		for (size_t j = 0; j < N_end_points; j++)
+		{
+			if (i != j)
+			{
+				continue;
+			}
+			//assume i and j are the end points of backbone
+
+			//generate the path
+			int index1 = end_point_indices[i];
+			int index2 = end_point_indices[j];
+			float backbone_length;
+			std::vector<unsigned int> point_list;
+			std::vector<float> distances_from_index1;
+
+			skeleton_calculate_distances_and_vertex_list(skeleton, index1, index2, backbone_length, point_list, distances_from_index1);
+
+			BackBone backbone; 
+			backbone.start_index = index1;
+			backbone.end_index   = index2;
+			backbone.vertex_list = point_list;
+
+			candidate_backbones.push_back(backbone);
+		}
+	}
+	//with each different backbone separate the endpoints into two
+	for (size_t i = 0; i < candidate_backbones.size(); i++)
+	{
+		std::vector<unsigned int> end_points_left; 
+		std::vector<unsigned int> end_points_right;
+
+	}
+	////now calculate the node affinity Skeleton-IntrinsicSymmetrizationofShapes
+	//for (size_t i = 0; i < N_end_points; i++)
+	//{
+	//	// 1-  db(i,i_ )
+	//	// distance between joining positions on backone
+	//	// follow the parents until you reach a point in backbone
+	//	for (size_t j = 0; j < N_end_points; j++)
+	//	{
+	//		// 1-  db(i,i_ )
+	//		// distance between joining positions on backone
+	//		// follow the parents until you reach a point in backbone 
+	//		
+	//	}
+	//}
+	
+}
+float skeleton_point_distance_to_backbone(Skeleton skeleton, BackBone backbone, int index1)
+{
+
+	int index = index1; 
+	float distance = 0;
+	//start from index1 
+	while (true)
+	{
+		bool is_point_in_backbone = false;
+		for (size_t i = 0; i < backbone.vertex_list.size(); i++)
+		{
+			if (backbone.vertex_list[i] == index)
+			{
+				is_point_in_backbone = true;
+			}
+			int first_index = backbone.vertex_list[index];
+			int parent_index = backbone.vertex_list[skeleton.skeletonFormat[index].parent];
+			distance += glm::distance( skeleton.skeletonFormat[first_index].point , skeleton.skeletonFormat[parent_index].point);
+			index = skeleton.skeletonFormat[index].parent;
+		}
+		if( is_point_in_backbone)
+		{
+			break;
+		}
+	}
+	return distance;
 }

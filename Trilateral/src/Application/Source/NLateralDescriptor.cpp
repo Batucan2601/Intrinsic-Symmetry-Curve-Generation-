@@ -684,29 +684,43 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 		}
 	}
 }
-
-void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& skeletonFormat, NLateralParameters N_LATERAL_PARAMETERS)
+// lets try connecting to n-closest endpoint for now?
+void start_n_lateral_algorithm_for_mesh(Skeleton& skeleton, NLateralParameters N_LATERAL_PARAMETERS)
 {
-	// lets try connecting to n-closest endpoint for now?
+	int N = skeleton.skeletonFormat.size();
 	std::vector<unsigned int> end_point_indices;
-	for (size_t i = 0; i < skeletonFormat.size(); i++)
+
+	for (size_t i = 0; i < N; i++)
 	{
-		if (skeletonFormat[i].label == END)
+		if (skeleton.skeletonFormat[i].label == END)
 		{
 			end_point_indices.push_back(i);
 		}
 	}
-
-	//step 1: generate n-lateral descriptors for these endpoints
-	for (size_t i = 0; i <end_point_indices.size(); i++)
+	int end_point_size = end_point_indices.size();
+	//calcualte distances between 
+	std::vector<std::vector<float>>distances_between_end_points(end_point_size);
+	for ( int i = 0; i < end_point_size; i++)
 	{
-		glm::vec3 
-		for (size_t i = 0; i < length; i++)
-		{
+		std::vector<float> distances_i(N);
+		
+		//irrelevant for this operation
+		float dist = 0;
+		std::vector<unsigned int> vertex_list; 
+		//irrelevant for this operation
 
+		skeleton_calculate_distances_and_vertex_list(skeleton, end_point_indices[i], 0, dist, vertex_list, distances_i);
+		
+		std::vector<float> distances_between_end_points_i;
+		for (size_t j = 0; j < end_point_size; j++)
+		{
+			distances_between_end_points_i.push_back(end_point_indices[j]);
 		}
+
 	}
-	//step 2: permutations of the endpoints
+
+
+	//step 2: generate trilateral descriptors
 	// need to get all of the permuations as vectors
 	std::vector<unsigned int> permutation_vector;
 	for (size_t i = 0; i < N_LATERAL_PARAMETERS.N; i++)
@@ -719,5 +733,10 @@ void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& skeletonFor
 		all_permutations.push_back(permutation_vector);
 	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
 
+
+	/*for (size_t i = 0; i < length; i++)
+	{
+
+	}*/
 
 }

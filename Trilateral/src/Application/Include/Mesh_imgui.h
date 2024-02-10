@@ -310,7 +310,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
 static std::vector<float> skeleton_lines; 
-static std::vector<SkeletonFormat> skeletonFormat;
+static Skeleton skeleton;
 
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
@@ -333,7 +333,7 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     ImGui::LabelText("Skeleton generation with Cohen-Or's method" , "Value");
     if (ImGui::Button("Generate Skeleton"))
     {
-        skeletonFormat = skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
+        skeleton = skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
     }
     if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
     {
@@ -429,13 +429,24 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     ImGui::End();
 
 }
-
-void imgui_debug_layer(glm::vec3 cameraPos, glm::vec3 cameraDir, glm::vec3 up )
+static float camera_pos_x = 0.0f;
+static float camera_pos_y = 0.0f;
+static float camera_pos_z = 0.0f;
+void imgui_debug_layer(glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
 {
+
+
     ImGui::Begin("DEBUG layer");
     ImGui::Text(" camerapos is %f %f %f ", cameraPos.x, cameraPos.y, cameraPos.z);
     ImGui::Text(" cameraDir is %f %f %f ", cameraDir.x, cameraDir.y, cameraDir.z);
     ImGui::Text(" cameraUp is %f %f %f ", up.x, up.y, up.z);
+    ImGui::InputFloat("camera X ", &camera_pos_x);
+    ImGui::InputFloat("camera Y ", &camera_pos_y);
+    ImGui::InputFloat("camera Z ", &camera_pos_z);
+    if (ImGui::Button("Teleport to coordinates above "))
+    {
+        cameraPos = glm::vec3(camera_pos_x , camera_pos_y, camera_pos_z);
+    }
     ImGui::End();
 
 }

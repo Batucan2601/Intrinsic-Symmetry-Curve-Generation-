@@ -1,3 +1,4 @@
+#pragma once 
 #include <vector>
 #include <string>
 #include <map>
@@ -24,7 +25,21 @@ typedef struct
 	POINT_LABEL label;
 	glm::vec3 point;
 }SkeletonFormat;
+typedef struct
+{
+	std::vector<SkeletonFormat> skeletonFormat;
+	std::vector<std::vector<bool>> adjacencies;
+}Skeleton;
+typedef struct
+{
+	std::vector<unsigned int> vertex_list; 
+	unsigned int start_index;
+	unsigned int end_index;
+}BackBone;
 
+Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
+
+void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1, int index2, float& dist, std::vector<unsigned int>& vertex_list, std::vector<float>& dijkstra_distances);
+void skeleton_generate_backbone(Skeleton skeleton);
+float skeleton_point_distance_to_backbone(Skeleton skeleton, BackBone backbone, int index1);
 std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat);
-float skeleton_calculate_distances(std::vector<SkeletonFormat> skeletonFormat, int index1, int index2);
-std::vector<SkeletonFormat> skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
