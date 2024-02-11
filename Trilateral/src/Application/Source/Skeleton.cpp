@@ -859,8 +859,8 @@ void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1,
 	while (no_of_discovered < N )
 	{
 		float minimum_distance = INFINITY;
-		unsigned int minimum_distance_index = -1;
-		unsigned int discovered_vertex = -1; 
+		int minimum_distance_index = -1;
+		int discovered_vertex = -1; 
 		//check adjacent non_discovered points
 		for (size_t i = 0; i < N; i++)
 		{
@@ -993,7 +993,7 @@ void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1,
 //	
 //}
 
-void skeleton_generate_backbone(Skeleton skeleton)
+void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 {
 	
 	int N = skeleton.skeletonFormat.size();
@@ -1036,30 +1036,142 @@ void skeleton_generate_backbone(Skeleton skeleton)
 			candidate_backbones.push_back(backbone);
 		}
 	}
+	std::vector<float> backbone_affinity_diffs; 
+	std::vector<std::vector<std::pair<unsigned int, unsigned int>>> backbone_pairs_vec;
 	//with each different backbone separate the endpoints into two
 	for (size_t i = 0; i < candidate_backbones.size(); i++)
 	{
-		std::vector<unsigned int> end_points_left; 
-		std::vector<unsigned int> end_points_right;
+		std::vector<unsigned int> right_points;
+		std::vector<unsigned int> left_points;
+		std::vector<NodeAffinityParams> right_points_node_params; 
+		std::vector<NodeAffinityParams> left_points_node_params;
 
+
+		//get the middle point of backbone
+		for (size_t j = 0; j < N_end_points; j++)
+		{
+			//if not consisting in backbone 
+			if (end_point_indices[j] != candidate_backbones[i].start_index && end_point_indices[j] != candidate_backbones[i].end_index)
+			{
+				int hitIndex = -1;
+				float dist = -1.0f;
+				std::vector<unsigned int> indices;
+				skeleton_point_to_backbone(skeleton, candidate_backbones[i], end_point_indices[j], hitIndex, dist , indices);
+
+				//lets cross these vectors 
+				// vector1 -> vector of hitIndex and it's parent on backbone chain
+				// vector2 -> the n-2'th index on indices vectpr subtracted by n-1'th
+
+				glm::vec3 hitIndexPoint(skeleton.skeletonFormat[hitIndex].point);
+				glm::vec3 hitIndexBackBonePredecessor;
+
+				// get the predecessor
+				for (size_t k = 0; k < candidate_backbones[i].vertex_list.size(); k++)
+				{
+					if (candidate_backbones[i].vertex_list[k] == hitIndex)
+					{
+						hitIndexBackBonePredecessor = glm::vec3(skeleton.skeletonFormat[candidate_backbones[i].vertex_list[k - 1]].point);
+						break;
+					}
+				}
+				glm::vec3 vec1 = hitIndexBackBonePredecessor - hitIndexPoint;
+
+				glm::vec3 hitIndexPointParent(skeleton.skeletonFormat[indices[indices.size()-2]].point);
+
+				glm::vec3 vec2 = hitIndexPointParent - hitIndexPoint;
+
+				//cross them
+				glm::vec3 crossVec = glm::cross(vec1, vec2);
+
+				//just compute node affinity here 
+				NodeAffinityParams param;
+				param.distance_to_backbone = dist;
+				param.point_in_backbone = hitIndex;
+
+				// separate using sign y for now 
+				if (glm::normalize(crossVec).y > 0.0f)
+				{
+					right_points.push_back(end_point_indices[j]);
+					right_points_node_params.push_back(param);
+
+				}
+				else
+				{
+					left_points.push_back(end_point_indices[j]);
+					left_points_node_params.push_back(param);
+				}
+
+				
+
+			}
+		}
+
+		
+
+		//now calculate the node affinity Skeleton-IntrinsicSymmetrizationofShapes
+		std::vector<glm::vec3> hit_points;
+		std::vector<std::pair<unsigned int , unsigned int >> backbone_pairs;
+		// 1-  db(i,i_ )
+		// 2- dl
+		float total_dif_on_backbone = 0; 
+		for (size_t j = 0; j < right_points_node_params.size(); j++)
+		{
+			float db_j = right_points_node_params[j].distance_to_backbone;
+			glm::vec3 backbone_point_j(skeleton.skeletonFormat[right_points_node_params[j].point_in_backbone].point);
+			
+			int mimimum_index = -1;
+			float minimum_node_affinity_diff = INFINITY;
+
+			for (size_t k = 0; k < left_points_node_params.size(); k++)
+			{
+				float db_k = right_points_node_params[k].distance_to_backbone;
+				glm::vec3 backbone_point_k(skeleton.skeletonFormat[right_points_node_params[j].point_in_backbone].point);
+				float dl = glm::distance(backbone_point_j,backbone_point_k);
+
+				float diff = dl + abs(db_j - db_k);
+				if (diff < minimum_node_affinity_diff)
+				{
+					minimum_node_affinity_diff = diff; 
+					mimimum_index = k;
+				}
+			}
+			std::pair<unsigned int, unsigned int> point_index_pair;
+			point_index_pair.first = right_points[j];
+			point_index_pair.second = left_points[j];
+			backbone_pairs.push_back(point_index_pair);
+			total_dif_on_backbone += minimum_node_affinity_diff;
+		}
+
+		backbone_affinity_diffs.push_back(total_dif_on_backbone);
+		backbone_pairs_vec.push_back(backbone_pairs);
 	}
-	////now calculate the node affinity Skeleton-IntrinsicSymmetrizationofShapes
-	//for (size_t i = 0; i < N_end_points; i++)
-	//{
-	//	// 1-  db(i,i_ )
-	//	// distance between joining positions on backone
-	//	// follow the parents until you reach a point in backbone
-	//	for (size_t j = 0; j < N_end_points; j++)
-	//	{
-	//		// 1-  db(i,i_ )
-	//		// distance between joining positions on backone
-	//		// follow the parents until you reach a point in backbone 
-	//		
-	//	}
-	//}
+
+	//check the best backbone diff
+	int minimum_affinity_diff_index = -1;
+	float minimum_affinity_diff = INFINITY;
+	for (size_t i = 0; i < backbone_affinity_diffs.size(); i++)
+	{
+		if (minimum_affinity_diff > backbone_affinity_diffs[i])
+		{
+			minimum_affinity_diff = backbone_affinity_diffs[i];
+			minimum_affinity_diff_index = i;
+		}
+	}
 	
+	// now we decided that the best backbone is minimum_affinity_diff_index
+	BackBone best_backbone = candidate_backbones[minimum_affinity_diff_index];
+	//paint the backbone to blue
+	glBindVertexArray(meshFac.skeleton_VAO);
+	for (size_t i = 0; i < best_backbone.vertex_list.size(); i++)
+	{
+		int back_bone_index = best_backbone.vertex_list[i];
+		meshFac.mesh_skeleton_vec[back_bone_index * 6 + 3] = 0.0f;
+		meshFac.mesh_skeleton_vec[back_bone_index * 6 + 4] = 0.0f;
+		meshFac.mesh_skeleton_vec[back_bone_index * 6 + 5] = 255.0f;
+	}
+	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.size() * sizeof(float), &meshFac.mesh_skeleton_vec[0], GL_STATIC_DRAW);
 }
-float skeleton_point_distance_to_backbone(Skeleton skeleton, BackBone backbone, int index1)
+void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<unsigned int>& indices)
 {
 
 	int index = index1; 
@@ -1077,6 +1189,7 @@ float skeleton_point_distance_to_backbone(Skeleton skeleton, BackBone backbone, 
 			int first_index = backbone.vertex_list[index];
 			int parent_index = backbone.vertex_list[skeleton.skeletonFormat[index].parent];
 			distance += glm::distance( skeleton.skeletonFormat[first_index].point , skeleton.skeletonFormat[parent_index].point);
+			indices.push_back(index);
 			index = skeleton.skeletonFormat[index].parent;
 		}
 		if( is_point_in_backbone)
@@ -1084,5 +1197,8 @@ float skeleton_point_distance_to_backbone(Skeleton skeleton, BackBone backbone, 
 			break;
 		}
 	}
-	return distance;
+	
+	dist = distance; 
+	hitIndex = index;
+	return;
 }
