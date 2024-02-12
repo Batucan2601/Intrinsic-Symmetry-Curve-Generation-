@@ -744,18 +744,18 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 
 	//adjacencies
 	// just to be sure make them all false
-	std::vector<std::vector<bool>> adjacencies; 
+	std::vector<std::vector<bool>> adjacencies(skeletonPoints.size() , std::vector<bool>(skeletonPoints.size(),false));
  	for (size_t i = 0; i < skeletonPoints.size(); i++)
 	{
-		std::vector<bool> adjacency_i(skeletonPoints.size(),false);
 		for (size_t j = 0; j < skeletonPoints.size(); j++)
 		{
 			if (skeletonPoints[j].parent == i )
 			{
-				adjacency_i[j] = true; 
+				adjacencies[i][j] = true;
+				adjacencies[j][i] = true;
+
 			}
 		}
-		adjacencies.push_back(adjacency_i);
 	}
 
 	std::vector<float> skeleton_lines; 
@@ -877,6 +877,7 @@ void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1,
 						{
 							minimum_distance = dist; 
 							minimum_distance_index = j;
+							discovered_vertex = i;
 						}
 					}
 				}
