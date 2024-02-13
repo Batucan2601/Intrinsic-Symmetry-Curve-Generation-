@@ -744,15 +744,15 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 
 	//adjacencies
 	// just to be sure make them all false
-	std::vector<std::vector<bool>> adjacencies(skeletonPoints.size() , std::vector<bool>(skeletonPoints.size(),false));
+	std::vector<std::vector<unsigned int>> adjacencies(skeletonPoints.size());
  	for (size_t i = 0; i < skeletonPoints.size(); i++)
 	{
 		for (size_t j = 0; j < skeletonPoints.size(); j++)
 		{
 			if (skeletonPoints[j].parent == i )
 			{
-				adjacencies[i][j] = true;
-				adjacencies[j][i] = true;
+				adjacencies[i].push_back(j);
+				adjacencies[j].push_back(i);
 
 			}
 		}
@@ -851,46 +851,67 @@ void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1,
 	std::vector<float> distances(N, INFINITY);
 	distances[index1] = 0.0f;
 	
-	std::vector<bool> discovered_vertices(N , false);
-	discovered_vertices[index1] = true; 
-	int no_of_discovered = 1;
+	std::vector<int> discovered_vertices;
+	std::vector<bool> is_vertex_discovered( N , false);
 
-	std::vector<unsigned int> predecessors(N, -1);
+
+	//std::vector<bool> discovered_vertices(N , false);
+	//discovered_vertices[index1] = true; 
+	discovered_vertices.push_back(index1);
+	is_vertex_discovered[index1] = true;
+	int no_of_discovered = 1;
+	for (size_t i = 0; i < skeleton.adjacencies[index1].size(); i++)
+	{
+		glm::vec3 p_index1 = skeleton.skeletonFormat[index1].point;
+		glm::vec3 p = skeleton.skeletonFormat[skeleton.adjacencies[index1][i]].point;
+		distances[skeleton.adjacencies[index1][i]] = glm::distance(p_index1, p);
+	}
+
+
+	std::vector<int> predecessors(N, -1);
 	while (no_of_discovered < N )
 	{
 		float minimum_distance = INFINITY;
 		int minimum_distance_index = -1;
 		int discovered_vertex = -1; 
 		//check adjacent non_discovered points
-		for (size_t i = 0; i < N; i++)
+		for (size_t i = 0; i < discovered_vertices.size(); i++)
 		{
-			if (discovered_vertices[i])
+			int discovered_vertex_adjacency_size = skeleton.adjacencies[discovered_vertices[i]].size();
+			//check adjacencies
+			for (size_t j = 0; j < discovered_vertex_adjacency_size; j++)
 			{
-				//check adjacencies
-				for (size_t j = 0; j < N; j++)
+				int discovered_vertex_adjaceny = skeleton.adjacencies[discovered_vertices[i]][j];
+				if( !is_vertex_discovered[discovered_vertex_adjaceny])
 				{
-					if( skeleton.adjacencies[i][j]  && !discovered_vertices[j] && i != j )
+					//check distance and compare
+					float dist = glm::distance(skeleton.skeletonFormat[discovered_vertices[i]].point, skeleton.skeletonFormat[discovered_vertex_adjaceny].point);
+					if (dist < minimum_distance)
 					{
-						//check distance and compare
-						float dist = glm::distance(skeleton.skeletonFormat[i].point, skeleton.skeletonFormat[j].point);
-						if (dist < minimum_distance)
-						{
-							minimum_distance = dist; 
-							minimum_distance_index = j;
-							discovered_vertex = i;
-						}
+						minimum_distance = dist; 
+						minimum_distance_index = discovered_vertex_adjaceny;
+						discovered_vertex = discovered_vertices[i];
 					}
 				}
 			}
 		}
 
-		discovered_vertices[minimum_distance_index] = true; 
-		if ( (distances[discovered_vertex] + minimum_distance) < distances[minimum_distance_index])
-		{
-			distances[minimum_distance_index] = distances[discovered_vertex] + minimum_distance;
-			predecessors[minimum_distance_index] = discovered_vertex;
+		is_vertex_discovered[minimum_distance_index] = true;	
+		discovered_vertices.push_back(minimum_distance_index);
 
+		//change the weights
+		for (size_t i = 0; i < skeleton.adjacencies[minimum_distance_index].size(); i++)
+		{
+			glm::vec3 p_index1 = skeleton.skeletonFormat[minimum_distance_index].point;
+			glm::vec3 p = skeleton.skeletonFormat[skeleton.adjacencies[minimum_distance_index][i]].point;
+			float edge_dist = glm::distance(p_index1, p);
+			if ((edge_dist + distances[minimum_distance_index]) < distances[skeleton.adjacencies[minimum_distance_index][i]])
+			{
+				distances[skeleton.adjacencies[minimum_distance_index][i]] = (edge_dist + distances[minimum_distance_index]);
+				predecessors[skeleton.adjacencies[minimum_distance_index][i]] = discovered_vertex;
+			}
 		}
+
 
 		no_of_discovered += 1;
 	}
@@ -905,6 +926,7 @@ void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1,
 			break;
 		}
 		vertex_list.push_back(predecessors[temp]);
+		temp = predecessors[temp];
 	}
 	dijkstra_distances = distances;
 	return; 
@@ -1014,7 +1036,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 	{
 		for (size_t j = 0; j < N_end_points; j++)
 		{
-			if (i != j)
+			if (i == j)
 			{
 				continue;
 			}
@@ -1187,6 +1209,7 @@ void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1
 			{
 				is_point_in_backbone = true;
 			}
+			//get index
 			int first_index = backbone.vertex_list[index];
 			int parent_index = backbone.vertex_list[skeleton.skeletonFormat[index].parent];
 			distance += glm::distance( skeleton.skeletonFormat[first_index].point , skeleton.skeletonFormat[parent_index].point);

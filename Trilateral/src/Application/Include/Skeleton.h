@@ -28,7 +28,7 @@ typedef struct
 typedef struct
 {
 	std::vector<SkeletonFormat> skeletonFormat;
-	std::vector<std::vector<bool>> adjacencies;
+	std::vector<std::vector<unsigned int>> adjacencies;
 }Skeleton;
 typedef struct
 {
