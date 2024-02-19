@@ -709,7 +709,7 @@ void start_n_lateral_algorithm_for_mesh(Skeleton& skeleton, NLateralParameters N
 		std::vector<unsigned int> vertex_list; 
 		//irrelevant for this operation
 
-		skeleton_calculate_distances_and_vertex_list(skeleton, end_point_indices[i], 0, dist, vertex_list, distances_i);
+		//skeleton_calculate_distances_and_vertex_list(skeleton, end_point_indices[i], 0, dist, vertex_list, distances_i);
 		
 		std::vector<float> distances_between_end_points_i;
 		for (size_t j = 0; j < end_point_size; j++)

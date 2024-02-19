@@ -32,7 +32,7 @@ typedef struct
 }Skeleton;
 typedef struct
 {
-	std::vector<unsigned int> vertex_list; 
+	std::vector<int> vertex_list; 
 	unsigned int start_index;
 	unsigned int end_index;
 }BackBone;
@@ -45,7 +45,9 @@ typedef struct
 
 Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
 
-void skeleton_calculate_distances_and_vertex_list(Skeleton skeleton, int index1, int index2, float& dist, std::vector<unsigned int>& vertex_list, std::vector<float>& dijkstra_distances);
+void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,std::vector<int>& predecessor_list, std::vector<float>& dijkstra_distances);
 void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton);
-void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<unsigned int>& indices);
-std::vector<std::vector<float>> skeleton_distances_table(std::vector<SkeletonFormat> skeletonFormat);
+void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices,
+	std::vector<float>& distance_matrix, std::vector<int>& predecessor_list_for_end_points);
+void skeleton_get_distance_and_vertex_list(Skeleton& skeleton,
+	int index1, int index2, std::vector<int>& predecessor_list, std::vector<int>& predecessor_index2_index1, float& geodesic_dist);
