@@ -1195,6 +1195,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 	// now we decided that the best backbone is minimum_affinity_diff_index
 	BackBone best_backbone = candidate_backbones[minimum_affinity_diff_index];
 	//paint the backbone to blue
+	meshFac.mesh_skeleton_vec.clear();
 	glBindVertexArray(meshFac.skeleton_VAO);
 	for (size_t i = 0; i < best_backbone.vertex_list.size()-1; i++)
 	{
