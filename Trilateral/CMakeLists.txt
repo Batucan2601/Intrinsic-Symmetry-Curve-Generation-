@@ -24,7 +24,8 @@ set(Header_Files
     "src/Application/Include/Skeleton.h"
     "src/Application/Include/MetricCalculations.h"
     "src/Application/Include/NLateralDescriptor.h"
-
+    "src/Application/Include/ShapeDiameter.h"
+    "src/Application/Include/Ray.h"
 
 )
 source_group("Header Files" FILES ${Header_Files})
@@ -54,6 +55,10 @@ set(Source_Files
     "src/Application/Source/Skeleton.cpp"
     "src/Application/Source/MetricCalculations.cpp"
     "src/Application/Source/NLateralDescriptor.cpp"
+    "src/Application/Source/ShapeDiameter.cpp"
+    "src/Application/Source/Ray.cpp"
+
+
 
 
 )
