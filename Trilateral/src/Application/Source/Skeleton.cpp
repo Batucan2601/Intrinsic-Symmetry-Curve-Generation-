@@ -1024,19 +1024,21 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 	std::vector<BackBone> candidate_backbones; 
 	for (size_t i = 0; i < N_end_points; i++)
 	{
+		int index1 = end_point_indices[i];
+		std::vector<int> point_list;
+		std::vector<float> distances_from_index1;
+
+		skeleton_calculate_dijkstra(skeleton, index1, point_list, distances_from_index1);
+
 		for (size_t j = i; j < N_end_points; j++)
 		{
 			//assume i and j are the end points of backbone
 
 			//generate the path
-			int index1 = end_point_indices[i];
 			int index2 = end_point_indices[j];
 			float backbone_length;
-			std::vector<int> point_list;
-			std::vector<float> distances_from_index1;
 			std::vector<int> vertex_list_index1_index2;
 
-			skeleton_calculate_dijkstra(skeleton, index1, point_list, distances_from_index1);
 			if (i != j)
 			{ 
 				skeleton_get_distance_and_vertex_list(skeleton, index1, index2, point_list,
@@ -1147,6 +1149,33 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 		std::vector<std::pair<unsigned int , unsigned int >> backbone_pairs;
 		// 1-  db(i,i_ )
 		// 2- dl
+
+		if (left_points_node_params.size() > right_points_node_params.size())
+		{
+			std::vector<NodeAffinityParams> temp_param_vec;
+			std::vector<unsigned int > temp_pair_vec;
+
+			temp_param_vec = right_points_node_params;
+			right_points_node_params = left_points_node_params;
+			left_points_node_params = temp_param_vec;
+
+			temp_pair_vec = right_points;
+			right_points = left_points;
+			left_points = temp_pair_vec;
+		}
+		int distance_matrix_start_index = -1;
+		int distance_matrix_end_index = -1;
+		for (size_t t = 0; t < end_point_indices.size(); t++)
+		{
+			if (candidate_backbones[i].start_index == end_point_indices[t])
+			{
+				distance_matrix_start_index = t;
+			}
+			else if (candidate_backbones[i].end_index == end_point_indices[t])
+			{
+				distance_matrix_end_index = t;
+			}
+		}
 		float total_dif_on_backbone = 0; 
 		for (size_t j = 0; j < right_points_node_params.size(); j++)
 		{
@@ -1160,9 +1189,12 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 			{
 				float db_k = left_points_node_params[k].distance_to_backbone;
 				glm::vec3 backbone_point_k(skeleton.skeletonFormat[left_points_node_params[k].point_in_backbone].point);
-				float dl = glm::distance(backbone_point_j,backbone_point_k);
+				
+				float db = glm::distance(backbone_point_j,backbone_point_k) / 
+				distance_matrix[distance_matrix_start_index][left_points_node_params[k].point_in_backbone]; //difference between length in backbone hitpoints
+				float dl = abs(db_j - db_k) / (db_j + db_k) * db_j; //difference between branch lengths
 
-				float diff = dl + abs(db_j - db_k);
+				float diff = dl + db;
 				if (diff < minimum_node_affinity_diff)
 				{
 					minimum_node_affinity_diff = diff; 
@@ -1175,7 +1207,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 			backbone_pairs.push_back(point_index_pair);
 			total_dif_on_backbone += minimum_node_affinity_diff;
 		}
-
+		total_dif_on_backbone /= right_points_node_params.size();
 		backbone_affinity_diffs.push_back(total_dif_on_backbone);
 		backbone_pairs_vec.push_back(backbone_pairs);
 	}

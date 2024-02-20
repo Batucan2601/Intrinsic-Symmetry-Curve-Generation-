@@ -38,6 +38,8 @@ int selected_mesh_for_points2 = 1;
 bool is_draw_lines_activated = false;
 bool is_draw_lines_activated_once = false; // indicator for one time buffering of points
 bool is_polygon_filled = true ; 
+bool is_normals_shown = false;
+
 std::vector<float> line_points; //line points will be global 
 
 bool activate_histogram = false; 
@@ -98,6 +100,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             is_polygon_filled = true;
         }
+    }
+    if (ImGui::Button("Show normals"))
+    {
+        is_normals_shown = !is_normals_shown;
     }
     if (ImGui::Button("Trilateral  "))
     {

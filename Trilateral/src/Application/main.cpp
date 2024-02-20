@@ -443,6 +443,19 @@ int main(void)
             glLineWidth(1.0f);
 
         }
+        glBindVertexArray(mesh_fac.mesh_vec[0].vao_normals);
+        if (is_normals_shown)
+        {
+            glm::mat4 model = mesh_fac.mesh_vec[0].model_mat;
+            MVP = proj * view * model;
+            mesh_fac.mesh_vec[0].MVP = MVP;
+            glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
+
+            glLineWidth(5.0f);
+            glDrawArrays(GL_LINES, 0, mesh_fac.mesh_vec[0].normals_display.size() / 6);
+            glLineWidth(1.0f);
+        }
+
 
         glBindVertexArray(0);
 

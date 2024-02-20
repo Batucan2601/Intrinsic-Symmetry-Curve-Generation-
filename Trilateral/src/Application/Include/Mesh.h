@@ -27,8 +27,12 @@ public:
 	std::vector<std::pair<unsigned int, unsigned int>> symmetry_pairs; // for ground truth 
 	std::vector<unsigned int> symmetry_pairs_map; // for ground truth hashmap for pairs
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
+	std::vector<glm::vec3> normals; // fil with constructor, actual vertices
+	std::vector<float> normals_display; // vertex information of normals
 	glm::mat4 model_mat;
 	std::string file_name; 
+	//VAO object
+	unsigned int vao_normals; 
 	//project 
 	bool off_format = false;
 	bool ply_format = false;
@@ -43,6 +47,7 @@ public:
 	private:
 	void read_ply_format(char* filename);
 	void read_off_format(char* filename);
+	void generate_normals();
 };
 
 void read_symmetry_format(char* filename, Mesh* m);

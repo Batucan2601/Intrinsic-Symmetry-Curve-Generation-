@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "../Include/Mesh.h"
 #include "happly.h"
 #include "glm/gtc/matrix_transform.hpp"
@@ -34,6 +35,7 @@ Mesh::Mesh(char* filename)
 		}
 	}
 	this->file_name = this->file_name.substr( slash_index+1, this->file_name.size());
+	generate_normals();
 }
 void Mesh::read_ply_format(char* filename)
 {
@@ -439,4 +441,73 @@ void read_symmetry_format(char* filename, Mesh* m)
 		m->symmetry_pairs.push_back(sym_pair);
 	}*/
 	return;
+}
+
+//gives normal for each point 
+void Mesh::generate_normals()
+{
+	std::vector<glm::vec3> normals(this->vertices.size() , glm::vec3(0.0f,0.0f,0.0f));
+	std::vector<float> each_point_count(this->vertices.size(), 0);
+
+	for (size_t i = 0; i < this->triangles.size(); i+=3)
+	{
+		glm::vec3 edge1 = this->vertices[this->triangles[i+1]] - this->vertices[this->triangles[i]];
+		glm::vec3 edge2 = this->vertices[this->triangles[i+2]] - this->vertices[this->triangles[i]];
+		glm::vec3 normal = glm::normalize(glm::cross(edge1 , edge2));
+		each_point_count[this->triangles[i]] += 1;
+		each_point_count[this->triangles[i]] += 1;
+		each_point_count[this->triangles[i]] += 1;
+		
+		normals[this->triangles[i]] = normals[this->triangles[i]] + normal;
+		normals[this->triangles[i+1]] = normals[this->triangles[i+1]] + normal;
+		normals[this->triangles[i+2]] = normals[this->triangles[i+2]] + normal;
+	}
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		normals[i] = normals[i] / each_point_count[i];
+	}
+	this->normals = normals;
+
+	//now the part where we display the normals
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		//start of the line is vertex itself
+		normals_display.push_back(this->vertices[i].x);
+		normals_display.push_back(this->vertices[i].y);
+		normals_display.push_back(this->vertices[i].z);
+		
+		normals_display.push_back(0);
+		normals_display.push_back(255);
+		normals_display.push_back(0);
+
+		// end part is the normal
+		glm::vec3 normal = this->vertices[i] + this->normals[i];
+		normals_display.push_back(normal.x);
+		normals_display.push_back(normal.y);
+		normals_display.push_back(normal.z);
+
+		normals_display.push_back(0);
+		normals_display.push_back(255);
+		normals_display.push_back(0);
+
+	}
+	unsigned int vbo;
+	unsigned int ibo;
+	//need to generate new vao 
+	glGenVertexArrays(1, &this->vao_normals);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ibo);
+
+
+	glBindVertexArray(this->vao_normals);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBufferData(GL_ARRAY_BUFFER, this->normals_display.size() * sizeof(float), &this->normals_display[0], GL_STATIC_DRAW);
+
+
 }
