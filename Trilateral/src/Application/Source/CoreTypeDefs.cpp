@@ -64,8 +64,9 @@ glm::vec3 symmetry_point_from_plane(Plane* plane, glm::vec3* point)
 Plane generate_plane_from_two_vectors(const glm::vec3& vec1, const glm::vec3& vec2)
 {
 	Plane p; 
-	p.normal = glm::cross(vec1, vec2);
-	p.point = vec1; 
+	p.normal = glm::normalize(glm::cross(vec1, vec2));
+	p.point = glm::normalize(vec1); 
+
 	return p; 
 }
 
