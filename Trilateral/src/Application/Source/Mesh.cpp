@@ -511,3 +511,20 @@ void Mesh::generate_normals()
 
 
 }
+
+
+unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point)
+{
+	unsigned int closest_distance_index = -1;
+	float closest_distance = INFINITY;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dist = glm::distance(m->vertices[i], point );
+		if (dist < closest_distance)
+		{
+			closest_distance = dist; 
+			closest_distance_index = i;
+		}
+	}
+	return closest_distance_index;
+}

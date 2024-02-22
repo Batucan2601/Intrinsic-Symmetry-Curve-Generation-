@@ -343,7 +343,7 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
     {
-        skeleton_generate_backbone(m_factory, skeleton);
+        skeleton_generate_backbone(m_factory, skeleton , selected_mesh);
 
         m_factory.remove_all();
         m_factory.add_all();

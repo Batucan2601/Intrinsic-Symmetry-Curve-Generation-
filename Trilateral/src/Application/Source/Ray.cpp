@@ -2,7 +2,7 @@
 #include "../Include/CoreTypeDefs.h"
 #include "glm/glm.hpp"
 
-bool ray_triangle_intersection(Ray& ray, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+bool ray_triangle_intersection(Ray& ray, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3& hit_point)
 {
 	float A, B, C, D;
     float t;
@@ -33,6 +33,7 @@ bool ray_triangle_intersection(Ray& ray, glm::vec3 p1, glm::vec3 p2, glm::vec3 p
 
     if (abs(main_triangle - (triangle1_area + triangle2_area + triangle3_area) ) <= FLOAT_COMPARISON)
     {
+        hit_point = Q;
         return true;
     }
     return false; 

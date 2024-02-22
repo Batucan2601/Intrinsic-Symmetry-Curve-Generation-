@@ -51,3 +51,4 @@ public:
 };
 
 void read_symmetry_format(char* filename, Mesh* m);
+unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point);

@@ -1,5 +1,6 @@
 #include "../Include/Skeleton.h"
 #include "../Include/Mesh.h"
+#include "../Include/ShapeDiameter.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -1004,7 +1005,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 //	
 //}
 
-void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
+void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index)
 {
 	
 	int N = skeleton.skeletonFormat.size();
@@ -1020,6 +1021,12 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 	std::vector<std::vector<int>> predecessor_list_for_end_points(N_end_points);
 	std::vector<std::vector<float>> distance_matrix(N_end_points);
 
+
+	//before generating please calculate  the sdf
+	std::vector<unsigned int>mesh_index_vertices; 
+	std::vector<float> shape_diameter_values;
+	skeleton_calculate_closest_mesh_points(skeleton, &meshFac.mesh_vec[mesh_index], mesh_index_vertices);
+	ShapeDiameter_calculate(&meshFac.mesh_vec[mesh_index], mesh_index_vertices, shape_diameter_values);
 	// brute force generating backbone
 	std::vector<BackBone> candidate_backbones; 
 	for (size_t i = 0; i < N_end_points; i++)
@@ -1192,7 +1199,9 @@ void skeleton_generate_backbone(MeshFactory& meshFac,  Skeleton skeleton)
 				
 				float db = glm::distance(backbone_point_j,backbone_point_k) / 
 				distance_matrix[distance_matrix_start_index][left_points_node_params[k].point_in_backbone]; //difference between length in backbone hitpoints
-				float dl = abs(db_j - db_k) / (db_j + db_k) * db_j; //difference between branch lengths
+				float dl = abs(db_j - db_k) / (db_j + db_k) ; //difference between branch lengths
+
+				//float d_sdf = shape_diameter_values[right_points[]] go on from there 
 
 				float diff = dl + db;
 				if (diff < minimum_node_affinity_diff)
@@ -1297,5 +1306,40 @@ void skeleton_get_distance_and_vertex_list(Skeleton&skeleton,
 		geodesic_dist += glm::distance(p_current_index, p_predecessor);
 
 		current_index = predecessor_index;
+	}
+}
+
+
+
+void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, Mesh* m, std::vector<unsigned int >& mesh_vertex_indices)
+{
+	std::vector<unsigned int> end_points;
+	skeleton_get_end_points(skeleton , end_points);
+	for (size_t i = 0; i < end_points.size(); i++)
+	{
+		glm::vec3 point = skeleton.skeletonFormat[end_points[i]].point;
+		int minimum_dist_index = -1;
+		float minimum_distance = INFINITY;
+		for (size_t j = 0; j < m->vertices.size(); j++)
+		{
+			float dist = glm::distance(point , m->vertices[i]);
+			if (dist < minimum_distance)
+			{
+				minimum_distance = dist;
+				minimum_dist_index = i;
+			}
+		}
+		mesh_vertex_indices.push_back(minimum_dist_index);
+
+	}
+}
+void skeleton_get_end_points(Skeleton& skeleton, std::vector<unsigned int >& end_vertex_indices)
+{
+	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	{
+		if (skeleton.skeletonFormat[i].label == END)
+		{
+			end_vertex_indices.push_back(i);
+		}
 	}
 }
