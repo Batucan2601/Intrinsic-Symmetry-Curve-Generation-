@@ -455,8 +455,8 @@ void Mesh::generate_normals()
 		glm::vec3 edge2 = this->vertices[this->triangles[i+2]] - this->vertices[this->triangles[i]];
 		glm::vec3 normal = glm::normalize(glm::cross(edge1 , edge2));
 		each_point_count[this->triangles[i]] += 1;
-		each_point_count[this->triangles[i]] += 1;
-		each_point_count[this->triangles[i]] += 1;
+		each_point_count[this->triangles[i+1]] += 1;
+		each_point_count[this->triangles[i+2]] += 1;
 		
 		normals[this->triangles[i]] = normals[this->triangles[i]] + normal;
 		normals[this->triangles[i+1]] = normals[this->triangles[i+1]] + normal;

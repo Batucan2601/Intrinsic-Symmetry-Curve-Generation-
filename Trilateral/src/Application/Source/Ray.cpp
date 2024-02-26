@@ -2,39 +2,46 @@
 #include "../Include/CoreTypeDefs.h"
 #include "glm/glm.hpp"
 
-bool ray_triangle_intersection(Ray& ray, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3& hit_point)
+bool ray_triangle_intersection(Ray& ray, glm::vec3 vertex0, glm::vec3 vertex1, glm::vec3 vertex2, glm::vec3& hitpoint)
 {
-	float A, B, C, D;
-    float t;
-    const float FLOAT_COMPARISON = 1e-6;
-    Plane plane= generate_plane_from_two_vectors(p2 - p1, p3 - p1);
-	get_coefficients_from_plane(plane, A, B, C, D);
-    float denom = glm::dot(plane.normal, ray.direction);
-    if (denom > 1e-6) {
-        glm::vec3 p0l0 = plane.point - ray.origin;
-        t = glm::dot(p0l0, plane.normal) / denom;
-    }
-    if (t < 0)
-    {
+    glm::vec3 edge1, edge2, h, s, q;
+    float a, f, u, v;
+
+    edge1.x = vertex1.x - vertex0.x;
+    edge1.y = vertex1.y - vertex0.y;
+    edge1.z = vertex1.z - vertex0.z;
+    edge2.x = vertex2.x - vertex0.x;
+    edge2.y = vertex2.y - vertex0.y;
+    edge2.z = vertex2.z - vertex0.z;
+
+    h = glm::cross(ray.direction, edge2);
+    a = glm::dot(edge1, h);
+
+    if (a > -0.00001 && a < 0.00001)
         return false;
-    }
-    //now check if inside a triangle 
 
-    //barycentric coord
+    f = 1.0 / a;
+    s.x = ray.origin.x - vertex0.x;
+    s.y = ray.origin.y - vertex0.y;
+    s.z = ray.origin.z - vertex0.z;
+    u = f * glm::dot(s, h);
 
-    glm::vec3 Q = ray.origin + ray.direction * t;
+    if (u < 0.0 || u > 1.0)
+        return false;
 
-    //generate 3 triangles
-    float triangle1_area = glm::length(glm::cross(p1 - Q, p2 - Q));  //ABQ
-    float triangle2_area = glm::length(glm::cross(p1 - Q, p3 - Q));  //ABQ
-    float triangle3_area = glm::length(glm::cross(p2 - Q, p3 - Q));  //ABQ
-    
-    float main_triangle = glm::length(glm::cross(p1 - Q, p2 - Q));
+    q = glm::cross(s, edge1);
+    v = f * glm::dot(ray.direction, q);
 
-    if (abs(main_triangle - (triangle1_area + triangle2_area + triangle3_area) ) <= FLOAT_COMPARISON)
-    {
-        hit_point = Q;
+    if (v < 0.0 || u + v > 1.0)
+        return false;
+
+    float t = f * glm::dot(edge2, q);
+    if (t > 0.00001) { // ray intersection
+        hitpoint.x = ray.origin.x + ray.direction.x * t;
+        hitpoint.y = ray.origin.y + ray.direction.y * t;
+        hitpoint.z = ray.origin.z + ray.direction.z * t;
         return true;
     }
-    return false; 
+
+    return false;
 }

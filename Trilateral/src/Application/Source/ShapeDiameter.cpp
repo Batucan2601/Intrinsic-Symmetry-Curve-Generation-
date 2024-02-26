@@ -25,7 +25,7 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> random_r (1, CONE_RADIUS * CONE_RADIUS_MULTIPLIER); // distribution in range [1, 6]
+	std::uniform_int_distribution<std::mt19937::result_type> random_r(1, CONE_RADIUS * CONE_RADIUS_MULTIPLIER); // distribution in range [1, 6]
 
 	// save each of the distances
 	// for each endpoint
@@ -64,7 +64,7 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 				if (ray_triangle_intersection(random_ray, p1, p2, p3, hit_point))
 				{
 					float dist= glm::distance( ray.origin , hit_point);
-					if (dist < dist)
+					if (dist < closest_dist)
 					{
 						closest_triangle_index = k;
 						closest_dist  = dist;
@@ -72,6 +72,34 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 					}
 				}
 
+			}
+		/*	if (closest_triangle_index == -1)
+			{
+				mesh->colors[indices[i]] = glm::vec3(255.0f ,0.0f , 0.0f );
+				break;
+			}*/
+			if (closest_triangle_index == -1) //somehow normal is inverted
+			{
+				Ray random_ray_inverse = random_ray;
+				random_ray_inverse.direction = -1.0f * random_ray.direction;
+				for (size_t k = 0; k < mesh->triangles.size(); k += 3)
+				{
+
+					glm::vec3 p1 = mesh->vertices[mesh->triangles[k]];
+					glm::vec3 p2 = mesh->vertices[mesh->triangles[k + 1]];
+					glm::vec3 p3 = mesh->vertices[mesh->triangles[k + 2]];
+					if (ray_triangle_intersection(random_ray_inverse, p1, p2, p3, hit_point))
+					{
+						float dist = glm::distance(ray.origin, hit_point);
+						if (dist < closest_dist)
+						{
+							closest_triangle_index = k;
+							closest_dist = dist;
+
+						}
+					}
+
+				}
 			}
 			//compute the closest again
 			glm::vec3 p1 = mesh->vertices[mesh->triangles[closest_triangle_index]];

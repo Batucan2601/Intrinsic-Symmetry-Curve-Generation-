@@ -8,6 +8,7 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/Skeleton.h"
 #include "../Include/NLateralDescriptor.h"
+#include "../Include/ShapeDiameter.h"
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -348,6 +349,20 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("Shape diameter function "))
+    {
+        std::vector<float> shape_diameter;
+        std::vector<unsigned int> indices;
+        for (size_t i = 0; i < 1; i++)
+        {
+            indices.push_back(522);
+        }
+        ShapeDiameter_calculate(&m_factory.mesh_vec[selected_mesh], indices, shape_diameter);
+        
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+
 }
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {

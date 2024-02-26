@@ -1199,9 +1199,28 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 				
 				float db = glm::distance(backbone_point_j,backbone_point_k) / 
 				distance_matrix[distance_matrix_start_index][left_points_node_params[k].point_in_backbone]; //difference between length in backbone hitpoints
-				float dl = abs(db_j - db_k) / (db_j + db_k) ; //difference between branch lengths
+				float dl = std::fabs(db_j - db_k) / (db_j + db_k) ; //difference between branch lengths
 
-				//float d_sdf = shape_diameter_values[right_points[]] go on from there 
+				int right_index = -1;
+				int left_index = -1;
+				//inefficient
+				for (size_t t = 0; t < end_point_indices.size(); t++)
+				{
+					if (end_point_indices[t] == right_points[j])
+					{
+						right_index = t;
+						break;
+					}
+				}//inefficient
+				for (size_t t = 0; t < end_point_indices.size(); t++)
+				{
+					if (end_point_indices[t] == left_points[k])
+					{
+						left_index = t;
+						break;
+					}
+				}
+				float d_sdf = std::fabs(shape_diameter_values[right_index] - shape_diameter_values[left_index]);
 
 				float diff = dl + db;
 				if (diff < minimum_node_affinity_diff)
@@ -1322,11 +1341,11 @@ void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, Mesh* m, std::ve
 		float minimum_distance = INFINITY;
 		for (size_t j = 0; j < m->vertices.size(); j++)
 		{
-			float dist = glm::distance(point , m->vertices[i]);
+			float dist = glm::distance(point , m->vertices[j]);
 			if (dist < minimum_distance)
 			{
 				minimum_distance = dist;
-				minimum_dist_index = i;
+				minimum_dist_index = j;
 			}
 		}
 		mesh_vertex_indices.push_back(minimum_dist_index);

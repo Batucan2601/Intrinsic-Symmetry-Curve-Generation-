@@ -13,6 +13,8 @@
 #include <map>
 #include "Include/Sampling.h"
 #include "Include/Mesh_imgui.h"
+#include "Include/Ray.h"
+
 //include prototypes
 #include "Include/Prototypes.h"
 //#include "Mesh.h"
@@ -245,7 +247,7 @@ int main(void)
     glGenBuffers(1, &VBO_pairs);
 
 
-    
+
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     
     

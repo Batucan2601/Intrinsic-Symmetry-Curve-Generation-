@@ -1,3 +1,4 @@
+#pragma once 
 #include "../Include/Mesh.h"
 
 typedef struct
