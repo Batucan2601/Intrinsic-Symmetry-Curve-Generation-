@@ -1192,6 +1192,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 			int mimimum_index = -1;
 			float minimum_node_affinity_diff = INFINITY;
 
+			
 			for (size_t k = 0; k < left_points_node_params.size(); k++)
 			{
 				float db_k = left_points_node_params[k].distance_to_backbone;
@@ -1222,12 +1223,23 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 				}
 				float d_sdf = std::fabs(shape_diameter_values[right_index] - shape_diameter_values[left_index]);
 
-				float diff = dl + db;
+
+				//lets try vectors instead
+				glm::vec3 minimum_node_affinity_right(db_j, shape_diameter_values[right_index] , db);
+				glm::vec3 minimum_node_affinity_left(db_k, shape_diameter_values[left_index] , db);
+				
+				float diff = glm::distance(minimum_node_affinity_right, minimum_node_affinity_left);
+				if (diff < minimum_node_affinity_diff)
+				{
+					minimum_node_affinity_diff = diff;
+					mimimum_index = k;
+				}
+				/*float diff = dl + db + d_sdf;
 				if (diff < minimum_node_affinity_diff)
 				{
 					minimum_node_affinity_diff = diff; 
 					mimimum_index = k;
-				}
+				}*/
 			}
 			std::pair<unsigned int, unsigned int> point_index_pair;
 			point_index_pair.first = right_points[j];
