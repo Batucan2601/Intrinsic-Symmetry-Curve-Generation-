@@ -6,6 +6,7 @@
 #include <fstream>
 #include <src/Application/Include/MeshFactory.h>
 #include <GL/glew.h>
+#include <unordered_set>
 
 
 #pragma region VIDEO-TO-POSE 3D repo functions legacy for now
@@ -1005,7 +1006,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 //	
 //}
 
-void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index)
+void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone , std::vector<std::pair<unsigned int, unsigned int >>& best_backbone_pairs)
 {
 	
 	int N = skeleton.skeletonFormat.size();
@@ -1225,8 +1226,8 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 
 
 				//lets try vectors instead
-				glm::vec3 minimum_node_affinity_right(db_j, shape_diameter_values[right_index] , db);
-				glm::vec3 minimum_node_affinity_left(db_k, shape_diameter_values[left_index] , db);
+				glm::vec3 minimum_node_affinity_right(db_j / (db_j + db_k), shape_diameter_values[right_index] , db);
+				glm::vec3 minimum_node_affinity_left(db_k / (db_j + db_k), shape_diameter_values[left_index] , db);
 				
 				float diff = glm::distance(minimum_node_affinity_right, minimum_node_affinity_left);
 				if (diff < minimum_node_affinity_diff)
@@ -1265,7 +1266,8 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 	}
 	
 	// now we decided that the best backbone is minimum_affinity_diff_index
-	BackBone best_backbone = candidate_backbones[minimum_affinity_diff_index];
+	best_backbone = candidate_backbones[minimum_affinity_diff_index];
+	best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
 	//paint the backbone to blue
 	meshFac.mesh_skeleton_vec.clear();
 	glBindVertexArray(meshFac.skeleton_VAO);
@@ -1292,6 +1294,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 		meshFac.mesh_skeleton_vec.push_back(255.0f);
 	}
 	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.size() * sizeof(float), &meshFac.mesh_skeleton_vec[0], GL_STATIC_DRAW);
+
 }
 void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices, 
 std::vector<float>& distance_matrix,std::vector<int>& predecessor_list)
@@ -1372,5 +1375,44 @@ void skeleton_get_end_points(Skeleton& skeleton, std::vector<unsigned int >& end
 		{
 			end_vertex_indices.push_back(i);
 		}
+	}
+}
+/*
+	TODO: The N laterals should be grouped according to best backbione as a symettry plane
+	1 - regroup N_laterals ( endpoints ) in according to the symmetry plane 
+*/
+void skeleton_get_N_Lateral_points(MeshFactory& m_factory, Skeleton& skeleton, unsigned int selected_mesh , BackBone& best_backbone ,
+std::vector<std::pair<unsigned int, unsigned int>> best_backbone_point_pairs, std::vector<unsigned int>& right_mesh_indices,
+std::vector<unsigned int>& left_mesh_indices)
+{
+	std::vector<unsigned int> left_skeleton_indices; 
+	std::vector<unsigned int> right_skeleton_indices;
+	std::vector<unsigned int> mesh_vertex_indices;
+	
+
+	for (size_t i = 0; i < best_backbone_point_pairs.size(); i++)
+	{
+		right_skeleton_indices.push_back(best_backbone_point_pairs[i].first);
+		left_skeleton_indices.push_back(best_backbone_point_pairs[i].second);
+	}
+	//delete duplicates
+	std::unordered_set<unsigned int> right_indices_unique(right_skeleton_indices.begin(), right_skeleton_indices.end());
+	std::unordered_set<unsigned int> left_indices_unique(left_skeleton_indices.begin(), left_skeleton_indices.end());
+
+	right_skeleton_indices.assign(right_indices_unique.begin(), right_indices_unique.end());
+	left_skeleton_indices.assign(left_indices_unique.begin(), left_indices_unique.end());
+
+	//now convert back to mesh points from skeleton
+	skeleton_calculate_closest_mesh_points(skeleton, &m_factory.mesh_vec[selected_mesh], mesh_vertex_indices);
+
+	// this generates every skeleton point do a  n for loop to get the needed indices for mesh
+	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	{
+		right_mesh_indices.push_back(right_skeleton_indices[i]);
+	}
+	// this generates every skeleton point do  a  n for loop to get the needed indices for mesh
+	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
+	{
+		left_mesh_indices.push_back(left_skeleton_indices[i]);
 	}
 }

@@ -63,3 +63,6 @@ void start_n_lateral_algorithm(Mesh* m , NLateralParameters N_LATERAL_PARAMETERS
 void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& mesh, NLateralParameters N_LATERAL_PARAMETERS);
 
 void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);
+
+void start_n_lateral_algorithm_with_skeleton_end_points(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS,
+	std::vector<unsigned int>& mesh_left_endpoints, std::vector<unsigned int>& mesh_right_endpoints);

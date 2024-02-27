@@ -318,6 +318,8 @@ static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
 static std::vector<float> skeleton_lines; 
 static Skeleton skeleton;
+static BackBone best_backbone;
+static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
 
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
@@ -340,12 +342,19 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     ImGui::LabelText("Skeleton generation with Cohen-Or's method" , "Value");
     if (ImGui::Button("Generate Skeleton"))
     {
-        skeleton = skeleton_read_swc_file(m_factory ,"0001.isometry.1.swc");
+        skeleton = skeleton_read_swc_file(m_factory ,"0001.isometry.8.swc");
     }
     if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
     {
-        skeleton_generate_backbone(m_factory, skeleton , selected_mesh);
+        std::vector<unsigned int> right_mesh_end_points;
+        std::vector<unsigned int> left_mesh_end_points;
+        skeleton_generate_backbone(m_factory, skeleton , selected_mesh ,best_backbone , skeleton_best_end_point_pairs);
+        skeleton_get_N_Lateral_points(m_factory, skeleton, selected_mesh , best_backbone, skeleton_best_end_point_pairs
+        , right_mesh_end_points, left_mesh_end_points);
 
+        start_n_lateral_algorithm_with_skeleton_end_points(&m_factory.mesh_vec[selected_mesh], N_LATERAL_PARAMETERS,
+            left_mesh_end_points, right_mesh_end_points);
+        
         m_factory.remove_all();
         m_factory.add_all();
     }

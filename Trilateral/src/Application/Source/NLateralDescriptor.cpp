@@ -740,3 +740,101 @@ void start_n_lateral_algorithm_for_mesh(Skeleton& skeleton, NLateralParameters N
 	}*/
 
 }
+
+
+void start_n_lateral_algorithm_with_skeleton_end_points(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS,
+std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_right_endpoints)
+{
+	// trilateral computation
+	std::vector<NLateralDescriptor> positive_mesh_N_lateral_descriptor;
+	std::vector<NLateralDescriptor> negative_mesh_N_lateral_descriptor;
+	if (N_LATERAL_PARAMETERS.current_n_lateral_construction_method.find("closest") != std::string::npos)
+	{
+		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(m, mesh_left_endpoints, N_LATERAL_PARAMETERS);
+		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(m, mesh_right_endpoints, N_LATERAL_PARAMETERS);
+	}
+	NLateral_parameters_calculate_maximums(m, N_LATERAL_PARAMETERS, mesh_left_endpoints, mesh_right_endpoints);
+
+	// write a function for comparing two descriptor
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_n_lateral_descriptors(m, positive_mesh_N_lateral_descriptor, negative_mesh_N_lateral_descriptor
+		, N_LATERAL_PARAMETERS);
+
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	float total_error = get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+
+	// now use fps points to get maximum distance in order to compare to 
+	float maximum_geodesic_distance = 0;
+	for (size_t i = 0; i < mesh_right_endpoints.size(); i++)
+	{
+		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*m, mesh_right_endpoints[i]);
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (maximum_geodesic_distance < distances[j])
+			{
+				maximum_geodesic_distance = distances[j];
+			}
+		}
+	}
+
+	// color left red
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 0;
+		m->colors[resemblance_pairs[i].second].b = 255;
+	}
+
+	m->calculated_symmetry_pairs = resemblance_pairs;
+
+	//L_MDS_mesh.colors = mesh->colors;
+	//*mesh = L_MDS_mesh;
+	//color right  blue 
+
+	/*L_MDS_mesh.colors.clear();
+	for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	{
+		if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
+		{
+			L_MDS_mesh.colors.push_back(glm::vec3(255.0 , 0.0 , 0.0 ) );
+		}
+		else
+		{
+			L_MDS_mesh.colors.push_back(glm::vec3(0, 255, 0.0));
+		}
+	}
+	*mesh = L_MDS_mesh;*/
+
+	// file creating
+	ofstream txtFile("C:/Users/BATU/source/repos/Trilateral/Results/" + m->file_name + ".txt");
+	// 
+	txtFile << "===============================================================================" << std::endl;
+	txtFile << " N lateral " << std::endl;
+	//first write the N_lateral parameters
+	txtFile << " N ===== " << N_LATERAL_PARAMETERS.N << std::endl;
+	txtFile << "number of sampled pairs  " << N_LATERAL_PARAMETERS.no_of_N_lateral_pairs << "  " << N_LATERAL_PARAMETERS.no_of_N_lateral_pairs * 2.0 /
+		m->vertices.size() << std::endl;
+	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
+	{
+		if (N_LATERAL_PARAMETERS.parameter_checkbox[i])
+		{
+			txtFile << N_LATERAL_PARAMETERS.parameter_names[i] << "  " << N_LATERAL_PARAMETERS.parameter_weights[i] << std::endl;
+		}
+	}
+	txtFile << "===============================================================================" << std::endl;
+	float error_percentage = total_error / maximum_geodesic_distance;
+	txtFile << " geodesic error " + std::to_string(error_percentage) + "\n";
+	txtFile.close();
+
+}

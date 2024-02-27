@@ -46,10 +46,14 @@ typedef struct
 Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
 
 void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,std::vector<int>& predecessor_list, std::vector<float>& dijkstra_distances);
-void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton , unsigned int mesh_index );
+void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
+BackBone& best_backbone, std::vector<std::pair<unsigned int, unsigned int >>& best_backbone_pairs);
 void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices,
 	std::vector<float>& distance_matrix, std::vector<int>& predecessor_list_for_end_points);
 void skeleton_get_distance_and_vertex_list(Skeleton& skeleton,
 	int index1, int index2, std::vector<int>& predecessor_list, std::vector<int>& predecessor_index2_index1, float& geodesic_dist);
 void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, Mesh* m, std::vector<unsigned int >& mesh_vertex_indices);
 void skeleton_get_end_points(Skeleton& skeleton, std::vector<unsigned int >& mesh_vertex_indices);
+void skeleton_get_N_Lateral_points(MeshFactory& m_factory, Skeleton& skeleton, unsigned int selected_mesh, BackBone& best_backbone,
+	std::vector<std::pair<unsigned int, unsigned int>> best_backbone_point_pairs, std::vector<unsigned int>& right_mesh_indices,
+	std::vector<unsigned int>& left_mesh_indices);

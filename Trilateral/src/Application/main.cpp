@@ -286,7 +286,7 @@ int main(void)
     Mesh m5((char*)"../../Trilateral/Mesh/faust/tr_reg_007.ply");*/
 
 
-    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.12.off");
+    Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.8.off");
    
     
     
