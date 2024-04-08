@@ -1025,46 +1025,37 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 			}
 		}
 	}
-	// is_visited_interior = true is_visited 0 is the correct interior 
-	// is_visited_interior = false is_visited 1 is the correct interior 
-   // now recolor
-	std::vector<glm::vec3> new_color_buffer;
+	//fix is_visited_interior 
 	if (is_visited_interior)
 	{
-		for (size_t i = 0; i < m->colors.size(); i++)
+		for (size_t i = 0; i < m->vertices.size(); i++)
 		{
-
-			if (is_visited[i] == -1) //edge 
+			if (is_visited[i] == 1)
 			{
-				new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-			}
-			else if (is_visited[i] == 1)
-			{
-				new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+				is_visited[i] = 0;
 			}
 			else if (is_visited[i] == 0)
 			{
-				new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
+				is_visited[i] = 1; 
 			}
 		}
 	}
-	else
+   // now recolor
+	std::vector<glm::vec3> new_color_buffer;
+	for (size_t i = 0; i < m->colors.size(); i++)
 	{
-		for (size_t i = 0; i < m->colors.size(); i++)
-		{
 
-			if (is_visited[i] == -1) //edge 
-			{
-				new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-			}
-			else if (is_visited[i] == 0) //not visited 
-			{
-				new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-			}
-			else if (is_visited[i] == 1)
-			{
-				new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-			}
+		if (is_visited[i] == -1) //edge 
+		{
+			new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		else if (is_visited[i] == 0) //not visited 
+		{
+			new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+		}
+		else if (is_visited[i] == 1)
+		{
+			new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 	}
 	m->colors = new_color_buffer;
@@ -2963,4 +2954,14 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	 std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl;
 	 float error_percentage = (float)total_error / maximum_geodesic_distance;
 	 //return plane;
+}
+
+void trilateral_ROI_area(int* trilateral_vertices, bool& is_visited_interior, float& total_area)
+{
+	total_area = 0;
+
+	if (is_visited_interior)
+	{
+
+	}
 }
