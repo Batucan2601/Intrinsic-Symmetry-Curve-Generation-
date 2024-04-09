@@ -340,8 +340,8 @@ void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 
 //region of interest
-int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
-void trilateral_ROI_area(int* trilateral_vertices, bool& is_visited_interior, float& total_area);
+std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
 
 
 // sampling

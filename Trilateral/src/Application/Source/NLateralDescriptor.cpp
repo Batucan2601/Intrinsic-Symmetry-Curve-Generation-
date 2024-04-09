@@ -785,7 +785,7 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 
 	// color left red
 	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	/*for (size_t i = 0; i < resemblance_pairs.size(); i++)
 	{
 		m->colors[resemblance_pairs[i].first].r = 255;
 		m->colors[resemblance_pairs[i].first].g = 0;
@@ -794,6 +794,34 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 		m->colors[resemblance_pairs[i].second].r = 0;
 		m->colors[resemblance_pairs[i].second].g = 0;
 		m->colors[resemblance_pairs[i].second].b = 255;
+	}*/
+	for (size_t i = 0; i < positive_mesh_N_lateral_descriptor.size(); i++)
+	{
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[0]].r = 255;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[0]].g = 0;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[0]].b = 0;
+
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[1]].r = 255;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[1]].g = 0;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[1]].b = 0;
+
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[2]].r = 255;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[2]].g = 0;
+		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[2]].b = 0;
+	}
+	for (size_t i = 0; i < negative_mesh_N_lateral_descriptor.size(); i++)
+	{
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[0]].r = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[0]].g = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[0]].b = 255;
+
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[1]].r = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[1]].g = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[1]].b = 255;
+
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].r = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].g = 0;
+		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].b = 255;
 	}
 
 	m->calculated_symmetry_pairs = resemblance_pairs;
@@ -837,4 +865,14 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 	txtFile << " geodesic error " + std::to_string(error_percentage) + "\n";
 	txtFile.close();
 
+}
+
+void  NLateralDescriptor::get_ROI()
+{
+	float total_area = 0;
+	bool is_visited_interior = false;
+	std::vector<int> roi_indices =  trialteral_ROI(&this->mesh, this->point_indices[0], this->point_indices[1], this->point_indices[2], 1, is_visited_interior);
+	trilateral_ROI_area(&this->mesh, roi_indices, total_area);
+
+	this->area = total_area;
 }

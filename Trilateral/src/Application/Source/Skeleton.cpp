@@ -1058,7 +1058,6 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 				backbone.vertex_list = vertex_list_index1_index2;
 
 				candidate_backbones.push_back(backbone);
-
 				
 			}
 			predecessor_list_for_end_points[i] = point_list;

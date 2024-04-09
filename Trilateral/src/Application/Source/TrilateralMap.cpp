@@ -902,9 +902,8 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 
 
 
- int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior)
+ std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior)
 {
-	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
 	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
 	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
@@ -931,7 +930,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
 
 	//lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
-	int* is_visited = new int[m->vertices.size()];
+	std::vector<int> is_visited(m->vertices.size());
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		is_visited[i] = 0;
@@ -2328,7 +2327,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 //		closeness_of_points[i][j] = 
 //	}
 //}
-void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int division_no) // sample size must be bigger than 3 
+/*void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int division_no) // sample size must be bigger than 3 
 {
 	//get the histogram of the traingle with the most near 2 points
 	Mesh* m1 = &mesh_fac.mesh_vec[mesh_index1];
@@ -2575,7 +2574,7 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 
 	m1->colors = m1_colors;
 	m2->colors = m2_colors;
-}
+}*/
 
 //from the paper Robust3DShapeCorrespondenceintheSpectralDomain 4.1 
  std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index, std::vector<unsigned int> landmark_vertices)
@@ -2955,13 +2954,39 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 	 float error_percentage = (float)total_error / maximum_geodesic_distance;
 	 //return plane;
 }
-
-void trilateral_ROI_area(int* trilateral_vertices, bool& is_visited_interior, float& total_area)
+void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, float& total_area)
 {
 	total_area = 0;
-
-	if (is_visited_interior)
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
 	{
+		int triangle_index1 = m->triangles[i];
+		int triangle_index2 = m->triangles[i + 1 ];
+		int triangle_index3 = m->triangles[i + 2 ];
 
+		bool is_triangle_index1_inside = false;
+		bool is_triangle_index2_inside = false;
+		bool is_triangle_index3_inside = false;
+		
+		if (trilateral_vertices[triangle_index1] != 0)
+		{
+			is_triangle_index1_inside = true; 
+		}
+		if (trilateral_vertices[triangle_index2] != 0)
+		{
+			is_triangle_index2_inside = true;
+		}
+		if (trilateral_vertices[triangle_index3] != 0)
+		{
+			is_triangle_index3_inside = true;
+		}
+		
+		if (is_triangle_index1_inside && is_triangle_index2_inside && is_triangle_index3_inside)
+		{
+			glm::vec3 p1 = m->vertices[triangle_index1];
+			glm::vec3 p2 = m->vertices[triangle_index2];
+			glm::vec3 p3 = m->vertices[triangle_index3];
+			total_area += compute_triangle_area(p1, p2, p3);
+		}
 	}
+
 }

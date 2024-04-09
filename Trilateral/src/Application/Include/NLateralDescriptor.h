@@ -19,7 +19,7 @@ struct NLateralDescriptor
 	void get_geodesic_distances();
 	void get_curvatures();
 	void get_k_ring_areas(int K);
-
+	void get_ROI();
 
 	
 };
