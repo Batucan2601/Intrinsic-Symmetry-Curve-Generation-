@@ -1006,7 +1006,8 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 //	
 //}
 
-void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone , std::vector<std::pair<unsigned int, unsigned int >>& best_backbone_pairs)
+void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone ,
+std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_left_points )
 {
 	
 	int N = skeleton.skeletonFormat.size();
@@ -1068,6 +1069,8 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 	}
 	std::vector<float> backbone_affinity_diffs; 
 	std::vector<std::vector<std::pair<unsigned int, unsigned int>>> backbone_pairs_vec;
+	std::vector<std::vector<unsigned int>> backbone_right_points;
+	std::vector<std::vector<unsigned int>> backbone_left_points;
 	//with each different backbone separate the endpoints into two
 	for (size_t i = 0; i < candidate_backbones.size(); i++)
 	{
@@ -1186,21 +1189,20 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 		float total_dif_on_backbone = 0; 
 		for (size_t j = 0; j < right_points_node_params.size(); j++)
 		{
-			float db_j = right_points_node_params[j].distance_to_backbone;
+			float dl_j = right_points_node_params[j].distance_to_backbone;
 			glm::vec3 backbone_point_j(skeleton.skeletonFormat[right_points_node_params[j].point_in_backbone].point);
 			
 			int mimimum_index = -1;
 			float minimum_node_affinity_diff = INFINITY;
-
 			
 			for (size_t k = 0; k < left_points_node_params.size(); k++)
 			{
-				float db_k = left_points_node_params[k].distance_to_backbone;
+				float dl_k = left_points_node_params[k].distance_to_backbone;
 				glm::vec3 backbone_point_k(skeleton.skeletonFormat[left_points_node_params[k].point_in_backbone].point);
 				
 				float db = glm::distance(backbone_point_j,backbone_point_k) / 
 				distance_matrix[distance_matrix_start_index][left_points_node_params[k].point_in_backbone]; //difference between length in backbone hitpoints
-				float dl = std::fabs(db_j - db_k) / (db_j + db_k) ; //difference between branch lengths
+				float dl = std::fabs(dl_j - dl_k) / (dl_j + dl_k) ; //difference between branch lengths
 
 				int right_index = -1;
 				int left_index = -1;
@@ -1225,8 +1227,8 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 
 
 				//lets try vectors instead
-				glm::vec3 minimum_node_affinity_right(db_j / (db_j + db_k), shape_diameter_values[right_index] , db);
-				glm::vec3 minimum_node_affinity_left(db_k / (db_j + db_k), shape_diameter_values[left_index] , db);
+				glm::vec3 minimum_node_affinity_right(dl_j / (dl_j + dl_k), shape_diameter_values[right_index] , db);
+				glm::vec3 minimum_node_affinity_left(dl_k / (dl_j + dl_k), shape_diameter_values[left_index] , db);
 				
 				float diff = glm::distance(minimum_node_affinity_right, minimum_node_affinity_left);
 				if (diff < minimum_node_affinity_diff)
@@ -1250,6 +1252,9 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 		total_dif_on_backbone /= right_points_node_params.size();
 		backbone_affinity_diffs.push_back(total_dif_on_backbone);
 		backbone_pairs_vec.push_back(backbone_pairs);
+		backbone_right_points.push_back(right_points);
+		backbone_left_points.push_back(left_points);
+
 	}
 
 	//check the best backbone diff
@@ -1266,7 +1271,9 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 	
 	// now we decided that the best backbone is minimum_affinity_diff_index
 	best_backbone = candidate_backbones[minimum_affinity_diff_index];
-	best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
+	best_right_points = backbone_right_points[minimum_affinity_diff_index];
+	best_left_points = backbone_left_points[minimum_affinity_diff_index];
+	//best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
 	//paint the backbone to blue
 	meshFac.mesh_skeleton_vec.clear();
 	glBindVertexArray(meshFac.skeleton_VAO);

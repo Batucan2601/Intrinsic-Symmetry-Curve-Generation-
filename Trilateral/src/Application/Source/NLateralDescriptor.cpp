@@ -485,7 +485,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 			{
 				if (N_LATERAL_PARAMETERS.parameter_checkbox[t])
 				{
-					if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian"))
+					if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian") != std::string::npos)
 					{
 						for (int p = 0; p < desc_j.euclidian_distances.size(); p++)
 						{
@@ -493,7 +493,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 							/  N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] ) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic") != std::string::npos)
 					{
 						for (int p = 0; p < desc_j.geodesic_distances.size(); p++)
 						{
@@ -501,7 +501,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 								/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature") != std::string::npos)
 					{
 						for (int p = 0; p < desc_j.curvatures.size(); p++)
 						{
@@ -509,7 +509,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring") != std::string::npos)
 					{
 						for (int p = 0; p < desc_j.k_ring_areas.size(); p++)
 						{
@@ -517,7 +517,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 							/ N_LATERAL_PARAMETERS.parameter_maximums["ring"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area") != std::string::npos)
 					{
 						desc_j_vectors[k](current_size++) = desc_j.area;
 					}
@@ -549,7 +549,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 			{
 				if (N_LATERAL_PARAMETERS.parameter_checkbox[k])
 				{
-					if (N_LATERAL_PARAMETERS.parameter_names[k].find("euclidian"))
+					if (N_LATERAL_PARAMETERS.parameter_names[k].find("euclidian") != std::string::npos)
 					{
 						for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
 						{
@@ -557,7 +557,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 							/ N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] )* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("geodesic"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("geodesic") != std::string::npos)
 					{
 						for (int t = 0; t < desc_i.geodesic_distances.size(); t++)
 						{
@@ -565,7 +565,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 							/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("curvature"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("curvature") != std::string::npos )
 					{
 						for (int t = 0; t < desc_i.curvatures.size(); t++)
 						{
@@ -573,7 +573,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("ring"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("ring") != std::string::npos )
 					{
 						for (int t = 0; t < desc_i.k_ring_areas.size(); t++)
 						{
@@ -581,7 +581,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 								/ N_LATERAL_PARAMETERS.parameter_maximums["ring"])* N_LATERAL_PARAMETERS.parameter_weights[k];
 						}
 					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("area"))
+					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("area") != std::string::npos )
 					{
 						desc_i_vectors[j](current_size++) = desc_i.area;
 					}
