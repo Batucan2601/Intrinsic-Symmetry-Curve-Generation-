@@ -103,7 +103,7 @@ NLateralDescriptor generate_NLateralDescriptor(Mesh* m, const std::vector<unsign
 		{
 			if (parameter_names[i].find("area") != std::string::npos)
 			{
-				//nlateralDescriptor.get
+				nlateralDescriptor.get_ROI();
 			}
 			else if (parameter_names[i].find("euclidian") != std::string::npos)
 			{
@@ -601,6 +601,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 					double dist = dif_vec.norm();
 					if (dist < smallest_dif)
 					{
+						std::cout << dif_vec << std::endl; 
 						smallest_dif = dist;
 						smallest_pair.first = i;
 						smallest_pair.second = j;
@@ -679,7 +680,9 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 			}
 			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area") != std::string::npos)
 			{
-
+				float maximum_area = -INFINITY;
+				
+				maximum_area = 1.0f;
 			}
 		}
 	}
