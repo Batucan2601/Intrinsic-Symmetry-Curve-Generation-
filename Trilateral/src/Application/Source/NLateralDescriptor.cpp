@@ -621,7 +621,7 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 	{
 		if (N_LATERAL_PARAMETERS.parameter_checkbox[i])
 		{
-			if (N_LATERAL_PARAMETERS.parameter_names[i].find("euclidian"))
+			if (N_LATERAL_PARAMETERS.parameter_names[i].find("euclidian") != std::string::npos )
 			{
 				float maximum_dist = -INFINITY; 
 				//calculate the maximum euclidian distances
@@ -637,7 +637,7 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 				}
 				N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] = maximum_dist;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("geodesic"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("geodesic") != std::string::npos )
 			{
 				float maximum_dist = -INFINITY;
 				//calculate the maximum euclidian distances
@@ -651,11 +651,11 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 				}
 				N_LATERAL_PARAMETERS.parameter_maximums["geodesic"] = maximum_dist;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("curvature"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("curvature") != std::string::npos )
 			{
 				N_LATERAL_PARAMETERS.parameter_maximums["curvature"] = 1.0;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("ring"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("ring") != std::string::npos)
 			{
 				float maximum_area = -INFINITY;
 				for (size_t j = 0; j < left.size(); j++)
@@ -677,7 +677,7 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 				N_LATERAL_PARAMETERS.parameter_maximums["ring"] = 1.0;
 
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area") != std::string::npos)
 			{
 
 			}
@@ -753,7 +753,7 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 		positive_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(m, mesh_left_endpoints, N_LATERAL_PARAMETERS);
 		negative_mesh_N_lateral_descriptor = get_N_lateral_descriptor_using_closest_pairs(m, mesh_right_endpoints, N_LATERAL_PARAMETERS);
 	}
-	//NLateral_parameters_calculate_maximums(m, N_LATERAL_PARAMETERS, mesh_left_endpoints, mesh_right_endpoints);
+	NLateral_parameters_calculate_maximums(m, N_LATERAL_PARAMETERS, mesh_left_endpoints, mesh_right_endpoints);
 
 	// write a function for comparing two descriptor
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_n_lateral_descriptors(m, positive_mesh_N_lateral_descriptor, negative_mesh_N_lateral_descriptor
