@@ -427,191 +427,136 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	{
 		if (N_LATERAL_PARAMETERS.parameter_checkbox[i])
 		{
-			if (N_LATERAL_PARAMETERS.parameter_names[i].find("euclidian"))
+			if (N_LATERAL_PARAMETERS.parameter_names[i].find("euclidian") != std::string::npos)
 			{
 				size_of_vector += N_LATERAL_PARAMETERS.N;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("geodesic"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("geodesic") != std::string::npos)
 			{
 				size_of_vector += N_LATERAL_PARAMETERS.N;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("curvature"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("curvature") != std::string::npos)
 			{
 				size_of_vector += N_LATERAL_PARAMETERS.N;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("ring"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("ring") != std::string::npos)
 			{
 				size_of_vector += N_LATERAL_PARAMETERS.N;
 			}
-			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area"))
+			else if (N_LATERAL_PARAMETERS.parameter_names[i].find("area") != std::string::npos )
 			{
 				size_of_vector += 1;
 			}
 		}
 	}
-	// need to get all of the permuations as vectors
-	std::vector<unsigned int> permutation_vector;
-	for (size_t i = 0; i < N_LATERAL_PARAMETERS.N; i++)
-	{
-		permutation_vector.push_back(i);
-	}
-
-	//all permutations for indices
-	std::vector<std::vector<unsigned int>> all_permutations;
-	do {
-		all_permutations.push_back(permutation_vector);
-	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
-
-
-
-	//calculate nlateral_vec_right for once
-	for (size_t i = 0; i < n_lateral_vec_right.size(); i++)
-	{
-		NLateralDescriptor desc_j = n_lateral_vec_right[i];
-
-		std::vector<Eigen::VectorXd>desc_j_vectors(all_permutations.size()); //size is number of permutations 
-
-		// generate vectors for all of the permutations
-		for (size_t k = 0; k < all_permutations.size(); k++)
-		{
-			desc_j_vectors[k] = Eigen::VectorXd(size_of_vector);
-		}
-
-
-		for (size_t k = 0; k < all_permutations.size(); k++)
-		{
-			int current_size = 0;
-			for (size_t t = 0; t < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; t++)
-			{
-				if (N_LATERAL_PARAMETERS.parameter_checkbox[t])
-				{
-					if (N_LATERAL_PARAMETERS.parameter_names[t].find("euclidian") != std::string::npos)
-					{
-						for (int p = 0; p < desc_j.euclidian_distances.size(); p++)
-						{
-							desc_j_vectors[k](current_size++) = ( desc_j.euclidian_distances[0][all_permutations[k][p]] 
-							/  N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] ) * N_LATERAL_PARAMETERS.parameter_weights[t];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("geodesic") != std::string::npos)
-					{
-						for (int p = 0; p < desc_j.geodesic_distances.size(); p++)
-						{
-							desc_j_vectors[k](current_size++) = (desc_j.geodesic_distances[0][all_permutations[k][p]]
-								/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("curvature") != std::string::npos)
-					{
-						for (int p = 0; p < desc_j.curvatures.size(); p++)
-						{
-							desc_j_vectors[k](current_size++) = (desc_j.curvatures[0][all_permutations[k][p]]
-								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("ring") != std::string::npos)
-					{
-						for (int p = 0; p < desc_j.k_ring_areas.size(); p++)
-						{
-							desc_j_vectors[k](current_size++) = (desc_j.k_ring_areas[all_permutations[k][p]]
-							/ N_LATERAL_PARAMETERS.parameter_maximums["ring"]) * N_LATERAL_PARAMETERS.parameter_weights[t];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[t].find("area") != std::string::npos)
-					{
-						desc_j_vectors[k](current_size++) = desc_j.area;
-					}
-				}
-			}
-		}
-		n_lateral_right_vectors.push_back(desc_j_vectors);
-	}
+	
 	for (size_t i = 0; i < nlateral_vec_left.size(); i++)
 	{
-		//for comparisons in the end
-		float smallest_dif = INFINITY;
-		std::pair<unsigned int, unsigned int> smallest_pair; // in terms of indices
-
-
 		NLateralDescriptor desc_i = nlateral_vec_left[i];
-		std::vector<Eigen::VectorXd>desc_i_vectors(all_permutations.size()); //size is number of permutations 
+		float minimum_dist = INFINITY;
 
-		// generate vectors for all of the permutations
-		for (size_t j = 0; j < all_permutations.size(); j++)
+		Eigen::VectorXf vector_i(size_of_vector);
+		int dynamic_vec_size = 0;
+		int closest_index_j = -1;
+
+		for (size_t j = 0; j < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; j++)
 		{
-			desc_i_vectors[j] = Eigen::VectorXd(size_of_vector);
-		}
-		// fill all of the vectors
-		for (size_t j = 0; j < all_permutations.size(); j++)
-		{
-			int current_size = 0;
-			for (size_t k = 0; k < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; k++)
+			if (N_LATERAL_PARAMETERS.parameter_checkbox[j])
 			{
-				if (N_LATERAL_PARAMETERS.parameter_checkbox[k])
+				if (N_LATERAL_PARAMETERS.parameter_names[j].find("euclidian") != std::string::npos)
 				{
-					if (N_LATERAL_PARAMETERS.parameter_names[k].find("euclidian") != std::string::npos)
+					for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
 					{
-						for (int t = 0; t < desc_i.euclidian_distances.size(); t++)
-						{
-							desc_i_vectors[j](current_size++) = (desc_i.euclidian_distances[0][all_permutations[j][t]]
-							/ N_LATERAL_PARAMETERS.parameter_maximums["euclidian"] )* N_LATERAL_PARAMETERS.parameter_weights[k];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("geodesic") != std::string::npos)
-					{
-						for (int t = 0; t < desc_i.geodesic_distances.size(); t++)
-						{
-							desc_i_vectors[j](current_size++) = (desc_i.geodesic_distances[0][all_permutations[j][t]]
-							/ N_LATERAL_PARAMETERS.parameter_maximums["geodesic"])* N_LATERAL_PARAMETERS.parameter_weights[k];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("curvature") != std::string::npos )
-					{
-						for (int t = 0; t < desc_i.curvatures.size(); t++)
-						{
-							desc_i_vectors[j](current_size++) = (desc_i.curvatures[0][all_permutations[j][t]]
-								/ N_LATERAL_PARAMETERS.parameter_maximums["curvature"])* N_LATERAL_PARAMETERS.parameter_weights[k];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("ring") != std::string::npos )
-					{
-						for (int t = 0; t < desc_i.k_ring_areas.size(); t++)
-						{
-							desc_i_vectors[j](current_size++) = (desc_i.k_ring_areas[all_permutations[j][t]]
-								/ N_LATERAL_PARAMETERS.parameter_maximums["ring"])* N_LATERAL_PARAMETERS.parameter_weights[k];
-						}
-					}
-					else if (N_LATERAL_PARAMETERS.parameter_names[k].find("area") != std::string::npos )
-					{
-						desc_i_vectors[j](current_size++) = desc_i.area;
+						vector_i(dynamic_vec_size++) = desc_i.euclidian_distances[0][k];
 					}
 				}
-			}
-		
-		}
-
-		for (size_t j = 0; j < n_lateral_right_vectors.size(); j++)
-		{
-			//compare all
-			for (size_t k = 0; k < all_permutations.size(); k++)
-			{
-				for (size_t t = 0; t < all_permutations.size(); t++)
+				else if (N_LATERAL_PARAMETERS.parameter_names[j].find("geodesic") != std::string::npos)
 				{
-					Eigen::VectorXd dif_vec = desc_i_vectors[k] - n_lateral_right_vectors[j][t];
-					double dist = dif_vec.norm();
-					if (dist < smallest_dif)
+					for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
 					{
-						std::cout << dif_vec << std::endl; 
-						smallest_dif = dist;
-						smallest_pair.first = i;
-						smallest_pair.second = j;
+						vector_i(dynamic_vec_size++) = desc_i.geodesic_distances[0][k];
 					}
+				}
+				else if (N_LATERAL_PARAMETERS.parameter_names[j].find("curvature") != std::string::npos)
+				{
+					for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+					{
+						vector_i(dynamic_vec_size++) = desc_i.euclidian_distances[0][k];
+					}
+				}
+				else if (N_LATERAL_PARAMETERS.parameter_names[j].find("ring") != std::string::npos)
+				{
+					for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+					{
+						vector_i(dynamic_vec_size++) = desc_i.euclidian_distances[0][k];
+					}
+				}
+				else if (N_LATERAL_PARAMETERS.parameter_names[j].find("area") != std::string::npos)
+				{
+						vector_i(dynamic_vec_size++) = desc_i.area;
 				}
 			}
 		}
-		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[smallest_pair.first].point_indices[0], n_lateral_vec_right[smallest_pair.second].point_indices[0]));
 
+
+		for (size_t j = 0; j < n_lateral_vec_right.size(); j++)
+		{
+			NLateralDescriptor desc_j = n_lateral_vec_right[j];
+			Eigen::VectorXf vector_j(size_of_vector);
+			int dynamic_vec_size = 0;
+			for (size_t j = 0; j < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; j++)
+			{
+				if (N_LATERAL_PARAMETERS.parameter_checkbox[j])
+				{
+					if (N_LATERAL_PARAMETERS.parameter_names[j].find("euclidian") != std::string::npos)
+					{
+						for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+						{
+							vector_j(dynamic_vec_size++) = desc_j.euclidian_distances[0][k];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[j].find("geodesic") != std::string::npos)
+					{
+						for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+						{
+							vector_j(dynamic_vec_size++) = desc_j.geodesic_distances[0][k];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[j].find("curvature") != std::string::npos)
+					{
+						for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+						{
+							vector_j(dynamic_vec_size++) = desc_j.euclidian_distances[0][k];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[j].find("ring") != std::string::npos)
+					{
+						for (size_t k = 0; k < N_LATERAL_PARAMETERS.N; k++)
+						{
+							vector_j(dynamic_vec_size++) = desc_j.euclidian_distances[0][k];
+						}
+					}
+					else if (N_LATERAL_PARAMETERS.parameter_names[j].find("area") != std::string::npos)
+					{
+						vector_j(dynamic_vec_size++) = desc_j.area;
+					}
+				}
+			}
+
+
+			Eigen::VectorXf dif = vector_i - vector_j;
+			float norm = dif.norm();
+			if (minimum_dist > norm)
+			{
+				minimum_dist = norm;
+				closest_index_j = j;
+			}
+
+		}
+
+		resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(nlateral_vec_left[i].point_indices[0], n_lateral_vec_right[closest_index_j].point_indices[0]));
 	}
+
 	return resemblance_pairs;
 }
 
@@ -798,7 +743,7 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 		m->colors[resemblance_pairs[i].second].g = 0;
 		m->colors[resemblance_pairs[i].second].b = 255;
 	}*/
-	for (size_t i = 0; i < positive_mesh_N_lateral_descriptor.size(); i++)
+	/*for (size_t i = 0; i < positive_mesh_N_lateral_descriptor.size(); i++)
 	{
 		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[0]].r = 255;
 		m->colors[positive_mesh_N_lateral_descriptor[i].point_indices[0]].g = 0;
@@ -825,9 +770,28 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].r = 0;
 		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].g = 0;
 		m->colors[negative_mesh_N_lateral_descriptor[i].point_indices[2]].b = 255;
+	}*/
+
+	for (size_t i = 0; i < mesh_left_endpoints.size(); i++)
+	{
+		m->colors[mesh_left_endpoints[i]].r = 0;
+		m->colors[mesh_left_endpoints[i]].g = 0;
+		m->colors[mesh_left_endpoints[i]].b = 255;
+	}
+
+	for (size_t i = 0; i < mesh_right_endpoints.size(); i++)
+	{
+		m->colors[mesh_right_endpoints[i]].r = 0;
+		m->colors[mesh_right_endpoints[i]].g = 255;
+		m->colors[mesh_right_endpoints[i]].b = 0;
 	}
 
 	m->calculated_symmetry_pairs = resemblance_pairs;
+
+
+
+
+
 
 	//L_MDS_mesh.colors = mesh->colors;
 	//*mesh = L_MDS_mesh;

@@ -1138,12 +1138,12 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 				glm::vec3 direction = glm::normalize(direction_end - direction_start);
 				if (glm::dot(direction, normal) > 0)
 				{
-					right_points.push_back(end_point_indices[j]);
+					right_points.push_back(mesh_index_vertices[j]);
 					right_points_node_params.push_back(param);
 				}
 				else
 				{
-					left_points.push_back(end_point_indices[j]);
+					left_points.push_back(mesh_index_vertices[j]);
 					left_points_node_params.push_back(param);
 				}
 #pragma endregion WRONG 
@@ -1207,17 +1207,17 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 				int right_index = -1;
 				int left_index = -1;
 				//inefficient
-				for (size_t t = 0; t < end_point_indices.size(); t++)
+				for (size_t t = 0; t < mesh_index_vertices.size(); t++)
 				{
-					if (end_point_indices[t] == right_points[j])
+					if (mesh_index_vertices[t] == right_points[j])
 					{
 						right_index = t;
 						break;
 					}
 				}//inefficient
-				for (size_t t = 0; t < end_point_indices.size(); t++)
+				for (size_t t = 0; t < mesh_index_vertices.size(); t++)
 				{
-					if (end_point_indices[t] == left_points[k])
+					if (mesh_index_vertices[t] == left_points[k])
 					{
 						left_index = t;
 						break;
