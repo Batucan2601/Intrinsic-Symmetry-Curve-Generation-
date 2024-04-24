@@ -69,7 +69,18 @@ Plane generate_plane_from_two_vectors(const glm::vec3& vec1, const glm::vec3& ve
 
 	return p; 
 }
+Plane generate_plane_from_three_points(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3)
+{
+	Plane p;
 
+	glm::vec3 v1 = p2 - p1;
+	glm::vec3 v2 = p3 - p1;
+	glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+	//float d = -glm::dot(normal, p1);
+	p.normal = normal; 
+	p.point = p1; 
+	return p;
+}
 
 // Check if two line segments intersect
 static bool is_line_segments_intersect(const glm::vec3& p1, const glm::vec3&  q1, const glm::vec3&  p2, const glm::vec3&  q2) {
