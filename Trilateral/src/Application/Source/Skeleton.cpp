@@ -7,7 +7,7 @@
 #include <src/Application/Include/MeshFactory.h>
 #include <GL/glew.h>
 #include <unordered_set>
-
+#include <eigen/Eigen/Dense>
 
 #pragma region VIDEO-TO-POSE 3D repo functions legacy for now
 using std::ifstream;
@@ -1009,7 +1009,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone ,
 std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_left_points )
 {
-	
+	Mesh* mesh = &meshFac.mesh_vec[mesh_index];
 	int N = skeleton.skeletonFormat.size();
 	std::vector<unsigned int> end_point_indices;
 	for (size_t i = 0; i < N; i++)
@@ -1110,33 +1110,39 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 				}
 				glm::vec3 vec1 = hitIndexBackBonePredecessor - hitIndexPoint;
 
-				glm::vec3 hitIndexPointParent;
-				if (indices.size() > 2)
-				{
-					hitIndexPointParent = skeleton.skeletonFormat[indices[indices.size() - 2]].point;
-				}
-				else
-				{
-					hitIndexPointParent = skeleton.skeletonFormat[indices[indices.size() - 1]].point;
-				}
+
 
 				NodeAffinityParams param;
 				param.distance_to_backbone = dist;
 				param.point_in_backbone = hitIndex;
-#pragma region WRONG 
-				//generate a triangle from start and end indices and a middle index
-				glm::vec3 p_start_index = skeleton.skeletonFormat[candidate_backbones[i].start_index].point;
-				glm::vec3 p_end_index = skeleton.skeletonFormat[candidate_backbones[i].end_index].point;
-				glm::vec3 mid_point = skeleton.skeletonFormat[candidate_backbones[i].vertex_list[candidate_backbones[i].vertex_list.size() / 2]].point;
-				//generate a normal 
-				glm::vec3 edge_1 = p_start_index - mid_point;
-				glm::vec3 edge_2 = p_end_index - mid_point;
-				glm::vec3 normal = glm::normalize(glm::cross(edge_1, edge_2));
-				
-				glm::vec3 direction_start = skeleton.skeletonFormat[end_point_indices[j]].point;
-				glm::vec3 direction_end = skeleton.skeletonFormat[param.point_in_backbone].point;
-				glm::vec3 direction = glm::normalize(direction_end - direction_start);
-				if (glm::dot(direction, normal) > 0)
+#pragma region WRONG
+				//https://math.stackexchange.com/questions/214187/point-on-the-left-or-right-side-of-a-plane-in-3d-space#:~:text=How%20do%20you%20define%20right%2Fleft%3F&text=To%20distinguish%20the%20two%20sides,%E2%80%93%20J.%20J.
+
+
+				for (size_t k = 1; k < candidate_backbones[i].vertex_list.size() - 1 ; k++)
+				{
+
+				}
+
+				if (candidate_backbones.size() <= 2)
+				{
+					continue; 
+				}
+				glm::vec3 A = mesh->vertices[candidate_backbones[i].start_index];
+				glm::vec3 B = mesh->vertices[candidate_backbones[i].end_index];
+				glm::vec3 C = mesh->vertices[candidate_backbones[i].vertex_list.size()/2];
+				glm::vec3 X = mesh->vertices[end_point_indices[j]];
+
+				glm::vec3 B_ = B - A;
+				glm::vec3 C_ = C - A;
+				glm::vec3 X_ = X - A;
+				Eigen::Matrix3f sign_matrix;
+				sign_matrix.row(0) = Eigen::Vector3f(B_.x, B_.y, B_.z);
+				sign_matrix.row(1) = Eigen::Vector3f(C_.x, C_.y, C_.z);
+				sign_matrix.row(2) = Eigen::Vector3f(X_.x, X_.y, X_.z);
+
+				float det = sign_matrix.determinant();
+				if (det >= 0)
 				{
 					right_points.push_back(mesh_index_vertices[j]);
 					right_points_node_params.push_back(param);
@@ -1146,6 +1152,16 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 					left_points.push_back(mesh_index_vertices[j]);
 					left_points_node_params.push_back(param);
 				}
+ 				//if (glm::dot(vec1, glm::normalize(skeleton.skeletonFormat[0].point - skeleton.skeletonFormat[1].point)) > 0)
+				//{
+				//	right_points.push_back(mesh_index_vertices[j]);
+				//	right_points_node_params.push_back(param);
+				//}
+				//else
+				//{
+				//	left_points.push_back(mesh_index_vertices[j]);
+				//	left_points_node_params.push_back(param);
+				//}
 #pragma endregion WRONG 
 				
 
@@ -1153,7 +1169,10 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 		}
 
 		
-
+		if (right_points.size() == 0 || left_points.size() == 0)
+		{
+			continue;
+		}
 		//now calculate the node affinity Skeleton-IntrinsicSymmetrizationofShapes
 		std::vector<glm::vec3> hit_points;
 		std::vector<std::pair<unsigned int , unsigned int >> backbone_pairs;
