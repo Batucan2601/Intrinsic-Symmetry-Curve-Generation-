@@ -320,7 +320,6 @@ static std::vector<float> skeleton_lines;
 static Skeleton skeleton;
 static BackBone best_backbone;
 static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
-
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
@@ -460,6 +459,11 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
 static float camera_pos_x = 0.0f;
 static float camera_pos_y = 0.0f;
 static float camera_pos_z = 0.0f;
+
+//testing
+static int dijkstra_index;
+static std::vector<int> vertex_list;
+static std::vector<float> dijkstra_distances;
 void imgui_debug_layer(glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
 {
 
@@ -474,6 +478,24 @@ void imgui_debug_layer(glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
     if (ImGui::Button("Teleport to coordinates above "))
     {
         cameraPos = glm::vec3(camera_pos_x , camera_pos_y, camera_pos_z);
+    }
+    if (ImGui::InputInt("Calculate smallest distance", &dijkstra_index))
+    {
+        skeleton_calculate_dijkstra(skeleton, dijkstra_index,
+            vertex_list, dijkstra_distances);
+        //get smallest and color it
+        int smallest_index = -1;
+        float smallest_dist = INFINITY;
+        for (size_t i = 0; i < INFINITY; i++)
+        {
+            if (dijkstra_distances[i] < smallest_dist)
+            {
+                smallest_index = i; 
+                smallest_dist = dijkstra_distances[i];
+            }
+        }
+
+        
     }
     ImGui::End();
 

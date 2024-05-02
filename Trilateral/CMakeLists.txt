@@ -26,6 +26,7 @@ set(Header_Files
     "src/Application/Include/NLateralDescriptor.h"
     "src/Application/Include/ShapeDiameter.h"
     "src/Application/Include/Ray.h"
+    "src/Application/Include/SkeletalNLateral.h"
 
 )
 source_group("Header Files" FILES ${Header_Files})
@@ -57,9 +58,7 @@ set(Source_Files
     "src/Application/Source/NLateralDescriptor.cpp"
     "src/Application/Source/ShapeDiameter.cpp"
     "src/Application/Source/Ray.cpp"
-
-
-
+    "src/Application/Source/SkeletalNLateral.cpp"
 
 )
 source_group("Source Files" FILES ${Source_Files})
