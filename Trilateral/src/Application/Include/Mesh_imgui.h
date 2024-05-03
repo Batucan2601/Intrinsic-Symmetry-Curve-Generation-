@@ -464,7 +464,7 @@ static float camera_pos_z = 0.0f;
 static int dijkstra_index;
 static std::vector<int> vertex_list;
 static std::vector<float> dijkstra_distances;
-void imgui_debug_layer(glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
+void imgui_debug_layer(int& selected_mesh , MeshFactory& mesh_fac, glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
 {
 
 
@@ -479,23 +479,36 @@ void imgui_debug_layer(glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
     {
         cameraPos = glm::vec3(camera_pos_x , camera_pos_y, camera_pos_z);
     }
-    if (ImGui::InputInt("Calculate smallest distance", &dijkstra_index))
+    ImGui::InputInt("End point Index", &dijkstra_index);
+    if (ImGui::Button("Calculate skeletal dijkstra"))
     {
-        skeleton_calculate_dijkstra(skeleton, dijkstra_index,
+        //get the n'th end point
+        SkeletonEndPoint end_point_index = skeleton.endPoints[dijkstra_index];
+        skeleton_calculate_dijkstra(skeleton, end_point_index.index,
             vertex_list, dijkstra_distances);
         //get smallest and color it
         int smallest_index = -1;
         float smallest_dist = INFINITY;
-        for (size_t i = 0; i < INFINITY; i++)
+        for (size_t i = 0; i < skeleton.endPoints.size(); i++)
         {
-            if (dijkstra_distances[i] < smallest_dist)
+            SkeletonEndPoint end_point_index_temp = skeleton.endPoints[i];
+            if (dijkstra_distances[end_point_index_temp.index] < smallest_dist && end_point_index_temp.index != end_point_index.index)
             {
-                smallest_index = i; 
-                smallest_dist = dijkstra_distances[i];
+                smallest_index = end_point_index.index;
+                smallest_dist = dijkstra_distances[end_point_index_temp.index];
             }
         }
 
+        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3] = 0.0f;
+        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3 + 1] = 255.0f;
+        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3 + 2] = 0.0f;
         
+        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 ] = 0.0f;
+        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 + 1] = 255.0f;
+        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 + 2] = 0.0f;
+
+        skeleton_buffer(mesh_fac);
+
     }
     ImGui::End();
 

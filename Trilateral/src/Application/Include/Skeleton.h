@@ -27,7 +27,12 @@ typedef struct
 }SkeletonFormat;
 typedef struct
 {
+	unsigned int index;
+}SkeletonEndPoint;
+typedef struct
+{
 	std::vector<SkeletonFormat> skeletonFormat;
+	std::vector<SkeletonEndPoint> endPoints;
 	std::vector<std::vector<unsigned int>> adjacencies;
 }Skeleton;
 typedef struct
@@ -42,6 +47,9 @@ typedef struct
 	unsigned int point_in_backbone;
 }NodeAffinityParams;
 
+//buffer
+void skeleton_generate_buffer( MeshFactory& mesh_fac);
+void skeleton_buffer(const MeshFactory& mesh_fac);
 
 Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
 

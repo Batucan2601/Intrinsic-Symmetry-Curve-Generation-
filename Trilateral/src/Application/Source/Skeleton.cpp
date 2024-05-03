@@ -472,7 +472,9 @@ void match_skeleton_keypoints( MeshFactory& meshFactory ,Mesh* m , std::vector<f
 	meshFactory.mesh_skeleton_vec.push_back(255.0f);
 
 
-	unsigned int skeleton_vao, skeleton_vbo;
+	skeleton_generate_buffer(meshFactory);
+	skeleton_buffer(meshFactory);
+	/*unsigned int skeleton_vao, skeleton_vbo;
 	glGenVertexArrays(1, &skeleton_vao);
 	glGenBuffers(1, &skeleton_vbo);
 
@@ -486,7 +488,7 @@ void match_skeleton_keypoints( MeshFactory& meshFactory ,Mesh* m , std::vector<f
 
 	meshFactory.skeleton_VAO = skeleton_vao;
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 
 }
 
@@ -713,11 +715,13 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 		return skeleton;
 	}
 	std::string line;
+	unsigned int point_index = 0;
 	while (std::getline(indata, line))
 	{
 		if (line.find('#') == std::string::npos && line.size() > 1 )
 		{
 			SkeletonFormat point; 
+			SkeletonEndPoint skeleton_end_point; 
 			float point_no;
 			POINT_LABEL label_point;
 			int soma_point;
@@ -740,6 +744,14 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 
 			point.label = (POINT_LABEL)soma_point;
 			skeletonPoints.push_back(point);
+
+			if (point.label == END)
+			{
+				skeleton_end_point.index = point_index;
+				skeleton.endPoints.push_back(skeleton_end_point);
+			}
+			
+			point_index++;
 		}
 
 	}
@@ -822,7 +834,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	}
 	meshFactory.mesh_skeleton_vec = skeleton_lines;
 
-	unsigned int skeleton_vao, skeleton_vbo;
+	/*unsigned int skeleton_vao, skeleton_vbo;
 	glGenVertexArrays(1, &skeleton_vao);
 	glGenBuffers(1, &skeleton_vbo);
 
@@ -836,8 +848,9 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 
 	meshFactory.skeleton_VAO = skeleton_vao;
 
-	glBindVertexArray(0);
-
+	glBindVertexArray(0);*/
+	skeleton_generate_buffer(meshFactory);
+	skeleton_buffer(meshFactory);
 
 	skeleton.skeletonFormat = skeletonPoints;
 	skeleton.adjacencies = adjacencies;
@@ -1453,4 +1466,35 @@ std::vector<unsigned int>& left_mesh_indices)
 	{
 		left_mesh_indices.push_back(left_skeleton_indices[i]);
 	}
+}
+
+
+
+
+void skeleton_generate_buffer(MeshFactory& mesh_fac)
+{
+
+	unsigned int skeleton_vao, skeleton_vbo;
+	glGenVertexArrays(1, &skeleton_vao);
+	glGenBuffers(1, &skeleton_vbo);
+
+	glBindVertexArray(skeleton_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	mesh_fac.skeleton_VAO = skeleton_vao;
+	glBindVertexArray(0);
+
+
+}
+void skeleton_buffer(const MeshFactory& mesh_fac)
+{
+	glBindVertexArray(mesh_fac.skeleton_VAO);
+	glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_skeleton_vec.size() * sizeof(float), &mesh_fac.mesh_skeleton_vec[0], GL_STATIC_DRAW);
+	glBindVertexArray(0);
+
 }
