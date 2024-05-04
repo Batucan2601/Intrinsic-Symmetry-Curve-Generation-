@@ -494,18 +494,18 @@ void imgui_debug_layer(int& selected_mesh , MeshFactory& mesh_fac, glm::vec3& ca
             SkeletonEndPoint end_point_index_temp = skeleton.endPoints[i];
             if (dijkstra_distances[end_point_index_temp.index] < smallest_dist && end_point_index_temp.index != end_point_index.index)
             {
-                smallest_index = end_point_index.index;
+                smallest_index = end_point_index_temp.index;
                 smallest_dist = dijkstra_distances[end_point_index_temp.index];
             }
         }
 
-        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3] = 0.0f;
-        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3 + 1] = 255.0f;
-        mesh_fac.mesh_skeleton_vec[end_point_index.index * 6 + 3 + 2] = 0.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3] = 0.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3 + 1] = 255.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3 + 2] = 0.0f;
         
-        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 ] = 0.0f;
-        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 + 1] = 255.0f;
-        mesh_fac.mesh_skeleton_vec[smallest_index * 6 + 3 + 2] = 0.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 ] = 0.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 + 1] = 255.0f;
+        mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 + 2] = 0.0f;
 
         skeleton_buffer(mesh_fac);
 

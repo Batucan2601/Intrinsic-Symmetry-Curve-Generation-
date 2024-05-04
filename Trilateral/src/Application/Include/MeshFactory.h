@@ -15,6 +15,7 @@
 #include "../Include/Mesh.h"
 #include "../Include/FibonacciHeap.h"
 
+
 #define INFINITE 10000000
 
 
@@ -248,7 +249,7 @@ public:
 	
 	
 	// for skeleton detection from pose  video-to-pose
-	std::vector<float> mesh_skeleton_vec;
+	SkeletonMesh mesh_skeleton_vec;
 	unsigned int skeleton_VAO; 
 	// 
 	glm::mat4 view;

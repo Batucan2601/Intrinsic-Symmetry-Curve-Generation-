@@ -49,6 +49,10 @@ public:
 	void read_off_format(char* filename);
 	void generate_normals();
 };
-
+typedef struct
+{
+	std::vector<float> skeleton_points;
+	std::vector<unsigned int> skeleton_indices;
+}SkeletonMesh;
 void read_symmetry_format(char* filename, Mesh* m);
 unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point);

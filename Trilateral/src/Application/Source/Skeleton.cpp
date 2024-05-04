@@ -213,7 +213,7 @@ void match_skeleton_keypoints( MeshFactory& meshFactory ,Mesh* m , std::vector<f
 	// generate the skeleton
 
 	// 1 -between eyes 
-	meshFactory.mesh_skeleton_vec.push_back(keypoints["LEye"].x);
+	/*meshFactory.mesh_skeleton_vec.push_back(keypoints["LEye"].x);
 	meshFactory.mesh_skeleton_vec.push_back(keypoints["LEye"].y);
 	meshFactory.mesh_skeleton_vec.push_back(keypoints["LEye"].z);
 
@@ -469,7 +469,7 @@ void match_skeleton_keypoints( MeshFactory& meshFactory ,Mesh* m , std::vector<f
 
 	meshFactory.mesh_skeleton_vec.push_back(0.0f);
 	meshFactory.mesh_skeleton_vec.push_back(0.0f);
-	meshFactory.mesh_skeleton_vec.push_back(255.0f);
+	meshFactory.mesh_skeleton_vec.push_back(255.0f);*/
 
 
 	skeleton_generate_buffer(meshFactory);
@@ -540,7 +540,7 @@ std::vector<float> generate_skeleton_lines(std::string file_name)
 
 void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>& skeleton_bounding_box, std::vector<float> skeleton_lines)
 {
-	meshFactory.mesh_skeleton_vec = skeleton_lines;
+	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_lines;
 
 	std::vector<float> bb_mesh;
 	/*
@@ -691,7 +691,7 @@ void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>&
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	glBufferData(GL_ARRAY_BUFFER, meshFactory.mesh_skeleton_vec.size() * sizeof(float), /*&meshFactory.mesh_skeleton_vec[0]*/&offsetted_skeleton_lines[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, meshFactory.mesh_skeleton_vec.skeleton_points.size() * sizeof(float), /*&meshFactory.mesh_skeleton_vec[0]*/&offsetted_skeleton_lines[0], GL_STATIC_DRAW);
 
 	meshFactory.skeleton_VAO = skeleton_vao;
 
@@ -772,67 +772,70 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 		}
 	}
 
-	std::vector<float> skeleton_lines; 
+	std::vector<float> skeleton_points; 
+	std::vector<unsigned int> skeleton_indices; 
 	// another pass needed to generate lines with according parent
 	for (size_t i = 0; i < skeletonPoints.size(); i++)
 	{
 		glm::vec3 point = skeletonPoints[i].point;
 		int parent = skeletonPoints[i].parent;
-		if (parent > 0)
+
+		skeleton_points.push_back(point.x);
+		skeleton_points.push_back(point.y);
+		skeleton_points.push_back(point.z);
+			
+		if (skeletonPoints[i].label == END)
 		{
-			glm::vec3 parent_point = skeletonPoints[parent].point;
-
-			
-			skeleton_lines.push_back(point.x);
-			skeleton_lines.push_back(point.y);
-			skeleton_lines.push_back(point.z);
-			
-			if (skeletonPoints[i].label == END)
-			{
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(255.0f);
-			}
-			else if (skeletonPoints[i].parent == -1)
-			{
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(255.0f);
-			}
-			else
-			{
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(0.0f);
-			}
-
-
-			skeleton_lines.push_back(parent_point.x);
-			skeleton_lines.push_back(parent_point.y);
-			skeleton_lines.push_back(parent_point.z);
-
-			if (skeletonPoints[parent].label == END)
-			{
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(255.0f);
-			}
-			else if (skeletonPoints[i].parent == -1)
-			{
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(255.0f);
-			}
-			else
-			{
-				skeleton_lines.push_back(255.0f);
-				skeleton_lines.push_back(0.0f);
-				skeleton_lines.push_back(0.0f);
-			}
-
+			skeleton_points.push_back(0.0f);
+			skeleton_points.push_back(0.0f);
+			skeleton_points.push_back(255.0f);
 		}
+		else if (skeletonPoints[i].parent == -1)
+		{
+			skeleton_points.push_back(255.0f);
+			skeleton_points.push_back(255.0f);
+			skeleton_points.push_back(255.0f);
+		}
+		else
+		{
+			skeleton_points.push_back(255.0f);
+			skeleton_points.push_back(0.0f);
+			skeleton_points.push_back(0.0f);
+		}
+
+		if (parent >= 0)
+		{
+			skeleton_indices.push_back(i);
+			skeleton_indices.push_back(parent);
+		}
+
+		/*skeleton_points.push_back(parent_point.x);
+		skeleton_points.push_back(parent_point.y);
+		skeleton_points.push_back(parent_point.z);
+
+		if (skeletonPoints[parent].label == END)
+		{
+			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(255.0f);
+		}
+		else if (skeletonPoints[i].parent == -1)
+		{
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(255.0f);
+		}
+		else
+		{
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(0.0f);
+		}*/
+
 	}
-	meshFactory.mesh_skeleton_vec = skeleton_lines;
+	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_points;
+	meshFactory.mesh_skeleton_vec.skeleton_indices = skeleton_indices;
+
 
 	/*unsigned int skeleton_vao, skeleton_vbo;
 	glGenVertexArrays(1, &skeleton_vao);
@@ -911,7 +914,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 		//change the weights
 		for (size_t i = 0; i < skeleton.adjacencies[minimum_distance_index].size(); i++)
 		{
-			if (is_vertex_discovered[skeleton.adjacencies[minimum_distance_index][i]])
+			//if (is_vertex_discovered[skeleton.adjacencies[minimum_distance_index][i]])
 			{
 				glm::vec3 p_index1 = skeleton.skeletonFormat[minimum_distance_index].point;
 				glm::vec3 p = skeleton.skeletonFormat[skeleton.adjacencies[minimum_distance_index][i]].point;
@@ -1320,31 +1323,31 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 	best_left_points = backbone_left_points[minimum_affinity_diff_index];
 	//best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
 	//paint the backbone to blue
-	meshFac.mesh_skeleton_vec.clear();
+	meshFac.mesh_skeleton_vec.skeleton_points.clear();
 	glBindVertexArray(meshFac.skeleton_VAO);
 	for (size_t i = 0; i < best_backbone.vertex_list.size()-1; i++)
 	{
 		int back_bone_index = best_backbone.vertex_list[i];
 		glm::vec3 p_bb_point = skeleton.skeletonFormat[back_bone_index].point;
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.x);
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.y);
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.z);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.x);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.y);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.z);
 
-		meshFac.mesh_skeleton_vec.push_back(0.0f);
-		meshFac.mesh_skeleton_vec.push_back(0.0f);
-		meshFac.mesh_skeleton_vec.push_back(255.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(0.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(0.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(255.0f);
 
 		back_bone_index = best_backbone.vertex_list[i+1];
 		p_bb_point = skeleton.skeletonFormat[back_bone_index].point;
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.x);
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.y);
-		meshFac.mesh_skeleton_vec.push_back(p_bb_point.z);
-
-		meshFac.mesh_skeleton_vec.push_back(0.0f);
-		meshFac.mesh_skeleton_vec.push_back(0.0f);
-		meshFac.mesh_skeleton_vec.push_back(255.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.x);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.y);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(p_bb_point.z);
+								  
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(0.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(0.0f);
+		meshFac.mesh_skeleton_vec.skeleton_points.push_back(255.0f);
 	}
-	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.size() * sizeof(float), &meshFac.mesh_skeleton_vec[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.skeleton_points.size() * sizeof(float), &meshFac.mesh_skeleton_vec.skeleton_points[0], GL_STATIC_DRAW);
 
 }
 void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices, 
@@ -1474,9 +1477,11 @@ std::vector<unsigned int>& left_mesh_indices)
 void skeleton_generate_buffer(MeshFactory& mesh_fac)
 {
 
-	unsigned int skeleton_vao, skeleton_vbo;
+	unsigned int skeleton_vao, skeleton_vbo, skeleton_ibo;
 	glGenVertexArrays(1, &skeleton_vao);
 	glGenBuffers(1, &skeleton_vbo);
+	glGenBuffers(1, &skeleton_ibo);
+
 
 	glBindVertexArray(skeleton_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo);
@@ -1486,6 +1491,9 @@ void skeleton_generate_buffer(MeshFactory& mesh_fac)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, skeleton_ibo);
+
+
 	mesh_fac.skeleton_VAO = skeleton_vao;
 	glBindVertexArray(0);
 
@@ -1494,7 +1502,8 @@ void skeleton_generate_buffer(MeshFactory& mesh_fac)
 void skeleton_buffer(const MeshFactory& mesh_fac)
 {
 	glBindVertexArray(mesh_fac.skeleton_VAO);
-	glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_skeleton_vec.size() * sizeof(float), &mesh_fac.mesh_skeleton_vec[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh_fac.mesh_skeleton_vec.skeleton_points.size() * sizeof(float), &mesh_fac.mesh_skeleton_vec.skeleton_points[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_fac.mesh_skeleton_vec.skeleton_indices.size() * sizeof(unsigned int), &mesh_fac.mesh_skeleton_vec.skeleton_indices[0], GL_STATIC_DRAW);
 	glBindVertexArray(0);
 
 }
