@@ -250,8 +250,9 @@ public:
 	
 	// for skeleton detection from pose  video-to-pose
 	SkeletonMesh mesh_skeleton_vec;
-	unsigned int skeleton_VAO; 
-	// 
+	unsigned int skeleton_VAO;  // skeleton
+
+											 // 
 	glm::mat4 view;
 	glm::mat4 projection;
 	// line 

@@ -459,7 +459,10 @@ int main(void)
             glDrawArrays(GL_LINES, 0, mesh_fac.mesh_vec[0].normals_display.size() / 6);
             glLineWidth(1.0f);
         }
-
+        if (is_skeletalNLateral_created)
+        {
+            SkeletalNLateral_draw( mesh_fac, default_shader.ID);
+        }
 
         glBindVertexArray(0);
 

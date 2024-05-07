@@ -9,6 +9,7 @@
 #include "../Include/Skeleton.h"
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/ShapeDiameter.h"
+#include <src/Application/Include/SkeletalNLateral.h>
 bool if_bilateral_map = true; 
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true; 
@@ -40,6 +41,7 @@ bool is_draw_lines_activated = false;
 bool is_draw_lines_activated_once = false; // indicator for one time buffering of points
 bool is_polygon_filled = true ; 
 bool is_normals_shown = false;
+bool is_skeletalNLateral_created = false;
 
 std::vector<float> line_points; //line points will be global 
 
@@ -320,6 +322,7 @@ static std::vector<float> skeleton_lines;
 static Skeleton skeleton;
 static BackBone best_backbone;
 static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
+static std::vector<std::pair<int, int>>  skeletalNLateral_end_point_results;
 void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
@@ -356,6 +359,13 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
         
         m_factory.remove_all();
         m_factory.add_all();
+    }
+    if (ImGui::Button("Match End Points With N-Lateral"))
+    {
+        skeletalNLateral_end_point_results = SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(skeleton, N_LATERAL_PARAMETERS.N);
+        SkeletalNLateral_generate_buffer(skeleton, skeletalNLateral_end_point_results);
+        SkeletalNLateral_buffer();
+        is_skeletalNLateral_created = true; 
     }
     if (ImGui::Button("Shape diameter function "))
     {

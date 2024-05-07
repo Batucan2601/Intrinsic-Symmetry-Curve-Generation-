@@ -1507,3 +1507,91 @@ void skeleton_buffer(const MeshFactory& mesh_fac)
 	glBindVertexArray(0);
 
 }
+
+void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances)
+{
+	int N = skeleton.skeletonFormat.size();
+	//run a dijkstra from index1 
+	std::vector<float> distances(N, INFINITY);
+	distances[index1] = 0.0f;
+
+	std::vector<int> discovered_vertices;
+	std::vector<bool> is_vertex_discovered(N, false);
+	std::vector<int> predecessors(N, -1);
+
+
+	// initila nei
+	discovered_vertices.push_back(index1);
+	is_vertex_discovered[index1] = true;
+	int no_of_discovered = 1;
+	while (no_of_discovered < N)
+	{
+		float minimum_distance = INFINITY;
+		int minimum_distance_index = -1;
+		int discovered_vertex = -1;
+		//check adjacent non_discovered points
+		for (size_t i = 0; i < discovered_vertices.size(); i++)
+		{
+			int discovered_vertex_adjacency_size = skeleton.adjacencies[discovered_vertices[i]].size();
+			//check adjacencies
+			for (size_t j = 0; j < discovered_vertex_adjacency_size; j++)
+			{
+				int discovered_vertex_adjaceny = skeleton.adjacencies[discovered_vertices[i]][j];
+				if (!is_vertex_discovered[discovered_vertex_adjaceny])
+				{
+					//check distance and compare
+					float dist = glm::distance(skeleton.skeletonFormat[discovered_vertices[i]].point, skeleton.skeletonFormat[discovered_vertex_adjaceny].point);
+					if (dist < minimum_distance)
+					{
+						minimum_distance = dist;
+						minimum_distance_index = discovered_vertex_adjaceny;
+						discovered_vertex = discovered_vertices[i];
+					}
+				}
+			}
+		}
+
+		distances[minimum_distance_index] = distances[discovered_vertex] + minimum_distance;;
+		predecessors[minimum_distance_index] = discovered_vertex;
+
+		is_vertex_discovered[minimum_distance_index] = true;
+		discovered_vertices.push_back(minimum_distance_index);
+
+		//change the weights
+		for (size_t i = 0; i < skeleton.adjacencies[minimum_distance_index].size(); i++)
+		{
+			//if (is_vertex_discovered[skeleton.adjacencies[minimum_distance_index][i]])
+			{
+				glm::vec3 p_index1 = skeleton.skeletonFormat[minimum_distance_index].point;
+				glm::vec3 p = skeleton.skeletonFormat[skeleton.adjacencies[minimum_distance_index][i]].point;
+				float edge_dist = glm::distance(p_index1, p);
+				if ((edge_dist + distances[minimum_distance_index]) < distances[skeleton.adjacencies[minimum_distance_index][i]])
+				{
+					distances[skeleton.adjacencies[minimum_distance_index][i]] = (edge_dist + distances[minimum_distance_index]);
+					predecessors[skeleton.adjacencies[minimum_distance_index][i]] = minimum_distance_index;
+				}
+				else
+				{
+					int a = 1;
+				}
+			}
+
+		}
+		no_of_discovered += 1;
+	}
+
+	//now the only difference with the original is calculating the end points only
+	std::vector<float> dijsktra_endpoints;
+	std::vector<int> predecessor_endpoints;
+	for (size_t i = 0; i <distances.size() ; i++)
+	{
+		if (skeleton.skeletonFormat[i].label == END)
+		{
+			dijsktra_endpoints.push_back(distances[i]);
+			predecessor_endpoints.push_back(predecessors[i]);
+		}
+	}
+	vertex_list = predecessor_endpoints;
+	dijkstra_distances = dijsktra_endpoints;
+	return;
+}
