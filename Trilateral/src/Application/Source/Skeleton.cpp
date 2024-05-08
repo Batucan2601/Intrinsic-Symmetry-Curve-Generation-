@@ -835,28 +835,37 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	}
 	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_points;
 	meshFactory.mesh_skeleton_vec.skeleton_indices = skeleton_indices;
-
-
-	/*unsigned int skeleton_vao, skeleton_vbo;
-	glGenVertexArrays(1, &skeleton_vao);
-	glGenBuffers(1, &skeleton_vbo);
-
-	glBindVertexArray(skeleton_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glBufferData(GL_ARRAY_BUFFER, meshFactory.mesh_skeleton_vec.size() * sizeof(float), &meshFactory.mesh_skeleton_vec[0], GL_STATIC_DRAW);
-
-	meshFactory.skeleton_VAO = skeleton_vao;
-
-	glBindVertexArray(0);*/
+	
 	skeleton_generate_buffer(meshFactory);
 	skeleton_buffer(meshFactory);
 
 	skeleton.skeletonFormat = skeletonPoints;
 	skeleton.adjacencies = adjacencies;
+	
+	//lastly get midpoint and get the closest vertex
+	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
+	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	{
+		mid_point += skeleton.skeletonFormat[i].point;
+	}
+	mid_point /= skeleton.skeletonFormat.size();
+
+	//check the closest vertex in skeleton
+	float minimum_dist = INFINITY;
+	int minimum_index = -1;
+	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	{
+		float dist = glm::distance(skeleton.skeletonFormat[i].point, mid_point);
+		if ( minimum_dist < dist)
+		{
+			minimum_dist = dist; 
+			minimum_index = i;
+		}
+	}
+
+	skeleton.mid_point_index = minimum_index;
+	skeleton.skeleton_mid_point = mid_point;
+
 	return skeleton;
 }
 

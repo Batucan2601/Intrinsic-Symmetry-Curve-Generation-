@@ -39,10 +39,30 @@ SkeletalNLateral::SkeletalNLateral(Skeleton& skeleton, const std::vector<int>& p
 	this->geodesic_distances = dijkstra_distances;
 	this->predecessor_list = vertex_list;
 
+	//get distance to the mid point
+	std::vector<int> vertex_list_temp;
+	std::vector<float> dijkstra_distances_temp;
+	skeleton_calculate_dijkstra(skeleton, skeleton.mid_point_index, vertex_list_temp, dijkstra_distances_temp);
+
+	//get minimum dist apart from itself
+	int minimum_index = -1;
+	float minimum_dist = INFINITY;
+	for (size_t i = 0; i < dijkstra_distances_temp.size(); i++)
+	{
+		if (minimum_dist > dijkstra_distances_temp[i])
+		{
+			minimum_dist = dijkstra_distances_temp[i];
+			minimum_index = i;
+		}
+	}
+
+	this->geo_dist_to_skel_mid_point = minimum_dist;
+
 }
 
 float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, SkeletalNLateral& nLateral2 , int N )
 {
+	//TODO YOU SHOULD ADD DISTANCE TO THE MIDPOINT
 	//use geodesic distances
 	// generate the first eigen vector
 	Eigen::VectorXf nLateral1_vector(N);

@@ -34,6 +34,8 @@ typedef struct
 	std::vector<SkeletonFormat> skeletonFormat;
 	std::vector<SkeletonEndPoint> endPoints;
 	std::vector<std::vector<unsigned int>> adjacencies;
+	glm::vec3 skeleton_mid_point;
+	int mid_point_index; // index of skeleton point's who is closest to the mid point
 }Skeleton;
 typedef struct
 {

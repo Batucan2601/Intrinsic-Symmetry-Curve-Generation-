@@ -14,7 +14,7 @@ struct SkeletalNLateral
 	std::vector<std::vector<float>>  geodesic_distances;
 	std::vector<std::vector<int>>  predecessor_list;
 	SkeletalNLateral(Skeleton& skeleton, const std::vector<int>& point_indices, int N);
-
+	float geo_dist_to_skel_mid_point;
 
 };
 
