@@ -4,7 +4,7 @@
 static std::vector<float> pair_data;
 static unsigned int vao;
 
-static std::vector<int> get_smallest_N(const std::vector<float>& distances, int N, int index);
+static std::vector<int> get_smallest_N(const std::vector<float>& distances, int N, int index , float constraint);
 
 //only geodesic distances for skeletal end points 
 SkeletalNLateral::SkeletalNLateral(Skeleton& skeleton, const std::vector<int>& point_indices, int N)
@@ -65,12 +65,14 @@ float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, S
 	//TODO YOU SHOULD ADD DISTANCE TO THE MIDPOINT
 	//use geodesic distances
 	// generate the first eigen vector
-	Eigen::VectorXf nLateral1_vector(N);
-	for (size_t i = 0; i < nLateral1_vector.size(); i++)
+	Eigen::VectorXf nLateral1_vector(N + 1);
+	for (size_t i = 0; i < N; i++)
 	{
 		nLateral1_vector(i) = nLateral1.geodesic_distances[0][i];
 	}
 
+	nLateral1_vector(N) = nLateral1.geo_dist_to_skel_mid_point;
+	
 	//generate permuation
 	std::vector<unsigned int> permutation_vector;
 	for (size_t i = 0; i < N; i++)
@@ -87,13 +89,14 @@ float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, S
 
 	for (size_t i = 0; i < all_permutations.size(); i++)
 	{
-		Eigen::VectorXf nLateral2_vector(N);
+		Eigen::VectorXf nLateral2_vector(N + 1 );
 		for (size_t j = 0; j < all_permutations[i].size(); j++)
 		{
 			int index_1 = all_permutations[i][0];
 			int index_2 = all_permutations[i][j];
 			nLateral2_vector(j) = nLateral2.geodesic_distances[index_1][index_2];
 		}
+		nLateral2_vector(N) = nLateral2.geo_dist_to_skel_mid_point;
 		nLateral2_vector_list.push_back(nLateral2_vector);
 	}
 
@@ -136,7 +139,7 @@ std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_Skeleta
 		std::vector<int> smallest_endpoint_indices;
 		skeleton_get_dijkstra_endpoints(skeleton,  current_index, vertex_list, dijkstra_distances);
 		//get smallest N-1
-		smallest_endpoint_indices = get_smallest_N(dijkstra_distances, N - 1, i);
+		smallest_endpoint_indices = get_smallest_N(dijkstra_distances, N - 1, i , 1.0f);
 		
 		SkeletalNLateral skeletalNLateral(skeleton , smallest_endpoint_indices , N);
 		
@@ -169,7 +172,7 @@ std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_Skeleta
 				continue; 
 			}
 			float norm =SkeletalNLateral_compareTwoSkeletalNLateral(skeletalNLateral_vec[i], skeletalNLateral_vec[j], N);
-			if (best_val > norm && skeletalNLateral_vec[i].point_indices[0] != skeletalNLateral_vec[j].point_indices[0])
+			if (best_val > norm /*&& skeletalNLateral_vec[i].point_indices[0] != skeletalNLateral_vec[j].point_indices[0]*/)
 			{
 				best_val = norm;
 				best_index = j;
@@ -181,7 +184,8 @@ std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_Skeleta
 	return end_point_pairs;
 }
 
-static std::vector<int> get_smallest_N(const std::vector<float>& distances , int N , int index)
+//constraint is used for selecting points with greater geodesic distances compared to constraint variable
+static std::vector<int> get_smallest_N(const std::vector<float>& distances , int N , int index , float constraint)
 {
 	std::vector<int> smallest_indices;
 	smallest_indices.push_back(index);
@@ -196,7 +200,7 @@ static std::vector<int> get_smallest_N(const std::vector<float>& distances , int
 				continue; 
 			}
 
-			if (smallest_value > distances[j])
+			if (smallest_value > distances[j] && constraint > 0 &&  distances[j] > constraint )
 			{
 				//check if already included
 				bool is_already_included = false;

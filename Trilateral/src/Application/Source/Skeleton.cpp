@@ -856,7 +856,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
 	{
 		float dist = glm::distance(skeleton.skeletonFormat[i].point, mid_point);
-		if ( minimum_dist < dist)
+		if ( minimum_dist > dist)
 		{
 			minimum_dist = dist; 
 			minimum_index = i;
