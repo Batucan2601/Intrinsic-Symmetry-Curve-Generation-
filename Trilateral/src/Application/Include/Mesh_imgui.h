@@ -318,6 +318,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 
 static std::vector<float> bounding_box;
 static std::map<std::string, glm::vec3 > key_points;
+static std::vector<float> shape_diameter;
 static std::vector<float> skeleton_lines; 
 static Skeleton skeleton;
 static BackBone best_backbone;
@@ -362,18 +363,21 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("Match End Points With N-Lateral"))
     {
-        skeletalNLateral_end_point_results = SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(skeleton, N_LATERAL_PARAMETERS.N);
+        skeletalNLateral_end_point_results = SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(skeleton,
+        &m_factory.mesh_vec[selected_mesh],N_LATERAL_PARAMETERS.N , shape_diameter);
         SkeletalNLateral_generate_buffer(skeleton, skeletalNLateral_end_point_results);
         SkeletalNLateral_buffer();
         is_skeletalNLateral_created = true; 
     }
     if (ImGui::Button("Shape diameter function "))
     {
-        std::vector<float> shape_diameter;
         std::vector<unsigned int> indices;
-        for (size_t i = 0; i < 1; i++)
+        for (size_t i = 0; i < skeleton.endPoints.size(); i++)
         {
-            indices.push_back(522);
+            int mesh_index1 = mesh_get_closest_index(&m_factory.mesh_vec[selected_mesh]
+            ,skeleton.skeletonFormat[i].point);
+            indices.push_back(mesh_index1);
+
         }
         ShapeDiameter_calculate(&m_factory.mesh_vec[selected_mesh], indices, shape_diameter);
         

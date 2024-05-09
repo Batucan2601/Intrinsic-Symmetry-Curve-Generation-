@@ -4,7 +4,7 @@
 const int CONE_RADIUS = 3;
 const int CONE_RADIUS_MULTIPLIER = 100; //for random number generation
 
-const int CONE_HEIGHT = 1;
+const int CONE_HEIGHT = 20;
 const int NUMBER_OF_RAYS = 30;
 
 

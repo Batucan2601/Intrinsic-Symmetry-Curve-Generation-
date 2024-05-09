@@ -18,7 +18,7 @@ struct SkeletalNLateral
 
 };
 
-std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton, int N);
+std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton,Mesh*m, int N , std::vector<float>& mesh_sdf_array);
 float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, SkeletalNLateral& nLateral2, int N);
 void SkeletalNLateral_buffer();
 void SkeletalNLateral_generate_buffer(Skeleton& skeleton, std::vector<std::pair<int, int>>& pairs);

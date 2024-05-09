@@ -1,10 +1,15 @@
 #include "../Include/SkeletalNLateral.h"
+#include "../Include/ShapeDiameter.h"
 #include <eigen/Eigen/Dense>
 
+#define SDF_PARAMETER 0.055f
 static std::vector<float> pair_data;
 static unsigned int vao;
+static float maximum_sdf; // for sdf filter 
 
 static std::vector<int> get_smallest_N(const std::vector<float>& distances, int N, int index , float constraint);
+static bool compare_two_sdf_values(Mesh* m, Skeleton& skeleton, int index1, int index2, std::vector<float>& sdf_array);
+static void get_maximum_sdf(std::vector<float>& sdf_array);
 
 //only geodesic distances for skeletal end points 
 SkeletalNLateral::SkeletalNLateral(Skeleton& skeleton, const std::vector<int>& point_indices, int N)
@@ -123,13 +128,15 @@ float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, S
 	return minimum_value;
 }
 
-
-std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton, int N)
+std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton, Mesh* m ,
+int N, std::vector<float>& mesh_sdf_array)
 {
 	// declare the endpoint pairs 
 	std::vector<std::pair<int, int>> end_point_pairs;
 	//generate every Nlateral with closest points
-	std::vector<SkeletalNLateral> skeletalNLateral_vec; 
+	std::vector<SkeletalNLateral> skeletalNLateral_vec;
+	
+	get_maximum_sdf(mesh_sdf_array);
 	for (size_t i = 0; i < skeleton.endPoints.size(); i++)
 	{
 		// get closest indices
@@ -153,6 +160,8 @@ std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_Skeleta
 		//compare each other
 		for (size_t j = 0; j < skeletalNLateral_vec.size(); j++)
 		{
+			int end_point_indices_i = skeletalNLateral_vec[i].point_indices[0];
+			int end_point_indices_j = skeletalNLateral_vec[j].point_indices[0];
 			if (i == j)
 			{
 				continue;
@@ -171,6 +180,23 @@ std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_Skeleta
 			{
 				continue; 
 			}
+			// check the sdf
+			int skeleton_index_i = skeleton.endPoints[end_point_indices_i].index;
+			int skeleton_index_j = skeleton.endPoints[end_point_indices_j].index;
+			int mesh_index1 = mesh_get_closest_index(m,skeleton.skeletonFormat[skeleton_index_i].point);
+			int mesh_index2 = mesh_get_closest_index(m,skeleton.skeletonFormat[skeleton_index_j].point);
+			bool is_sdf_similiar = compare_two_sdf_values(m, skeleton, end_point_indices_i, end_point_indices_j, mesh_sdf_array);
+			
+			if(!is_sdf_similiar)
+			{
+				continue; 
+			}
+			else
+			{
+				int debug; 
+			}
+
+			
 			float norm =SkeletalNLateral_compareTwoSkeletalNLateral(skeletalNLateral_vec[i], skeletalNLateral_vec[j], N);
 			if (best_val > norm /*&& skeletalNLateral_vec[i].point_indices[0] != skeletalNLateral_vec[j].point_indices[0]*/)
 			{
@@ -291,4 +317,29 @@ void SkeletalNLateral_draw(MeshFactory& mesh_fac , unsigned int shader_id)
 
 }
 
+//index1 and index2 are skeleton indices, convert them to  mesh indices an compare their sdf
+// the golden rule seems like if difference in SDF is more than 0.055MAX_SDF you return false 
+static bool compare_two_sdf_values(Mesh* m, Skeleton& skeleton, int end_point_index1, int end_point_index2, std::vector<float>& sdf_array)
+{
 
+	if (fabs(sdf_array[end_point_index1] - sdf_array[end_point_index2])  > (SDF_PARAMETER * maximum_sdf) )
+	{
+		return false;
+	}
+	return true; 
+}
+
+static void get_maximum_sdf(std::vector<float>& sdf_array)
+{
+	int maximum_index = -1; 
+	float maximum_dist = -INFINITY;
+	for (size_t i = 0; i < sdf_array.size(); i++)
+	{
+		if (sdf_array[i] > maximum_dist)
+		{
+			maximum_dist = sdf_array[i];
+			maximum_index = i; 
+		}
+	}
+	maximum_sdf = maximum_dist;
+}

@@ -809,53 +809,25 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 			skeleton_indices.push_back(parent);
 		}
 
-		/*skeleton_points.push_back(parent_point.x);
-		skeleton_points.push_back(parent_point.y);
-		skeleton_points.push_back(parent_point.z);
-
-		if (skeletonPoints[parent].label == END)
-		{
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(255.0f);
-		}
-		else if (skeletonPoints[i].parent == -1)
-		{
-			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(255.0f);
-		}
-		else
-		{
-			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(0.0f);
-		}*/
-
 	}
-	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_points;
-	meshFactory.mesh_skeleton_vec.skeleton_indices = skeleton_indices;
 	
-	skeleton_generate_buffer(meshFactory);
-	skeleton_buffer(meshFactory);
 
-	skeleton.skeletonFormat = skeletonPoints;
-	skeleton.adjacencies = adjacencies;
 	
 	//lastly get midpoint and get the closest vertex
 	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
-	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	Mesh* m = &meshFactory.mesh_vec[0];
+	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
-		mid_point += skeleton.skeletonFormat[i].point;
+		mid_point += m->vertices[i];
 	}
-	mid_point /= skeleton.skeletonFormat.size();
+	mid_point /= m->vertices.size();
 
 	//check the closest vertex in skeleton
 	float minimum_dist = INFINITY;
 	int minimum_index = -1;
-	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	for (size_t i = 0; i < skeletonPoints.size(); i++)
 	{
-		float dist = glm::distance(skeleton.skeletonFormat[i].point, mid_point);
+		float dist = glm::distance(skeletonPoints[i].point, mid_point);
 		if ( minimum_dist > dist)
 		{
 			minimum_dist = dist; 
@@ -863,8 +835,24 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 		}
 	}
 
+
+	//color mid point white
+	skeleton_points[minimum_index * 6 + 3] = 0.0f;
+	skeleton_points[minimum_index * 6 + 4] = 255.0f;
+	skeleton_points[minimum_index * 6 + 5] = 0.0f;
+
+
+	skeleton.skeletonFormat = skeletonPoints;
+	skeleton.adjacencies = adjacencies;
 	skeleton.mid_point_index = minimum_index;
 	skeleton.skeleton_mid_point = mid_point;
+
+
+	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_points;
+	meshFactory.mesh_skeleton_vec.skeleton_indices = skeleton_indices;
+
+	skeleton_generate_buffer(meshFactory);
+	skeleton_buffer(meshFactory);
 
 	return skeleton;
 }
