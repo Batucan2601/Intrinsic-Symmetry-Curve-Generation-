@@ -193,6 +193,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("trilateral drawing "))
     {
         trilateral_map_drawing_using_three_points(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index);
+        m_factory.remove_all();
+        m_factory.add_all();
     }
     if (ImGui::Button("point matching using AGD"))
     {

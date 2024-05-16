@@ -94,12 +94,12 @@ std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int po
 
 void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selected_index, int p1, int p2, int p3)
 {
-	Mesh m = mesh_fac.mesh_vec[selected_index];
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	//extract two paths
 	//1 - extract the path from p1  to p2  and p1 to p3  and p2 to p3 
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(m, p1, p2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(m, p1, p3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(m, p2, p3);
+	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, p1, p2);
+	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, p1, p3);
+	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, p2, p3);
 
 #pragma region calculation of distances between points 2 ,3 and 1  
 
@@ -109,15 +109,15 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 
 	for (size_t i = 0; i < path_1_2.size() - 1; i++)
 	{
-		dist_1_2 += glm::distance(m.vertices[path_1_2[i]], m.vertices[path_1_2[i + 1]]);
+		dist_1_2 += glm::distance(m->vertices[path_1_2[i]], m->vertices[path_1_2[i + 1]]);
 	}
 	for (size_t i = 0; i < path_1_3.size() - 1; i++)
 	{
-		dist_1_3 += glm::distance(m.vertices[path_1_3[i]], m.vertices[path_1_3[i + 1]]);
+		dist_1_3 += glm::distance(m->vertices[path_1_3[i]], m->vertices[path_1_3[i + 1]]);
 	}
 	for (size_t i = 0; i < path_2_3.size() - 1; i++)
 	{
-		dist_2_3 += glm::distance(m.vertices[path_2_3[i]], m.vertices[path_2_3[i + 1]]);
+		dist_2_3 += glm::distance(m->vertices[path_2_3[i]], m->vertices[path_2_3[i + 1]]);
 	}
 	std::cout << "dist1 " << dist_1_2 << std::endl;
 	std::cout << "dist 2 " << dist_1_3 << std::endl;
@@ -126,9 +126,9 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 #pragma region  angle
 	// for p1
 	float angle_p1 = 0.0f; // in degrees ( from angle betwen 2 , 1 ,3 )
-	glm::vec3 p1_point = glm::vec3(m.vertices[p1]);
-	glm::vec3 p2_point = glm::vec3(m.vertices[p2]);
-	glm::vec3 p3_point = glm::vec3(m.vertices[p3]);
+	glm::vec3 p1_point = glm::vec3(m->vertices[p1]);
+	glm::vec3 p2_point = glm::vec3(m->vertices[p2]);
+	glm::vec3 p3_point = glm::vec3(m->vertices[p3]);
 	glm::vec3 vec_2_1 = glm::vec3(p2_point - p1_point);
 	glm::vec3 vec_3_1 = glm::vec3(p3_point - p1_point);
 	double angle_radian_p1 = glm::acos(glm::dot(vec_2_1, vec_3_1) / (glm::length(vec_2_1) * glm::length(vec_3_1)));
@@ -158,14 +158,16 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 
 #pragma endregion 
 
-	std::vector<float> draw_buffer;
-	for (size_t i = 0; i < m.vertices.size(); i++)
+	std::vector<glm::vec3> draw_buffer;
+	std::vector<glm::vec3> draw_buffer_color;
+	
+	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
-		glm::vec3 point = m.vertices[i];
+		glm::vec3 point = m->vertices[i];
 		bool is_in_way = false;
 		for (size_t j = 0; j < path_1_2.size(); j++)
 		{
-			glm::vec3 point_between_1_2 = m.vertices[path_1_2[j]];
+			glm::vec3 point_between_1_2 = m->vertices[path_1_2[j]];
 
 			if (point.x == point_between_1_2.x && point.y == point_between_1_2.y && point.z == point_between_1_2.z)
 			{
@@ -174,7 +176,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		}
 		for (size_t j = 0; j < path_1_3.size(); j++)
 		{
-			glm::vec3 point_between_1_3 = m.vertices[path_1_3[j]];
+			glm::vec3 point_between_1_3 = m->vertices[path_1_3[j]];
 
 			if (point.x == point_between_1_3.x && point.y == point_between_1_3.y && point.z == point_between_1_3.z)
 			{
@@ -183,7 +185,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		}
 		for (size_t j = 0; j < path_2_3.size(); j++)
 		{
-			glm::vec3 point_between_2_3 = m.vertices[path_2_3[j]];
+			glm::vec3 point_between_2_3 = m->vertices[path_2_3[j]];
 
 			if (point.x == point_between_2_3.x && point.y == point_between_2_3.y && point.z == point_between_2_3.z)
 			{
@@ -191,20 +193,23 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 			}
 		}
 		// rebuffer data
-		draw_buffer.push_back(point.x);
-		draw_buffer.push_back(point.y);
-		draw_buffer.push_back(point.z);
+		//draw_buffer.push_back(point.x);
+		//draw_buffer.push_back(point.y);
+		//draw_buffer.push_back(point.z);
 
+		glm::vec3 color;
 		//red 
 		if (is_in_way)
 		{
 			if (i == p1 || i == p2 || i == p3) //point itself  (will draw red therefore skip )
 			{
-				draw_buffer.push_back(0.0f);
+				//draw_buffer.push_back(0.0f);
+				color.r = 0.0f; 
 			}
 			else
 			{
-				draw_buffer.push_back(1.0f); // on the way 
+				//draw_buffer.push_back(1.0f); // on the way 
+				color.r = 1.0f;
 
 			}
 
@@ -212,24 +217,28 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		}
 		else
 		{
-			draw_buffer.push_back(0.0f);
+			//draw_buffer.push_back(0.0f);
+			color.r = 0.0f;
 		}
 
 		//green 
-		draw_buffer.push_back(0.0f);
+		//draw_buffer.push_back(0.0f);
+		color.g = 0.0f;
 
 
 		//blue
 		if (i == p1 || i == p2 || i == p3) //point itself  
 		{
-			draw_buffer.push_back(1.0f);
+			//draw_buffer.push_back(1.0f);
+			color.b = 1.0f;
 		}
 		else
 		{
-			draw_buffer.push_back(0.0f);
+			//draw_buffer.push_back(0.0f);
+			color.b = 0.0f;
 		}
 
-
+		m->colors[i] = color; 
 
 	}
 	int point_size = 0;
@@ -237,7 +246,8 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	{
 		point_size += mesh_fac.mesh_vec[i].vertices.size() * 6;
 	}
-	glBufferSubData(GL_ARRAY_BUFFER, point_size * sizeof(float), draw_buffer.size() * sizeof(float), &draw_buffer[0]);
+	
+	//glBufferSubData(GL_ARRAY_BUFFER, point_size * sizeof(float), draw_buffer.size() * sizeof(float), &draw_buffer[0]);
 	/*glBufferData(GL_ARRAY_BUFFER, draw_buffer.size() * sizeof(float), &draw_buffer[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.triangles.size() * sizeof(int), &m.triangles[0], GL_STATIC_DRAW);*/
 
