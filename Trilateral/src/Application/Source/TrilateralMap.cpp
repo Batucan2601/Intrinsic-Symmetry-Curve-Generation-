@@ -1070,7 +1070,8 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	m->colors = new_color_buffer;
 	return  is_visited;
 }
-std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, int* is_visited, bool is_visited_interior)
+std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
+std::vector<int> is_visited, bool is_visited_interior)
 {
 	//histogram to be returned 
 	std::vector<float> histogram;

@@ -324,7 +324,8 @@ std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& se
 
 
 //static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
-std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, int* is_visited, bool is_visited_interior);
+std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3,
+int division_no,std::vector<int> is_visited, bool is_visited_interior);
 
 // the ultimate trilateral descriptor generator 
 TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);

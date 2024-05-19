@@ -30,7 +30,7 @@ bool is_trilateral = false;
 
 int selected_mesh = 0; 
 
-int* is_visited; // checks if vertex is visited 
+std::vector<int> is_visited; // checks if vertex is visited 
 
 bool is_visited_interior = false; 
 
@@ -112,7 +112,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
         
-        //is_visited = trialteral_ROI(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index, partition_no , is_visited_interior);
+        is_visited = trialteral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no, is_visited_interior);
         m_factory.remove_all();
         m_factory.add_all();
     }
