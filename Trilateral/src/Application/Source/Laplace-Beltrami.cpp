@@ -1,7 +1,154 @@
 #include "../Include/Laplace-Beltrami.h"
+#include "eigen/Eigen/EigenValues"
+#include <vector>
+#include "../Include/NLateralDescriptor.h"
 using Eigen::MatrixXd;
 using Eigen::VectorXcd;
+using Eigen::Vector3d;
 
+// Function to compute the cotangent of an angle
+static double cotangent(const glm::vec3& v1, const glm::vec3& v2) {
+	return glm::dot(v1,v2) / glm::length(glm::cross(v1,v2));
+}
+
+// Function to compute the area of the Voronoi region around a vertex
+static double voronoi_area(const Mesh& mesh, int vertex) {
+	double area = 0.0;
+	for (int i = 0; i < mesh.triangles.size(); i += 3 ) {
+		if ( mesh.triangles[i] == vertex || mesh.triangles[i + 1] == vertex || mesh.triangles[i + 2] == vertex) {
+			glm::vec3 v0 = mesh.vertices[mesh.triangles[i]];
+			glm::vec3 v1 = mesh.vertices[mesh.triangles[i + 1]];
+			glm::vec3 v2 = mesh.vertices[mesh.triangles[i + 2]];
+			double a = glm::length((v1 - v0));
+			double b = glm::length((v2 - v1));
+			double c = glm::length((v0 - v2));
+			double s = (a + b + c) / 2.0;
+			area += sqrt(s * (s - a) * (s - b) * (s - c)) / 3.0;
+		}
+	}
+	return area;
+}
+
+// Function to assemble the cotangent Laplacian matrix
+static MatrixXd cotangent_laplacian(const Mesh& mesh) {
+	int n = mesh.vertices.size();
+	MatrixXd L = MatrixXd::Zero(n, n);
+
+	for (int index = 0; index < mesh.triangles.size(); index += 3 ) {
+		int i = mesh.triangles[index];
+		int j = mesh.triangles[index + 1];
+		int k = mesh.triangles[index + 2];
+
+		glm::vec3 vi = mesh.vertices[i];
+		glm::vec3 vj = mesh.vertices[j];
+		glm::vec3 vk = mesh.vertices[k];
+
+		double cot_alpha = cotangent(vj - vi, vk - vi);
+		double cot_beta = cotangent(vi - vj, vk - vj);
+		double cot_gamma = cotangent(vi - vk, vj - vk);
+
+		L(i, j) -= cot_gamma;
+		L(i, k) -= cot_beta;
+		L(j, i) -= cot_gamma;
+		L(j, k) -= cot_alpha;
+		L(k, i) -= cot_beta;
+		L(k, j) -= cot_alpha;
+
+		L(i, i) += cot_beta + cot_gamma;
+		L(j, j) += cot_alpha + cot_gamma;
+		L(k, k) += cot_alpha + cot_beta;
+	}
+
+	return L;
+}
+
+// Function to compute the Laplace-Beltrami operator
+static MatrixXd laplace_beltrami(const Mesh& mesh) {
+	MatrixXd L = cotangent_laplacian(mesh);
+	int n = mesh.vertices.size();
+	MatrixXd A = MatrixXd::Zero(n, n);
+
+	for (int i = 0; i < n; ++i) {
+		A(i, i) = voronoi_area(mesh, i);
+	}
+
+	return A.inverse() * L;
+}
+
+// Function to embed the original vertices to a 2D domain
+MatrixXd embed_mesh_to_2d(Mesh& mesh) {
+
+	// Compute Laplace-Beltrami operator
+	MatrixXd L = laplace_beltrami(mesh);
+
+	// Compute eigendecomposition
+	Eigen::SelfAdjointEigenSolver<MatrixXd> es(L);
+	if (es.info() != Eigen::Success) {
+		std::cerr << "Eigendecomposition failed!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	// Extract the eigenvectors corresponding to the smallest non-zero eigenvalues
+	Eigen::VectorXd eigenvalues = es.eigenvalues();
+	MatrixXd eigenvectors = es.eigenvectors();
+
+	// Skip the first eigenvector (corresponding to eigenvalue 0)
+	// The second and third smallest eigenvalues correspond to the embedding
+	MatrixXd embedding(mesh.vertices.size(), 2);
+	embedding.col(0) = eigenvectors.col(1); // Second smallest eigenvalue
+	embedding.col(1) = eigenvectors.col(2); // Third smallest eigenvalue
+
+
+	for (size_t i = 0; i < mesh.vertices.size(); i++)
+	{
+		mesh.vertices[i].z = 0.0f;
+		mesh.vertices[i].x = embedding(0,i);
+		mesh.vertices[i].y = embedding(1,i);
+	}
+	
+	return embedding;
+}
+
+Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLateralParameters& nLateralParameters )
+{
+	std::vector<unsigned int> mesh_indices; //for skeleton end points
+	std::vector<NLateralDescriptor> n_lateral_list;
+	std::pair<int, int > pair_index_to_mesh_index;  
+	int size_of_endpoints = 0;
+	skeleton_calculate_closest_mesh_points(skeleton ,&mesh , mesh_indices);
+	n_lateral_list = get_N_lateral_descriptor_using_closest_pairs(&mesh, mesh_indices, nLateralParameters);
+	Mesh mesh_endpoints; 
+	size_of_endpoints = mesh_indices.size();
+
+
+	//make it into a mesh
+	for (size_t i = 0; i < size_of_endpoints; i++)
+	{
+		mesh_endpoints.vertices.push_back(mesh.vertices[mesh_indices[i]]);
+	}
+	//generate Degree matrix
+	Eigen::MatrixXd D(size_of_endpoints, size_of_endpoints);
+	for (size_t i = 0; i < size_of_endpoints; i++)
+	{
+		for (size_t j = 0; j < size_of_endpoints; j++)
+		{
+			D(i, j) = 0;
+			for (size_t k = 0; k < n_lateral_list[i].point_indices.size(); k++)
+			{
+				if (D(i,j))
+				{
+
+				}
+			}
+
+		}
+	}
+	//generate adjacency matrix 
+	Eigen::MatrixXd A(size_of_endpoints, size_of_endpoints);
+}
+
+
+// non auto generated.
 MatrixXd generate_L(Mesh* mesh)
 {
 	// method =>  L = A_-1 (D - W )

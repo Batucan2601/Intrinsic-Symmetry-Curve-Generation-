@@ -127,9 +127,9 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     ImGui::InputInt("no of samples  ", &no_of_points);
     ImGui::SameLine();
-    if (ImGui::Button("Laplacian generation "))
+    if (ImGui::Button("embed mesh to 2D "))
     {
-        generate_L(&m_factory.mesh_vec[selected_mesh]);
+        embed_mesh_to_2d(m_factory.mesh_vec[selected_mesh]);
         m_factory.remove_all();
         m_factory.add_all();
     }
