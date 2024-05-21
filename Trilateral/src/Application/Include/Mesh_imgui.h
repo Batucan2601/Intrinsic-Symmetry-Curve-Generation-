@@ -127,12 +127,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     ImGui::InputInt("no of samples  ", &no_of_points);
     ImGui::SameLine();
-    if (ImGui::Button("embed mesh to 2D "))
-    {
-        embed_mesh_to_2d(m_factory.mesh_vec[selected_mesh]);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
+
     if (ImGui::Button("dominant symmetry plane  "))
     {
         plane =  generate_dominant_symmetry_plane(selected_mesh , m_factory);
@@ -348,6 +343,17 @@ void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
     if (ImGui::Button("Generate Skeleton"))
     {
         skeleton = skeleton_read_swc_file(m_factory ,"0001.isometry.8.swc");
+    }
+    if (ImGui::Button("embed mesh to 2D "))
+    {
+        try {
+            embed_mesh_endpoints_to_2d(m_factory.mesh_vec[selected_mesh], skeleton, N_LATERAL_PARAMETERS);
+        }
+        catch (const std::exception& ex) {
+            std::cerr << "Error: " << ex.what() << std::endl;
+        }
+        m_factory.remove_all();
+        m_factory.add_all();
     }
     if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
     {

@@ -113,38 +113,76 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 {
 	std::vector<unsigned int> mesh_indices; //for skeleton end points
 	std::vector<NLateralDescriptor> n_lateral_list;
-	std::pair<int, int > pair_index_to_mesh_index;  
+	std::map<int,int> pair_index_to_mesh_index;  
 	int size_of_endpoints = 0;
 	skeleton_calculate_closest_mesh_points(skeleton ,&mesh , mesh_indices);
 	n_lateral_list = get_N_lateral_descriptor_using_closest_pairs(&mesh, mesh_indices, nLateralParameters);
 	Mesh mesh_endpoints; 
 	size_of_endpoints = mesh_indices.size();
 
-
 	//make it into a mesh
 	for (size_t i = 0; i < size_of_endpoints; i++)
 	{
 		mesh_endpoints.vertices.push_back(mesh.vertices[mesh_indices[i]]);
+		mesh_endpoints.colors.push_back(glm::vec3(255.0f , 0.0f , 0.0f));
+
+		pair_index_to_mesh_index[mesh_indices[i]] =  i ;
 	}
 	//generate Degree matrix
-	Eigen::MatrixXd D(size_of_endpoints, size_of_endpoints);
+	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(size_of_endpoints, size_of_endpoints);
 	for (size_t i = 0; i < size_of_endpoints; i++)
 	{
-		for (size_t j = 0; j < size_of_endpoints; j++)
-		{
-			D(i, j) = 0;
-			for (size_t k = 0; k < n_lateral_list[i].point_indices.size(); k++)
-			{
-				if (D(i,j))
-				{
-
-				}
-			}
-
-		}
+		D(i, i) = n_lateral_list[i].point_indices.size() - 1;
 	}
 	//generate adjacency matrix 
-	Eigen::MatrixXd A(size_of_endpoints, size_of_endpoints);
+	Eigen::MatrixXd A = Eigen::MatrixXd::Zero(size_of_endpoints, size_of_endpoints);
+	for (size_t i = 0; i < size_of_endpoints; i++)
+	{
+		for (size_t j = 1; j < n_lateral_list[i].point_indices.size(); j++)
+		{
+			A(i, pair_index_to_mesh_index[n_lateral_list[i].point_indices[j]]) = 1;
+		}
+	}
+	//Laplacian matrix
+	Eigen::MatrixXd L = Eigen::MatrixXd::Zero(size_of_endpoints, size_of_endpoints);
+	L = D - A;
+	
+	// Compute eigendecomposition
+	Eigen::SelfAdjointEigenSolver<MatrixXd> es(L);
+	if (es.info() != Eigen::Success) {
+		std::cerr << "Eigendecomposition failed!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	// Extract the eigenvectors corresponding to the smallest non-zero eigenvalues
+	Eigen::VectorXd eigenvalues = es.eigenvalues();
+	MatrixXd eigenvectors = es.eigenvectors();
+
+	// Skip the first eigenvector (corresponding to eigenvalue 0)
+	// The second and third smallest eigenvalues correspond to the embedding
+	MatrixXd embedding(size_of_endpoints, 3);
+	embedding.col(0) = eigenvectors.col(1); // Second smallest eigenvalue
+	embedding.col(1) = eigenvectors.col(2); // Third smallest eigenvalue
+
+	for (size_t i = 0; i < n_lateral_list.size(); i++)
+	{
+		for (size_t j = 1; j  < n_lateral_list[i].point_indices.size(); j += 2 )
+		{
+			mesh_endpoints.triangles.push_back(pair_index_to_mesh_index[n_lateral_list[i].point_indices[j]]);
+			mesh_endpoints.triangles.push_back(pair_index_to_mesh_index[n_lateral_list[i].point_indices[0]]);
+			mesh_endpoints.triangles.push_back(pair_index_to_mesh_index[n_lateral_list[i].point_indices[j + 1]]);
+		}
+	}
+
+	for (size_t i = 0; i < mesh_endpoints.vertices.size(); i++)
+	{
+		mesh_endpoints.vertices[i].z = 0.0f;
+		mesh_endpoints.vertices[i].x = embedding(i, 0);
+		mesh_endpoints.vertices[i].y = embedding(i, 1);
+	}
+	mesh = mesh_endpoints;
+
+	return embedding; 
 }
 
 
