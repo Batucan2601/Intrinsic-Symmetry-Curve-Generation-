@@ -324,3 +324,11 @@ std::vector<int> getNumberFromString(std::string s)
 	}
 	return num_vec;
 }
+
+Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec) {
+	Eigen::VectorXd eigen_vec(std_vec.size());
+	for (size_t i = 0; i < std_vec.size(); ++i) {
+		eigen_vec[i] = std_vec[i];
+	}
+	return eigen_vec;
+}

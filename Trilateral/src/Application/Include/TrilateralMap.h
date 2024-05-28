@@ -360,6 +360,8 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  void reset_points(MeshFactory& mesh_fac, int meshIndex);
 
 
+ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no);
+
 
 
 

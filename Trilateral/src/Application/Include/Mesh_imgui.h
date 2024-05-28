@@ -171,9 +171,11 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         }
         if( ImGui::Selectable((const char*)"FPS", &isSelected))
         {
-            selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points);
+            selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points , true);
             curtrilateralItem = "FPS";
             is_trilateral_generated = true;
+            m_factory.remove_all();
+            m_factory.add_all();
         }
         if (ImGui::Selectable((const char*)"Random Symmetry Pairs", &isSelected))
         {
@@ -181,8 +183,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
             curtrilateralItem = "Random Symmetry Pairs";
             is_trilateral_generated = true;
         }
-        m_factory.remove_all();
-        m_factory.add_all();
+
         ImGui::EndCombo();
     }
     if (ImGui::Button("trilateral drawing "))
@@ -270,6 +271,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("get n ring "))
     {
         get_N_ring_area(&m_factory.mesh_vec[selected_mesh], 100, 1);
+    }
+    if (ImGui::Button("FPS and histogram matching "))
+    {
+        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , 10 );
+        m_factory.remove_all();
+        m_factory.add_all();
+        //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
+
     }
     ImGui::End();
         

@@ -1,6 +1,8 @@
 #pragma once 
 #include "glm/glm.hpp"
 #include "Mesh.h"
+#include <eigen/Eigen/Dense>
+
 typedef struct {
 	glm::vec3 point;
 	glm::vec3 normal;
@@ -34,6 +36,13 @@ enum  ComparisonMethod
 	absoulute_dif,
 	quadratic_dif,
 };
+enum PointStatus
+{
+	INSIDE,
+	OUTSIDE,
+	EDGE,
+	MIDPOINT,
+};
 Mesh generate_mesh_from_plane( Plane* plane , glm::vec3 * m  );
 float get_point_status_from_plane(Plane* plane, glm::vec3* point);
 glm::vec3 project_point_to_plane(Plane* plane, glm::vec3* point);
@@ -44,3 +53,4 @@ bool is_triangles_intersect(const glm::vec3& p1_1, const glm::vec3& p2_1, const 
 float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3&  p3_1 , const glm::vec3& p1_2 , const glm::vec3& p2_2 , const glm::vec3& p2_3  );
 void get_coefficients_from_plane(const Plane& plane , float& A , float& B , float& C , float& D);
 std::vector<int> getNumberFromString(std::string s);
+Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec);

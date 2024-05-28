@@ -117,14 +117,18 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 	int size_of_endpoints = 0;
 	skeleton_calculate_closest_mesh_points(skeleton ,&mesh , mesh_indices);
 	n_lateral_list = get_N_lateral_descriptor_using_closest_pairs(&mesh, mesh_indices, nLateralParameters);
-	Mesh mesh_endpoints; 
+	Mesh mesh_endpoints = mesh;
+	mesh_endpoints.colors.clear();
+	mesh_endpoints.vertices.clear();
+	mesh_endpoints.triangles.clear();
+
 	size_of_endpoints = mesh_indices.size();
 
 	//make it into a mesh
 	for (size_t i = 0; i < size_of_endpoints; i++)
 	{
 		mesh_endpoints.vertices.push_back(mesh.vertices[mesh_indices[i]]);
-		mesh_endpoints.colors.push_back(glm::vec3(255.0f , 0.0f , 0.0f));
+		mesh_endpoints.colors.push_back(glm::vec3(0.0f , 255.0f , 0.0f));
 
 		pair_index_to_mesh_index[mesh_indices[i]] =  i ;
 	}
@@ -174,11 +178,12 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 		}
 	}
 
+	//embed 
 	for (size_t i = 0; i < mesh_endpoints.vertices.size(); i++)
 	{
 		mesh_endpoints.vertices[i].z = 0.0f;
-		mesh_endpoints.vertices[i].x = embedding(i, 0);
-		mesh_endpoints.vertices[i].y = embedding(i, 1);
+		mesh_endpoints.vertices[i].x = embedding(i, 0) * 20;
+		mesh_endpoints.vertices[i].y = embedding(i, 1) * 20;
 	}
 	mesh = mesh_endpoints;
 
