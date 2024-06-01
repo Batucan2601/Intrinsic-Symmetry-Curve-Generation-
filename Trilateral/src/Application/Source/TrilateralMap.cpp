@@ -926,7 +926,105 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	 }
 	 return closest_index;
  }
+ //given edges and point do breadth first search on an area 
+ static std::vector<int> breadth_first_search(Mesh* m, int point_index, std::vector<int> is_visited)
+ {
+	 std::vector<int> visited_vertices;
+	 //push our point to stack
+	 std::stack<int> stack;
+	 stack.push(point_index);
+	 while (!stack.empty())
+	 {
+		 int index = stack.top();
+		 stack.pop(); //vertex index popped from stack
+		 if (is_visited[index] == OUTSIDE) //not visited
+		 {
+			 is_visited[index] = INSIDE; // now te vertex has been visited
+			 visited_vertices.push_back(index);
+			 // this region of loop assumes index is not edge, therefore add the adjacencies
+			 for (size_t i = 0; i < m->adjacenies[index].size(); i++) //process pairs 
+			 {
+				 stack.push(m->adjacenies[index][i].first);
+			 }
+		 }
+		 if (is_visited[index] == EDGE) //do nothing 
+		 {
+			 ;
+		 }
+	 }
+	 return visited_vertices;
+ }
+static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1_2, std::vector<int>& path_1_3, std::vector<int>& path_2_3)
+ {
+	 std::vector<int> start_vertices;
+	 start_vertices.push_back(path_1_2[0]);
+	 start_vertices.push_back(path_1_3[path_1_3.size() - 1]);
+	 start_vertices.push_back(path_2_3[0]);
+	 std::vector<int> is_visited;
+	 for (size_t i = 0; i < m->vertices.size(); i++)
+	 {
+		 is_visited.push_back(OUTSIDE);
+	 }
+	 std::vector<int> start_vertices_neighbours;
 
+	 //set the vertices
+	 for (size_t i = 0; i < m->vertices.size(); i++)
+	 {
+		 is_visited[i] = OUTSIDE;
+	 }
+	 for (size_t i = 0; i < path_1_2.size(); i++)
+	 {
+		 is_visited[path_1_2[i]] = EDGE;
+	 }
+	 for (size_t i = 0; i < path_1_3.size(); i++)
+	 {
+		 is_visited[path_1_3[i]] = EDGE;
+
+	 }
+	 for (size_t i = 0; i < path_2_3.size(); i++)
+	 {
+		 is_visited[path_2_3[i]] = EDGE;
+	 }
+	 std::vector<std::vector<int>> visited_vertices_list;
+	 // get the neighbours
+	 for (size_t i = 0; i < start_vertices.size(); i++)
+	 {
+		 for (size_t j = 0; j < m->adjacenies[start_vertices[i]].size(); j++)
+		 {
+			 int point_index = m->adjacenies[start_vertices[i]][j].first;
+			 if (is_visited[point_index] != EDGE)
+			 {
+				 start_vertices_neighbours.push_back(point_index);
+				 std::vector<int> visited_points = breadth_first_search(m, point_index, is_visited);
+				 visited_vertices_list.push_back(visited_points);
+			 }
+		 }
+	 }
+	 int minimum_val = m->vertices.size(); // maximum an be mesh size 
+	 int minimum_index = -1;
+	 for (size_t i = 0; i < visited_vertices_list.size(); i++)
+	 {
+		 if (minimum_val > visited_vertices_list[i].size())
+		 {
+			 minimum_val = visited_vertices_list[i].size();
+			 minimum_index = i; 
+		 }
+	 }
+	 for (size_t i = 0; i < visited_vertices_list[minimum_index].size(); i++)
+	 {
+		 int inside_index = visited_vertices_list[minimum_index][i];
+		 is_visited[inside_index] = INSIDE;
+	 }
+	 std::vector<int> return_visited_values;
+
+	 for (size_t i = 0; i < m->vertices.size(); i++)
+	 {
+		 return_visited_values.push_back(is_visited[i]);
+	 }
+
+	 return return_visited_values;
+
+ }
  std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior)
 {
 	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
@@ -935,68 +1033,70 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
 	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
 	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+
+	std::vector<int> is_visited = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
 	// do a breadth first search
 	//	get a random number of a vertex from a mesh 
 	
 	//int random_vertex_index = rand() % m->vertices.size(); // we know that this is inside the system
-	int random_vertex_index = getClosestMeshIndex(m ,point_index1, point_index2, point_index3); // we know that this is inside the system
+	//int random_vertex_index = getClosestMeshIndex(m ,point_index1, point_index2, point_index3); // we know that this is inside the system
 
 
-	//now check if this index is equal to point1 point2 or point3 
-	/*while ((random_vertex_index == point_index1 || random_vertex_index == point_index2 || random_vertex_index == point_index3))
-	{
-		random_vertex_index += 1;
-	}*/
-	//if not equal continue 
+	////now check if this index is equal to point1 point2 or point3 
+	///*while ((random_vertex_index == point_index1 || random_vertex_index == point_index2 || random_vertex_index == point_index3))
+	//{
+	//	random_vertex_index += 1;
+	//}*/
+	////if not equal continue 
 
-	//create a stack for BFS ( breadth first search )
-	std::stack<int> stack;  // a stack consisting of indices
+	////create a stack for BFS ( breadth first search )
+	//std::stack<int> stack;  // a stack consisting of indices
 
-	// get the adjacencies
-	std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
+	//// get the adjacencies
+	//std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
 
-	//lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
-	std::vector<int> is_visited(m->vertices.size());
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		is_visited[i] = OUTSIDE;
-	}
-	for (size_t i = 0; i < path_1_2.size(); i++)
-	{
-		is_visited[path_1_2[i]] = EDGE;
-	}
-	for (size_t i = 0; i < path_1_3.size(); i++)
-	{
-		is_visited[path_1_3[i]] = EDGE;
+	////lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
+	//std::vector<int> is_visited(m->vertices.size());
+	//for (size_t i = 0; i < m->vertices.size(); i++)
+	//{
+	//	is_visited[i] = OUTSIDE;
+	//}
+	//for (size_t i = 0; i < path_1_2.size(); i++)
+	//{
+	//	is_visited[path_1_2[i]] = EDGE;
+	//}
+	//for (size_t i = 0; i < path_1_3.size(); i++)
+	//{
+	//	is_visited[path_1_3[i]] = EDGE;
 
-	}
-	for (size_t i = 0; i < path_2_3.size(); i++)
-	{
-		is_visited[path_2_3[i]] = EDGE;
-	}
-	is_visited[random_vertex_index] = MIDPOINT;
+	//}
+	//for (size_t i = 0; i < path_2_3.size(); i++)
+	//{
+	//	is_visited[path_2_3[i]] = EDGE;
+	//}
+	//is_visited[random_vertex_index] = MIDPOINT;
 
-	//push our point to stack
-	stack.push(random_vertex_index);
-	while (!stack.empty())
-	{
-		int index = stack.top();
-		stack.pop(); //vertex index popped from stack
-		if (is_visited[index] == OUTSIDE || is_visited[index] == MIDPOINT) //not visited
-		{
-			is_visited[index] = INSIDE; // now te vertex has been visited
+	////push our point to stack
+	//stack.push(random_vertex_index);
+	//while (!stack.empty())
+	//{
+	//	int index = stack.top();
+	//	stack.pop(); //vertex index popped from stack
+	//	if (is_visited[index] == OUTSIDE || is_visited[index] == MIDPOINT) //not visited
+	//	{
+	//		is_visited[index] = INSIDE; // now te vertex has been visited
 
-			// this region of loop assumes index is not edge, therefore add the adjacencies
-			for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
-			{
-				stack.push(mesh_adjacencies[index][i].first);
-			}
-		}
-		if (is_visited[index] == EDGE) //do nothing 
-		{
-			;
-		}
-	}
+	//		// this region of loop assumes index is not edge, therefore add the adjacencies
+	//		for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
+	//		{
+	//			stack.push(mesh_adjacencies[index][i].first);
+	//		}
+	//	}
+	//	if (is_visited[index] == EDGE) //do nothing 
+	//	{
+	//		;
+	//	}
+	//}
 
 
 
@@ -1067,30 +1167,30 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		}
 	} */
    // now recolor
-	std::vector<glm::vec3> new_color_buffer;
-	for (size_t i = 0; i < m->colors.size(); i++)
-	{
+	//std::vector<glm::vec3> new_color_buffer;
+	//for (size_t i = 0; i < m->colors.size(); i++)
+	//{
 
-		if (is_visited[i] == EDGE) //edge 
-		{
-			//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-			m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
-		}
-		else if (is_visited[i] == OUTSIDE) //not visited 
-		{
-			m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-			//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-		}
-		else if (is_visited[i] == INSIDE)
-		{
-			m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
-			//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-		}
-		else if (is_visited[i] == MIDPOINT)
-		{
-			m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
-		}
-	}
+	//	if (is_visited[i] == EDGE) //edge 
+	//	{
+	//		//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	//		m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
+	//	}
+	//	else if (is_visited[i] == OUTSIDE) //not visited 
+	//	{
+	//		m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
+	//		//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+	//	}
+	//	else if (is_visited[i] == INSIDE)
+	//	{
+	//		m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
+	//		//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
+	//	}
+	//	else if (is_visited[i] == MIDPOINT)
+	//	{
+	//		m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
+	//	}
+	//}
 	//m->colors = new_color_buffer;
 	return  is_visited;
 }
@@ -3097,3 +3197,4 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	mesh->calculated_symmetry_pairs = resemblance_pairs;*/
 
 }
+

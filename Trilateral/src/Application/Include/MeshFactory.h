@@ -213,6 +213,7 @@ static std::vector<int> draw_with_fib_heap_implementation(Mesh& m, int p1_index,
 		consec_indices.push_back(pred);
 		pred = predecessors[pred];
 	}
+	consec_indices.insert(consec_indices.end(), p1_index);
 	return consec_indices;
 }
 typedef struct
