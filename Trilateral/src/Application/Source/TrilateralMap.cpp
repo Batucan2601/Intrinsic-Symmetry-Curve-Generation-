@@ -957,9 +957,21 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1_2, std::vector<int>& path_1_3, std::vector<int>& path_2_3)
  {
 	 std::vector<int> start_vertices;
-	 start_vertices.push_back(path_1_2[0]);
-	 start_vertices.push_back(path_1_3[path_1_3.size() - 1]);
-	 start_vertices.push_back(path_2_3[0]);
+	 for (size_t i = 0; i < path_1_2.size(); i++)
+	 {
+		 start_vertices.push_back(path_1_2[i]);
+	 }
+	 for (size_t i = 0; i < path_1_3.size(); i++)
+	 {
+		 start_vertices.push_back(path_1_3[i]);
+	 }
+	 for (size_t i = 0; i < path_2_3.size(); i++)
+	 {
+		 start_vertices.push_back(path_2_3[i]);
+	 }
+	 //start_vertices.push_back(path_1_2[0]);
+	 //start_vertices.push_back(path_1_3[path_1_3.size() - 1]);
+	 //start_vertices.push_back(path_2_3[0]);
 	 std::vector<int> is_visited;
 	 for (size_t i = 0; i < m->vertices.size(); i++)
 	 {
@@ -1025,7 +1037,7 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	 return return_visited_values;
 
  }
- std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior)
+ std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no)
 {
 	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
 	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
@@ -1035,137 +1047,7 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
 
 	std::vector<int> is_visited = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
-	// do a breadth first search
-	//	get a random number of a vertex from a mesh 
-	
-	//int random_vertex_index = rand() % m->vertices.size(); // we know that this is inside the system
-	//int random_vertex_index = getClosestMeshIndex(m ,point_index1, point_index2, point_index3); // we know that this is inside the system
 
-
-	////now check if this index is equal to point1 point2 or point3 
-	///*while ((random_vertex_index == point_index1 || random_vertex_index == point_index2 || random_vertex_index == point_index3))
-	//{
-	//	random_vertex_index += 1;
-	//}*/
-	////if not equal continue 
-
-	////create a stack for BFS ( breadth first search )
-	//std::stack<int> stack;  // a stack consisting of indices
-
-	//// get the adjacencies
-	//std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
-
-	////lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
-	//std::vector<int> is_visited(m->vertices.size());
-	//for (size_t i = 0; i < m->vertices.size(); i++)
-	//{
-	//	is_visited[i] = OUTSIDE;
-	//}
-	//for (size_t i = 0; i < path_1_2.size(); i++)
-	//{
-	//	is_visited[path_1_2[i]] = EDGE;
-	//}
-	//for (size_t i = 0; i < path_1_3.size(); i++)
-	//{
-	//	is_visited[path_1_3[i]] = EDGE;
-
-	//}
-	//for (size_t i = 0; i < path_2_3.size(); i++)
-	//{
-	//	is_visited[path_2_3[i]] = EDGE;
-	//}
-	//is_visited[random_vertex_index] = MIDPOINT;
-
-	////push our point to stack
-	//stack.push(random_vertex_index);
-	//while (!stack.empty())
-	//{
-	//	int index = stack.top();
-	//	stack.pop(); //vertex index popped from stack
-	//	if (is_visited[index] == OUTSIDE || is_visited[index] == MIDPOINT) //not visited
-	//	{
-	//		is_visited[index] = INSIDE; // now te vertex has been visited
-
-	//		// this region of loop assumes index is not edge, therefore add the adjacencies
-	//		for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
-	//		{
-	//			stack.push(mesh_adjacencies[index][i].first);
-	//		}
-	//	}
-	//	if (is_visited[index] == EDGE) //do nothing 
-	//	{
-	//		;
-	//	}
-	//}
-
-
-
-	/*for (size_t i = 0; i < m->vertices.size(); i++)  //start checking with visited area , it is highly likelty that visited is outside
-	{
-		if (is_visited[i] == 1)
-		{
-			for (size_t j = i; j < m->vertices.size(); j++)
-			{
-				if (i != j)
-				{
-					std::vector<int> path_i_j = draw_with_fib_heap_implementation(*m, i, j);
-
-					for (size_t k = 0; k < path_i_j.size(); k++)
-					{
-						for (size_t t = 0; t < path_1_2.size(); t++)
-						{
-							if (path_i_j[k] == path_1_2[t])
-							{
-								is_visited_interior = true;
-							}
-						}
-						for (size_t t = 0; t < path_1_3.size(); t++)
-						{
-							if (path_i_j[k] == path_1_3[t])
-							{
-								is_visited_interior = true;
-							}
-						}
-						for (size_t t = 0; t < path_2_3.size(); t++)
-						{
-							if (path_i_j[k] == path_2_3[t])
-							{
-								is_visited_interior = true;
-							}
-						}
-						if (is_visited_interior)
-						{
-							break;
-						}
-					}
-
-					if (is_visited_interior)
-					{
-						break;
-					}
-				}
-			}
-			if (is_visited_interior)
-			{
-				break;
-			}
-		}
-	}
-	//fix is_visited_interior 
-	if (is_visited_interior)
-	{
-		for (size_t i = 0; i < m->vertices.size(); i++)
-		{
-			if (is_visited[i] == 1)
-			{
-				is_visited[i] = 0;
-			}
-			else if (is_visited[i] == 0)
-			{
-				is_visited[i] = 1; 
-			}
-		}
-	} */
    // now recolor
 	//std::vector<glm::vec3> new_color_buffer;
 	//for (size_t i = 0; i < m->colors.size(); i++)
@@ -1195,7 +1077,7 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	return  is_visited;
 }
 std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
-std::vector<int> is_visited, bool is_visited_interior)
+std::vector<int> is_visited, std::vector<int>& global_is_visited)
 {
 	//histogram to be returned 
 	std::vector<float> histogram;
@@ -1257,83 +1139,43 @@ std::vector<int> is_visited, bool is_visited_interior)
 
 	//now recolor
 	std::vector<glm::vec3> new_color_buffer;
-	if (is_visited_interior)
+	for (size_t i = 0; i < m->colors.size(); i++)
 	{
-		for (size_t i = 0; i < m->colors.size(); i++)
+
+		if (is_visited[i] == EDGE) //edge 
 		{
+			//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+			m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
+			global_is_visited[i] = EDGE; 
+		}
+		else if (is_visited[i] == OUTSIDE) //not visited 
+		{
+			//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+			//m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			if (is_visited[i] == EDGE) //edge 
+		}
+		else if (is_visited[i] == INSIDE ) // get the max distance
+		{
+			global_is_visited[i] = INSIDE;
+			//get distance
+			float max_dist_from_index_i = std::max(distance_matrix_p1[i], distance_matrix_p2[i]);
+			max_dist_from_index_i = std::max(max_dist_from_index_i, distance_matrix_p3[i]);
+			int hist_index = max_dist_from_index_i / step;
+			if (hist_index % 2 == 0)
 			{
-				//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-				m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
-			}
-			else if (is_visited[i] == OUTSIDE) //not visited 
-			{
-				//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-				//m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-
-			}
-			else if (is_visited[i] == INSIDE) // get the max distance
-			{
-				//get distance
-				float max_dist_from_index_i = std::max(distance_matrix_p1[i], distance_matrix_p2[i]);
-				max_dist_from_index_i = std::max(max_dist_from_index_i, distance_matrix_p3[i]);
-				int hist_index = max_dist_from_index_i / step;
-				if (hist_index % 2 == 0)
-				{
-					//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-					m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
+				//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
+				m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
 					
-				}
-				else if (hist_index % 2 == 1)
-				{
-					//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-					m->colors[i] = glm::vec3(0.0f, 0.0f, 1.0f);
-
-				}
 			}
-			else if (is_visited[i] == MIDPOINT)
+			else if (hist_index % 2 == 1)
 			{
-				m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
+				//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+				m->colors[i] = glm::vec3(0.0f, 0.0f, 1.0f);
+
 			}
 		}
 	}
-	else
-	{
-		/*for (size_t i = 0; i < m->colors.size(); i++)
-		{
-			if (is_visited[i] == -1) //edge 
-			{
-				//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-				m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
 
-			}
-			else if (is_visited[i] == 0) //not visited 
-			{
-				//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-				m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-
-			}
-			else if (is_visited[i] == 1) // get the max distance
-			{
-				//get distance
-				float max_dist_from_index_i = std::max(distance_matrix_p1[i], distance_matrix_p2[i]);
-				max_dist_from_index_i = std::max(max_dist_from_index_i, distance_matrix_p3[i]);
-				int hist_index = max_dist_from_index_i / step;
-				if (hist_index % 2 == 0)
-				{
-					//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-					m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
-
-				}
-				else if (hist_index % 2 == 1)
-				{
-					//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-					m->colors[i] = glm::vec3(0.0f, 0.0f, 1.0f);
-				}
-			}
-		}*/
-	}
 	//m->colors = new_color_buffer;
 
 	//getting the numbers
@@ -3150,12 +2992,16 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	
 	// use dijkstra to get each beest neihbours
 	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
+	std::vector<int> global_is_visited; 
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		global_is_visited.push_back(OUTSIDE);
+	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		bool is_visited_interior = true;
-		std::vector<int> is_visited = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no, is_visited_interior);
+		std::vector<int> is_visited = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
 		std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index,trilateral_desc[i].p1 ,
-		trilateral_desc[i].p2 , trilateral_desc[i].p3 , division_no,is_visited,is_visited_interior);
+		trilateral_desc[i].p2 , trilateral_desc[i].p3 , division_no,is_visited , global_is_visited);
 		trilateral_histograms.push_back(histogram);
 	}
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;

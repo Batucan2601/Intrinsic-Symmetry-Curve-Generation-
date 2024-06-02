@@ -324,8 +324,8 @@ std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& se
 
 
 //static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
-std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3,
-int division_no,std::vector<int> is_visited, bool is_visited_interior);
+std::vector<float> histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
+	std::vector<int> is_visited, std::vector<int>& global_is_visited);
 
 // the ultimate trilateral descriptor generator 
 TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);
@@ -341,7 +341,7 @@ void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 
 //region of interest
-std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no);
 void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
 
 
