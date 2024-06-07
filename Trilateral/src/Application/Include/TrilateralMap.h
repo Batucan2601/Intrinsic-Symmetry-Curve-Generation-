@@ -359,9 +359,12 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
 
  void reset_points(MeshFactory& mesh_fac, int meshIndex);
 
+ // spin image creation 
+ std::vector<float> trilateral_generate_spin_image(MeshFactory& mesh_fac, int selected_index, std::vector<int>& vertices_in_tri_area, int division_no);
+ float chi_squre_distance(std::vector<float>& vec1, std::vector<float>& vec2);
 
  void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no);
-
+ void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
 
 
 

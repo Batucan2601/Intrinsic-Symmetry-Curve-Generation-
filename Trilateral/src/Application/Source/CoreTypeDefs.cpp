@@ -332,3 +332,23 @@ Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec) {
 	}
 	return eigen_vec;
 }
+
+float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, const glm::vec3& linePoint2) 
+{
+	// Calculate the line direction vector
+	glm::vec3 lineDir = linePoint2 - linePoint1;
+
+	// Calculate the vector from linePoint1 to the given point
+	glm::vec3 pointVec = point - linePoint1;
+
+	// Project pointVec onto lineDir to find the projection length
+	float projectionLength = glm::dot(pointVec, lineDir) /  std::pow(glm::length(lineDir) ,2 );
+
+	// Calculate the closest point on the line to the given point
+	glm::vec3 closestPoint = linePoint1 + projectionLength * lineDir;
+
+	// Calculate the distance from the closest point to the given point
+	float distance = glm::length(point - closestPoint);
+
+	return distance;
+}

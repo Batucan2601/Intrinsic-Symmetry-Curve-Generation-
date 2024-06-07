@@ -22,3 +22,4 @@ Mesh compute_landmark_MDS(Mesh* mesh ,  const unsigned target_dim , const int no
 void trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh ,  const unsigned target_dim , const int no_of_landmarks = 100 );
 Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks, const int no_of_trilateral_points , float& error_percentage);
 void create_trilateral_sym_w_landmarl_with_planes(std::vector<Mesh> mesh, const unsigned target_dim, const int no_of_landmarks, const int no_of_trilateral_points , std::string filename);
+std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(Mesh* mesh, const unsigned target_dim , std::vector<unsigned int> vertex_indices);

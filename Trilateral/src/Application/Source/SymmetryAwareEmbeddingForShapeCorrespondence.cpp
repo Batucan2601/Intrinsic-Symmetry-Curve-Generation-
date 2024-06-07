@@ -685,6 +685,99 @@ void create_trilateral_sym_w_landmarl_with_planes(std::vector<Mesh>mesh_vector, 
 	}
 	txtFile.close();
 }
+std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(Mesh* mesh, const unsigned target_dim, std::vector<unsigned int> landmark_vertex_indices)
+{
+	int no_of_landmarks = landmark_vertex_indices.size();
 
+	// 2 - create landmark matrix 
+	Eigen::MatrixXd landmark_delta(no_of_landmarks, no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, landmark_vertex_indices[i]);
+		for (size_t j = 0; j < no_of_landmarks; j++)
+		{
+			landmark_delta(i, j) = distances[landmark_vertex_indices[j]] * distances[landmark_vertex_indices[j]];
+		}
+	}
+
+	Eigen::MatrixXd H = Eigen::MatrixXd::Identity(no_of_landmarks, no_of_landmarks) - (1.0 / no_of_landmarks) * Eigen::VectorXd::Ones(no_of_landmarks)
+		* Eigen::VectorXd::Ones(no_of_landmarks
+		).transpose();
+	Eigen::MatrixXd B = -0.5 * H * landmark_delta * H;
+
+
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(B);
+	Eigen::VectorXd S = eigensolver.eigenvalues();
+	Eigen::MatrixXd V = eigensolver.eigenvectors();
+
+	ExtractNLargestEigens(target_dim, S, V);
+
+	Eigen::MatrixXd L(target_dim, no_of_landmarks);
+	for (size_t i = 0; i < target_dim; i++)
+	{
+		L.row(i) = sqrt(S(i)) * V.col(i).transpose();
+
+	}
+	Mesh landmark_mesh = *mesh;
+	landmark_mesh.vertices.clear();
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		//landmark_mesh.vertices.push_back(glm::vec3(L(0,i) , L(1, i) , L(2, i)) );
+		landmark_mesh.vertices.push_back(mesh->vertices[landmark_vertex_indices[i]]);
+	}
+
+	// distance based triangulation
+
+	//find n x n matrix
+	Eigen::MatrixXd delta_n(no_of_landmarks, no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		for (size_t j = 0; j < no_of_landmarks; j++)
+		{
+			double distance = glm::distance(landmark_mesh.vertices[i], landmark_mesh.vertices[j]);
+			delta_n(i, j) = distance * distance;
+		}
+	}
+	//compute mean 
+	Eigen::VectorXd delta_n_mean(no_of_landmarks);
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		delta_n_mean(i) = 0;
+	}
+	for (size_t i = 0; i < no_of_landmarks; i++)
+	{
+		delta_n_mean = delta_n_mean + delta_n.col(i);
+	}
+	delta_n_mean /= no_of_landmarks;
+
+	//pseudo inverse transpose
+	Eigen::MatrixXd L_k(target_dim, no_of_landmarks);
+	for (size_t i = 0; i < target_dim; i++)
+	{
+		L_k.row(i) = V.col(i).transpose() / sqrt(S(i));
+	}
+	std::cout << " V dim " << V.rows() << " " << V.cols() << std::endl;
+
+	std::vector<glm::vec3> temp_vertices;
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		Eigen::VectorXd delta_a(no_of_landmarks);
+		bool is_point_landmark = false;
+		size_t j = 0;
+		for (j = 0; j < no_of_landmarks; j++)
+		{
+			float dist = glm::distance(mesh->vertices[i], landmark_mesh.vertices[j]);
+			delta_a(j) = dist * dist;
+		}
+		Eigen::VectorXd x_a_eigen = -1.0 / 2.0 * L_k * (delta_a - delta_n_mean);
+		glm::vec3 x_a(x_a_eigen(0), x_a_eigen(1), x_a_eigen(2));
+		temp_vertices.push_back(x_a);
+	}
+	//landmark_mesh.vertices = temp_vertices;
+	//get the center point from mesh
+
+	//return landmark_mesh;
+	return temp_vertices;
+}
 
 

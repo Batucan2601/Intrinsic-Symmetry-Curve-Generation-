@@ -838,8 +838,8 @@ void  NLateralDescriptor::get_ROI()
 {
 	float total_area = 0;
 	bool is_visited_interior = false;
-	std::vector<int> roi_indices =  trialteral_ROI(&this->mesh, this->point_indices[0], this->point_indices[1], this->point_indices[2], 1, is_visited_interior);
-	trilateral_ROI_area(&this->mesh, roi_indices, total_area);
+	//std::vector<int> roi_indices =  trialteral_ROI(&this->mesh, this->point_indices[0], this->point_indices[1], this->point_indices[2], 1, is_visited_interior);
+	//trilateral_ROI_area(&this->mesh, roi_indices, total_area);
 
 	this->area = total_area;
 }

@@ -54,6 +54,7 @@ std::vector<float> lines;
 //int no_of_sampling_fps = 10; 
 //int no_of_agd_points = 10; 
 int no_of_points = 10;
+int no_of_hist_division = 10;
 
 Plane plane; 
 std::vector<std::vector<int>> symmetry_paired_points;
@@ -112,7 +113,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
         
-        is_visited = trialteral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no, is_visited_interior);
+        is_visited = trialteral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -120,7 +121,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
 
-        histogram = histogramROi(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index, partition_no,  is_visited , is_visited_interior);
+        //histogram = histogramROi(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index, partition_no,  is_visited );
         m_factory.remove_all();
         m_factory.add_all();
         activate_histogram = true; 
@@ -272,9 +273,18 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         get_N_ring_area(&m_factory.mesh_vec[selected_mesh], 100, 1);
     }
+    ImGui::InputInt(" histogram sampling ", &no_of_hist_division);
     if (ImGui::Button("FPS and histogram matching "))
     {
-        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , 10 );
+        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , no_of_hist_division);
+        m_factory.remove_all();
+        m_factory.add_all();
+        //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
+
+    }
+    if (ImGui::Button("FPS and histogram matching w/ spin images "))
+    {
+        trilateral_FPS_histogram_matching_w_spin_image(m_factory, selected_mesh , no_of_points , no_of_hist_division);
         m_factory.remove_all();
         m_factory.add_all();
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)

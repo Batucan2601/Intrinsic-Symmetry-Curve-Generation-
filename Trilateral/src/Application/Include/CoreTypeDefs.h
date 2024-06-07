@@ -54,3 +54,4 @@ float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p2_1
 void get_coefficients_from_plane(const Plane& plane , float& A , float& B , float& C , float& D);
 std::vector<int> getNumberFromString(std::string s);
 Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec);
+float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, const glm::vec3& linePoint2);
