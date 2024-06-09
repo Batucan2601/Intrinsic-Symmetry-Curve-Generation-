@@ -3266,12 +3266,13 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 	std::vector<unsigned int> sampled_points = furthest_point_sampling(mesh, sample_no, true);
 	int N = mesh->vertices.size();
 	//MDS points
-	mds_points = compute_landmark_MDS_w_givenPoints(mesh, 2, sampled_points);
+	mds_points = compute_landmark_MDS_w_givenPoints(mesh, 3, sampled_points);
 
 	// use dijkstra to get each beest neihbours
 	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
 	std::vector<int> global_is_visited;
 	std::vector<std::vector<int>> is_visited_list(mesh->vertices.size()); 
+	std::vector<std::vector<int>> points_inside_list(mesh->vertices.size()); 
 	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
 		global_is_visited.push_back(OUTSIDE);
@@ -3280,17 +3281,59 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 	{
 		is_visited_list[i] = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
 		std::vector<int> points_inside;
-		for (size_t i = 0; i < N; i++)
+		for (size_t j = 0; j < N; j++)
 		{
-			if (is_visited[i] == INSIDE)
+			if (is_visited_list[i][j] == INSIDE)
 			{
-				points_inside.push_back(i);
+				points_inside.push_back(j);
 			}
 		}
-		std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside, division_no);
-		trilateral_histograms.push_back(histogram);
+		points_inside_list[i] = points_inside;
+		/*std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside, division_no);
+		trilateral_histograms.push_back(histogram);*/
 	}
 
+	mesh->vertices = mds_points;
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside_list[i], division_no);
+		trilateral_histograms.push_back(histogram);
 
+	}
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	//compare each
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		float smallest_dist = INFINITY;
+		int smallest_index = -1;
+		for (size_t j = 0; j < sample_no; j++)
+		{
+			if (j == i)
+			{
+				continue;
+			}
+			float dist = chi_squre_distance(trilateral_histograms[i], trilateral_histograms[j]);
+			if (smallest_dist > dist)
+			{
+				smallest_dist = dist;
+				smallest_index = j;
+			}
+		}
+		resemblance_pairs.push_back(std::pair<int, int>(sampled_points[i], sampled_points[smallest_index]));
+	}
+
+	//buffer
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		mesh->colors[resemblance_pairs[i].first].r = 255;
+		mesh->colors[resemblance_pairs[i].first].g = 0;
+		mesh->colors[resemblance_pairs[i].first].b = 0;
+
+		mesh->colors[resemblance_pairs[i].second].r = 0;
+		mesh->colors[resemblance_pairs[i].second].g = 0;
+		mesh->colors[resemblance_pairs[i].second].b = 255;
+	}
+
+	mesh->calculated_symmetry_pairs = resemblance_pairs;
 
 }
