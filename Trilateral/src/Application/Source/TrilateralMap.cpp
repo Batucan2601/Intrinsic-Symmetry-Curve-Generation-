@@ -3,7 +3,8 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/MetricCalculations.h"
 
-
+static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
+	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2);
 
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
@@ -3336,4 +3337,120 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 
 	mesh->calculated_symmetry_pairs = resemblance_pairs;
 
+}
+
+static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited)
+{
+	Mesh* m = &meshFac.mesh_vec[selectedIndex];
+	int numPoints = m->vertices.size();
+	std::vector<int> vertices_inside; 
+	for (size_t i = 0; i < numPoints; i++)
+	{
+		if (is_visited[i] != OUTSIDE)
+		{
+			vertices_inside.push_back(i);
+		}
+	}
+}
+// A sampler of  Useful  page 128 
+static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
+	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2 , int partition_no ) {
+	Mesh* m = &meshFac.mesh_vec[selectedIndex];
+	
+	int numVertices = m->vertices.size();
+	int numTriangles = m->triangles.size();
+	principalCurvatures1.resize(numVertices, 0.0);
+	principalCurvatures2.resize(numVertices, 0.0);
+	std::vector<int> vertices_inside = getPointsInside(meshFac, selectedIndex, is_visited);
+
+	//get numbe of points inside
+	int numTrianglesInside = 0;
+	for (int i = 0; i < numTriangles; i += 3) {
+	{
+		int p1_index = m->triangles[i];
+		int p2_index = m->triangles[i + 1];
+		int p3_index = m->triangles[i + 2];
+		if( is_visited[p1_index] != OUTSIDE && is_visited[p2_index] != OUTSIDE
+		&& is_visited[p3_index] != OUTSIDE)
+		{
+			numTrianglesInside++;
+		}
+	}
+	// For each vertex, we need to estimate the curvature tensor
+	for (int i = 0; i < vertices_inside.size(); ++i) {
+		Eigen::Matrix3d curvatureTensor = Eigen::Matrix3d::Zero();
+		Eigen::Vector3d vertexNormal = Eigen::Vector3d::Zero();
+
+		for (int j = 0; j < numTriangles; j+=3 ) {
+			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i) {
+				glm::vec3 v1 = m->vertices[m->triangles[j]];
+				glm::vec3 v2 = m->vertices[m->triangles[j + 1]];
+				glm::vec3 v3 = m->vertices[m->triangles[j + 2]];
+
+				glm::vec3 cross_res = glm::normalize(glm::cross(v3 - v1, v2 - v1));
+				Eigen::Vector3d normal(cross_res.x,cross_res.y,cross_res.z);
+				vertexNormal += normal;
+
+				// Compute the edge vectors
+				Eigen::Vector3d e1 = Eigen::Vector3d(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z).normalized();
+				Eigen::Vector3d e2 = Eigen::Vector3d(v3.x - v1.x, v3.y - v1.y, v3.z - v1.z).normalized();
+
+				// Compute the curvature tensor for the current triangle
+				curvatureTensor += (normal * normal.transpose());
+			}
+		}
+
+		vertexNormal.normalize();
+		curvatureTensor /= numTrianglesInside;
+
+		// Diagonalize the curvature tensor to get the principal curvatures
+		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(curvatureTensor);
+		Eigen::Vector3d eigenvalues = solver.eigenvalues();
+
+		principalCurvatures1[i] = eigenvalues(0);
+		principalCurvatures2[i] = eigenvalues(2); // Smallest and largest eigenvalues correspond to principal curvatures
+	}
+	//generate histogram
+	// 1 - get average point
+	glm::vec3 avg_point(0.0f, 0.0f, 0.0f);
+	for (size_t i = 0; i < vertices_inside.size(); i++)
+	{
+		avg_point += m->vertices[vertices_inside[i]];
+	}
+	avg_point /= vertices_inside.size();
+
+	//get the point nearest to avg_point
+	int nearest_vertex = -1;
+	float nearest_diff = INFINITY;
+	for (size_t i = 0; i < vertices_inside.size(); i++)
+	{
+		float dist = glm::distance(avg_point, m->vertices[vertices_inside[i]]);
+		if (nearest_diff > dist)
+		{
+			nearest_diff = dist; 
+			nearest_vertex = i; 
+		}
+	}
+
+	std::vector<float> point_distances(vertices_inside.size());
+	for (size_t i = 0; i < vertices_inside.size(); i++)
+	{
+		point_distances[i] = distancePointToLine(m->vertices[vertices_inside[i]], reference_point, ref_point_and_normal);
+	}
+	//generate histogram
+
+	// 1- get min and max
+	float min = INFINITY;
+	float max = -INFINITY;
+	for (size_t i = 0; i < N; i++)
+	{
+		if (point_distances[i] > max)
+		{
+			max = point_distances[i];
+		}
+		if (point_distances[i] < min)
+		{
+			min = point_distances[i];
+		}
+	}
 }
