@@ -3,8 +3,9 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/MetricCalculations.h"
 
-static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
-	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2);
+static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
+	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2, int partition_no);
+static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited);
 
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
@@ -3339,6 +3340,86 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 
 }
 
+// exact same with function above except do the histogram in MDS 
+void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
+{
+	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+	std::vector<std::vector<float>> trilateral_histograms;
+	std::vector<unsigned int> sampled_points = furthest_point_sampling(mesh, sample_no, true);
+	int N = mesh->vertices.size();
+
+	// use dijkstra to get each beest neihbours
+	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
+	std::vector<int> global_is_visited;
+	std::vector<std::vector<int>> is_visited_list(mesh->vertices.size());
+	std::vector<std::vector<int>> points_inside_list(mesh->vertices.size());
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
+	{
+		global_is_visited.push_back(OUTSIDE);
+	}
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		is_visited_list[i] = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
+		std::vector<int> points_inside;
+		for (size_t j = 0; j < N; j++)
+		{
+			if (is_visited_list[i][j] == INSIDE)
+			{
+				points_inside.push_back(j);
+			}
+		}
+		points_inside_list[i] = points_inside;
+		/*std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside, division_no);
+		trilateral_histograms.push_back(histogram);*/
+	}
+
+	std::vector<double> pC1_list;
+	std::vector<double> pC2_list;
+	for (size_t i = 0; i < sample_no; i++)
+	{
+
+		std::vector<float> histogram  = computePrincipalCurvatures(mesh_fac, selected_index, is_visited_list[i],
+			pC1_list, pC2_list, division_no);
+		trilateral_histograms.push_back(histogram);
+
+	}
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	//compare each
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		float smallest_dist = INFINITY;
+		int smallest_index = -1;
+		for (size_t j = 0; j < sample_no; j++)
+		{
+			if (j == i)
+			{
+				continue;
+			}
+			float dist = chi_squre_distance(trilateral_histograms[i], trilateral_histograms[j]);
+			if (smallest_dist > dist)
+			{
+				smallest_dist = dist;
+				smallest_index = j;
+			}
+		}
+		resemblance_pairs.push_back(std::pair<int, int>(sampled_points[i], sampled_points[smallest_index]));
+	}
+
+	//buffer
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		mesh->colors[resemblance_pairs[i].first].r = 255;
+		mesh->colors[resemblance_pairs[i].first].g = 0;
+		mesh->colors[resemblance_pairs[i].first].b = 0;
+
+		mesh->colors[resemblance_pairs[i].second].r = 0;
+		mesh->colors[resemblance_pairs[i].second].g = 0;
+		mesh->colors[resemblance_pairs[i].second].b = 255;
+	}
+
+	mesh->calculated_symmetry_pairs = resemblance_pairs;
+
+}
 static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited)
 {
 	Mesh* m = &meshFac.mesh_vec[selectedIndex];
@@ -3351,10 +3432,12 @@ static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex,
 			vertices_inside.push_back(i);
 		}
 	}
+	return vertices_inside;
 }
 // A sampler of  Useful  page 128 
-static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
-	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2 , int partition_no ) {
+static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
+	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2 , int division_no) 
+{
 	Mesh* m = &meshFac.mesh_vec[selectedIndex];
 	
 	int numVertices = m->vertices.size();
@@ -3365,7 +3448,7 @@ static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, 
 
 	//get numbe of points inside
 	int numTrianglesInside = 0;
-	for (int i = 0; i < numTriangles; i += 3) {
+	for (int i = 0; i < numTriangles; i += 3) 
 	{
 		int p1_index = m->triangles[i];
 		int p2_index = m->triangles[i + 1];
@@ -3377,12 +3460,15 @@ static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, 
 		}
 	}
 	// For each vertex, we need to estimate the curvature tensor
-	for (int i = 0; i < vertices_inside.size(); ++i) {
+	for (int i = 0; i < vertices_inside.size(); ++i)
+	{
 		Eigen::Matrix3d curvatureTensor = Eigen::Matrix3d::Zero();
 		Eigen::Vector3d vertexNormal = Eigen::Vector3d::Zero();
 
-		for (int j = 0; j < numTriangles; j+=3 ) {
-			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i) {
+		for (int j = 0; j < numTriangles; j+=3 ) 
+		{
+			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i) 
+			{
 				glm::vec3 v1 = m->vertices[m->triangles[j]];
 				glm::vec3 v2 = m->vertices[m->triangles[j + 1]];
 				glm::vec3 v3 = m->vertices[m->triangles[j + 2]];
@@ -3435,14 +3521,14 @@ static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, 
 	std::vector<float> point_distances(vertices_inside.size());
 	for (size_t i = 0; i < vertices_inside.size(); i++)
 	{
-		point_distances[i] = distancePointToLine(m->vertices[vertices_inside[i]], reference_point, ref_point_and_normal);
+		point_distances[i] = glm::distance(m->vertices[vertices_inside[i]], avg_point );
 	}
 	//generate histogram
 
 	// 1- get min and max
 	float min = INFINITY;
 	float max = -INFINITY;
-	for (size_t i = 0; i < N; i++)
+	for (size_t i = 0; i < point_distances.size(); i++)
 	{
 		if (point_distances[i] > max)
 		{
@@ -3453,4 +3539,20 @@ static void computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, 
 			min = point_distances[i];
 		}
 	}
+	float step = (max - min) / division_no;
+
+	std::vector<float> histogram(vertices_inside.size());
+	for (size_t i = 0; i < vertices_inside.size(); i++)
+	{
+		int index = (point_distances[i] - min) / step;
+		histogram[index]++; 
+	}
+
+	//normalize histogram
+	for (size_t i = 0; i < vertices_inside.size(); i++)
+	{
+		histogram[i] /= vertices_inside[i];
+	}
+
+	return histogram; 
 }

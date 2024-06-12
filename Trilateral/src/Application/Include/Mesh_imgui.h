@@ -298,7 +298,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
 
     }
-        
+    if (ImGui::Button("mesh and histogram matching w/ principal components "))
+    {
+        //trilateral_FPS_histogram_matching_w_principal_comp()
+    }
     ImGui::End();
         
 }
