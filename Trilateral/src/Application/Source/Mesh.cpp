@@ -4,6 +4,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 
+static void calculate_areas(Mesh* m);
+static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+
+
 Mesh::Mesh()
 {
 
@@ -36,6 +40,7 @@ Mesh::Mesh(char* filename)
 	}
 	this->file_name = this->file_name.substr( slash_index+1, this->file_name.size());
 	generate_normals();
+	calculate_areas(this);
 }
 void Mesh::read_ply_format(char* filename)
 {
@@ -527,4 +532,29 @@ unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point)
 		}
 	}
 	return closest_distance_index;
+}
+
+
+static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+{
+	glm::vec3 vec1 = p2 - p1;
+	glm::vec3 vec2 = p3 - p1;
+
+	glm::vec3 cross1 = glm::cross(vec1, vec2);
+	float length = glm::length(cross1) / 2;
+	return length;
+}
+static void calculate_areas(Mesh* m)
+{
+	m->areas = std::vector<float>(m->vertices.size(), 0);
+	for (size_t i = 0; i < m->triangles.size(); i+=3)
+	{
+		glm::vec3 p1 = m->vertices[m->triangles[i]];
+		glm::vec3 p2 = m->vertices[m->triangles[i+1]];
+		glm::vec3 p3 = m->vertices[m->triangles[i+2]];
+		float area = compute_triangle_area(p1, p2, p3);
+		m->areas[m->triangles[i]] += area;
+		m->areas[m->triangles[i+1]] += area;
+		m->areas[m->triangles[i+2]] += area;
+	}
 }

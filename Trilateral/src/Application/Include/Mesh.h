@@ -29,6 +29,7 @@ public:
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
 	std::vector<glm::vec3> normals; // fil with constructor, actual vertices
 	std::vector<float> normals_display; // vertex information of normals
+	std::vector<float> areas; // vertex information of normals
 	glm::mat4 model_mat;
 	std::string file_name; 
 	//VAO object

@@ -2,10 +2,15 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/DominantSymmetry.h"
 #include "../Include/MetricCalculations.h"
+#include "math.h"
+#ifndef PI
+#define PI 3.14159265358979323846
+#endif
 
 static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
 	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2, int partition_no);
 static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited);
+static Eigen::Matrix3d computeCurvatureTensor(const Mesh& mesh, int vertexIndex);
 
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
@@ -3373,13 +3378,14 @@ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, c
 		trilateral_histograms.push_back(histogram);*/
 	}
 
-	std::vector<double> pC1_list;
-	std::vector<double> pC2_list;
 	for (size_t i = 0; i < sample_no; i++)
 	{
-
+		if (i == 55)
+		{
+			int a = 1; 
+		}
 		std::vector<float> histogram  = computePrincipalCurvatures(mesh_fac, selected_index, is_visited_list[i],
-			pC1_list, pC2_list, division_no);
+		division_no);
 		trilateral_histograms.push_back(histogram);
 
 	}
@@ -3395,7 +3401,11 @@ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, c
 			{
 				continue;
 			}
-			float dist = chi_squre_distance(trilateral_histograms[i], trilateral_histograms[j]);
+			float dist = 0; //= fabs(chi_squre_distance(trilateral_histograms[i], trilateral_histograms[j]));
+			for (size_t k = 0; k < division_no; k++)
+			{
+				dist += powf(trilateral_histograms[i][k] - trilateral_histograms[j][k], 2);
+			}
 			if (smallest_dist > dist)
 			{
 				smallest_dist = dist;
@@ -3423,7 +3433,7 @@ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, c
 static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited)
 {
 	Mesh* m = &meshFac.mesh_vec[selectedIndex];
-	int numPoints = m->vertices.size();
+	int numPoints = is_visited.size();
 	std::vector<int> vertices_inside; 
 	for (size_t i = 0; i < numPoints; i++)
 	{
@@ -3436,10 +3446,13 @@ static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex,
 }
 // A sampler of  Useful  page 128 
 static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
-	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2 , int division_no) 
+	int division_no) 
 {
-	Mesh* m = &meshFac.mesh_vec[selectedIndex];
 	
+	Mesh* m = &meshFac.mesh_vec[selectedIndex];
+	std::vector<float> principalCurvatures1;
+	std::vector<float> principalCurvatures2;
+	std::vector<float> shapeIndices;
 	int numVertices = m->vertices.size();
 	int numTriangles = m->triangles.size();
 	principalCurvatures1.resize(numVertices, 0.0);
@@ -3463,9 +3476,8 @@ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int s
 	for (int i = 0; i < vertices_inside.size(); ++i)
 	{
 		Eigen::Matrix3d curvatureTensor = Eigen::Matrix3d::Zero();
-		Eigen::Vector3d vertexNormal = Eigen::Vector3d::Zero();
 
-		for (int j = 0; j < numTriangles; j+=3 ) 
+		/*for (int j = 0; j < numTriangles; j += 3)
 		{
 			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i) 
 			{
@@ -3484,17 +3496,21 @@ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int s
 				// Compute the curvature tensor for the current triangle
 				curvatureTensor += (normal * normal.transpose());
 			}
-		}
-
-		vertexNormal.normalize();
-		curvatureTensor /= numTrianglesInside;
+		}*/
+		curvatureTensor  = computeCurvatureTensor(meshFac.mesh_vec[selectedIndex], vertices_inside[i]);
 
 		// Diagonalize the curvature tensor to get the principal curvatures
 		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(curvatureTensor);
 		Eigen::Vector3d eigenvalues = solver.eigenvalues();
 
-		principalCurvatures1[i] = eigenvalues(0);
-		principalCurvatures2[i] = eigenvalues(2); // Smallest and largest eigenvalues correspond to principal curvatures
+		principalCurvatures1.push_back(eigenvalues(0));
+		principalCurvatures2.push_back(eigenvalues(2)); // Smallest and largest eigenvalues correspond to principal curvatures
+		float shape_index = -2 * PI * atan( (eigenvalues(2) - eigenvalues(0)) / (eigenvalues(0) + eigenvalues(2)));
+		if (_isnanf(shape_index))
+		{
+			int d = 1;
+		}
+		shapeIndices.push_back(shape_index);
 	}
 	//generate histogram
 	// 1 - get average point
@@ -3541,18 +3557,43 @@ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int s
 	}
 	float step = (max - min) / division_no;
 
-	std::vector<float> histogram(vertices_inside.size());
+	std::vector<float> histogram(division_no, 0);
+	std::vector<int> histogram_sizes(division_no,0 );
+	
 	for (size_t i = 0; i < vertices_inside.size(); i++)
 	{
-		int index = (point_distances[i] - min) / step;
-		histogram[index]++; 
+		int index =  (point_distances[i] - min) / step;
+		if (max == point_distances[i])
+		{
+			index--;
+		}
+		histogram[index] += shapeIndices[i] ;
+		histogram_sizes[index]++;
 	}
 
 	//normalize histogram
-	for (size_t i = 0; i < vertices_inside.size(); i++)
+	for (size_t i = 0; i < division_no; i++)
 	{
-		histogram[i] /= vertices_inside[i];
+		histogram[i] /= histogram_sizes[i];
+	}
+	return histogram; 
+}
+
+static Eigen::Matrix3d computeCurvatureTensor(const Mesh& mesh, int vertexIndex) 
+{
+	const glm::vec3& v = mesh.vertices[vertexIndex];
+	Eigen::Matrix3d curvatureTensor = Eigen::Matrix3d::Zero();
+	double area = mesh.areas[vertexIndex];
+
+	for (int i = 0; i < mesh.adjacenies[vertexIndex].size(); i++) {
+		glm::vec3 edgeVector = mesh.vertices[mesh.adjacenies[vertexIndex][i].first] - v;
+		Eigen::Vector3d edgeVecEigen;
+		edgeVecEigen(0) = edgeVector.x;
+		edgeVecEigen(1) = edgeVector.y;
+		edgeVecEigen(2) = edgeVector.z;
+		edgeVecEigen.normalize();
+		curvatureTensor += /*e.angle **/ edgeVecEigen * edgeVecEigen.transpose();
 	}
 
-	return histogram; 
+	return curvatureTensor / area;
 }

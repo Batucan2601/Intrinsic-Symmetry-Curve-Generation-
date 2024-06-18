@@ -366,5 +366,8 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no);
  void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
  void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
+ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
 
+ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
+	 int division_no);
 
