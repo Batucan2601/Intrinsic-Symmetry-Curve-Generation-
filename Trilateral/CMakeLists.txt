@@ -27,6 +27,8 @@ set(Header_Files
     "src/Application/Include/ShapeDiameter.h"
     "src/Application/Include/Ray.h"
     "src/Application/Include/SkeletalNLateral.h"
+    "src/Application/Include/FuzzyGeodesic.h"
+
 
 )
 source_group("Header Files" FILES ${Header_Files})
@@ -59,6 +61,8 @@ set(Source_Files
     "src/Application/Source/ShapeDiameter.cpp"
     "src/Application/Source/Ray.cpp"
     "src/Application/Source/SkeletalNLateral.cpp"
+    "src/Application/Source/FuzzyGeodesic.cpp"
+
 
 )
 source_group("Source Files" FILES ${Source_Files})
