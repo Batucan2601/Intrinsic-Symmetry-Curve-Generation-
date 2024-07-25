@@ -11,6 +11,7 @@
 #include <eigen/Eigen/Dense>
 #include "Sampling.h"
 #include "CoreTypeDefs.h"
+#include "FuzzyGeodesic.h"
 #include <src/Application/Include/CoreTypeDefs.h>
 
 // 1 - use area error
@@ -371,3 +372,8 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
 	 int division_no);
 
+
+
+ //using fuzzy geodesics 
+
+ void trilateral_fuzzyGeodesic();

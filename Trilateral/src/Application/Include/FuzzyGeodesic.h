@@ -14,5 +14,7 @@ typedef struct
 	std::vector<FuzzyGeodesic> fuzzyGeodesicList;
 }FuzzyGeodesicList;
 
+
+
 FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex, float sigma);
-void FuzzyGeodesic_colorMesh(Mesh* m , const FuzzyGeodesicList& fuzzyList , );
+void FuzzyGeodesic_FuzzyArea(Mesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );

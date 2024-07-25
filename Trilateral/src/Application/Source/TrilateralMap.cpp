@@ -3597,3 +3597,5 @@ static Eigen::Matrix3d computeCurvatureTensor(const Mesh& mesh, int vertexIndex)
 
 	return curvatureTensor / area;
 }
+
+

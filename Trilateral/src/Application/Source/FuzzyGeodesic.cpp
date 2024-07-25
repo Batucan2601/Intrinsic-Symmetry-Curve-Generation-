@@ -44,7 +44,41 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 	return fuzzyList;
 }
 
-void FuzzyGeodesic_colorMesh(Mesh* m, const FuzzyGeodesicList& fuzzyList)
+// use fuzziness as a direct distance
+// for each point
+// get the area covered by fuzziness around the point 
+void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
 {
+	int N = m->vertices.size();
+	for (size_t i = 0; i < fuzzyList.fuzzyGeodesicList.size(); i++)
+	{
+		std::vector<int> isVertexInside(N, false);
+		std::vector<float> distances =  compute_geodesic_distances_fibonacci_heap_distances(*m, fuzzyList.fuzzyGeodesicList[i].pointIndex);
+		for (size_t j = 0; j < N; j++)
+		{
+			if (distances[j] > fuzzyList.fuzzyGeodesicList[i].fuzziness)
+			{
+				isVertexInside[j] = true; 
+			}
+		}
+
+		float area = 0;
+		//get all triangles
+		for (size_t i = 0; i < m->triangles.size(); i+=3)
+		{
+			int index1 = m->triangles[i];
+			int index2 = m->triangles[i + 1];
+			int index3 = m->triangles[i + 2];
+			if (isVertexInside[index1] && isVertexInside[index2] && isVertexInside[index3])
+			{
+				area = area + compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+				if (color)
+				{
+					m->colors[index1].g = 255; 
+				}
+			}
+		}
+
+	}
 
 }
