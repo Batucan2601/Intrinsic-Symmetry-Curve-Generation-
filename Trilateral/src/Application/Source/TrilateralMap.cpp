@@ -3598,4 +3598,15 @@ static Eigen::Matrix3d computeCurvatureTensor(const Mesh& mesh, int vertexIndex)
 	return curvatureTensor / area;
 }
 
-
+void trilateral_fuzzyGeodesic(MeshFactory& meshFac, int selectedIndex, int p1, int p2, int p3 , float fuzziness_sigma )
+{
+	FuzzyGeodesicList fuzzyLists[3];
+	Mesh* m = &meshFac.mesh_vec[selectedIndex];
+	fuzzyLists[0] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p2, fuzziness_sigma);
+	fuzzyLists[1] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p2, p3, fuzziness_sigma);
+	fuzzyLists[2] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p3, fuzziness_sigma);
+   
+	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
+	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
+	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+}

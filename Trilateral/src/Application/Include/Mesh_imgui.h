@@ -75,6 +75,10 @@ std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs;
 Mesh m1, m2;
 std::vector<int> m1_map_indices, m2_map_indices;
 std::string KIDS_text_file_name;
+
+//fuzziness
+float fuzziness = 1;
+
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -301,6 +305,13 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("mesh and histogram matching w/ principal components "))
     {
         trilateral_FPS_histogram_matching_w_principal_comp(m_factory, selected_mesh, no_of_points, no_of_hist_division);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    ImGui::InputFloat("fuzziness", &fuzziness);
+    if (ImGui::Button("Calculate fuzzy geodesic areas with trilateral points "))
+    {
+        trilateral_fuzzyGeodesic(m_factory, selected_mesh, point_1_index, point_1_index, point_3_index , fuzziness);
         m_factory.remove_all();
         m_factory.add_all();
     }

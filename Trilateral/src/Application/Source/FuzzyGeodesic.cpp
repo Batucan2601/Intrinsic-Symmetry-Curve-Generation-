@@ -34,11 +34,12 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 
 	for (size_t i = 0; i < path.size(); i++)
 	{
+		FuzzyGeodesic f_geo;
 		float d_x_p = distances[i];
 		float d_x_q = total_geodesic_dist - distances[i];
-		float gaussian_fuzziness = gaussian(d_x_p, d_x_q , total_geodesic_dist, sigma );
-		fuzzyList.fuzzyGeodesicList[i].fuzziness = gaussian_fuzziness;
-		fuzzyList.fuzzyGeodesicList[i].pointIndex = path[i];
+		f_geo.fuzziness = gaussian(d_x_p, d_x_q , total_geodesic_dist, sigma );
+		f_geo.pointIndex = path[i];
+		fuzzyList.fuzzyGeodesicList.push_back(f_geo);
 	}
 
 	return fuzzyList;
@@ -50,13 +51,19 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
 {
 	int N = m->vertices.size();
+	std::vector<int> isPath(N, false);
+	
+	
+
+
+
 	for (size_t i = 0; i < fuzzyList.fuzzyGeodesicList.size(); i++)
 	{
 		std::vector<int> isVertexInside(N, false);
 		std::vector<float> distances =  compute_geodesic_distances_fibonacci_heap_distances(*m, fuzzyList.fuzzyGeodesicList[i].pointIndex);
 		for (size_t j = 0; j < N; j++)
 		{
-			if (distances[j] > fuzzyList.fuzzyGeodesicList[i].fuzziness)
+			if (distances[j] < fuzzyList.fuzzyGeodesicList[i].fuzziness)
 			{
 				isVertexInside[j] = true; 
 			}
@@ -74,11 +81,25 @@ void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool c
 				area = area + compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
 				if (color)
 				{
+					m->colors[index1].r = 0;
 					m->colors[index1].g = 255; 
+					m->colors[index1].b = 0; 
 				}
+
 			}
 		}
 
+	}
+
+	//for the path itself 
+	if (color)
+	{
+		for (size_t i = 0; i < fuzzyList.fuzzyGeodesicList.size(); i++)
+		{
+			m->colors[fuzzyList.fuzzyGeodesicList[i].pointIndex].r = 255; 
+			m->colors[fuzzyList.fuzzyGeodesicList[i].pointIndex].g = 0; 
+			m->colors[fuzzyList.fuzzyGeodesicList[i].pointIndex].b = 0; 
+		}
 	}
 
 }
