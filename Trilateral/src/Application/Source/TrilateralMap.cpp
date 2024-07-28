@@ -3611,3 +3611,31 @@ void trilateral_fuzzyGeodesic(MeshFactory& meshFac, int selectedIndex, int p1, i
 	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
 	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
 }
+
+void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no)
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	std::vector<unsigned int> sampled_points = furthest_point_sampling(m, sample_no, true);
+	int N = m->vertices.size();
+	int sample_size = sampled_points.size();
+
+	// generate closest  trialterals
+	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
+
+	for (size_t i = 0; i < sample_size; i++)
+	{
+		int p1 = trilateral_desc[i].p1;
+		int p2 = trilateral_desc[i].p2;
+		int p3 = trilateral_desc[i].p3;
+		FuzzyGeodesicList fuzzyLists[3];
+		
+		fuzzyLists[0] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p2, fuzziness_sigma);
+		fuzzyLists[1] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p2, p3, fuzziness_sigma);
+		fuzzyLists[2] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p3, fuzziness_sigma);
+
+		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
+		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
+		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+	}
+
+}
