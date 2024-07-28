@@ -311,7 +311,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputFloat("fuzziness", &fuzziness);
     if (ImGui::Button("Calculate fuzzy geodesic areas with trilateral points "))
     {
-        trilateral_fuzzyGeodesic(m_factory, selected_mesh, point_1_index, point_1_index, point_3_index , fuzziness);
+        trilateral_fuzzyGeodesic(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index , fuzziness);
         m_factory.remove_all();
         m_factory.add_all();
     }

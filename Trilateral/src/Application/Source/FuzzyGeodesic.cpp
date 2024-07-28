@@ -1,7 +1,6 @@
 #include "../Include/FuzzyGeodesic.h"
-static float gaussian(float d_x_p , float d_x_q , float d_p_q, float sigma);
 
-static float gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
+static float fuzzy_gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
 {
 	float res = (d_x_p + d_x_q - d_p_q) / sigma;
 
@@ -10,7 +9,7 @@ static float gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
 	return res; 
 }
 
-FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex , float sigma)
+FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex , float fuzziness)
 {
 	FuzzyGeodesicList fuzzyList; 
 	// 1 - calculate dijkstra 
@@ -35,9 +34,10 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 	for (size_t i = 0; i < path.size(); i++)
 	{
 		FuzzyGeodesic f_geo;
-		float d_x_p = distances[i];
-		float d_x_q = total_geodesic_dist - distances[i];
-		f_geo.fuzziness = gaussian(d_x_p, d_x_q , total_geodesic_dist, sigma );
+		std::vector<float> distances_for_x  = compute_geodesic_distances_fibonacci_heap_distances(*m ,path[i]);
+		float d_x_p = distances_for_x[startIndex];
+		float d_x_q = distances_for_x[endIndex];
+		f_geo.fuzziness = fuzzy_gaussian(d_x_p, d_x_q , total_geodesic_dist, fuzziness);
 		f_geo.pointIndex = path[i];
 		fuzzyList.fuzzyGeodesicList.push_back(f_geo);
 	}
