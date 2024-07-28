@@ -2,6 +2,7 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/DominantSymmetry.h"
 #include "../Include/MetricCalculations.h"
+#include "../Include/Geodesic.h"
 #include "math.h"
 #ifndef PI
 #define PI 3.14159265358979323846
@@ -104,9 +105,9 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	//extract two paths
 	//1 - extract the path from p1  to p2  and p1 to p3  and p2 to p3 
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, p1, p2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, p1, p3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, p2, p3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, p1, p2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, p1, p3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, p2, p3);
 
 #pragma region calculation of distances between points 2 ,3 and 1  
 
@@ -296,9 +297,9 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		total += step;
 	}
 	//1 - extract the path from point1 to point2
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(m, point_index2, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(m, point_index2, point_index3);
 
 	std::vector<float> path_1 = compute_geodesic_distances_min_heap_distances(m, point_index1);
 	std::vector<float> path_2 = compute_geodesic_distances_min_heap_distances(m, point_index2);
@@ -347,7 +348,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	//calculate the distance from every vertex within path
 	for (size_t i = 0; i < path_1_2.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_1_2[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_1_2[i]);
 		// if a point is close change the flag
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -364,7 +365,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}
 	for (size_t i = 0; i < path_2_3.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_2_3[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_2_3[i]);
 		// if a point is close change the flag
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -380,7 +381,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}
 	for (size_t i = 0; i < path_1_3.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_1_3[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_1_3[i]);
 		// if a point is close change the flag
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -554,7 +555,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	{
 		TrilateralDescriptor desc;
 		//get two of the closed indexed points
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
 		std::vector<std::pair<float, unsigned int >> distances;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
@@ -619,7 +620,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	 {
 		 TrilateralDescriptor desc;
 		 //get two of the closed indexed points
-		 std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		 std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
 		 std::vector<std::pair<float, unsigned int >> distances;
 		 for (size_t j = 0; j < geodesic_distances.size(); j++)
 		 {
@@ -682,7 +683,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	 {
 		 TrilateralDescriptor desc;
 		 //get two of the closed indexed points
-		 std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		 std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
 		 std::vector<std::pair<float, unsigned int >> distances;
 		 for (size_t j = 0; j < geodesic_distances.size(); j++)
 		 {
@@ -749,7 +750,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		// 2 - calculate distances for all
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, i);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, i);
 		// sum 
 		agdValues[i] = 0;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
@@ -866,7 +867,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}*/
 	for (size_t i = 0; i < agd_indices.size(); i++)
 	{
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, agd_indices[i]);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, agd_indices[i]);
 		float minimum_len = INFINITY;
 		int minimum_index = -1;
 		//get the minimum 
@@ -893,7 +894,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	std::vector < unsigned int> mgd_indices;
 	for (size_t i = 0; i < average_geodesic_function.size(); i++)
 	{
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, average_geodesic_function[i]);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, average_geodesic_function[i]);
 		float minimum_len = INFINITY;
 		int minimum_index = -1;
 		//get the minimum 
@@ -1073,12 +1074,12 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
  }
  std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no)
 {
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
-	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
-	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
-	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
 
 	std::vector<int> is_visited = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
 
@@ -1121,12 +1122,12 @@ std::vector<int> is_visited, std::vector<int>& global_is_visited)
 		histogram.push_back(0);
 	}
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
-	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
-	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
-	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
 	//find the maximum distance from is_visited and paths
 	float max = -999;
 	float min = 100000;
@@ -1274,12 +1275,12 @@ std::vector<int> is_visited, std::vector<int>& global_is_visited)
 	trilateral_descriptor.geodesic_lenght_2_3 = 0;
 
 
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
-	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
-	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
-	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
 
 	// get distances
 	trilateral_descriptor.geodesic_lenght_1_2 = distance_matrix_p1[point_index2];
@@ -1373,7 +1374,7 @@ std::vector<int> is_visited, std::vector<int>& global_is_visited)
 			{
 				if (i != j)
 				{
-					std::vector<int> path_i_j = draw_with_fib_heap_implementation(*m, i, j);
+					std::vector<int> path_i_j = Geodesic_between_two_points(*m, i, j);
 
 					for (size_t k = 0; k < path_i_j.size(); k++)
 					{
@@ -1457,12 +1458,12 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 	trilateral_descriptor.geodesic_lenght_2_3 = 0;
 
 
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(*m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(*m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(*m, point_index2, point_index3);
-	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index1);
-	std::vector<float> distance_matrix_p2 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index2);
-	std::vector<float> distance_matrix_p3 = compute_geodesic_distances_fibonacci_heap_distances(*m, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
 
 	// get distances
 	trilateral_descriptor.geodesic_lenght_1_2 = distance_matrix_p1[point_index2];
@@ -1558,7 +1559,7 @@ TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, 
 			{
 				if (i != j)
 				{
-					std::vector<int> path_i_j = draw_with_fib_heap_implementation(*m, i, j);
+					std::vector<int> path_i_j = Geodesic_between_two_points(*m, i, j);
 
 					for (size_t k = 0; k < path_i_j.size(); k++)
 					{
@@ -2081,7 +2082,7 @@ std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weigh
 	std::vector<std::vector<int>> closest_3_pairs; // n x 3 matrix
 	for (size_t i = 0; i < vertex_indices.size(); i++)
 	{
-		std::vector<float> closest_matrix = compute_geodesic_distances_fibonacci_heap_distances(*mesh, vertex_indices[i]);
+		std::vector<float> closest_matrix = Geodesic_dijkstra(*mesh, vertex_indices[i]);
 		//get closest 3 
 		int closest_index_1 = -1;
 		int closest_index_2 = -1;
@@ -2388,7 +2389,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 			distances.push_back(0);
 		}
 		int p1_index = sample_indices_m1[i];
-		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m1, p1_index);
+		std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m1, p1_index);
 		//traverse through distance matrix
 		for (size_t j = 0; j < sample_indices_m1.size(); j++)
 		{
@@ -2452,7 +2453,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 			distances.push_back(0);
 		}
 		int p1_index = sample_indices_m2[i];
-		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m1, p1_index);
+		std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m1, p1_index);
 		//traverse through distance matrix
 		for (size_t j = 0; j < sample_indices_m1.size(); j++)
 		{
@@ -2619,7 +2620,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	// 1 - generate affinitiy matrix
 	for (size_t i = 0; i < landmark_vertices.size(); i++)
 	{
-		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, landmark_vertices[i]);
+		std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, landmark_vertices[i]);
 		int landmark_vertex_index = 0;
 		for (size_t j = 0; j < m->vertices.size(); j++)
 		{
@@ -2939,7 +2940,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 float maximum_geodesic_distance = 0;
 	 for (size_t i = 0; i < fps_positive.size(); i++)
 	 {
-		 std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		 std::vector<float> distances = Geodesic_dijkstra(*mesh, fps_positive[i]);
 		 for (size_t j = 0; j < distances.size(); j++)
 		 {
 			 if (maximum_geodesic_distance < distances[j])

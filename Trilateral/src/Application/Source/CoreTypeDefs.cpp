@@ -352,3 +352,14 @@ float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, c
 
 	return distance;
 }
+
+
+float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+{
+	glm::vec3 vec1 = p2 - p1;
+	glm::vec3 vec2 = p3 - p1;
+
+	glm::vec3 cross1 = glm::cross(vec1, vec2);
+	float length = glm::length(cross1) / 2;
+	return length;
+}

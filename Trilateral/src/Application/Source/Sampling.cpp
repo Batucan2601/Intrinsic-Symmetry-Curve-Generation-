@@ -1,4 +1,5 @@
 #include "../Include/Sampling.h"
+#include "../Include/Geodesic.h"
 #include <stdlib.h>     /* srand, rand */
 std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, bool is_points_colored )
 {
@@ -20,7 +21,7 @@ std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, b
 	for (size_t i = 1; i < no_of_samples; i++)
 	{
 		//update distances
-		std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, sample_idx);
+		std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, sample_idx);
 		for (size_t j = 0; j < distance_matrix_p1.size(); j++)
 		{
 			if (distance_matrix_p1[j] < distance[j])

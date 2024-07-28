@@ -411,7 +411,7 @@ static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m,
 	delete predecessor;
 	return distances;
 }
-static std::vector<int> compute_geodesic_distances_fibonacci_heap(Mesh& m, int point_index)
+static std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<int> predecessors;
@@ -497,7 +497,7 @@ static std::vector<int> compute_geodesic_distances_fibonacci_heap(Mesh& m, int p
 	delete[] predecessor;
 	return predecessors;
 }
-static std::vector<float> compute_geodesic_distances_fibonacci_heap_distances(Mesh& m, int point_index)
+static std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<float> matrix_vec;
@@ -686,7 +686,7 @@ static void compute_all(Mesh& m)
 
 static std::vector<int> compute_iso_curves(Mesh& m, int point_index_1)
 {
-	std::vector<int> predecessors = compute_geodesic_distances_fibonacci_heap(m, point_index_1);
+	std::vector<int> predecessors = Geodesic_dijkstra_predecessors(m, point_index_1);
 	std::vector<int> distances; // distances in terms of edge no not edge length 
 	//init 
 	for (size_t i = 0; i < m.vertices.size(); i++)
@@ -906,7 +906,7 @@ static std::vector<int> compute_iso_curves(Mesh& m, int point_index_1)
 }
 static std::vector<float> compute_curve_distances(Mesh& m, std::vector<int> distances, int point_index1)
 {
-	std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(m, point_index1);
+	std::vector<float> geodesic_distances = Geodesic_dijkstra(m, point_index1);
 	std::vector<float> total_distances;
 
 	// get the max from distances
@@ -1062,7 +1062,7 @@ static int find_point_from_histogram(Mesh& m, std::vector<float> histogram)
 /*static void compute_iso_curves(Mesh &m , int point_index_1 , int k , float offset   ) //k is the number of times
 {
 	//number of
-	std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, point_index_1);
+	std::vector<float> distances = Geodesic_dijkstra(m, point_index_1);
 	// 1- get the max of it so we now how to divide them
 	float max = 0;
 	for (size_t i = 0; i < distances.size(); i++)
@@ -1308,7 +1308,7 @@ static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, float tau, int division_no) // tau is the closeness division_no is the no of how much you want to separate
 {
 	//1 - extract the path from point1 to point2 
-	std::vector<int> path = draw_with_fib_heap_implementation(m, point_index1, point_index2);
+	std::vector<int> path = Geodesic_between_two_points(m, point_index1, point_index2);
 	//2 - we should calculate the geodesic distances for all of the path and than redraw
 	//declare variable 
 	std::vector<float> histogram;
@@ -1351,7 +1351,7 @@ static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, f
 	//calculate the distance from every vertex within path
 	for (size_t i = 0; i < path.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path[i]);
 		// if a point is close change the flag 
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -1480,7 +1480,7 @@ static void compute_bilateral_map_according_to_point(Mesh& m, int point1_index, 
 	}
 
 	float histogram_no = tau / division_no;
-	std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, point1_index);
+	std::vector<float> distances = Geodesic_dijkstra(m, point1_index);
 
 	int* is_close = new int[m.vertices.size()];
 	int* is_in_path = new int[m.vertices.size()];

@@ -68,9 +68,9 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		total += step;
 	}
 	//1 - extract the path from point1 to point2 
-	std::vector<int> path_1_2 = draw_with_fib_heap_implementation(m, point_index1, point_index2);
-	std::vector<int> path_1_3 = draw_with_fib_heap_implementation(m, point_index1, point_index3);
-	std::vector<int> path_2_3 = draw_with_fib_heap_implementation(m, point_index2, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(m, point_index2, point_index3);
 
 	std::vector<float> path_1 = compute_geodesic_distances_min_heap_distances(m, point_index1);
 	std::vector<float> path_2 = compute_geodesic_distances_min_heap_distances(m, point_index2);
@@ -119,7 +119,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	//calculate the distance from every vertex within path
 	for (size_t i = 0; i < path_1_2.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_1_2[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_1_2[i]);
 		// if a point is close change the flag 
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -136,7 +136,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}
 	for (size_t i = 0; i < path_2_3.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_2_3[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_2_3[i]);
 		// if a point is close change the flag 
 		for (size_t j = 0; j < distances.size(); j++)
 		{
@@ -152,7 +152,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}
 	for (size_t i = 0; i < path_1_3.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(m, path_1_3[i]);
+		std::vector<float> distances = Geodesic_dijkstra(m, path_1_3[i]);
 		// if a point is close change the flag 
 		for (size_t j = 0; j < distances.size(); j++)
 		{

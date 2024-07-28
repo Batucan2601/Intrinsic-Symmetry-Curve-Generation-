@@ -2,6 +2,7 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/TrilateralMap.h"
 #include "../Include/MetricCalculations.h"
+#include "../Include/Geodesic.h"
 #pragma comment(linker, "/STACK:2000000")
 #pragma comment(linker, "/HEAP:1000000000")
 
@@ -89,7 +90,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	{
 		for (size_t i = 0; i < N; i++)
 		{
-			std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, i);
+			std::vector<float> distances = Geodesic_dijkstra(*mesh, i);
 			for (size_t j = 0; j < N; j++)
 			{
 				delta(i, j) = distances[j];
@@ -100,7 +101,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	{
 		for (size_t i = 0; i < N/2; i++)
 		{
-			std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, simplified_mesh.symmetry_pairs[i].first);
+			std::vector<float> distances = Geodesic_dijkstra(*mesh, simplified_mesh.symmetry_pairs[i].first);
 			int delta_index = 0; 
 			for (size_t j = 0; j < mesh->vertices.size(); j++)
 			{
@@ -119,7 +120,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 				}
 			}
 			//repeat for secone 
-			distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, simplified_mesh.symmetry_pairs[i].second);
+			distances = Geodesic_dijkstra(*mesh, simplified_mesh.symmetry_pairs[i].second);
 			delta_index = 0;
 			for (size_t j = 0; j < mesh->vertices.size(); j++)
 			{
@@ -460,7 +461,7 @@ Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
 	// 1.2generate geodesic distances matrix ( delta)
 	for (size_t i = 0; i < N; i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, i);
+		std::vector<float> distances = Geodesic_dijkstra(*mesh, i);
 		for (size_t j = 0; j < N; j++)
 		{
 			delta(i, j) = distances[j];
@@ -485,7 +486,7 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 	Eigen::MatrixXd landmark_delta(no_of_landmarks, no_of_landmarks);
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, landmark_vertex_indices[i]);
+		std::vector<float> distances = Geodesic_dijkstra(*mesh, landmark_vertex_indices[i]);
 		for (size_t j = 0; j < no_of_landmarks; j++)
 		{
 			landmark_delta(i, j) = distances[landmark_vertex_indices[j]] * distances[landmark_vertex_indices[j]];
@@ -625,7 +626,7 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	float maximum_geodesic_distance = 0;
 	for (size_t i = 0; i < fps_positive.size(); i++)
 	{
-		std::vector<float> distances  = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		std::vector<float> distances  = Geodesic_dijkstra(*mesh, fps_positive[i]);
 		for (size_t j = 0; j < distances.size(); j++)
 		{
 			if (maximum_geodesic_distance < distances[j])
@@ -693,7 +694,7 @@ std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(Mesh* mesh, const unsi
 	Eigen::MatrixXd landmark_delta(no_of_landmarks, no_of_landmarks);
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, landmark_vertex_indices[i]);
+		std::vector<float> distances = Geodesic_dijkstra(*mesh, landmark_vertex_indices[i]);
 		for (size_t j = 0; j < no_of_landmarks; j++)
 		{
 			landmark_delta(i, j) = distances[landmark_vertex_indices[j]] * distances[landmark_vertex_indices[j]];

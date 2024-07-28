@@ -55,3 +55,6 @@ void get_coefficients_from_plane(const Plane& plane , float& A , float& B , floa
 std::vector<int> getNumberFromString(std::string s);
 Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec);
 float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, const glm::vec3& linePoint2);
+
+
+float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);

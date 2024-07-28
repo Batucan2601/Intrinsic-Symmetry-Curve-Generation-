@@ -28,6 +28,7 @@ set(Header_Files
     "src/Application/Include/Ray.h"
     "src/Application/Include/SkeletalNLateral.h"
     "src/Application/Include/FuzzyGeodesic.h"
+    "src/Application/Include/Geodesic.h"
 
 
 )
@@ -62,6 +63,8 @@ set(Source_Files
     "src/Application/Source/Ray.cpp"
     "src/Application/Source/SkeletalNLateral.cpp"
     "src/Application/Source/FuzzyGeodesic.cpp"
+    "src/Application/Source/Geodesic.cpp"
+
 
 
 )

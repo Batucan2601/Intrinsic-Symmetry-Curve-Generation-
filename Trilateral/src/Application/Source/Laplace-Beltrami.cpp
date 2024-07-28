@@ -2,6 +2,7 @@
 #include "eigen/Eigen/EigenValues"
 #include <vector>
 #include "../Include/NLateralDescriptor.h"
+#include "../Include/CoreTypeDefs.h"
 using Eigen::MatrixXd;
 using Eigen::VectorXcd;
 using Eigen::Vector3d;

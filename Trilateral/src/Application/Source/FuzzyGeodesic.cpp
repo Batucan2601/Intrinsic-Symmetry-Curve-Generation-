@@ -1,4 +1,7 @@
 #include "../Include/FuzzyGeodesic.h"
+#include "../Include/CoreTypeDefs.h"
+#include "../Include/Geodesic.h"
+
 
 static float fuzzy_gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
 {
@@ -13,7 +16,7 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 {
 	FuzzyGeodesicList fuzzyList; 
 	// 1 - calculate dijkstra 
-	std::vector<int> path =draw_with_fib_heap_implementation(*m, startIndex, endIndex);
+	std::vector<int> path =Geodesic_between_two_points(*m, startIndex, endIndex);
 
 	glm::vec3 p = m->vertices[startIndex];
 	glm::vec3 q = m->vertices[endIndex];;
@@ -34,7 +37,7 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 	for (size_t i = 0; i < path.size(); i++)
 	{
 		FuzzyGeodesic f_geo;
-		std::vector<float> distances_for_x  = compute_geodesic_distances_fibonacci_heap_distances(*m ,path[i]);
+		std::vector<float> distances_for_x  = Geodesic_dijkstra(*m ,path[i]);
 		float d_x_p = distances_for_x[startIndex];
 		float d_x_q = distances_for_x[endIndex];
 		f_geo.fuzziness = fuzzy_gaussian(d_x_p, d_x_q , total_geodesic_dist, fuzziness);
@@ -60,7 +63,7 @@ void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool c
 	for (size_t i = 0; i < fuzzyList.fuzzyGeodesicList.size(); i++)
 	{
 		std::vector<int> isVertexInside(N, false);
-		std::vector<float> distances =  compute_geodesic_distances_fibonacci_heap_distances(*m, fuzzyList.fuzzyGeodesicList[i].pointIndex);
+		std::vector<float> distances =  Geodesic_dijkstra(*m, fuzzyList.fuzzyGeodesicList[i].pointIndex);
 		for (size_t j = 0; j < N; j++)
 		{
 			if (distances[j] < fuzzyList.fuzzyGeodesicList[i].fuzziness)

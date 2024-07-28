@@ -3,6 +3,8 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/MetricCalculations.h"
+#include "../Include/Geodesic.h"
+
 #pragma region Nlateral struct
 
 NLateralDescriptor::NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N)
@@ -137,7 +139,7 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Me
 	for (size_t i = 0; i < indices.size(); i++)
 	{
 		//get n-1 of the furthest indexed points
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
 		std::vector<std::pair<float, unsigned int >> distances;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
@@ -196,7 +198,7 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mes
 	for (size_t i = 0; i < indices.size(); i++)
 	{
 		//get n-1 of the closest indexed points
-		std::vector<float> geodesic_distances = compute_geodesic_distances_fibonacci_heap_distances(*m, indices[i]);
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
 		std::vector<std::pair<float, unsigned int >> distances;
 		for (size_t j = 0; j < geodesic_distances.size(); j++)
 		{
@@ -350,7 +352,7 @@ void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMET
 	float maximum_geodesic_distance = 0;
 	for (size_t i = 0; i < fps_positive.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*mesh, fps_positive[i]);
+		std::vector<float> distances = Geodesic_dijkstra(*mesh, fps_positive[i]);
 		for (size_t j = 0; j < distances.size(); j++)
 		{
 			if (maximum_geodesic_distance < distances[j])
@@ -587,7 +589,7 @@ void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATER
 			{
 				float maximum_dist = -INFINITY;
 				//calculate the maximum euclidian distances
-				std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*m, left[i]);
+				std::vector<float> distances = Geodesic_dijkstra(*m, left[i]);
 				for (size_t j = 0; j < distances.size(); j++)
 				{
 					if (maximum_dist < distances[j])
@@ -721,7 +723,7 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 	float maximum_geodesic_distance = 0;
 	for (size_t i = 0; i < mesh_right_endpoints.size(); i++)
 	{
-		std::vector<float> distances = compute_geodesic_distances_fibonacci_heap_distances(*m, mesh_right_endpoints[i]);
+		std::vector<float> distances = Geodesic_dijkstra(*m, mesh_right_endpoints[i]);
 		for (size_t j = 0; j < distances.size(); j++)
 		{
 			if (maximum_geodesic_distance < distances[j])

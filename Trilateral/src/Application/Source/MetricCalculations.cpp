@@ -1,5 +1,6 @@
 #include "../Include/MetricCalculations.h"
 #include "../Include/MeshFactory.h"
+#include "../Include/Geodesic.h"
 
 //v6'nin ground-truth simetrik noktasi v66 ise ve senin methodun v6->v77'ye gonderdiyse o zaman geodesic(v66, v77) costun olacak;
 float get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence)
@@ -19,7 +20,7 @@ float get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int calcula
 			break;
 		}
 	}
-	std::vector<float> distance_matrix_p1 = compute_geodesic_distances_fibonacci_heap_distances(*m, ground_truth);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, ground_truth);
 
 	float cost = distance_matrix_p1[calculated_index1_correspondence]; 
 
