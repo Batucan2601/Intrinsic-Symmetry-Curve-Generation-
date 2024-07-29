@@ -2934,7 +2934,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 		 left_correspondences.push_back(resemblance_pairs[i].first);
 		 right_correspondences.push_back(resemblance_pairs[i].second);
 	 }
-	 float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+	 float total_error = Metric_get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
 
 	 // now use fps points to get maximum distance in order to compare to 
 	 float maximum_geodesic_distance = 0;
@@ -3612,7 +3612,7 @@ void trilateral_fuzzyGeodesic(MeshFactory& meshFac, int selectedIndex, int p1, i
 	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
 }
 
-void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no)
+void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no , float fuzziness_sigma)
 {
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<unsigned int> sampled_points = furthest_point_sampling(m, sample_no, true);
@@ -3622,6 +3622,7 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 	// generate closest  trialterals
 	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
 
+	std::vector<Eigen::Vector3f> area_vectors(sample_size);
 	for (size_t i = 0; i < sample_size; i++)
 	{
 		int p1 = trilateral_desc[i].p1;
@@ -3633,9 +3634,51 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 		fuzzyLists[1] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p2, p3, fuzziness_sigma);
 		fuzzyLists[2] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p3, fuzziness_sigma);
 
-		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
-		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
-		FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+		area_vectors[i][0] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
+		area_vectors[i][1] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
+		area_vectors[i][2] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+
 	}
+
+	
+	//compare each other 
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+
+	for (size_t i = 0; i < sample_size; i++)
+	{
+		int min_index = -1;
+		float min_float = INFINITY;
+		for (size_t j = 0; j < sample_size; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			Eigen::Vector3f dif_vec = area_vectors[i] - area_vectors[j];
+			float dif = dif_vec.norm();
+			if (min_float > dif)
+			{
+				min_float = dif; 
+				min_index = j;
+			}
+		}
+
+		resemblance_pairs.push_back(std::pair<int, int>(sampled_points[i], sampled_points[min_index]));
+
+	}
+
+	//buffer
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 0;
+		m->colors[resemblance_pairs[i].second].b = 255;
+	}
+
+	m->calculated_symmetry_pairs = resemblance_pairs;
 
 }

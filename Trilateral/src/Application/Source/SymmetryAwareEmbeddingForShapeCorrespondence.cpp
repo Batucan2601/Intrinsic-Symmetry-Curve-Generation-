@@ -620,7 +620,7 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 		left_correspondences.push_back(resemblance_pairs[i].first);
 		right_correspondences.push_back(resemblance_pairs[i].second);
 	}
-	float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+	float total_error = Metric_get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
 	
 	// now use fps points to get maximum distance in order to compare to 
 	float maximum_geodesic_distance = 0;

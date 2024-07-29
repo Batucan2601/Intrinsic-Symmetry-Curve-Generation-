@@ -12,7 +12,7 @@ static float fuzzy_gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
 	return res; 
 }
 
-FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex , float fuzziness)
+FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex , float fuzziness_sigma)
 {
 	FuzzyGeodesicList fuzzyList; 
 	// 1 - calculate dijkstra 
@@ -40,7 +40,7 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 		std::vector<float> distances_for_x  = Geodesic_dijkstra(*m ,path[i]);
 		float d_x_p = distances_for_x[startIndex];
 		float d_x_q = distances_for_x[endIndex];
-		f_geo.fuzziness = fuzzy_gaussian(d_x_p, d_x_q , total_geodesic_dist, fuzziness);
+		f_geo.fuzziness = fuzzy_gaussian(d_x_p, d_x_q , total_geodesic_dist, fuzziness_sigma);
 		f_geo.pointIndex = path[i];
 		fuzzyList.fuzzyGeodesicList.push_back(f_geo);
 	}
@@ -51,14 +51,14 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 // use fuzziness as a direct distance
 // for each point
 // get the area covered by fuzziness around the point 
-void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
+float FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
 {
 	int N = m->vertices.size();
 	std::vector<int> isPath(N, false);
 	
-	
 
 
+	float area = 0;
 
 	for (size_t i = 0; i < fuzzyList.fuzzyGeodesicList.size(); i++)
 	{
@@ -72,7 +72,6 @@ void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool c
 			}
 		}
 
-		float area = 0;
 		//get all triangles
 		for (size_t i = 0; i < m->triangles.size(); i+=3)
 		{
@@ -105,4 +104,5 @@ void FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool c
 		}
 	}
 
+	return area;
 }

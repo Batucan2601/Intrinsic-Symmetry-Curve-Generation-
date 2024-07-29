@@ -346,7 +346,7 @@ void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMET
 		left_correspondences.push_back(resemblance_pairs[i].first);
 		right_correspondences.push_back(resemblance_pairs[i].second);
 	}
-	float total_error = get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+	float total_error = Metric_get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
 
 	// now use fps points to get maximum distance in order to compare to 
 	float maximum_geodesic_distance = 0;
@@ -717,7 +717,7 @@ std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_ri
 		left_correspondences.push_back(resemblance_pairs[i].first);
 		right_correspondences.push_back(resemblance_pairs[i].second);
 	}
-	float total_error = get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+	float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
 
 	// now use fps points to get maximum distance in order to compare to 
 	float maximum_geodesic_distance = 0;

@@ -17,4 +17,4 @@ typedef struct
 
 
 FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex, float sigma);
-void FuzzyGeodesic_FuzzyArea(Mesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );
+float FuzzyGeodesic_FuzzyArea(Mesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );

@@ -315,6 +315,13 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("FPS matching w/ fuzzy geodesic "))
+    {
+        trilateral_FPS_matching_w_fuzzy_geodesic(m_factory, selected_mesh, no_of_points, fuzziness);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+
     ImGui::End();
         
 }
