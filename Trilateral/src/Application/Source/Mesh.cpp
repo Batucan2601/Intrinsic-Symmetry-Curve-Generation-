@@ -6,7 +6,7 @@
 
 static void calculate_areas(Mesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
-
+static void calculate_mesh_area(Mesh* m);
 
 Mesh::Mesh()
 {
@@ -41,6 +41,7 @@ Mesh::Mesh(char* filename)
 	this->file_name = this->file_name.substr( slash_index+1, this->file_name.size());
 	generate_normals();
 	calculate_areas(this);
+	calculate_mesh_area(this);
 }
 void Mesh::read_ply_format(char* filename)
 {
@@ -428,14 +429,14 @@ void read_symmetry_format(char* filename, Mesh* m)
 		m->symmetry_pairs.push_back(sym_pair);
 
 	}
-	m->symmetry_pairs_map = std::vector<unsigned int>(m->symmetry_pairs.size());
+	m->ground_truth_symmetry_pairs = std::vector<unsigned int>(m->symmetry_pairs.size());
 	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
 	{
-		m->symmetry_pairs_map[m->symmetry_pairs[i].first] = m->symmetry_pairs[i].second;
+		m->ground_truth_symmetry_pairs[m->symmetry_pairs[i].first] = m->symmetry_pairs[i].second;
 	}
 	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
 	{
-		m->symmetry_pairs_map[m->symmetry_pairs[i].second] = m->symmetry_pairs[i].first;
+		m->ground_truth_symmetry_pairs[m->symmetry_pairs[i].second] = m->symmetry_pairs[i].first;
 	}	
 	/*while (symFile >> number)
 	{
@@ -556,5 +557,18 @@ static void calculate_areas(Mesh* m)
 		m->areas[m->triangles[i]] += area;
 		m->areas[m->triangles[i+1]] += area;
 		m->areas[m->triangles[i+2]] += area;
+	}
+}
+
+static void calculate_mesh_area(Mesh* m )
+{
+	m->mesh_area = 0;
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		glm::vec3 p1 = m->vertices[m->triangles[i]];
+		glm::vec3 p2 = m->vertices[m->triangles[i + 1]];
+		glm::vec3 p3 = m->vertices[m->triangles[i + 2]];
+		float area = compute_triangle_area(p1, p2, p3);
+		m->mesh_area += area; 
 	}
 }

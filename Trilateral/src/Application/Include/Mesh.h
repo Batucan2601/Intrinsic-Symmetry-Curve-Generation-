@@ -25,7 +25,7 @@ public:
 	std::vector<unsigned int > triangles;
 	std::vector<std::vector<unsigned int>> neighbours; 
 	std::vector<std::pair<unsigned int, unsigned int>> symmetry_pairs; // for ground truth 
-	std::vector<unsigned int> symmetry_pairs_map; // for ground truth hashmap for pairs
+	std::vector<unsigned int> ground_truth_symmetry_pairs; // for ground truth hashmap for pairs
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
 	std::vector<glm::vec3> normals; // fil with constructor, actual vertices
 	std::vector<float> normals_display; // vertex information of normals
@@ -39,6 +39,8 @@ public:
 	bool ply_format = false;
 	//MVP
 	glm::mat4 MVP;
+	//area
+	float mesh_area; 
 	Mesh();
 	Mesh(char* filename);
 	Mesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);

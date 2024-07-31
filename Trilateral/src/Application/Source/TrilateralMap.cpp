@@ -3612,7 +3612,7 @@ void trilateral_fuzzyGeodesic(MeshFactory& meshFac, int selectedIndex, int p1, i
 	FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
 }
 
-void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no , float fuzziness_sigma)
+void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no , float fuzziness_sigma , bool recordTxt )
 {
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];
 	std::vector<unsigned int> sampled_points = furthest_point_sampling(m, sample_no, true);
@@ -3680,5 +3680,10 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 	}
 
 	m->calculated_symmetry_pairs = resemblance_pairs;
+
+	if (recordTxt)
+	{
+		Metric_write_to_file(m, "../../../Results/Trilateral_w_FuzzyGeodesic.txt");
+	}
 
 }

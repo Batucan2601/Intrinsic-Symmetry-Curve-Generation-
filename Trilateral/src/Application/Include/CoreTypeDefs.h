@@ -3,6 +3,7 @@
 #include "Mesh.h"
 #include <eigen/Eigen/Dense>
 
+
 typedef struct {
 	glm::vec3 point;
 	glm::vec3 normal;

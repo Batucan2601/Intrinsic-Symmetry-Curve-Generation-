@@ -71,7 +71,7 @@ void MeshFactory::buffer_meshes()
 
 			glm::vec3 color;
 			// check if they are matched
-			if (this->mesh_vec[i].symmetry_pairs_map[index1] == index2)
+			if (this->mesh_vec[i].ground_truth_symmetry_pairs[index1] == index2)
 			{
 				color.r = 0;
 				color.g = 255;

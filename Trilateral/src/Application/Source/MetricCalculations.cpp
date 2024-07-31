@@ -2,24 +2,15 @@
 #include "../Include/MeshFactory.h"
 #include "../Include/Geodesic.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
 //v6'nin ground-truth simetrik noktasi v66 ise ve senin methodun v6->v77'ye gonderdiyse o zaman geodesic(v66, v77) costun olacak;
-float Metric_get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence)
+float Metric_get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence, bool isNormalized)
 {
-	unsigned int ground_truth = -1;
-	//get symmetry pair
-	for (size_t i = 0; i < m->symmetry_pairs.size(); i++)
-	{
-		if (m->symmetry_pairs[i].first == point_index1)
-		{
-			ground_truth = m->symmetry_pairs[i].second;
-			break;
-		}
-		else if (m->symmetry_pairs[i].second == point_index1)
-		{
-			ground_truth = m->symmetry_pairs[i].first;
-			break;
-		}
-	}
+	unsigned int ground_truth = 0;
+
+	ground_truth = m->ground_truth_symmetry_pairs[point_index1];
+
 	std::vector<float> distance_matrix_for_ground_truth = Geodesic_dijkstra(*m, ground_truth);
 
 
@@ -36,7 +27,11 @@ float Metric_get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int 
 			max_index = i; 
 		}
 	}
-	return dif_ground_vs_corresp / max_value ; //return the value normalized
+	if (isNormalized)
+	{
+		dif_ground_vs_corresp /= max_value; //return the value normalized
+	}
+	return dif_ground_vs_corresp; 
 }
 float Metric_get_geodesic_cost_with_list(Mesh* m, std::vector<unsigned int> point_indices, std::vector<unsigned int> calculated_index_correspondence_list)
 {
@@ -45,9 +40,120 @@ float Metric_get_geodesic_cost_with_list(Mesh* m, std::vector<unsigned int> poin
 	std::vector<unsigned int> ground_truth_indices; 
 	for (size_t i = 0; i < N; i++)
 	{
-		float single_error = Metric_get_geodesic_cost( m , point_indices[i], calculated_index_correspondence_list[i]);
+		float single_error = Metric_get_geodesic_cost( m , point_indices[i], calculated_index_correspondence_list[i] , true);
 		error += single_error;
 	}
 	return error/N ; // return average error
 }
 
+float Metric_get_geodesic_cost(Mesh* m )
+{
+	unsigned int N = m->calculated_symmetry_pairs.size();
+	float error = 0;
+	
+	// just in case 
+	read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
+
+
+	for (size_t i = 0; i < N; i++)
+	{
+		int index = m->calculated_symmetry_pairs[i].first;
+		int calculated_pair = m->calculated_symmetry_pairs[i].second;
+
+		float single_error = Metric_get_geodesic_cost(m, index, calculated_pair, true );
+		error += single_error;
+	}
+	return error / N; // return average error
+}
+
+// to be fair it is really hard to sample correct indices, therefore these two metrics
+// probably wont use in the end 
+std::vector<std::pair<unsigned int , unsigned int> > Metric_get_correct_pairs(Mesh* m)
+{
+	std::vector<std::pair<unsigned int, unsigned int>> correct_pairs; 
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index = m->calculated_symmetry_pairs[i].first;
+		int calculated_symmetry_index = m->calculated_symmetry_pairs[i].second;
+		int ground_truth = m->ground_truth_symmetry_pairs[index];
+		if (ground_truth == calculated_symmetry_index)
+		{
+			correct_pairs.push_back(std::pair<unsigned int, unsigned int >(index, calculated_symmetry_index));
+		}
+	}
+	return correct_pairs;
+}
+
+std::vector<std::pair<unsigned int, unsigned int> > Metric_get_incorrect_pairs(Mesh* m)
+{
+	std::vector<std::pair<unsigned int, unsigned int>> incorrect_pairs;
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index = m->calculated_symmetry_pairs[i].first;
+		int calculated_symmetry_index = m->calculated_symmetry_pairs[i].second;
+		int ground_truth = m->ground_truth_symmetry_pairs[index];
+		if (ground_truth != calculated_symmetry_index)
+		{
+			incorrect_pairs.push_back(std::pair<unsigned int, unsigned int >(index, calculated_symmetry_index));
+		}
+	}
+	return incorrect_pairs;
+}
+
+
+/*Correspondence Rate : The percentage of correspondences with geodesic dist
+qance between the computed and ground - truth correspondence of the vertex less than
+area(M)
+PI*N.We take N = 20 as used in MT.
+*/
+
+float Metric_get_correspondance_rate(Mesh* m)
+{
+	float threshold = sqrtf(m->mesh_area / (M_PI * m->vertices.size()));
+	float percentage = 0;
+	int N = m->calculated_symmetry_pairs.size();
+	int passed_point_count = 0;
+	for (size_t i = 0; i < N; i++)
+	{
+		int index = m->calculated_symmetry_pairs[i].first;
+		int calculated_index = m->calculated_symmetry_pairs[i].second;
+		float geo_cost = Metric_get_geodesic_cost(m, index, calculated_index, false);
+		 
+		if (geo_cost < threshold)
+		{
+			passed_point_count++;
+		}
+	}
+
+	percentage = passed_point_count / (float)N;
+	return percentage;
+}
+
+
+void Metric_write_to_file(Mesh* m, const std::string& file_name)
+{
+	std::string concat_name = file_name;
+	//just in case 
+	read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
+	
+	std::ofstream out_file;
+	// Specify the file name
+	// attach date to file
+	std::time_t currentTime = std::time(nullptr);
+	// Convert to local time
+	std::tm* localTime = std::localtime(&currentTime);
+	// Convert to a readable format
+	char buffer[80];
+	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
+	concat_name = concat_name + std::string(buffer);
+	// Open the file
+	out_file.open(concat_name);
+	if (!out_file) {
+		std::cerr << "Error opening file: " << std::endl;
+	}
+	// 1 - write geodesic cost
+	out_file << "Normalize geodesic cost === " << std::to_string(Metric_get_geodesic_cost(m)) << std::endl;
+	out_file << "correspondance rate === " << std::to_string(Metric_get_correspondance_rate(m)) << std::endl;
+
+	out_file.close();
+}
