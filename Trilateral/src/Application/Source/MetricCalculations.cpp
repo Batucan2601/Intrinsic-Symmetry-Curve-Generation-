@@ -129,7 +129,13 @@ float Metric_get_correspondance_rate(Mesh* m)
 	return percentage;
 }
 
-
+static std::string getCurrentDate() {
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+	char date[20];
+	sprintf(date, "%04d-%02d-%02d-%02d-%02d-%02d", 1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday , ltm->tm_hour , ltm->tm_min , ltm->tm_sec );
+	return std::string(date);
+}
 void Metric_write_to_file(Mesh* m, const std::string& file_name)
 {
 	std::string concat_name = file_name;
@@ -143,13 +149,12 @@ void Metric_write_to_file(Mesh* m, const std::string& file_name)
 	// Convert to local time
 	std::tm* localTime = std::localtime(&currentTime);
 	// Convert to a readable format
-	char buffer[80];
-	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
-	concat_name = concat_name + std::string(buffer);
+	concat_name = concat_name + getCurrentDate() + ".txt";
 	// Open the file
 	out_file.open(concat_name);
 	if (!out_file) {
 		std::cerr << "Error opening file: " << std::endl;
+		exit(1);
 	}
 	// 1 - write geodesic cost
 	out_file << "Normalize geodesic cost === " << std::to_string(Metric_get_geodesic_cost(m)) << std::endl;

@@ -3683,7 +3683,7 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 
 	if (recordTxt)
 	{
-		Metric_write_to_file(m, "../../../Results/Trilateral_w_FuzzyGeodesic.txt");
+		Metric_write_to_file(m, "../../Results/Trilateral_w_FuzzyGeodesic.txt");
 	}
 
 }
