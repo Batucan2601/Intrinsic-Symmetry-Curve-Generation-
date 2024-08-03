@@ -3,6 +3,7 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/MetricCalculations.h"
 #include "../Include/Geodesic.h"
+#include "../Include/Skeleton.h"
 #include "math.h"
 #ifndef PI
 #define PI 3.14159265358979323846
@@ -3685,5 +3686,12 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 	{
 		Metric_write_to_file(m, "../../Results/Trilateral_w_FuzzyGeodesic.txt");
 	}
+
+}
+
+//use fuzzy geodesics and also use end points converted from skeelton endpoints as anchors
+void trilateral_FPS_symmetry_using_skel_endpoints(MeshFactory& mesh_fac, const int& selected_index, int sample_no,
+float fuzziness_sigma,Skeleton& skeleton,bool recordTxt)
+{
 
 }
