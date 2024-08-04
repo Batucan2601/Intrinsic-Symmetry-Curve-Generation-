@@ -3689,9 +3689,113 @@ void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& 
 
 }
 
+void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index,
+	float fuzziness_sigma, Skeleton& skeleton, bool recordTxt)
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	int N = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	glm::vec3 mesh_mid_point; 
+	// 1 - get end points from skeleton
+	std::vector<unsigned int> mesh_endpoints;
+	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
+	int sample_no = mesh_endpoints.size();
+
+	// generate closest  trialterals
+	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, mesh_endpoints);
+	std::vector<Eigen::Vector3f> area_vectors(sample_no);
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		int p1 = trilateral_desc[i].p1;
+		int p2 = trilateral_desc[i].p2;
+		int p3 = trilateral_desc[i].p3;
+		FuzzyGeodesicList fuzzyLists[3];
+
+		fuzzyLists[0] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p2, fuzziness_sigma);
+		fuzzyLists[1] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p2, p3, fuzziness_sigma);
+		fuzzyLists[2] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p3, fuzziness_sigma);
+
+		area_vectors[i][0] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
+		area_vectors[i][1] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
+		area_vectors[i][2] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+
+	}
+
+	mesh_mid_point_index = skeleton_calculate_closest_mesh_point( skeleton,m , skeleton.mid_point_index);
+	std::vector<float> distances_from_mesh_mid_point = Geodesic_dijkstra(*m, mesh_mid_point_index);
+	mesh_mid_point = m->vertices[mesh_mid_point_index];
+	//compare each other 
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		int min_index = -1;
+		float min_float = INFINITY;
+		for (size_t j = 0; j < sample_no; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			// also check if the distance
+			Eigen::Vector3f dif_vec = area_vectors[i] - area_vectors[j];
+			float dif = dif_vec.norm();
+			if (min_float > dif )
+			{
+				min_float = dif;
+				min_index = j;
+			}
+		}
+
+		resemblance_pairs.push_back(std::pair<int, int>(mesh_endpoints[i], mesh_endpoints[min_index]));
+
+	}
+	//buffer
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 0;
+		m->colors[resemblance_pairs[i].second].b = 255;
+	}
+
+	m->calculated_symmetry_pairs = resemblance_pairs;
+	if (recordTxt)
+	{
+		Metric_write_to_file(m, "../../Results/Trilateral_w_FuzzyGeodesic.txt");
+	}
+}
 //use fuzzy geodesics and also use end points converted from skeelton endpoints as anchors
 void trilateral_FPS_symmetry_using_skel_endpoints(MeshFactory& mesh_fac, const int& selected_index, int sample_no,
 float fuzziness_sigma,Skeleton& skeleton,bool recordTxt)
 {
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	int N = m->vertices.size();
+	// 1 - get end points from skeleton
+	std::vector<unsigned int> mesh_endpoints;
+	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
+	// 2 - FPS 
+	std::vector<unsigned int> sampled_points = furthest_point_sampling(m, sample_no, true);
+	// 3 - generate closest  trialterals
+	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
 
+	std::vector<Eigen::Vector3f> area_vectors(sample_no);
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		int p1 = trilateral_desc[i].p1;
+		int p2 = trilateral_desc[i].p2;
+		int p3 = trilateral_desc[i].p3;
+		FuzzyGeodesicList fuzzyLists[3];
+
+		fuzzyLists[0] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p2, fuzziness_sigma);
+		fuzzyLists[1] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p2, p3, fuzziness_sigma);
+		fuzzyLists[2] = FuzzyGeodesic_calculateFuzzyGedoesic(m, p1, p3, fuzziness_sigma);
+
+		area_vectors[i][0] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[0], true);
+		area_vectors[i][1] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[1], true);
+		area_vectors[i][2] = FuzzyGeodesic_FuzzyArea(m, fuzzyLists[2], true);
+
+	}
 }

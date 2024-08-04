@@ -1592,3 +1592,23 @@ void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector
 	dijkstra_distances = dijsktra_endpoints;
 	return;
 }
+
+unsigned int skeleton_calculate_closest_mesh_point(Skeleton& skeleton, Mesh* m, unsigned int skeleton_point_index)
+{
+	std::vector<unsigned int> end_points;
+	skeleton_get_end_points(skeleton, end_points);
+	glm::vec3 skeleton_point = skeleton.skeletonFormat[skeleton_point_index].point;
+	int minimum_dist_index = -1;
+	float minimum_distance = INFINITY;
+	for (size_t j = 0; j < m->vertices.size(); j++)
+	{
+		float dist = glm::distance(skeleton_point, m->vertices[j]);
+		if (dist < minimum_distance)
+		{
+			minimum_distance = dist;
+			minimum_dist_index = j;
+		}
+	}
+	return minimum_dist_index;
+	
+}

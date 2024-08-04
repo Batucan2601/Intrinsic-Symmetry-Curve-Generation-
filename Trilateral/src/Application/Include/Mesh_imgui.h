@@ -79,6 +79,92 @@ std::string KIDS_text_file_name;
 //fuzziness
 float fuzziness = 1;
 
+
+
+
+static std::vector<float> bounding_box;
+static std::map<std::string, glm::vec3 > key_points;
+static std::vector<float> shape_diameter;
+static std::vector<float> skeleton_lines;
+static Skeleton skeleton;
+static BackBone best_backbone;
+static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
+static std::vector<std::pair<int, int>>  skeletalNLateral_end_point_results;
+void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
+{
+    if (ImGui::Button("Generate Bounding Box For mesh"))
+    {
+        bounding_box = generate_bounding_box("0001.isometry.12.txt");
+    }
+    if (ImGui::Button("Generate Skeleton Keypoints for mesh"))
+    {
+        //key_points = generate_skeleton_keypoints("0001.isometry.1.txt");
+        skeleton_lines = generate_skeleton_lines("0001.isometry.12.txt");
+    }
+    if (ImGui::Button("Match skeleton"))
+    {
+        //match_skeleton_keypoints(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
+        match_skeleton_lines(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, skeleton_lines);
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    ImGui::LabelText("Skeleton generation with Cohen-Or's method", "Value");
+    if (ImGui::Button("Generate Skeleton"))
+    {
+        skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
+    }
+    if (ImGui::Button("embed mesh to 2D "))
+    {
+        try {
+            embed_mesh_endpoints_to_2d(m_factory.mesh_vec[selected_mesh], skeleton, N_LATERAL_PARAMETERS);
+        }
+        catch (const std::exception& ex) {
+            std::cerr << "Error: " << ex.what() << std::endl;
+        }
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
+    {
+        std::vector<unsigned int> right_mesh_end_points;
+        std::vector<unsigned int> left_mesh_end_points;
+        skeleton_generate_backbone(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
+        skeleton_get_N_Lateral_points(m_factory, skeleton, selected_mesh, best_backbone, skeleton_best_end_point_pairs
+            , right_mesh_end_points, left_mesh_end_points);
+
+        start_n_lateral_algorithm_with_skeleton_end_points(&m_factory.mesh_vec[selected_mesh], N_LATERAL_PARAMETERS,
+            left_mesh_end_points, right_mesh_end_points);
+
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+    if (ImGui::Button("Match End Points With N-Lateral"))
+    {
+        skeletalNLateral_end_point_results = SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(skeleton,
+            &m_factory.mesh_vec[selected_mesh], N_LATERAL_PARAMETERS.N, shape_diameter);
+        SkeletalNLateral_generate_buffer(skeleton, skeletalNLateral_end_point_results);
+        SkeletalNLateral_buffer();
+        is_skeletalNLateral_created = true;
+    }
+    if (ImGui::Button("Shape diameter function "))
+    {
+        std::vector<unsigned int> indices;
+        for (size_t i = 0; i < skeleton.endPoints.size(); i++)
+        {
+            int mesh_index1 = mesh_get_closest_index(&m_factory.mesh_vec[selected_mesh]
+                , skeleton.skeletonFormat[i].point);
+            indices.push_back(mesh_index1);
+
+        }
+        ShapeDiameter_calculate(&m_factory.mesh_vec[selected_mesh], indices, shape_diameter);
+
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
+
+}
+
+
 void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
 {
 
@@ -321,7 +407,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-
+    if(ImGui::Button("skeleton endpoint matching w/ fuzzy geodesic "))
+    {
+        trilateral_w_skeleton_endpoints(m_factory, selected_mesh,  fuzziness, skeleton, true);
+        m_factory.remove_all();
+       m_factory.add_all();
+    }
     ImGui::End();
         
 }
@@ -364,87 +455,6 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 }
 
 
-static std::vector<float> bounding_box;
-static std::map<std::string, glm::vec3 > key_points;
-static std::vector<float> shape_diameter;
-static std::vector<float> skeleton_lines; 
-static Skeleton skeleton;
-static BackBone best_backbone;
-static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
-static std::vector<std::pair<int, int>>  skeletalNLateral_end_point_results;
-void imgui_KIDS_skeleton( const int& selected_mesh, MeshFactory& m_factory)
-{
-    if (ImGui::Button("Generate Bounding Box For mesh"))
-    {
-        bounding_box = generate_bounding_box("0001.isometry.12.txt");
-    }
-    if (ImGui::Button("Generate Skeleton Keypoints for mesh"))
-    {
-        //key_points = generate_skeleton_keypoints("0001.isometry.1.txt");
-        skeleton_lines = generate_skeleton_lines("0001.isometry.12.txt");
-    }
-    if (ImGui::Button("Match skeleton"))
-    {
-        //match_skeleton_keypoints(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, key_points);
-        match_skeleton_lines(m_factory, &m_factory.mesh_vec[selected_mesh], bounding_box, skeleton_lines);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
-    ImGui::LabelText("Skeleton generation with Cohen-Or's method" , "Value");
-    if (ImGui::Button("Generate Skeleton"))
-    {
-        skeleton = skeleton_read_swc_file(m_factory ,"0001.isometry.8.swc");
-    }
-    if (ImGui::Button("embed mesh to 2D "))
-    {
-        try {
-            embed_mesh_endpoints_to_2d(m_factory.mesh_vec[selected_mesh], skeleton, N_LATERAL_PARAMETERS);
-        }
-        catch (const std::exception& ex) {
-            std::cerr << "Error: " << ex.what() << std::endl;
-        }
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
-    if (ImGui::Button("Start N-Lateral algorithm for skeleton"))
-    {
-        std::vector<unsigned int> right_mesh_end_points;
-        std::vector<unsigned int> left_mesh_end_points;
-        skeleton_generate_backbone(m_factory, skeleton , selected_mesh ,best_backbone , right_mesh_end_points , left_mesh_end_points );
-        skeleton_get_N_Lateral_points(m_factory, skeleton, selected_mesh , best_backbone, skeleton_best_end_point_pairs
-        , right_mesh_end_points, left_mesh_end_points);
-
-        start_n_lateral_algorithm_with_skeleton_end_points(&m_factory.mesh_vec[selected_mesh], N_LATERAL_PARAMETERS,
-            left_mesh_end_points, right_mesh_end_points);
-        
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
-    if (ImGui::Button("Match End Points With N-Lateral"))
-    {
-        skeletalNLateral_end_point_results = SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(skeleton,
-        &m_factory.mesh_vec[selected_mesh],N_LATERAL_PARAMETERS.N , shape_diameter);
-        SkeletalNLateral_generate_buffer(skeleton, skeletalNLateral_end_point_results);
-        SkeletalNLateral_buffer();
-        is_skeletalNLateral_created = true; 
-    }
-    if (ImGui::Button("Shape diameter function "))
-    {
-        std::vector<unsigned int> indices;
-        for (size_t i = 0; i < skeleton.endPoints.size(); i++)
-        {
-            int mesh_index1 = mesh_get_closest_index(&m_factory.mesh_vec[selected_mesh]
-            ,skeleton.skeletonFormat[i].point);
-            indices.push_back(mesh_index1);
-
-        }
-        ShapeDiameter_calculate(&m_factory.mesh_vec[selected_mesh], indices, shape_diameter);
-        
-        m_factory.remove_all();
-        m_factory.add_all();
-    }
-
-}
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
    

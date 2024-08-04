@@ -13,6 +13,7 @@
 #include "CoreTypeDefs.h"
 #include "FuzzyGeodesic.h"
 #include <src/Application/Include/CoreTypeDefs.h>
+#include "../Include/Skeleton.h"
 
 // 1 - use area error
 // 2 - use geodesic error
@@ -378,3 +379,7 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
 
  void trilateral_fuzzyGeodesic(MeshFactory& meshFac, int selectedIndex, int p1, int p2, int p3, float fuzziness_sigma);
  void trilateral_FPS_matching_w_fuzzy_geodesic(MeshFactory& mesh_fac, const int& selected_index, int sample_no , float fuzziness_sigma, bool recordTxt );
+
+ //skeleton and fuzzy
+ void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index,
+	 float fuzziness_sigma, Skeleton& skeleton, bool recordTxt);
