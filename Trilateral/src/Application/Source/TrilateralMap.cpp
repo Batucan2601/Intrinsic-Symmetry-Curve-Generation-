@@ -3730,11 +3730,19 @@ void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_
 	{
 		int min_index = -1;
 		float min_float = INFINITY;
+		std::vector<float> dist_i = Geodesic_dijkstra(*m, mesh_endpoints[i]);
 		for (size_t j = 0; j < sample_no; j++)
 		{
 			if (i == j)
 			{
 				continue;
+			}
+			// !! also check the distance between i and checkpoint and i and j
+			float dist_i_mid = distances_from_mesh_mid_point[mesh_endpoints[i]];
+			float dist_i_j = dist_i[mesh_endpoints[j]];
+			if (dist_i_mid *15.0f/10.0f > dist_i_j)
+			{
+				continue; 
 			}
 			// also check if the distance
 			Eigen::Vector3f dif_vec = area_vectors[i] - area_vectors[j];
