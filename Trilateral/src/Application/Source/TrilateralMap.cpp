@@ -263,7 +263,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 }
 
 
-/*static float* trialteral_ROI(MeshFactory& mesh_fac  , int& selected_index, int point_index1, int point_index2, int point_index3, int division_no) // tau is the closeness division_no is the no of how much you want to separate
+/*static float* trilateral_ROI(MeshFactory& mesh_fac  , int& selected_index, int point_index1, int point_index2, int point_index3, int division_no) // tau is the closeness division_no is the no of how much you want to separate
 {
 	Mesh m = mesh_fac.mesh_vec[selected_index];
 	int* is_close = new int[m.vertices.size()];
@@ -1073,7 +1073,7 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	 return return_visited_values;
 
  }
- std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no)
+ std::vector<int> trilateral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color )
 {
 	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
 	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
@@ -1084,32 +1084,35 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 
 	std::vector<int> is_visited = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
 
-   // now recolor
-	//std::vector<glm::vec3> new_color_buffer;
-	//for (size_t i = 0; i < m->colors.size(); i++)
-	//{
+	if (is_color )
+	{
+		std::vector<glm::vec3> new_color_buffer;
+		for (size_t i = 0; i < m->colors.size(); i++)
+		{
 
-	//	if (is_visited[i] == EDGE) //edge 
-	//	{
-	//		//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-	//		m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
-	//	}
-	//	else if (is_visited[i] == OUTSIDE) //not visited 
-	//	{
-	//		m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-	//		//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-	//	}
-	//	else if (is_visited[i] == INSIDE)
-	//	{
-	//		m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
-	//		//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-	//	}
-	//	else if (is_visited[i] == MIDPOINT)
-	//	{
-	//		m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
-	//	}
-	//}
-	//m->colors = new_color_buffer;
+			if (is_visited[i] == EDGE) //edge 
+			{
+				//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+				m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
+			}
+			else if (is_visited[i] == OUTSIDE) //not visited 
+			{
+				m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
+				//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+			}
+			else if (is_visited[i] == INSIDE)
+			{
+				m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
+				//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else if (is_visited[i] == MIDPOINT)
+			{
+				m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
+			}
+		}
+		m->colors = new_color_buffer;
+	}
+	
 	return  is_visited;
 }
 std::vector<float>  histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
@@ -2215,7 +2218,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 					if (i != k && k != j)
 					{
 						float* histogram_arr = new float[division_no];
-						//histogram_arr = trialteral_ROI(mesh_fac, mesh_index1, i, k, j, division_no); // tau is the closeness division_no is the no of how much you want to separate
+						//histogram_arr = trilateral_ROI(mesh_fac, mesh_index1, i, k, j, division_no); // tau is the closeness division_no is the no of how much you want to separate
 						delete[] histogram_arr;
 					}
 				}
@@ -2279,7 +2282,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 //				if (i != j && i != k && j != k) //if points are different
 //				{
 //					bool is_visited_interior = false;
-//					int* is_visited = trialteral_ROI(mesh_fac, mesh_index1, m1_histograms[i].first, m1_histograms[j].first, m1_histograms[k].first, division_no, is_visited_interior);
+//					int* is_visited = trilateral_ROI(mesh_fac, mesh_index1, m1_histograms[i].first, m1_histograms[j].first, m1_histograms[k].first, division_no, is_visited_interior);
 //					std::vector<float> histogram_vec =  histogramROi(mesh_fac, mesh_index1, m1_histograms[i].first, m1_histograms[j].first, m1_histograms[k].first, division_no, is_visited, is_visited_interior);
 //					m1_histograms[i].second.push_back(histogram_vec);
 //				}
@@ -2295,7 +2298,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 //				if (i != j && i != k && j != k) //if points are different
 //				{
 //					bool is_visited_interior = false;
-//					int* is_visited = trialteral_ROI(mesh_fac, mesh_index2, m2_histograms[i].first, m2_histograms[j].first, m2_histograms[k].first, division_no, is_visited_interior);
+//					int* is_visited = trilateral_ROI(mesh_fac, mesh_index2, m2_histograms[i].first, m2_histograms[j].first, m2_histograms[k].first, division_no, is_visited_interior);
 //					std::vector<float> histogram_vec = histogramROi(mesh_fac, mesh_index2, m2_histograms[i].first, m2_histograms[j].first, m2_histograms[k].first, division_no, is_visited, is_visited_interior);
 //					m2_histograms[i].second.push_back(histogram_vec);
 //				}
@@ -2427,7 +2430,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 			}
 		}
 		bool is_visited_interior = false;
-		int* is_visited = trialteral_ROI(mesh_fac, mesh_index2, sample_indices_m1[i], sample_indices_m1[first_min], sample_indices_m1[second_min], division_no, is_visited_interior);
+		int* is_visited = trilateral_ROI(mesh_fac, mesh_index2, sample_indices_m1[i], sample_indices_m1[first_min], sample_indices_m1[second_min], division_no, is_visited_interior);
 		std::vector<float> histogram_of_nearest_2_points = histogramROi(mesh_fac, mesh_index1, sample_indices_m1[i], sample_indices_m1[first_min], sample_indices_m1[second_min], division_no, is_visited, is_visited_interior);
 
 		//normalize
@@ -2491,7 +2494,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 			}
 		}
 		bool is_visited_interior = false;
-		int* is_visited = trialteral_ROI(mesh_fac, mesh_index2, sample_indices_m2[i], sample_indices_m2[first_min], sample_indices_m2[second_min], division_no, is_visited_interior);
+		int* is_visited = trilateral_ROI(mesh_fac, mesh_index2, sample_indices_m2[i], sample_indices_m2[first_min], sample_indices_m2[second_min], division_no, is_visited_interior);
 		std::vector<float> histogram_of_nearest_2_points = histogramROi(mesh_fac, mesh_index1, sample_indices_m2[i], sample_indices_m2[first_min], sample_indices_m2[second_min], division_no, is_visited, is_visited_interior);
 
 		//normalize
@@ -3025,7 +3028,7 @@ void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, f
 
 }
 
-void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no )
+void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no , bool recordTxt)
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	std::vector<std::vector<float>> trilateral_histograms;
@@ -3040,7 +3043,7 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		std::vector<int> is_visited = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
+		std::vector<int> is_visited = trilateral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false );
 		std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index,trilateral_desc[i].p1 ,
 		trilateral_desc[i].p2 , trilateral_desc[i].p3 , division_no,is_visited , global_is_visited);
 		trilateral_histograms.push_back(histogram);
@@ -3105,6 +3108,11 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	}
 
 	mesh->calculated_symmetry_pairs = resemblance_pairs;
+
+	if (recordTxt)
+	{
+		Metric_write_to_file(mesh, "../../Results/Base_Trilateral_FPS_histogram.txt");
+	}
 
 }
 
@@ -3206,7 +3214,7 @@ void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const
 	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		std::vector<int> is_visited = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
+		std::vector<int> is_visited = trilateral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false );
 		std::vector<int> points_inside; 
 		for (size_t i = 0; i < is_visited.size(); i++)
 		{
@@ -3288,7 +3296,7 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		is_visited_list[i] = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
+		is_visited_list[i] = trilateral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false);
 		std::vector<int> points_inside;
 		for (size_t j = 0; j < N; j++)
 		{
@@ -3366,7 +3374,7 @@ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, c
 	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		is_visited_list[i] = trialteral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no);
+		is_visited_list[i] = trilateral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no,false);
 		std::vector<int> points_inside;
 		for (size_t j = 0; j < N; j++)
 		{

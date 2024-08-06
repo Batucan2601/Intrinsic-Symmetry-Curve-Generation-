@@ -27,14 +27,14 @@ struct TrilateralError
 	float curvatureError;
 };
 
-//static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+//static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
 
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index);
 
 void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selected_index, int p1, int p2, int p3);
 
 
-/*static float* trialteral_ROI(MeshFactory& mesh_fac  , int& selected_index, int point_index1, int point_index2, int point_index3, int division_no) // tau is the closeness division_no is the no of how much you want to separate
+/*static float* trilateral_ROI(MeshFactory& mesh_fac  , int& selected_index, int point_index1, int point_index2, int point_index3, int division_no) // tau is the closeness division_no is the no of how much you want to separate
 {
 	Mesh m = mesh_fac.mesh_vec[selected_index];
 	int* is_close = new int[m.vertices.size()];
@@ -325,7 +325,7 @@ std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& se
 std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
 
-//static int* trialteral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
+//static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
 std::vector<float> histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
 	std::vector<int> is_visited, std::vector<int>& global_is_visited);
 
@@ -343,7 +343,7 @@ void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 
 //region of interest
-std::vector<int> trialteral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no);
+std::vector<int> trilateral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color);
 void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
 
 
@@ -365,7 +365,7 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  std::vector<float> trilateral_generate_spin_image(MeshFactory& mesh_fac, int selected_index, std::vector<int>& vertices_in_tri_area, int division_no);
  float chi_squre_distance(std::vector<float>& vec1, std::vector<float>& vec2);
 
- void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no);
+ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no, bool recordTxt);
  void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
  void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);
  void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no);

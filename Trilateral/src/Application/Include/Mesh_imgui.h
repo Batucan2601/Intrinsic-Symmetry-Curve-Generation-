@@ -203,7 +203,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
         
-        is_visited = trialteral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no);
+        is_visited = trilateral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no,true);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -366,7 +366,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputInt(" histogram sampling ", &no_of_hist_division);
     if (ImGui::Button("FPS and histogram matching "))
     {
-        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , no_of_hist_division);
+        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , no_of_hist_division , true );
         m_factory.remove_all();
         m_factory.add_all();
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
