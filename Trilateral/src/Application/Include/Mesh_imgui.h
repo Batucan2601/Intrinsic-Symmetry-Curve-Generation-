@@ -409,7 +409,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if(ImGui::Button("skeleton endpoint matching w/ fuzzy geodesic "))
     {
-        trilateral_w_skeleton_endpoints(m_factory, selected_mesh,  fuzziness, skeleton, true);
+        trilateral_w_skeleton_endpoints(m_factory, selected_mesh,  fuzziness, skeleton, false);
         m_factory.remove_all();
        m_factory.add_all();
     }

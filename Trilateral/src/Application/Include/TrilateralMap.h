@@ -383,3 +383,4 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  //skeleton and fuzzy
  void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index,
 	 float fuzziness_sigma, Skeleton& skeleton, bool recordTxt);
+

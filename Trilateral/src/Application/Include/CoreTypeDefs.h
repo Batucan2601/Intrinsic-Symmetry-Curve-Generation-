@@ -59,3 +59,6 @@ float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, c
 
 
 float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+
+// permuation
+float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2, int N);

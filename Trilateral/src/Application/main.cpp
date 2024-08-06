@@ -427,8 +427,9 @@ int main(void)
                 MVP = proj * view * model;
                 mesh_fac.mesh_vec[i].MVP = MVP;
                 glUniformMatrix4fv(glGetUniformLocation(default_shader.ID, "u_MVP"), 1, GL_FALSE, &MVP[0][0]);
-
+                glLineWidth(5.0f);
                 glDrawArrays(GL_LINES, 0, mesh_fac.mesh_vec[i].calculated_symmetry_pairs.size() * 2);
+                glLineWidth(1.0f);
             }
             
         }
@@ -442,7 +443,7 @@ int main(void)
 
             glLineWidth(5.0f);
             //glDrawArrays(GL_LINES, 0, mesh_fac.mesh_skeleton_vec.skeleton_points.size()/2 );
-            glDrawElements(GL_LINES, mesh_fac.mesh_skeleton_vec.skeleton_indices.size(), GL_UNSIGNED_INT, 0);
+            //glDrawElements(GL_LINES, mesh_fac.mesh_skeleton_vec.skeleton_indices.size(), GL_UNSIGNED_INT, 0);
             //glDraw(GL_LINES, 0, mesh_fac.mesh_skeleton_vec.skeleton_points.size()/2 );
             glLineWidth(1.0f);
 

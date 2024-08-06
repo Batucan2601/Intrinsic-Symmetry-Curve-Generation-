@@ -363,3 +363,50 @@ float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 	float length = glm::length(cross1) / 2;
 	return length;
 }
+
+
+float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2, int N)
+{
+	//generate permuation
+	std::vector<unsigned int> permutation_vector;
+	for (size_t i = 0; i < N; i++)
+	{
+		permutation_vector.push_back(i);
+	}
+	//all permutations for indices
+	std::vector<std::vector<unsigned int>> all_permutations;
+	std::vector<Eigen::VectorXf> vec1_list;
+	std::vector<Eigen::VectorXf> vec2_list;
+
+	do {
+		all_permutations.push_back(permutation_vector);
+	} while (std::next_permutation(permutation_vector.begin(), permutation_vector.end()));
+
+	for (size_t i = 0; i < all_permutations.size(); i++)
+	{
+		Eigen::VectorXf vec1_p(N);
+		Eigen::VectorXf vec2_p(N);
+		for (size_t j = 0; j < N; j++)
+		{
+			vec1_p(j) = vec1(all_permutations[i][j]);
+			vec2_p(j) = vec2(all_permutations[i][j]);
+		}
+		vec1_list.push_back(vec1_p);
+		vec2_list.push_back(vec2_p);
+	}
+	int minimum_index = -1;
+	float minimum_value = INFINITY;
+	for (size_t i = 0; i < all_permutations.size(); i++)
+	{
+		for (size_t j = 0; j < all_permutations.size(); j++)
+		{
+			float diff = (vec1_list[i] - vec2_list[j]).norm();
+			if (minimum_value > diff)
+			{
+				minimum_value = diff;
+			}
+		}
+	}
+
+	return minimum_value;
+}

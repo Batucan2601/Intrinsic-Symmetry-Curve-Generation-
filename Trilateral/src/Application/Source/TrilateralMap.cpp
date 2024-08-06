@@ -3738,15 +3738,15 @@ void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_
 				continue;
 			}
 			// !! also check the distance between i and checkpoint and i and j
-			float dist_i_mid = distances_from_mesh_mid_point[mesh_endpoints[i]];
+			/*float dist_i_mid = distances_from_mesh_mid_point[mesh_endpoints[i]];
 			float dist_i_j = dist_i[mesh_endpoints[j]];
 			if (dist_i_mid *15.0f/10.0f > dist_i_j)
 			{
 				continue; 
-			}
+			}*/
 			// also check if the distance
-			Eigen::Vector3f dif_vec = area_vectors[i] - area_vectors[j];
-			float dif = dif_vec.norm();
+			//Eigen::Vector3f dif_vec = area_vectors[i] - area_vectors[j];
+			float dif = permutation_return_smallest_dif( area_vectors[i], area_vectors[j], 3);
 			if (min_float > dif )
 			{
 				min_float = dif;
@@ -3774,6 +3774,7 @@ void trilateral_w_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_
 	{
 		Metric_write_to_file(m, "../../Results/Trilateral_w_FuzzyGeodesic.txt");
 	}
+
 }
 //use fuzzy geodesics and also use end points converted from skeelton endpoints as anchors
 void trilateral_FPS_symmetry_using_skel_endpoints(MeshFactory& mesh_fac, const int& selected_index, int sample_no,
