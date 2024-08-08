@@ -966,7 +966,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1_2, std::vector<int>& path_1_3, std::vector<int>& path_2_3)
  {
 	 std::vector<int> start_vertices;
-	 /*for (size_t i = 0; i < path_1_2.size(); i++)
+	 for (size_t i = 0; i < path_1_2.size(); i++)
 	 {
 		 start_vertices.push_back(path_1_2[i]);
 	 }
@@ -977,14 +977,14 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	 for (size_t i = 0; i < path_2_3.size(); i++)
 	 {
 		 start_vertices.push_back(path_2_3[i]);
-	 }*/
+	 }
 
 	 //make the list unique
-	 std::sort(start_vertices.begin(), start_vertices.end());
+	 /*std::sort(start_vertices.begin(), start_vertices.end());
 	 start_vertices.erase(std::unique(start_vertices.begin(), start_vertices.end()), start_vertices.end());
 	 start_vertices.push_back(path_1_2[0]);
 	 start_vertices.push_back(path_1_3[path_1_3.size() - 1]);
-	 start_vertices.push_back(path_2_3[0]);
+	 start_vertices.push_back(path_2_3[0]);*/
 	 std::vector<int> is_visited;
 	 for (size_t i = 0; i < m->vertices.size(); i++)
 	 {
@@ -1014,8 +1014,8 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 	 // get the neighbours
 	 for (size_t i = 0; i < start_vertices.size(); i++)
 	 {
-		 for (size_t j = 0; j < m->adjacenies[start_vertices[i]].size(); j++)
-		 {
+		 for (size_t j = 0; j < /*m->adjacenies[start_vertices[i]].size() */ 1; j++) //only check 1 neighbour this should emirically work ?
+		 { 
 			 int point_index = m->adjacenies[start_vertices[i]][j].first;
 			 if (is_visited[point_index] != EDGE)
 			 {
@@ -1086,7 +1086,6 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 
 	if (is_color )
 	{
-		std::vector<glm::vec3> new_color_buffer;
 		for (size_t i = 0; i < m->colors.size(); i++)
 		{
 
@@ -1110,7 +1109,6 @@ static std::vector<int> check_vertices_visited(Mesh* m, std::vector<int>& path_1
 				m->colors[i] = glm::vec3(255.0f, 255.0f, 255.0f);
 			}
 		}
-		m->colors = new_color_buffer;
 	}
 	
 	return  is_visited;
