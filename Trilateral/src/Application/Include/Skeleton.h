@@ -58,6 +58,10 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name
 void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances);
 void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
 BackBone& best_backbone, std::vector<unsigned int>& right_points  , std::vector<unsigned int>& left_points);
+
+void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
+BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points);
+
 void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices,
 	std::vector<float>& distance_matrix, std::vector<int>& predecessor_list_for_end_points);
 void skeleton_get_distance_and_vertex_list(Skeleton& skeleton,

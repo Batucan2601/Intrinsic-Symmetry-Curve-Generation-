@@ -1612,3 +1612,79 @@ unsigned int skeleton_calculate_closest_mesh_point(Skeleton& skeleton, Mesh* m, 
 	return minimum_dist_index;
 	
 }
+
+void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
+	BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points)
+{
+	Mesh* mesh = &meshFac.mesh_vec[mesh_index];
+	int skeleton_mid_point_index = skeleton.mid_point_index;
+	int N = skeleton.skeletonFormat.size();
+	std::vector<unsigned int> end_point_indices;
+	std::vector<BackBone> candidate_backbones; 
+	for (size_t i = 0; i < N; i++)
+	{
+		if (skeleton.skeletonFormat[i].label == END)
+		{
+			end_point_indices.push_back(i);
+		}
+	}
+	int N_end = end_point_indices.size();
+	std::vector<std::vector<int>> predecessor_list_for_end_points(N_end);
+	std::vector<std::vector<float>> distance_matrix(N_end);
+	for (size_t i = 0; i < N_end; i++)
+	{
+		int index1 = end_point_indices[i];
+		std::vector<int> point_list;
+		std::vector<float> distances_from_index1;
+
+		skeleton_calculate_dijkstra(skeleton, index1, point_list, distances_from_index1);
+
+		for (size_t j = i; j < N_end; j++)
+		{
+			//assume i and j are the end points of backbone
+			//generate the path
+			int index2 = end_point_indices[j];
+			float backbone_length;
+			std::vector<int> vertex_list_index1_index2;
+			if (i != j)
+			{
+				skeleton_get_distance_and_vertex_list(skeleton, index1, index2, point_list,
+					vertex_list_index1_index2, backbone_length);
+
+				BackBone backbone;
+				backbone.start_index = index1;
+				backbone.end_index = index2;
+				backbone.vertex_list = vertex_list_index1_index2;
+				bool is_mid_point_present = false;
+				// check if mid point index included
+				for (size_t k = 0; k < backbone.vertex_list.size(); k++)
+				{
+					if (backbone.vertex_list[k] = skeleton_mid_point_index)
+					{
+						is_mid_point_present = true; 
+						break;
+					}
+				}
+				if (is_mid_point_present)
+				{
+					candidate_backbones.push_back(backbone);
+				}
+
+			}
+			predecessor_list_for_end_points[i] = point_list;
+
+			distance_matrix[i] = distances_from_index1;
+
+		}
+	}
+	//std::vector<int> mesh_vertex_indices; 
+	//skeleton_calculate_closest_mesh_points(skeleton, &meshFac.mesh_vec[mesh_index], mesh_index_vertices);
+	std::vector<>
+	std::vector
+	for (size_t i = 0; i < candidate_backbones.size(); i++)
+	{
+
+	}
+
+
+}

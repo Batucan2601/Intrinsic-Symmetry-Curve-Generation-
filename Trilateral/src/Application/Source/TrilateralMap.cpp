@@ -3029,16 +3029,13 @@ void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, f
 void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no , bool recordTxt)
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+	int N = mesh->vertices.size();
 	std::vector<std::vector<float>> trilateral_histograms;
 	std::vector<unsigned int> sampled_points = furthest_point_sampling(mesh , sample_no , true );
 	
 	// use dijkstra to get each beest neihbours
 	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
-	std::vector<int> global_is_visited; 
-	for (size_t i = 0; i < mesh->vertices.size(); i++)
-	{
-		global_is_visited.push_back(OUTSIDE);
-	}
+	std::vector<int> global_is_visited( N , OUTSIDE); 
 	for (size_t i = 0; i < sample_no; i++)
 	{
 		std::vector<int> is_visited = trilateral_ROI(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false );
@@ -3081,17 +3078,6 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 		}
 		resemblance_pairs.push_back(std::pair<int,int>(trilateral_desc[i].p1 , trilateral_desc[minimum_index].p1));
 	}
-	/*for (size_t i = 0; i < sample_no; i++)
-	{
-		for (size_t j = i; j < sample_no; j++)
-		{
-			if (j == i)
-			{
-				continue;
-			}
-			std::vector<int> histogram_i = trilateral_generate_spin_image(mesh_fac , selected_index ,)
-		}
-	}*/
 
 	//buffer
 	for (size_t i = 0; i < resemblance_pairs.size(); i++)
