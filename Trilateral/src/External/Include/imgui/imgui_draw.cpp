@@ -2482,7 +2482,7 @@ static bool ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
     stbtt_PackBegin(&spc, NULL, atlas->TexWidth, TEX_HEIGHT_MAX, 0, atlas->TexGlyphPadding, NULL);
     ImFontAtlasBuildPackCustomRects(atlas, spc.pack_info);
 
-    // 6. Pack each source font. No rendering yet, we are working with rectangles in an infinitely tall texture at this point.
+    // 6. Pack each source font. No rendering yet, we are working with rectangles in an INFINITYly tall texture at this point.
     for (int src_i = 0; src_i < src_tmp_array.Size; src_i++)
     {
         ImFontBuildSrcData& src_tmp = src_tmp_array[src_i];

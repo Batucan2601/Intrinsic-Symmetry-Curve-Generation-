@@ -78,8 +78,8 @@ static std::vector<int> compute_geodesic_distances_array(Mesh& m, int point_inde
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -118,10 +118,10 @@ static std::vector<int> compute_geodesic_distances_array(Mesh& m, int point_inde
 			}
 		}
 		// 2 - after update select the minimum non visited vertex from matrix and if_visited array
-		int minimum_size = (float)INFINITE;
+		int minimum_size = (float)INFINITY;
 		for (size_t i = 0; i < m.vertices.size(); i++)
 		{
-			if (if_vertex_visited[i] == 0 && matrix[i] != (float)INFINITE) //update 
+			if (if_vertex_visited[i] == 0 && matrix[i] != (float)INFINITY) //update 
 			{
 				if (matrix[i] < minimum_size)
 				{
@@ -161,8 +161,8 @@ static std::vector<float> compute_geodesic_distances_array_distance(Mesh& m, int
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -201,10 +201,10 @@ static std::vector<float> compute_geodesic_distances_array_distance(Mesh& m, int
 			}
 		}
 		// 2 - after update select the minimum non visited vertex from matrix and if_visited array
-		int minimum_size = (float)INFINITE;
+		int minimum_size = (float)INFINITY;
 		for (size_t i = 0; i < m.vertices.size(); i++)
 		{
-			if (if_vertex_visited[i] == 0 && matrix[i] != (float)INFINITE) //update 
+			if (if_vertex_visited[i] == 0 && matrix[i] != (float)INFINITY) //update 
 			{
 				if (matrix[i] < minimum_size)
 				{
@@ -252,8 +252,8 @@ static std::vector<int> compute_geodesic_distances_min_heap(Mesh& m, int point_i
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -339,8 +339,8 @@ static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m,
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -427,8 +427,8 @@ static std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -513,8 +513,8 @@ static std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -1010,7 +1010,7 @@ static std::vector<float> compute_curve_distances(Mesh& m, std::vector<int> dist
 		}
 
 	}
-	float min_distance = INFINITE;
+	float min_distance = INFINITY;
 	// we will have 2 of those triangles , divide all of the vector data to half
 	for (size_t i = 0; i < total_distances.size(); i++)
 	{
@@ -1032,7 +1032,7 @@ static std::vector<float> compute_curve_distances(Mesh& m, std::vector<int> dist
 }
 static int find_point_from_histogram(Mesh& m, std::vector<float> histogram)
 {
-	float min_distance = INFINITE;
+	float min_distance = INFINITY;
 	int best_index;
 
 	std::vector<int> point_list;
@@ -1333,7 +1333,7 @@ static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, f
 	}
 	for (size_t i = 0; i < m.vertices.size(); i++)
 	{
-		minimum_distance[i] = (float)INFINITE; //false for all 
+		minimum_distance[i] = (float)INFINITY; //false for all 
 	}
 
 	float step = 0;
@@ -1437,7 +1437,7 @@ static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, f
 		int no_2 = dist2 / histogram_no;
 		int no_3 = dist3 / histogram_no;
 
-		int min = INFINITE;
+		int min = INFINITY;
 		if (no_1 < min)
 		{
 			min = no_1;
@@ -1501,7 +1501,7 @@ static void compute_bilateral_map_according_to_point(Mesh& m, int point1_index, 
 	}
 	for (size_t i = 0; i < m.vertices.size(); i++)
 	{
-		minimum_distance[i] = (float)INFINITE; //false for all 
+		minimum_distance[i] = (float)INFINITY; //false for all 
 	}
 	for (size_t j = 0; j < distances.size(); j++)
 	{
@@ -1520,7 +1520,7 @@ static void compute_bilateral_map_according_to_point(Mesh& m, int point1_index, 
 		int no_2 = dist2 / histogram_no;
 		int no_3 = dist3 / histogram_no;
 
-		int min = INFINITE;
+		int min = INFINITY;
 		if (no_1 < min)
 		{
 			min = no_1;

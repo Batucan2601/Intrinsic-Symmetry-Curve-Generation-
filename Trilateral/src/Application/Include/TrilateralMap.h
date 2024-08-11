@@ -114,7 +114,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	}
 	for (size_t i = 0; i < m.vertices.size(); i++)
 	{
-		minimum_distance[i] = INFINITE;
+		minimum_distance[i] = INFINITY;
 
 	}
 	//calculate the distance from every vertex within path

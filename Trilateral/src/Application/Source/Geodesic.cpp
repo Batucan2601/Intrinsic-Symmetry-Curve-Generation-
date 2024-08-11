@@ -15,8 +15,8 @@ std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff
@@ -102,8 +102,8 @@ std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
 		}
 		else
 		{
-			//infinite
-			matrix[i] = (float)INFINITE;
+			//INFINITY
+			matrix[i] = (float)INFINITY;
 		}
 	}
 	//init extra stuff

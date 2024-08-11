@@ -167,7 +167,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	for (size_t i = 0; i < best_top_eigen_values; i++)
 	{
 		unsigned int best_index = -1;
-		float best_value = -INFINITE;
+		float best_value = -INFINITY;
 		for (size_t j = 0; j < eigen_values.rows(); j++)
 		{
 			bool is_best_selected_already = false; 

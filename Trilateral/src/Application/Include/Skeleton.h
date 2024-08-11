@@ -60,7 +60,7 @@ void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigne
 BackBone& best_backbone, std::vector<unsigned int>& right_points  , std::vector<unsigned int>& left_points);
 
 void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
-BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points);
+	BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points);
 
 void skeleton_point_to_backbone(Skeleton skeleton, BackBone backbone, int index1, int& hitIndex, float& dist, std::vector<int>& indices,
 	std::vector<float>& distance_matrix, std::vector<int>& predecessor_list_for_end_points);
@@ -73,3 +73,6 @@ void skeleton_get_N_Lateral_points(MeshFactory& m_factory, Skeleton& skeleton, u
 	std::vector<std::pair<unsigned int, unsigned int>> best_backbone_point_pairs, std::vector<unsigned int>& right_mesh_indices,
 	std::vector<unsigned int>& left_mesh_indices);
 void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances);
+
+float skeleton_get_backbone_length(Mesh* m,BackBone* backBone);
+

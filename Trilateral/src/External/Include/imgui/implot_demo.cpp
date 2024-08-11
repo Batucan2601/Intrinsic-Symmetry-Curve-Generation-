@@ -592,9 +592,9 @@ void Demo_StemPlots() {
 
 //-----------------------------------------------------------------------------
 
-void Demo_InfiniteLines() {
+void Demo_INFINITYLines() {
     static double vals[] = {0.25, 0.5, 0.75};
-    if (ImPlot::BeginPlot("##Infinite")) {
+    if (ImPlot::BeginPlot("##INFINITY")) {
         ImPlot::SetupAxes(NULL,NULL,ImPlotAxisFlags_NoInitialFit,ImPlotAxisFlags_NoInitialFit);
         ImPlot::PlotInfLines("Vertical",vals,3);
         ImPlot::PlotInfLines("Horizontal",vals,3,ImPlotInfLinesFlags_Horizontal);
@@ -2196,7 +2196,7 @@ void ShowDemoWindow(bool* p_open) {
             DemoHeader("Bar Stacks", Demo_BarStacks);
             DemoHeader("Error Bars", Demo_ErrorBars);
             DemoHeader("Stem Plots##", Demo_StemPlots);
-            DemoHeader("Infinite Lines", Demo_InfiniteLines);
+            DemoHeader("INFINITY Lines", Demo_INFINITYLines);
             DemoHeader("Pie Charts", Demo_PieCharts);
             DemoHeader("Heatmaps", Demo_Heatmaps);
             DemoHeader("Histogram", Demo_Histogram);

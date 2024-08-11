@@ -170,7 +170,15 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
     }
-
+    if (ImGui::Button("Best backbone generation using mid point"))
+    {
+        std::vector<unsigned int> right_mesh_end_points;
+        std::vector<unsigned int> left_mesh_end_points;
+        skeleton_generate_backbone_w_midpoint(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
+        //skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
+        m_factory.remove_all();
+        m_factory.add_all();
+    }
 }
 
 

@@ -15,7 +15,7 @@
 #include "../Include/Mesh.h"
 
 
-#define INFINITE 10000000
+#define INFINITY 10000000
 
 
 #pragma region functions
