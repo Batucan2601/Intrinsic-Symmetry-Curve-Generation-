@@ -482,6 +482,7 @@ int main(void)
         imgui_KIDS_skeleton(selected_mesh, mesh_fac);
         imgui_N_Lateral_Parameters(selected_mesh, mesh_fac);
         imgui_debug_layer(selected_mesh, mesh_fac,cameraPos, cameraFront, cameraUp);
+        imgui_menu_bar(selected_mesh, mesh_fac);
         //imgui_N_Lateral_Parameters();
         if (is_trilateral_generated)
         {

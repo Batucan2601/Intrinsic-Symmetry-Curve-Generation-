@@ -10,14 +10,14 @@
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/ShapeDiameter.h"
 #include <src/Application/Include/SkeletalNLateral.h>
-bool if_bilateral_map = true; 
+bool if_bilateral_map = true;
 bool if_isocurve_selected = false;
-bool if_bilateral_map_selected = true; 
-int point_1_index = 0 ;
+bool if_bilateral_map_selected = true;
+int point_1_index = 0;
 int point_2_index = 100;
 int point_3_index = 200;
 float tau = 50.0f;
-int partition_no = 10; 
+int partition_no = 10;
 std::vector<int> iso_curve_distances;
 std::vector<float> iso_curve_histogram;
 float scale = 1.0f;
@@ -25,53 +25,53 @@ float scale = 1.0f;
 
 bool is_mesh_quadified = false;
 bool is_catmull_clark = false;
-bool is_sqrt_3 = false; 
-bool is_trilateral = false; 
+bool is_sqrt_3 = false;
+bool is_trilateral = false;
 
-int selected_mesh = 0; 
+int selected_mesh = 0;
 
 std::vector<int> is_visited; // checks if vertex is visited 
 
-bool is_visited_interior = false; 
+bool is_visited_interior = false;
 
 // lines
 int selected_mesh_for_points1 = 0;
 int selected_mesh_for_points2 = 1;
 bool is_draw_lines_activated = false;
 bool is_draw_lines_activated_once = false; // indicator for one time buffering of points
-bool is_polygon_filled = true ; 
+bool is_polygon_filled = true;
 bool is_normals_shown = false;
 bool is_skeletalNLateral_created = false;
 
 std::vector<float> line_points; //line points will be global 
 
-bool activate_histogram = false; 
+bool activate_histogram = false;
 
-std::vector<float> histogram; 
+std::vector<float> histogram;
 
-std::vector<float> lines; 
+std::vector<float> lines;
 
 //int no_of_sampling_fps = 10; 
 //int no_of_agd_points = 10; 
 int no_of_points = 10;
 int no_of_hist_division = 10;
 
-Plane plane; 
+Plane plane;
 std::vector<std::vector<int>> symmetry_paired_points;
 std::vector<unsigned int> selectedIndices;
 std::vector<unsigned int> indices;
-std::vector<TrilateralDescriptor> trilateralDescVector; 
+std::vector<TrilateralDescriptor> trilateralDescVector;
 
 static std::string curtrilateralItem;
 bool is_trilateral_generated = false;
 
-float trilateralCurvatureWeight = 1; 
+float trilateralCurvatureWeight = 1;
 float trilateralGeodesicWeight = 1;
 float trilateralAreaWeight = 1;
 
 //spectral embedding
 std::vector<glm::vec3> embed_vertices;
-std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs; 
+std::vector<std::pair<unsigned int, unsigned int >> calculated_symmetry_pairs;
 Mesh m1, m2;
 std::vector<int> m1_map_indices, m2_map_indices;
 std::string KIDS_text_file_name;
@@ -117,7 +117,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     {
         std::vector<unsigned int> right_mesh_end_points;
         std::vector<unsigned int> left_mesh_end_points;
-        skeleton_generate_backbone(m_factory, skeleton, selected_mesh,best_backbone, right_mesh_end_points, left_mesh_end_points);
+        skeleton_generate_backbone(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
         //skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
         m_factory.remove_all();
         m_factory.add_all();
@@ -179,14 +179,18 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("Generate Spectral Skeleton"))
+    {
+        skeleton = skeleton_read_swc_file(m_factory, "skeletonSpectral.swc");
+    }
 }
 
 
-void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
+void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
 {
 
     ImGui::Begin("Input window");
-    
+
 
     ImGui::InputInt("mesh no  ", &selected_mesh);
 
@@ -201,7 +205,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         if (ImGui::Button("Enable polygon mode "))
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            is_polygon_filled = false; 
+            is_polygon_filled = false;
         }
     }
     else
@@ -219,8 +223,8 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     if (ImGui::Button("Trilateral  "))
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
-        
-        is_visited = trilateral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no,true);
+
+        is_visited = trilateral_ROI(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no, true);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -231,20 +235,20 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         //histogram = histogramROi(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index, partition_no,  is_visited );
         m_factory.remove_all();
         m_factory.add_all();
-        activate_histogram = true; 
+        activate_histogram = true;
     }
     ImGui::InputInt("no of samples  ", &no_of_points);
     ImGui::SameLine();
 
     if (ImGui::Button("dominant symmetry plane  "))
     {
-        plane =  generate_dominant_symmetry_plane(selected_mesh , m_factory);
+        plane = generate_dominant_symmetry_plane(selected_mesh, m_factory);
         m_factory.remove_all();
         m_factory.add_all();
     }
     if (ImGui::Button("separate mesh with dominant symmetry plane "))
     {
-        generate_two_separate_mesh_using_dominant_symmetry_plane(plane , &m_factory.mesh_vec[selected_mesh] , &m1 , &m2 , &m1_map_indices , &m2_map_indices ) ;
+        generate_two_separate_mesh_using_dominant_symmetry_plane(plane, &m_factory.mesh_vec[selected_mesh], &m1, &m2, &m1_map_indices, &m2_map_indices);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -260,15 +264,15 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }*/
-    if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str() )) // The second parameter is the label previewed before opening the combo.
+    if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str())) // The second parameter is the label previewed before opening the combo.
     {
-        bool isSelected = false; 
-        if (ImGui::Selectable( (const char*)"AGD", &isSelected))
+        bool isSelected = false;
+        if (ImGui::Selectable((const char*)"AGD", &isSelected))
         {
-            selectedIndices= AverageGeodesicFunction(m_factory, selected_mesh, no_of_points);
+            selectedIndices = AverageGeodesicFunction(m_factory, selected_mesh, no_of_points);
             //trilateralDescVector = match_points_using_trilateral_decriptor(m_factory, selected_mesh, AGDIndices);
             curtrilateralItem = "AGD";
-            is_trilateral_generated = true; 
+            is_trilateral_generated = true;
         }
         if (ImGui::Selectable((const char*)"MGD", &isSelected))
         {
@@ -277,9 +281,9 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
             is_trilateral_generated = true;
 
         }
-        if( ImGui::Selectable((const char*)"FPS", &isSelected))
+        if (ImGui::Selectable((const char*)"FPS", &isSelected))
         {
-            selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points , true);
+            selectedIndices = furthest_point_sampling(&m_factory.mesh_vec[selected_mesh], no_of_points, true);
             curtrilateralItem = "FPS";
             is_trilateral_generated = true;
             m_factory.remove_all();
@@ -310,9 +314,9 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
         m_factory.remove_all();
         m_factory.add_all();
     }
-    if(ImGui::Button("Generate spectral embedding"))
+    if (ImGui::Button("Generate spectral embedding"))
     {
-        embed_vertices = generate_spectral_embedding(m_factory, selected_mesh , selectedIndices);
+        embed_vertices = generate_spectral_embedding(m_factory, selected_mesh, selectedIndices);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -322,10 +326,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("Symmetry Plane using Isomap"))
     {
-        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh] ,false , 1);
-        Mesh plane_mesh = generate_mesh_from_plane( &plane , &plane.point);
+        plane = generate_isomap_embedding(&m_factory.mesh_vec[selected_mesh], false, 1);
+        Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
         m_factory.add_mesh(plane_mesh);
-        
+
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -337,7 +341,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("generate symmetry plane with landmark MDS "))
     {
-        Mesh  landmark_mesh = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh] , 3 );
+        Mesh  landmark_mesh = compute_landmark_MDS(&m_factory.mesh_vec[selected_mesh], 3);
         m_factory.mesh_vec.clear();
         m_factory.add_mesh(landmark_mesh);
 
@@ -348,28 +352,28 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     {
         //Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3);
         float error_percentage;
-        Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3 , 100 , 100 , error_percentage);
+        Plane plane = trilateral_symmetry_with_landmark_MDS_with_plane(&m_factory.mesh_vec[selected_mesh], 3, 100, 100, error_percentage);
         Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
         m_factory.add_mesh(plane_mesh);
         m_factory.remove_all();
         m_factory.add_all();
     }
-    if (ImGui::InputText("textfile_name_for_kids_dataset" , &KIDS_text_file_name ))
+    if (ImGui::InputText("textfile_name_for_kids_dataset", &KIDS_text_file_name))
     {
 
     }
     if (ImGui::Button("generate  trilateral descriptors w sym plane w KIDS dataset "))
     {
         // total of 15 + 15 meshes 
-        std::vector<Mesh> mesh_vector; 
-        for (size_t i = 0; i < 15 +15; i++)
+        std::vector<Mesh> mesh_vector;
+        for (size_t i = 0; i < 15 + 15; i++)
         {
             std::string path("../../Trilateral/Mesh/off/");
-            std::string isometry_batch_no( "000" + std::to_string((i / 15) + 1));
-            std::string isometry_no(std::to_string(i % 15 + 1) );
+            std::string isometry_batch_no("000" + std::to_string((i / 15) + 1));
+            std::string isometry_no(std::to_string(i % 15 + 1));
             // read the meshes.
             path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
-            Mesh m((char*)path.c_str() );
+            Mesh m((char*)path.c_str());
             //read the symmetry format
             read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
             mesh_vector.push_back(m);
@@ -383,7 +387,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputInt(" histogram sampling ", &no_of_hist_division);
     if (ImGui::Button("FPS and histogram matching "))
     {
-        trilateral_FPS_histogram_matching(m_factory, selected_mesh , no_of_points , no_of_hist_division , true );
+        trilateral_FPS_histogram_matching(m_factory, selected_mesh, no_of_points, no_of_hist_division, true);
         m_factory.remove_all();
         m_factory.add_all();
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
@@ -391,7 +395,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     }
     if (ImGui::Button("FPS and histogram matching w/ spin images "))
     {
-        trilateral_FPS_histogram_matching_w_spin_image(m_factory, selected_mesh , no_of_points , no_of_hist_division);
+        trilateral_FPS_histogram_matching_w_spin_image(m_factory, selected_mesh, no_of_points, no_of_hist_division);
         m_factory.remove_all();
         m_factory.add_all();
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
@@ -414,31 +418,31 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory )
     ImGui::InputFloat("fuzziness", &fuzziness);
     if (ImGui::Button("Calculate fuzzy geodesic areas with trilateral points "))
     {
-        trilateral_fuzzyGeodesic(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index , fuzziness);
+        trilateral_fuzzyGeodesic(m_factory, selected_mesh, point_1_index, point_2_index, point_3_index, fuzziness);
         m_factory.remove_all();
         m_factory.add_all();
     }
     if (ImGui::Button("FPS matching w/ fuzzy geodesic "))
     {
-        trilateral_FPS_matching_w_fuzzy_geodesic(m_factory, selected_mesh, no_of_points, fuzziness , true);
+        trilateral_FPS_matching_w_fuzzy_geodesic(m_factory, selected_mesh, no_of_points, fuzziness, true);
         m_factory.remove_all();
         m_factory.add_all();
     }
-    if(ImGui::Button("skeleton endpoint matching w/ fuzzy geodesic "))
+    if (ImGui::Button("skeleton endpoint matching w/ fuzzy geodesic "))
     {
-        trilateral_w_skeleton_endpoints(m_factory, selected_mesh,  fuzziness, skeleton, false);
+        trilateral_w_skeleton_endpoints(m_factory, selected_mesh, fuzziness, skeleton, false);
         m_factory.remove_all();
-       m_factory.add_all();
+        m_factory.add_all();
     }
     ImGui::End();
-        
+
 }
 
 //display the attributes of selected mesh 
-void imgui_selected_mesh_properties_window(const int& selected_mesh , MeshFactory& m_factory)
+void imgui_selected_mesh_properties_window(const int& selected_mesh, MeshFactory& m_factory)
 {
     ImGui::Begin("Mesh properties ");
-    
+
     ImGui::InputFloat(" X ", &m_factory.mesh_vec[selected_mesh].model_mat[3][0]);
     ImGui::InputFloat(" Y ", &m_factory.mesh_vec[selected_mesh].model_mat[3][1]);
     ImGui::InputFloat(" Z ", &m_factory.mesh_vec[selected_mesh].model_mat[3][2]);
@@ -452,7 +456,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     ImGui::InputFloat("CurvatureWeight :", &trilateralCurvatureWeight);
     ImGui::InputFloat("GeodesicWeight :", &trilateralGeodesicWeight);
     ImGui::InputFloat("AreaWeight :", &trilateralAreaWeight);
-    
+
     Mesh m = m_factory.mesh_vec[selected_mesh];
 
     // get each point  p_i and 2 others with minimal geoesic distance for p_i
@@ -462,7 +466,7 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
     }
     if (ImGui::Button("Point Matching Using trilateral Weights "))
     {
-        calculated_symmetry_pairs = point_match_trilateral_weights(&m, trilateralDescVector , trilateralCurvatureWeight ,trilateralGeodesicWeight , trilateralAreaWeight );
+        calculated_symmetry_pairs = point_match_trilateral_weights(&m, trilateralDescVector, trilateralCurvatureWeight, trilateralGeodesicWeight, trilateralAreaWeight);
     }
     if (ImGui::Button("Display Accuracy"))
     {
@@ -474,12 +478,12 @@ void imgui_trilateralConfiguration(const int& selected_mesh, MeshFactory& m_fact
 
 void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory)
 {
-   
+
     ImGui::Begin("N lateral Params ");
     ImGui::InputInt("N parameter in N lateral:", &N_LATERAL_PARAMETERS.N);
     ImGui::InputInt("no of n latearl points ", &N_LATERAL_PARAMETERS.no_of_N_lateral_pairs);
 
-// point selection algorithm
+    // point selection algorithm
     ImGui::Text(" Select which way to fetch other n-1 lateral points for each.");
     static const char* current_point_Selection_method = N_LATERAL_PARAMETERS.n_lateral_construction_methods[0].c_str();
     if (ImGui::BeginCombo("combobox", current_point_Selection_method))
@@ -498,11 +502,11 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     N_LATERAL_PARAMETERS.current_n_lateral_construction_method = current_point_Selection_method;
 
     ImGui::Text("Select required paramters and give them weights ");
-    
+
     for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
     {
         bool temp = N_LATERAL_PARAMETERS.parameter_checkbox[i];
-        if (ImGui::Checkbox(N_LATERAL_PARAMETERS.parameter_names[i].c_str(), &temp  )) {}
+        if (ImGui::Checkbox(N_LATERAL_PARAMETERS.parameter_names[i].c_str(), &temp)) {}
         ImGui::SameLine();
         if (ImGui::InputFloat("weight = ", &N_LATERAL_PARAMETERS.parameter_weights[i])) {}
 
@@ -528,9 +532,9 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-       start_n_lateral_algorithm(m , N_LATERAL_PARAMETERS);
-       m_factory.remove_all();
-       m_factory.add_all();
+        start_n_lateral_algorithm(m, N_LATERAL_PARAMETERS);
+        m_factory.remove_all();
+        m_factory.add_all();
     }
     if (ImGui::Button("Start algorithm for all of the dataset"))
     {
@@ -552,7 +556,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         }
 
     }
-   
+
     ImGui::End();
 
 }
@@ -564,7 +568,7 @@ static float camera_pos_z = 0.0f;
 static int dijkstra_index;
 static std::vector<int> vertex_list;
 static std::vector<float> dijkstra_distances;
-void imgui_debug_layer(int& selected_mesh , MeshFactory& mesh_fac, glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up )
+void imgui_debug_layer(int& selected_mesh, MeshFactory& mesh_fac, glm::vec3& cameraPos, glm::vec3 cameraDir, glm::vec3 up)
 {
 
 
@@ -577,7 +581,7 @@ void imgui_debug_layer(int& selected_mesh , MeshFactory& mesh_fac, glm::vec3& ca
     ImGui::InputFloat("camera Z ", &camera_pos_z);
     if (ImGui::Button("Teleport to coordinates above "))
     {
-        cameraPos = glm::vec3(camera_pos_x , camera_pos_y, camera_pos_z);
+        cameraPos = glm::vec3(camera_pos_x, camera_pos_y, camera_pos_z);
     }
     ImGui::InputInt("End point Index", &dijkstra_index);
     if (ImGui::Button("Calculate skeletal dijkstra"))
@@ -602,16 +606,71 @@ void imgui_debug_layer(int& selected_mesh , MeshFactory& mesh_fac, glm::vec3& ca
         mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3] = 0.0f;
         mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3 + 1] = 255.0f;
         mesh_fac.mesh_skeleton_vec.skeleton_points[end_point_index.index * 6 + 3 + 2] = 0.0f;
-        
-        mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 ] = 0.0f;
+
+        mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3] = 0.0f;
         mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 + 1] = 255.0f;
         mesh_fac.mesh_skeleton_vec.skeleton_points[smallest_index * 6 + 3 + 2] = 0.0f;
 
         skeleton_buffer(mesh_fac);
 
     }
+    ImGui::InputInt("Save Mesh", &dijkstra_index);
     ImGui::End();
 
-}
 
+
+}
+//manaul save for now
+// do this for spectral
+void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac)
+{
+    Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
+    std::string file_name= "C:\\Users\\BATU\\Desktop\\Master\\Trilateral\\Trilateral\\Mesh\\off\\spectral_mesh.off";
+    std::ofstream outFile(file_name);
+
+    if (!outFile) {
+        std::cerr << "Failed to open file for writing!" << std::endl;
+        exit(1);
+    }
+    // Write OFF
+    outFile << "OFF" << std::endl;
+    outFile << m->vertices.size() << " " << m->triangles.size() / 3 << " " << 0 << std::endl; 
+    for (size_t i = 0; i < m->vertices.size(); i++)
+    {
+        outFile << m->vertices[i].x << " " << m->vertices[i].y << " " << m->vertices[i].z << std::endl;
+    }
+    for (size_t i = 0; i < m->triangles.size(); i+=3)
+    {
+        outFile << "3 " << m->triangles[i] << " " << m->triangles[i + 1] << " " << m->triangles[i + 2] << std::endl;
+    }
+    // Close the file
+    outFile.close();
+
+
+}
+void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Open")) { /* Open action */ }
+            if (ImGui::MenuItem("Save")) { /* Save action */ }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo")) { /* Undo action */ }
+            if (ImGui::MenuItem("Redo")) { /* Redo action */ }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Mesh"))
+        {
+            if (ImGui::MenuItem("Save Mesh")) { imgui_menubar_save_mesh(selected_mesh, mesh_fac); }
+            if (ImGui::MenuItem("Redo")) { /* Redo action */ }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
 
