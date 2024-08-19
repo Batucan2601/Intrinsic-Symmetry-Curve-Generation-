@@ -572,3 +572,37 @@ static void calculate_mesh_area(Mesh* m )
 		m->mesh_area += area; 
 	}
 }
+
+glm::vec3 mesh_generate_weighted_mid_point(Mesh* m) //supposed to be best way
+{
+	glm::vec3 midpoint = glm::vec3(0, 0, 0);
+	float biggest_triangle = -INFINITY; 
+
+	for (size_t i = 0; i < m->triangles.size(); i+=3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		float tri_area = compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+
+		if (tri_area > biggest_triangle)
+		{
+			biggest_triangle = tri_area;
+		}
+	}
+
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		float tri_area = compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+
+		midpoint = midpoint + m->vertices[index1] * tri_area / biggest_triangle;
+		midpoint = midpoint + m->vertices[index2] * tri_area / biggest_triangle;
+		midpoint = midpoint + m->vertices[index3] * tri_area / biggest_triangle;
+	}
+
+	midpoint /= m->triangles.size();
+	return midpoint;
+}

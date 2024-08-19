@@ -816,11 +816,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	//lastly get midpoint and get the closest vertex
 	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
 	Mesh* m = &meshFactory.mesh_vec[0];
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		mid_point += m->vertices[i];
-	}
-	mid_point /= m->vertices.size();
+	mid_point =  mesh_generate_weighted_mid_point(m);
 
 	//check the closest vertex in skeleton
 	float minimum_dist = INFINITY;
@@ -1656,7 +1652,7 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 				backbone.start_index = index1;
 				backbone.end_index = index2;
 				backbone.vertex_list = vertex_list_index1_index2;
-				bool is_mid_point_present = false;
+				bool is_mid_point_present = false; // mid point deactive !!!!!!!!!!!!
 				// check if mid point index included
 				for (size_t k = 0; k < backbone.vertex_list.size(); k++)
 				{
@@ -1832,4 +1828,11 @@ std::vector<int>& left_points , std::vector<int>& right_points)
 
 
 	}
+}
+
+//used for ladnmarked meshes 
+void skeleton_left_right_test_for_endpoint(Mesh* m , Skeleton* skeleton,
+std::vector<int>& right, std::vector<int>& left)
+{
+	
 }

@@ -59,3 +59,4 @@ typedef struct
 }SkeletonMesh;
 void read_symmetry_format(char* filename, Mesh* m);
 unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point);
+glm::vec3 mesh_generate_weighted_mid_point(Mesh* m); //supposed to be best way 
