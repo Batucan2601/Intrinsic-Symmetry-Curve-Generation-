@@ -1600,6 +1600,70 @@ unsigned int skeleton_calculate_closest_mesh_point(Skeleton& skeleton, Mesh* m, 
 	
 }
 
+std::pair<std::vector<std::pair<int, int>>,float> do_unique_pairing(std::vector<std::pair<float, int>>& distances_and_hit_points, std::vector<unsigned int>& end_point_indices
+,std::vector<std::vector<float>>& end_point_dijkstras,std::vector<std::vector<int>>& end_point_vertex_list , float backbone_length )
+{
+	std::vector<std::pair<float, std::pair<int, int>>> compareResults;
+	int N = distances_and_hit_points.size();
+	for (size_t i = 0; i < N; i++)
+	{
+		int hitpoint_i = distances_and_hit_points[i].second;
+		float dist_to_backbone_i = distances_and_hit_points[i].first;
+		for (size_t j = 0; j < N; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			int hitpoint_j = distances_and_hit_points[j].second;
+			float dist_to_backbone_j = distances_and_hit_points[j].first;
+			
+			float dist_between_hitpoints = 0;
+			float distances_to_backbone = 0;
+
+			//search for hitpoint k in vertex list
+			for (size_t t = 0; t < end_point_vertex_list[j].size(); t++)
+			{
+				if (hitpoint_j == end_point_vertex_list[j][t])
+				{
+					dist_between_hitpoints = end_point_dijkstras[j][t];
+					break;
+				}
+			}
+
+			//normalize dist_between 
+			dist_between_hitpoints = dist_between_hitpoints / backbone_length;
+			//normalize dist to backbone
+			distances_to_backbone = std::abs(dist_to_backbone_i - dist_to_backbone_j) / std::max(dist_to_backbone_i, dist_to_backbone_j);
+			
+			glm::vec2 res_vec(dist_between_hitpoints, distances_to_backbone);
+			compareResults.push_back({  res_vec.length() , {i,j}});
+		}
+	}
+	std::vector<std::pair<int, int>> selectedPairs;
+	float skeleton_resemblance_error = 0;
+	std::vector<bool> used(N, false);
+
+	std::sort(compareResults.begin(), compareResults.end());
+
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compareResults) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			selectedPairs.push_back({ end_point_indices[i], end_point_indices[j] });
+			skeleton_resemblance_error += entry.first;
+			used[i] = used[j] = true;  // Mark these objects as used
+		}
+	}
+	
+	std::pair<std::vector<std::pair<int, int>> , float> return_val;
+	
+	return_val.first = selectedPairs;
+	return_val.second = skeleton_resemblance_error;
+	
+	return return_val;
+}
 void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
 	BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points)
 {
@@ -1652,7 +1716,7 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 				backbone.start_index = index1;
 				backbone.end_index = index2;
 				backbone.vertex_list = vertex_list_index1_index2;
-				bool is_mid_point_present = false; // mid point deactive !!!!!!!!!!!!
+				/*bool is_mid_point_present = false; // mid point deactive !!!!!!!!!!!!
 				// check if mid point index included
 				for (size_t k = 0; k < backbone.vertex_list.size(); k++)
 				{
@@ -1661,8 +1725,8 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 						is_mid_point_present = true; 
 						break;
 					}
-				}
-				if (is_mid_point_present)
+				}*/
+				if (true)
 				{
 					candidate_backbones.push_back(backbone);
 				}
@@ -1701,7 +1765,13 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 		}
 		std::vector<std::pair< int, int>> skeleton_i_resemblances;
 		// do a N^2 comaprison of each distance and hit point  
-		for (size_t j = 0; j < N_end; j++)
+
+
+		 
+		std::pair<std::vector<std::pair<int,int>>, float > skeleton_pair_vals  = do_unique_pairing(distances_and_hit_points , end_point_indices , end_point_dijkstras , end_point_vertex_list , backbone_i_length );
+		skeleton_resemblances[i] = skeleton_pair_vals.first;
+		skeleton_resemblances_score[i] = skeleton_pair_vals.second;
+		/*for (size_t j = 0; j < N_end; j++)
 		{
 			float min_dist = INFINITY;
 			int min_index = -1;
@@ -1735,21 +1805,10 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 				//normalize dist_between 
 				dist_between_hitpoints = dist_between_hitpoints / backbone_i_length;
 				//normalize dist to backbone
-				float bigger_dist;
-				if (dist_to_backbone_j > dist_to_backbone_k)
-				{
-					bigger_dist = dist_to_backbone_j;
-				}
-				else
-				{
-					bigger_dist = dist_to_backbone_k;
-				}
-
-				distances_to_backbone = std::abs(dist_to_backbone_j - dist_to_backbone_k) / bigger_dist;
+				distances_to_backbone = std::abs(dist_to_backbone_j - dist_to_backbone_k) / std::max(dist_to_backbone_j, dist_to_backbone_k);
 				
 				// voting scheme
-				
-				float total_dist = 0.7f * dist_between_hitpoints + distances_to_backbone * 0.3;
+				float total_dist = 0.5f * dist_between_hitpoints + distances_to_backbone * 0.5;
 				if (total_dist < min_dist)
 				{
 					min_dist = total_dist;
@@ -1757,9 +1816,9 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 				}
 			}
 			skeleton_i_resemblances.push_back(std::pair<int,int>(end_point_indices[j], end_point_indices[min_index]));
-			skeleton_resemblances_score[i] += min_dist;
+			//skeleton_resemblances_score[i] += min_dist;
 		}
-		skeleton_resemblances[i] = skeleton_i_resemblances;
+		skeleton_resemblances[i] = skeleton_i_resemblances;*/
 
 
 	}
@@ -1776,7 +1835,7 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 		}
 	}
 
-	for (size_t i = 0; i < N_end; i++)
+	for (size_t i = 0; i < N_end/2; i++)
 	{
 		right_points.push_back(skeleton_resemblances[min_index][i].first);
 		left_points.push_back(skeleton_resemblances[min_index][i].second);
