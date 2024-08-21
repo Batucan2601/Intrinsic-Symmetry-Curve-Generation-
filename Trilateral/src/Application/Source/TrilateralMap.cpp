@@ -3026,6 +3026,51 @@ void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, f
 
 }
 
+static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pairing(std::vector<TrilateralDescriptor>& trilateral_desc,
+int N,std::vector<std::vector<float>>& trilateral_histograms)
+{
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	//compare each
+	std::vector<std::pair<float, std::pair<int, int>>> compareResults;
+
+	for (size_t i = 0; i < N; i++)
+	{
+		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_histograms[i]);
+		int minimum_index = -1;
+		float minimum_value = INFINITY;
+		for (size_t j = 0; j < N; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+
+			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_histograms[j]);
+			//float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
+			float resemblance = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
+			
+			compareResults.push_back({ resemblance, {i,j} });
+
+		}
+	}
+
+	std::vector<std::pair<int, int>> selectedPairs;
+	float skeleton_resemblance_error = 0;
+	std::vector<bool> used(N, false);
+	std::sort(compareResults.begin(), compareResults.end());
+
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compareResults) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			resemblance_pairs.push_back({ trilateral_desc[i].p1 , trilateral_desc[j].p1 });
+			used[i] = used[j] = true;  // Mark these objects as used
+		}
+	}
+	return resemblance_pairs;
+
+}
 void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no , int division_no , bool recordTxt)
 {
 	Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
@@ -3056,8 +3101,9 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 		}
 	}
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	resemblance_pairs = trilateral_unique_pairing(trilateral_desc, sample_no, trilateral_histograms);
 	//compare each
-	for (size_t i = 0; i < sample_no; i++)
+	/*for (size_t i = 0; i < sample_no; i++)
 	{
 		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_histograms[i]);
 		int minimum_index = -1;
@@ -3077,7 +3123,7 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 
 		}
 		resemblance_pairs.push_back(std::pair<int,int>(trilateral_desc[i].p1 , trilateral_desc[minimum_index].p1));
-	}
+	}*/
 
 	//buffer
 	for (size_t i = 0; i < resemblance_pairs.size(); i++)

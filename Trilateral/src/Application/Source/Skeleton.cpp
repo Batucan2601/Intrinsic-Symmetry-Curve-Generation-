@@ -1636,8 +1636,8 @@ std::pair<std::vector<std::pair<int, int>>,float> do_unique_pairing(std::vector<
 			//normalize dist to backbone
 			distances_to_backbone = std::abs(dist_to_backbone_i - dist_to_backbone_j) / std::max(dist_to_backbone_i, dist_to_backbone_j);
 			
-			glm::vec2 res_vec(dist_between_hitpoints, distances_to_backbone);
-			compareResults.push_back({  res_vec.length() , {i,j}});
+			//glm::vec2 res_vec(dist_between_hitpoints, distances_to_backbone);
+			compareResults.push_back({ dist_between_hitpoints +  distances_to_backbone, {i,j}});
 		}
 	}
 	std::vector<std::pair<int, int>> selectedPairs;
