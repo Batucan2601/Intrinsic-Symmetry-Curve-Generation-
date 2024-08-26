@@ -41,6 +41,11 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 	}
 	m = m / s;
 
+	// surfel weights 
+	std::vector<float> surfel_weights(mesh.vertices.size() , 0);
+	surfel_weights = mesh_point_surfel_normalized(&mesh);
+
+
 	MatrixXd Co(3, 3);
 
 	Co(0, 0) = 0;
@@ -61,7 +66,7 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 		pi(1) = pi_m.y;
 		pi(2) = pi_m.z;
 
-		Eigen::MatrixXd  Co_i = pi * pi.transpose();
+		Eigen::MatrixXd  Co_i = surfel_weights[i] * pi * pi.transpose();
 		Co = Co + Co_i;
 	}
 	Co = Co / s;
@@ -71,17 +76,6 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 	Eigen::MatrixXd eigen_vecs = es.eigenvectors().real();
 	Eigen::VectorXd eigen_values = es.eigenvalues().real();
 
-	double biggest_value = -INFINITY;
-	int biggest_index = -1;
-	//get the best eigen value
-	for (size_t i = 0; i < eigen_values.rows(); i++)
-	{
-		if (biggest_value < (float)eigen_values(i))
-		{
-			biggest_value = (float)eigen_values(i);
-			biggest_index = i;
-		}
-	}
 	std::cout << " eigne values "
 		<< std::endl << es.eigenvalues().col(0).real() << std::endl;
 	// generate the 3 planes
@@ -93,65 +87,150 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 	planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
 	planes[2].point = m;
 
-	float minimum_distances[3]; //for each plane 
-	//for (size_t p = 0; p < 3; p++) //for all planes 
-	//{
-	//	float minimum_of_di = INFINITY;
-	//	for (size_t i = 0; i < mesh.vertices.size(); i++)
-	//	{
-	//		// generate sir
-	//		glm::vec3 s_ir = symmetry_point_from_plane(&planes[p], &mesh.vertices[i]);
-	//		float s_ir_status = get_point_status_from_plane(&planes[p], &s_ir);
-	//		for (size_t j = 0; j < mesh.vertices.size(); j++)
-	//		{
-	//			if (s_ir_status * get_point_status_from_plane(&planes[p], &mesh.vertices[j]) >= 0)
-	//			{
-	//				float dist = glm::distance(s_ir, mesh.vertices[j]);
-	//				if (dist < minimum_of_di)
-	//				{
-	//					minimum_of_di = dist;
-	//				}
-	//			}
-	//		}
-	//	}
-	//	minimum_distances[p] = minimum_of_di;
-	//}
-	for (size_t p = 0; p < 3; p++)
+
+	float eigen_val1 = es.eigenvalues().col(0).real()(0);
+	float eigen_val2 = es.eigenvalues().col(0).real()(1);
+	float eigen_val3 = es.eigenvalues().col(0).real()(2);
+	int eigen_second_best_index = -1;
+
+	//get second best 
+	if ( (eigen_val1 > eigen_val2 && eigen_val1 < eigen_val3) || 
+		(eigen_val1 > eigen_val3 && eigen_val1 < eigen_val2))
 	{
-		float positive_status = 0;
-		float negative_status = 0;
+		eigen_second_best_index  = 0;
+	}
+	if ( (eigen_val2 > eigen_val1 && eigen_val2 < eigen_val3) || 
+		(eigen_val2 > eigen_val3 && eigen_val2 < eigen_val1))
+	{
+		eigen_second_best_index = 1;
+
+	}
+	if ( (eigen_val3 > eigen_val1 && eigen_val3 < eigen_val2) ||
+	(eigen_val3 > eigen_val3 && eigen_val3 < eigen_val1) )
+	{
+		eigen_second_best_index = 2;
+
+	}
+
+	Plane best_plane = planes[eigen_second_best_index];
+
+	for( int p = 0; p < 5; p++ )
+	{
+		std::vector<float> di_vec;
 		for (size_t i = 0; i < mesh.vertices.size(); i++)
 		{
-			glm::vec3 s_ir = symmetry_point_from_plane(&planes[p], &mesh.vertices[i]);
-			float s_ir_status = get_point_status_from_plane(&planes[p], &s_ir);
-			float dist = glm::distance(s_ir, mesh.vertices[i]);
-			if (s_ir_status > 0)
+			glm::vec3 s_ir = symmetry_point_from_plane(&best_plane, &mesh.vertices[i]);
+			float s_ir_status = get_point_status_from_plane(&best_plane, &s_ir);
+			float d_i= INFINITY;
+			int minimum_index = -1;
+			for (size_t j = 0; j < mesh.vertices.size(); j++)
 			{
-				positive_status += dist; 
+				if (i == j)
+				{
+					continue;
+				}
+				float s_j = get_point_status_from_plane(&best_plane, &mesh.vertices[j]);
+				if (s_j * s_ir_status < 0) //different side 
+				{
+					continue;
+				}
+				float distance = glm::distance(s_ir, mesh.vertices[j]);
+				if (distance < d_i)
+				{
+					d_i  = distance;
+				}
+			}
+			di_vec.push_back(d_i);
+		}
+		std::sort(di_vec.begin(), di_vec.end());
+		float di_median = di_vec[di_vec.size() / 2];
+		float c = 1.5;
+		float sigma = c * di_median;
+
+		//redo surfels
+		for (size_t i = 0; i < mesh.vertices.size(); i++)
+		{
+			float d_i = di_vec[i];
+			if (d_i > sigma)
+			{
+				surfel_weights[i] = (2 * sigma * sigma) /  pow((sigma*sigma + d_i * d_i ),2);
 			}
 			else
 			{
-				negative_status += dist;
+				surfel_weights[i] = 0;
 			}
 		}
-		float dif = abs(negative_status - positive_status);
-		minimum_distances[p] = dif; 
-	}
 
-
-	int smallest_dist_index = 0;
-	float smallest_dist = INFINITY;
-	for (size_t i = 0; i < 3; i++)
-	{
-		if (smallest_dist > minimum_distances[i])
+		//redo PCA
+		Co(0, 0) = 0;
+		Co(0, 1) = 0;
+		Co(0, 2) = 0;
+		Co(1, 0) = 0;
+		Co(1, 1) = 0;
+		Co(1, 2) = 0;
+		Co(2, 0) = 0;
+		Co(2, 1) = 0;
+		Co(2, 2) = 0;
+		for (size_t i = 0; i < mesh.vertices.size(); i++)
 		{
-			smallest_dist = minimum_distances[i];
-			smallest_dist_index = i;
-		}
-	}
+			glm::vec3 pi_m;
+			pi_m = mesh.vertices[i] - m;
+			Eigen::VectorXd pi(3);
+			pi(0) = pi_m.x;
+			pi(1) = pi_m.y;
+			pi(2) = pi_m.z;
 
+			Eigen::MatrixXd  Co_i = surfel_weights[i] * pi * pi.transpose();
+			Co = Co + Co_i;
+		}
+		Co = Co / s;
+
+		//// get the eigenvectors 
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(Co);
+		Eigen::MatrixXd eigen_vecs = es.eigenvectors().real();
+		Eigen::VectorXd eigen_values = es.eigenvalues().real();
+
+		std::cout << " eigne values "
+			<< std::endl << es.eigenvalues().col(0).real() << std::endl;
+		// generate the 3 planes
+		Plane planes[3];
+		planes[0].normal = glm::vec3(eigen_vecs.col(0).real()(0), eigen_vecs.col(0).real()(1), eigen_vecs.col(0).real()(2));
+		planes[0].point = m;
+		planes[1].normal = glm::vec3(eigen_vecs.col(1).real()(0), eigen_vecs.col(1).real()(1), eigen_vecs.col(1).real()(2));
+		planes[1].point = m;
+		planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+		planes[2].point = m;
+
+
+		float eigen_val1 = es.eigenvalues().col(0).real()(0);
+		float eigen_val2 = es.eigenvalues().col(0).real()(1);
+		float eigen_val3 = es.eigenvalues().col(0).real()(2);
+		int eigen_second_best_index = -1;
+
+		//get second best 
+		if ((eigen_val1 > eigen_val2 && eigen_val1 < eigen_val3) ||
+			(eigen_val1 > eigen_val3 && eigen_val1 < eigen_val2))
+		{
+			eigen_second_best_index = 0;
+		}
+		if ((eigen_val2 > eigen_val1 && eigen_val2 < eigen_val3) ||
+			(eigen_val2 > eigen_val3 && eigen_val2 < eigen_val1))
+		{
+			eigen_second_best_index = 1;
+
+		}
+		if ((eigen_val3 > eigen_val1 && eigen_val3 < eigen_val2) ||
+			(eigen_val3 > eigen_val3 && eigen_val3 < eigen_val1))
+		{
+			eigen_second_best_index = 2;
+
+		}
+		best_plane = planes[eigen_second_best_index];
+	}
 	
-	return planes[smallest_dist_index];
+
+
+	return best_plane;
 }
 Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 {

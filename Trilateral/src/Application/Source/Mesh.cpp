@@ -606,3 +606,39 @@ glm::vec3 mesh_generate_weighted_mid_point(Mesh* m) //supposed to be best way
 	midpoint /= m->triangles.size();
 	return midpoint;
 }
+
+// computes all of the areas of triangle for each point
+// normalizes for each point
+std::vector<float> mesh_point_surfel_normalized(Mesh* m)
+{
+	std::vector<float> triangles_normalized(m->vertices.size() , 0);
+	glm::vec3 midpoint = glm::vec3(0, 0, 0);
+	float biggest_triangle = -INFINITY;
+
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		float tri_area = compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+
+		if (tri_area > biggest_triangle)
+		{
+			biggest_triangle = tri_area;
+		}
+	}
+
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		float tri_area = compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+
+		triangles_normalized[index1] += tri_area / biggest_triangle;
+		triangles_normalized[index2] += tri_area / biggest_triangle;
+		triangles_normalized[index3] += tri_area / biggest_triangle;
+	}
+
+	return triangles_normalized;
+}
