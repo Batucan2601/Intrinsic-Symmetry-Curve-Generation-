@@ -471,7 +471,7 @@ Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
 	Eigen::MatrixXd mds_matrix = ComputeClassicalMds(delta, 3);
 
 	// 3 give plane to dominant symmetry plane
-	Plane plane = generate_dominant_symmetry_plane(*mesh);
+	Plane plane = generate_dominant_symmetry_plane(*mesh , 1);
 	return plane; 
 }
 

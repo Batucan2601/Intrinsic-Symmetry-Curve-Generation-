@@ -9,11 +9,11 @@ using Eigen::MatrixXd;
 
 static Plane rotate_plane(Plane plane, float rotation_degree);
 
-Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac) 
+Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac , int sym_iter_no) 
 {
 	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
 	
-	Plane plane = generate_dominant_symmetry_plane(mesh);
+	Plane plane = generate_dominant_symmetry_plane(mesh , sym_iter_no);
 
 	float s = mesh.vertices.size();
 	glm::vec3 m(0.0f, 0.0f, 0.0f);
@@ -29,7 +29,7 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	return plane;
 	
 }
-Plane generate_dominant_symmetry_plane(Mesh mesh)
+Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 {
 	
 	// generate PCA weights are same and 1 for now 
@@ -114,7 +114,7 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 
 	Plane best_plane = planes[eigen_second_best_index];
 
-	for( int p = 0; p < 5; p++ )
+	for( int p = 0; p < sym_iter_no; p++ )
 	{
 		std::vector<float> di_vec;
 		for (size_t i = 0; i < mesh.vertices.size(); i++)
@@ -142,8 +142,10 @@ Plane generate_dominant_symmetry_plane(Mesh mesh)
 			}
 			di_vec.push_back(d_i);
 		}
-		std::sort(di_vec.begin(), di_vec.end());
-		float di_median = di_vec[di_vec.size() / 2];
+		std::vector<float> di_vec_sorted = di_vec;
+
+		std::sort(di_vec_sorted.begin(), di_vec_sorted.end());
+		float di_median = di_vec_sorted[di_vec_sorted.size() / 2];
 		float c = 1.5;
 		float sigma = c * di_median;
 

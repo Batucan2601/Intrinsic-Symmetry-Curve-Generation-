@@ -2862,10 +2862,10 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 return area;
  }
 
- void start_n_lateral_algorithm(Mesh* mesh, const int N , const int number_of_n_lateral_points , const std::string& method_name, const bool* parameter_checkbox
+ void start_n_lateral_algorithm(MeshFactory& mesh_fac,int selected_index, const int N , const int number_of_n_lateral_points , const std::string& method_name, const bool* parameter_checkbox
 	 , const float* parameter_weights, const std::string* parameter_names)
 {
-
+	 Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
 	 // 1 - part one is same for now, generate a symmetry plane 
 #pragma region symmetry plane 
 	 Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3);
@@ -2967,27 +2967,10 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 
 	 mesh->calculated_symmetry_pairs = resemblance_pairs;
 
-	 //L_MDS_mesh.colors = mesh->colors;
-	 //*mesh = L_MDS_mesh;
-	 //color right  blue 
+	 Metric_write_to_file(mesh, "../../Results/Trilateral_W_LMDS_AND_DOMINANTPLANE.txt");
 
-	 /*L_MDS_mesh.colors.clear();
-	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
-	 {
-		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
-		 {
-			 L_MDS_mesh.colors.push_back(glm::vec3(255.0 , 0.0 , 0.0 ) );
-		 }
-		 else
-		 {
-			 L_MDS_mesh.colors.push_back(glm::vec3(0, 255, 0.0));
-		 }
-	 }
-	 *mesh = L_MDS_mesh;*/
-
-	 std::cout << " total average error is " << total_error << " maximum geodesic distance is " << maximum_geodesic_distance << std::endl;
-	 float error_percentage = (float)total_error / maximum_geodesic_distance;
-	 //return plane;
+	 Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
+	 mesh_fac.add_mesh(plane_mesh);
 }
 void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, float& total_area)
 {

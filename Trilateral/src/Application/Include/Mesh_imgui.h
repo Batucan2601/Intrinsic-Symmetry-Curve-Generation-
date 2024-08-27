@@ -55,7 +55,7 @@ std::vector<float> lines;
 //int no_of_agd_points = 10; 
 int no_of_points = 10;
 int no_of_hist_division = 10;
-
+int no_of_sym_plane_iterations = 2; 
 Plane plane;
 std::vector<std::vector<int>> symmetry_paired_points;
 std::vector<unsigned int> selectedIndices;
@@ -238,11 +238,12 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         activate_histogram = true;
     }
     ImGui::InputInt("no of samples  ", &no_of_points);
-    ImGui::SameLine();
 
+    ImGui::InputInt("no of sym plane iterations", &no_of_sym_plane_iterations);
+    ImGui::SameLine();
     if (ImGui::Button("dominant symmetry plane  "))
     {
-        plane = generate_dominant_symmetry_plane(selected_mesh, m_factory);
+        plane = generate_dominant_symmetry_plane(selected_mesh, m_factory , no_of_sym_plane_iterations);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -532,7 +533,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         Mesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-        start_n_lateral_algorithm(m, N_LATERAL_PARAMETERS);
+        start_n_lateral_algorithm(m_factory , selected_mesh, N_LATERAL_PARAMETERS);
         m_factory.remove_all();
         m_factory.add_all();
     }

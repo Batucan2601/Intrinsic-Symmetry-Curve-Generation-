@@ -285,8 +285,9 @@ NLateralParameters::NLateralParameters()
 }
 
 
-void start_n_lateral_algorithm(Mesh* mesh , NLateralParameters N_LATERAL_PARAMETERS)
+void start_n_lateral_algorithm(MeshFactory& mesh_fac, int selected_mesh, NLateralParameters N_LATERAL_PARAMETERS)
 {
+	Mesh* mesh = &mesh_fac.mesh_vec[selected_mesh];
 
 	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3); // 3 is as always 
 	//calculate center of the plane 
