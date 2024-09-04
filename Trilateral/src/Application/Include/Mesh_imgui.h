@@ -435,6 +435,15 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
     }
+    if (ImGui::Button("FPS matching using dominant sym plane and LMDS "))
+    {
+        std::string empty = " ";
+        trilateral_self_matching_with_dominant_sym(m_factory, selected_mesh, no_of_points, empty , no_of_sym_plane_iterations, false  );
+        m_factory.remove_all();
+        m_factory.add_all();
+
+    }
+
     ImGui::End();
 
 }

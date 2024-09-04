@@ -373,7 +373,8 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
  static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
 	 int division_no);
 
-
+ void trilateral_self_matching_with_dominant_sym(MeshFactory& mesh_fac, int selected_index, const int number_of_n_lateral_points, const std::string& method_name
+, int sym_iter_no,bool is_LMDS );
 
  //using fuzzy geodesics 
 

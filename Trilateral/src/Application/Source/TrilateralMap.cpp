@@ -13,7 +13,8 @@ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int s
 	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2, int partition_no);
 static std::vector<int> getPointsInside(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited);
 static Eigen::Matrix3d computeCurvatureTensor(const Mesh& mesh, int vertexIndex);
-
+static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pairing(std::vector<TrilateralDescriptor>& trilateral_desc_left,
+	std::vector<TrilateralDescriptor>& trilateral_desc_right);
 std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
 {
 	//create min heap
@@ -2862,38 +2863,28 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 return area;
  }
 
- void start_n_lateral_algorithm(MeshFactory& mesh_fac,int selected_index, const int N , const int number_of_n_lateral_points , const std::string& method_name, const bool* parameter_checkbox
-	 , const float* parameter_weights, const std::string* parameter_names)
+ void trilateral_self_matching_with_dominant_sym(MeshFactory& mesh_fac,int selected_index,  const int number_of_n_lateral_points , const std::string& method_name , int sym_iter_no, bool is_LMDS)
 {
-	 Mesh* mesh = &mesh_fac.mesh_vec[selected_index];
+	 Mesh mesh = mesh_fac.mesh_vec[selected_index];
 	 // 1 - part one is same for now, generate a symmetry plane 
 #pragma region symmetry plane 
-	 Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3);
+	 if (is_LMDS)
+	 {
+		 mesh = compute_landmark_MDS(&mesh, 3);
+	 }
 	 //calculate center of the plane 
 	 glm::vec3 plane_center(0, 0, 0);
-	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
+	 for (size_t i = 0; i < mesh.vertices.size(); i++)
 	 {
-		 plane_center += L_MDS_mesh.vertices[i];
+		 plane_center += mesh.vertices[i];
 	 }
-	 plane_center /= mesh->vertices.size();
-	 Plane plane = generate_dominant_symmetry_plane(plane_center, L_MDS_mesh);
+	 plane_center /= mesh.vertices.size();
+	 Plane plane = generate_dominant_symmetry_plane(selected_index, mesh_fac , sym_iter_no);
+
 #pragma endregion
 
 #pragma region separation of points on the mesh from plane 
-	 std::vector<unsigned int> points_plane_positive;
-	 std::vector<unsigned int> points_plane_negative;
-	 //now separate the points into two sides of the plane 
-	 for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
-	 {
-		 if (get_point_status_from_plane(&plane, &L_MDS_mesh.vertices[i]) >= 0)
-		 {
-			 points_plane_positive.push_back(i);
-		 }
-		 else
-		 {
-			 points_plane_negative.push_back(i);
-		 }
-	 }
+	 std::vector<unsigned int> fps_points = furthest_point_sampling(&mesh, number_of_n_lateral_points, true);
 #pragma endregion
 
 #pragma region do point sampling on partial regions 
@@ -2902,31 +2893,54 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 std::vector<unsigned int > fps_negative;
 	 // now do two distinct fps
 	 
-	 if (method_name == std::string("furthest"))
+	 for (size_t i = 0; i < number_of_n_lateral_points; i++)
 	 {
-		 std::vector<unsigned int > fps_positive = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
-		 std::vector<unsigned int > fps_negative = furthest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
-	 }
-	 else if (method_name == std::string("furthest"))
-	 {
-		 //std::vector<unsigned int > fps_positive = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_positive);
-		 //std::vector<unsigned int > fps_negative = closest_point_sampling_on_partial_points(&L_MDS_mesh, number_of_n_lateral_points, points_plane_negative);
+		 if (get_point_status_from_plane(&plane, &mesh.vertices[fps_points[i]]) > 0)
+		 {
+			 fps_positive.push_back(fps_points[i]);
+		 }
+		 else
+		 {
+			 fps_negative.push_back(fps_points[i]);
+		 }
 
 	 }
+	 
 #pragma endregion
 
 #pragma region n_lateral_algorithm
 		
 	 // n_lateral computation
-	 std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_positive);
-	 std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_furthest_pairs(&L_MDS_mesh, fps_negative);
+	 
+	 std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&mesh, fps_positive);
+	 std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&mesh, fps_negative);
 #pragma endregion
+
+	 for (size_t i = 0; i < fps_positive.size(); i++)
+	 {
+		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
+		 std::vector<int> is_visited = trilateral_ROI(&mesh, positive_mesh_trilateral_descriptor[i].p1, 
+		 positive_mesh_trilateral_descriptor[i].p2, positive_mesh_trilateral_descriptor[i].p3, 3, false);
+		 std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index, positive_mesh_trilateral_descriptor[i].p1,
+		 positive_mesh_trilateral_descriptor[i].p2, positive_mesh_trilateral_descriptor[i].p3, 3, is_visited, global_is_visited);
+		 positive_mesh_trilateral_descriptor[i].histogram = histogram;
+	 }
+	 for (size_t i = 0; i < fps_negative.size(); i++)
+	 {
+		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
+		 std::vector<int> is_visited = trilateral_ROI(&mesh, negative_mesh_trilateral_descriptor[i].p1,
+			 negative_mesh_trilateral_descriptor[i].p2, negative_mesh_trilateral_descriptor[i].p3, 3, false);
+		 std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index, negative_mesh_trilateral_descriptor[i].p1,
+			 negative_mesh_trilateral_descriptor[i].p2, negative_mesh_trilateral_descriptor[i].p3, 3, is_visited, global_is_visited);
+		 negative_mesh_trilateral_descriptor[i].histogram = histogram;
+	 }
 	 // write a function for comparing two descriptor
 	 //irrelevant constants 
 	 float const1 = 0;
 	 float const2 = 0;
 	 float const3 = 0;
-	 std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+	 std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = trilateral_unique_pairing(positive_mesh_trilateral_descriptor,
+		 negative_mesh_trilateral_descriptor);//point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
 
 	 //forge it into two list
 	 std::vector<unsigned int> left_correspondences;
@@ -2936,13 +2950,13 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 		 left_correspondences.push_back(resemblance_pairs[i].first);
 		 right_correspondences.push_back(resemblance_pairs[i].second);
 	 }
-	 float total_error = Metric_get_geodesic_cost_with_list(&L_MDS_mesh, left_correspondences, right_correspondences);
+	 float total_error = Metric_get_geodesic_cost_with_list(&mesh, left_correspondences, right_correspondences);
 
 	 // now use fps points to get maximum distance in order to compare to 
 	 float maximum_geodesic_distance = 0;
 	 for (size_t i = 0; i < fps_positive.size(); i++)
 	 {
-		 std::vector<float> distances = Geodesic_dijkstra(*mesh, fps_positive[i]);
+		 std::vector<float> distances = Geodesic_dijkstra(mesh, fps_positive[i]);
 		 for (size_t j = 0; j < distances.size(); j++)
 		 {
 			 if (maximum_geodesic_distance < distances[j])
@@ -2953,24 +2967,27 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 }
 
 	 // color left red
-	 std::vector<unsigned int> is_selected(mesh->vertices.size(), 0);
+	 std::vector<unsigned int> is_selected(mesh.vertices.size(), 0);
 	 for (size_t i = 0; i < resemblance_pairs.size(); i++)
 	 {
-		 mesh->colors[resemblance_pairs[i].first].r = 255;
-		 mesh->colors[resemblance_pairs[i].first].g = 0;
-		 mesh->colors[resemblance_pairs[i].first].b = 0;
+		 mesh.colors[resemblance_pairs[i].first].r = 255;
+		 mesh.colors[resemblance_pairs[i].first].g = 0;
+		 mesh.colors[resemblance_pairs[i].first].b = 0;
 
-		 mesh->colors[resemblance_pairs[i].second].r = 0;
-		 mesh->colors[resemblance_pairs[i].second].g = 0;
-		 mesh->colors[resemblance_pairs[i].second].b = 255;
+		 mesh.colors[resemblance_pairs[i].second].r = 0;
+		 mesh.colors[resemblance_pairs[i].second].g = 0;
+		 mesh.colors[resemblance_pairs[i].second].b = 255;
 	 }
 
-	 mesh->calculated_symmetry_pairs = resemblance_pairs;
+	 mesh.calculated_symmetry_pairs = resemblance_pairs;
 
-	 Metric_write_to_file(mesh, "../../Results/Trilateral_W_LMDS_AND_DOMINANTPLANE.txt");
+	 Metric_write_to_file(&mesh, "../../Results/Trilateral_W_LMDS_AND_DOMINANTPLANE.txt");
 
 	 Mesh plane_mesh = generate_mesh_from_plane(&plane, &plane.point);
 	 mesh_fac.add_mesh(plane_mesh);
+
+	 mesh_fac.mesh_vec[selected_index] = mesh ;
+
 }
 void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices, float& total_area)
 {
@@ -3049,6 +3066,47 @@ int N,std::vector<std::vector<float>>& trilateral_histograms)
 		if (!used[i] && !used[j]) {
 			resemblance_pairs.push_back({ trilateral_desc[i].p1 , trilateral_desc[j].p1 });
 			used[i] = used[j] = true;  // Mark these objects as used
+		}
+	}
+	return resemblance_pairs;
+
+}
+static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pairing(std::vector<TrilateralDescriptor>& trilateral_desc_left,
+	std::vector<TrilateralDescriptor>& trilateral_desc_right )
+{
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	//compare each
+	std::vector<std::pair<float, std::pair<int, int>>> compareResults;
+
+	int N_left = trilateral_desc_left.size();
+	int N_right = trilateral_desc_right.size();
+	for (size_t i = 0; i < N_left; i++)
+	{
+		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_desc_left[i].histogram);
+		int minimum_index = -1;
+		float minimum_value = INFINITY;
+		for (size_t j = 0; j < N_right; j++)
+		{
+			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_right[j].histogram);
+			//float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
+			float resemblance = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
+			compareResults.push_back({ resemblance, {i,j} });
+		}
+	}
+
+	std::vector<std::pair<int, int>> selectedPairs;
+	float skeleton_resemblance_error = 0;
+	std::vector<bool> used_left(N_left, false);
+	std::vector<bool> used_right(N_right, false);
+	std::sort(compareResults.begin(), compareResults.end());
+
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compareResults) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used_left[i] && !used_right[j]) {
+			resemblance_pairs.push_back({ trilateral_desc_left[i].p1 , trilateral_desc_right[j].p1 });
+			used_left[i] = used_right[j] = true;  // Mark these objects as used
 		}
 	}
 	return resemblance_pairs;

@@ -29,6 +29,8 @@ struct TrilateralDescriptor
 	float n_ring_area_p1;
 	float n_ring_area_p2;
 	float n_ring_area_p3;
+	// histogram
+	std::vector<float> histogram; 
 
 };
 
