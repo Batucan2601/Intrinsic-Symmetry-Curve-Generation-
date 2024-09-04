@@ -77,3 +77,6 @@ void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector
 float skeleton_get_backbone_length(Mesh* m,BackBone* backBone);
 
 void skeleton_left_right_test_for_endpoint(std::vector<int>& right , std::vector<int>& left );
+
+//TODO
+void skeleton_generate_backbone_with_dominant_sym(MeshFactory& meshFactory , int selected_mesh , Skeleton& skeleton);
