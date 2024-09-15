@@ -471,6 +471,7 @@ void Mesh::generate_normals()
 	for (size_t i = 0; i < this->vertices.size(); i++)
 	{
 		normals[i] = normals[i] / each_point_count[i];
+		normals[i] = glm::normalize(normals[i]);
 	}
 	this->normals = normals;
 

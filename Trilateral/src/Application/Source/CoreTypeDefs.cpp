@@ -410,3 +410,19 @@ float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2
 
 	return minimum_value;
 }
+Plane generate_plane_from_formula(const float& A, const float& B, const float& C, const float& D)
+{
+	Plane p; 
+	p.normal = glm::vec3(A, B, C);
+	float x = 0;
+	float y = 0; //C*z + D = 0 
+	float z;
+	if (C != 0)
+	{
+		z = -D / C; // z = -D / C 
+	}
+
+	p.point = glm::vec3(x, y, z);
+
+	return p; 
+}
