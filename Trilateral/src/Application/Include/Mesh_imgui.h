@@ -9,6 +9,8 @@
 #include "../Include/Skeleton.h"
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/ShapeDiameter.h"
+#include "../Include/DvorakEstimatingApprox.h"
+
 #include <src/Application/Include/SkeletalNLateral.h>
 bool if_bilateral_map = true;
 bool if_isocurve_selected = false;
@@ -259,12 +261,6 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         trilateralDescVector = match_two_meshes_with_fps(&m_factory.mesh_vec[selected_mesh], &plane, no_of_points);
         is_trilateral_generated = true;
     }
-    /*if (ImGui::Button("point matching using dominant symmetry plane "))
-    {
-        point_matching_with_dominant_symmetry_plane(m_factory, selected_mesh, &plane, no_of_points);
-        m_factory.remove_all();
-        m_factory.add_all();
-    }*/
     if (ImGui::BeginCombo("trilateral generation using", curtrilateralItem.c_str())) // The second parameter is the label previewed before opening the combo.
     {
         bool isSelected = false;
@@ -441,9 +437,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         trilateral_self_matching_with_dominant_sym(m_factory, selected_mesh, no_of_points, empty , no_of_sym_plane_iterations, false  );
         m_factory.remove_all();
         m_factory.add_all();
+    }
+    if (ImGui::Button("point matching with dominant plane and skeleton"))
+    {
+        trilateral_point_matching_with_skeleton_endpoints(m_factory, selected_mesh, skeleton );
+        m_factory.remove_all();
+        m_factory.add_all();
 
     }
-
     ImGui::End();
 
 }
@@ -658,6 +659,8 @@ void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac)
 
 
 }
+int dvorak_no_of_significant_points = 0;
+
 void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
 {
     if (ImGui::BeginMainMenuBar())
@@ -677,7 +680,27 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
         if (ImGui::BeginMenu("Mesh"))
         {
             if (ImGui::MenuItem("Save Mesh")) { imgui_menubar_save_mesh(selected_mesh, mesh_fac); }
-            if (ImGui::MenuItem("Redo")) { /* Redo action */ }
+            if (ImGui::BeginMenu("Trilateral "))
+            {
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Dvorak"))
+            {
+                if(ImGui::BeginMenu("Dvorak Extraction of significant points "))
+                {
+                    if (ImGui::InputInt("no of points ", &dvorak_no_of_significant_points));
+                    if (ImGui::MenuItem("Show"))
+                    {
+                        Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
+                        dvorak_show_signifcant_points(m, dvorak_no_of_significant_points);
+                        mesh_fac.remove_all();
+                        mesh_fac.add_all();
+                    }
+
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            };
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();

@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES 
 #include "../Include/DvorakEstimatingApprox.h"
 #include <cmath>
-static float gaussian_curvature(Mesh* mesh , int index )
+float gaussian_curvature(Mesh* mesh , int index )
 {
 	float area = mesh->areas[index];
 	float A_i = area / 3; // voronoi
@@ -122,7 +122,10 @@ std::vector<std::pair<int, int>> dvorak_chose_criterion(Mesh* m , std::vector<Dv
 			{
 				continue; 
 			}
-			criter_pairs.push_back((std::pair<int, int>){significant_points[i].p_index, significant_points[j].p_index  });
+			std::pair<int, int> temp_pair;
+			temp_pair.first = significant_points[i].p_index;
+			temp_pair.first = significant_points[j].p_index;
+			criter_pairs.push_back(temp_pair);
 			
 		}
 	}
