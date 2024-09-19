@@ -1,5 +1,6 @@
 #include "../Include/Laplace-Beltrami.h"
 #include "eigen/Eigen/EigenValues"
+#include "eigen/Eigen/Sparse"
 #include <vector>
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/CoreTypeDefs.h"
@@ -31,9 +32,12 @@ static double voronoi_area(const Mesh& mesh, int vertex) {
 }
 
 // Function to assemble the cotangent Laplacian matrix
-static MatrixXd cotangent_laplacian(const Mesh& mesh) {
+Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh)
+{
+
+	std::vector<Eigen::Triplet<double>> triplets;
+
 	int n = mesh.vertices.size();
-	MatrixXd L = MatrixXd::Zero(n, n);
 
 	for (int index = 0; index < mesh.triangles.size(); index += 3 ) {
 		int i = mesh.triangles[index];
@@ -48,17 +52,21 @@ static MatrixXd cotangent_laplacian(const Mesh& mesh) {
 		double cot_beta = cotangent(vi - vj, vk - vj);
 		double cot_gamma = cotangent(vi - vk, vj - vk);
 
-		L(i, j) -= cot_gamma;
-		L(i, k) -= cot_beta;
-		L(j, i) -= cot_gamma;
-		L(j, k) -= cot_alpha;
-		L(k, i) -= cot_beta;
-		L(k, j) -= cot_alpha;
+		triplets.push_back(Eigen::Triplet<double>(i, j, -cot_alpha / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(j, i, -cot_alpha / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(j, k, -cot_beta / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(k, j, -cot_beta / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(k, i, -cot_gamma / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(i, k, -cot_gamma / 2.0));
 
-		L(i, i) += cot_beta + cot_gamma;
-		L(j, j) += cot_alpha + cot_gamma;
-		L(k, k) += cot_alpha + cot_beta;
+		// Diagonal entries (sum of cotangent weights for the current vertex)
+		triplets.push_back(Eigen::Triplet<double>(i, i, (cot_alpha + cot_gamma) / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(j, j, (cot_alpha + cot_beta) / 2.0));
+		triplets.push_back(Eigen::Triplet<double>(k, k, (cot_beta + cot_gamma) / 2.0));
 	}
+
+	Eigen::SparseMatrix<double> L(n, n);
+	L.setFromTriplets(triplets.begin(), triplets.end());
 
 	return L;
 }

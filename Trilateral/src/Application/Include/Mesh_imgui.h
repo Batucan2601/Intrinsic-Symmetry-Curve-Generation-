@@ -10,6 +10,7 @@
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/ShapeDiameter.h"
 #include "../Include/DvorakEstimatingApprox.h"
+#include "../Include/HeatKernelSignature.h"
 
 #include <src/Application/Include/SkeletalNLateral.h>
 bool if_bilateral_map = true;
@@ -444,6 +445,10 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         m_factory.remove_all();
         m_factory.add_all();
 
+    }
+    if(ImGui::Button("Heat Kernal Signature"))
+    {
+        HKS_extract_kernel_signature(&m_factory.mesh_vec[selected_mesh]);
     }
     ImGui::End();
 

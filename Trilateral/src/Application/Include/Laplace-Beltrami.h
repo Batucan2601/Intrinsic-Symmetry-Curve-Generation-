@@ -1,5 +1,6 @@
 #pragma once 
 #include "eigen/Eigen/dense"
+#include "eigen/Eigen/sparse"
 #include "MeshFactory.h"
 #include "glm/glm.hpp"
 #include "Skeleton.h"
@@ -13,3 +14,5 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 Eigen::MatrixXd generate_L(Mesh * mesh  );
 Eigen::MatrixXd generate_W_cotangent_laplacian(Mesh* mesh);
 Eigen::MatrixXd generate_A(Mesh* mesh);
+
+Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh);

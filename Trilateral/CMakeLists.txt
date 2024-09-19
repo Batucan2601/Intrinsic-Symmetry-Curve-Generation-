@@ -30,6 +30,7 @@ set(Header_Files
     "src/Application/Include/FuzzyGeodesic.h"
     "src/Application/Include/Geodesic.h"
     "src/Application/Include/DvorakEstimatingApprox.h"
+    "src/Application/Include/HeatKernelSignature.h"
 
 
 
@@ -67,6 +68,7 @@ set(Source_Files
     "src/Application/Source/FuzzyGeodesic.cpp"
     "src/Application/Source/Geodesic.cpp"
     "src/Application/Source/DvorakEstimatingApprox.cpp"
+    "src/Application/Source/HeatKernelSignature.cpp"
 
 )
 source_group("Source Files" FILES ${Source_Files})
