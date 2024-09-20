@@ -16,3 +16,7 @@ Eigen::MatrixXd generate_W_cotangent_laplacian(Mesh* mesh);
 Eigen::MatrixXd generate_A(Mesh* mesh);
 
 Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh);
+
+bool check_if_matrix_symmetric(const Eigen::SparseMatrix<double>& mat);
+Eigen::SparseMatrix<double> normalize_laplacian(const Eigen::SparseMatrix<double>& L);
+Eigen::SparseMatrix<double> regularize_matrix(const Eigen::SparseMatrix<double>& L, double epsilon);

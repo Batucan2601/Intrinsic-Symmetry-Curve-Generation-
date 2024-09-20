@@ -1,32 +1,46 @@
 #include "../Include/HeatKernelSignature.h"
 #include "eigen/Eigen/EigenValues"
+#include <Spectra/SymEigsSolver.h>
+#include <Spectra/MatOp/SparseSymMatProd.h>
 #include <numeric>
 
 int no_of_samples = 10 ;
-int no_of_eigen_val = 5;
+int no_of_eigen_val = 3;
 
 void HKS_extract_kernel_signature(Mesh* m)
 {
 	Eigen::SparseMatrix<double>  cotangent_mat_sparse = cotangent_laplacian(*m);
+	cotangent_mat_sparse = normalize_laplacian(cotangent_mat_sparse);
 
-	Eigen::MatrixXd cotangent_mat = Eigen::MatrixXd(cotangent_mat_sparse);
-	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(cotangent_mat);
-	if (es.info() != Eigen::Success) {
-		std::cerr << "Eigendecomposition failed!" << std::endl;
-		exit(EXIT_FAILURE);
+	check_if_matrix_symmetric(cotangent_mat_sparse);
+
+	Spectra::SparseSymMatProd<double> op(cotangent_mat_sparse);
+
+	// Create a SymEigsSolver object using the matrix operation object
+	// Compute 3 eigenvalues, with a shift towards the smallest values
+	//Spectra::SymEigsSolver< double, Spectra::SmallestAlge, Spectra::SparseSymMatProd<double> > eigs(&op, 3, 6);
+	Eigen::Index num_of_eigenvalues = std::min(Eigen::Index(3), cotangent_mat_sparse.rows());
+	Spectra::SymEigsSolver<Spectra::SparseSymMatProd<double>> solver(op , num_of_eigenvalues,10);
+	for (int k = 0; k < cotangent_mat_sparse.outerSize(); ++k) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(cotangent_mat_sparse, k); it; ++it) {
+			if (std::isnan(it.value()) || std::isinf(it.value())) {
+				std::cerr << "Invalid matrix entry at (" << it.row() << ", " << it.col() << "): " << it.value() << std::endl;
+				return;
+			}
+		}
 	}
+	int max_iterations = 1000;  // Increase maximum number of iterations
+	double tolerance = 1e-8;    // Set a smaller tolerance for convergence
 
-	// Extract the eigenvectors corresponding to the smallest non-zero eigenvalues
-	Eigen::VectorXd eigenvalues = es.eigenvalues();
-	Eigen::MatrixXd eigenvectors = es.eigenvectors();
+	// Initialize and compute the eigenvalues
+	solver.init();
+	int nconv = solver.compute(Spectra::SortRule::SmallestAlge ,2000);
+	Eigen::VectorXd eigenvalues;
+	if (solver.info() == Spectra::CompInfo::Successful)
+		eigenvalues = solver.eigenvalues();
 
-	float minT = 1;
-	float maxT = 10;
-	if (1)
-	{
-		minT = (abs(4 * log(10) / eigenvalues(eigenvalues.size() - 1)));
-		maxT = (abs(4 * log(10) / eigenvalues(1)));
-	}
+	float minT = (abs(4 * log(10) / eigenvalues(eigenvalues.size() - 1)));
+	float maxT = (abs(4 * log(10) / eigenvalues(1)));
 
 	const double logTMin = log(minT);
 	const double logTMax = log(maxT);

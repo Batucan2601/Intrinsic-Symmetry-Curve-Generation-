@@ -4,6 +4,7 @@
 #include <vector>
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/CoreTypeDefs.h"
+#include <windows.h>
 using Eigen::MatrixXd;
 using Eigen::VectorXcd;
 using Eigen::Vector3d;
@@ -34,12 +35,11 @@ static double voronoi_area(const Mesh& mesh, int vertex) {
 // Function to assemble the cotangent Laplacian matrix
 Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh)
 {
-
+	int n = mesh.vertices.size();
+	Eigen::SparseMatrix<double> L(n, n);
 	std::vector<Eigen::Triplet<double>> triplets;
 
-	int n = mesh.vertices.size();
-
-	for (int index = 0; index < mesh.triangles.size(); index += 3 ) {
+	for (int index = 0; index < mesh.triangles.size(); index += 3) {
 		int i = mesh.triangles[index];
 		int j = mesh.triangles[index + 1];
 		int k = mesh.triangles[index + 2];
@@ -52,25 +52,69 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh)
 		double cot_beta = cotangent(vi - vj, vk - vj);
 		double cot_gamma = cotangent(vi - vk, vj - vk);
 
-		triplets.push_back(Eigen::Triplet<double>(i, j, -cot_alpha / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(j, i, -cot_alpha / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(j, k, -cot_beta / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(k, j, -cot_beta / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(k, i, -cot_gamma / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(i, k, -cot_gamma / 2.0));
+		// Symmetrically add off-diagonal entries
+		triplets.emplace_back(i, j, -cot_alpha / 2.0 );
+		triplets.emplace_back(j, i, -cot_alpha / 2.0 );
+
+		triplets.emplace_back(j, k, -cot_beta / 2.0);
+		triplets.emplace_back(k, j, -cot_beta / 2.0);
+
+		triplets.emplace_back(k, i, -cot_gamma / 2.0);
+		triplets.emplace_back(i, k, -cot_gamma / 2.0);
 
 		// Diagonal entries (sum of cotangent weights for the current vertex)
-		triplets.push_back(Eigen::Triplet<double>(i, i, (cot_alpha + cot_gamma) / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(j, j, (cot_alpha + cot_beta) / 2.0));
-		triplets.push_back(Eigen::Triplet<double>(k, k, (cot_beta + cot_gamma) / 2.0));
+		triplets.emplace_back(i, i, (cot_alpha + cot_gamma) / 2.0);
+		triplets.emplace_back(j, j, (cot_alpha + cot_beta) / 2.0);
+		triplets.emplace_back(k, k, (cot_beta + cot_gamma) / 2.0);
 	}
 
-	Eigen::SparseMatrix<double> L(n, n);
 	L.setFromTriplets(triplets.begin(), triplets.end());
-
+	L.makeCompressed();
 	return L;
 }
 
+Eigen::SparseMatrix<double> normalize_laplacian(const Eigen::SparseMatrix<double>& L)
+{
+	Eigen::VectorXd D = L.diagonal();
+	Eigen::SparseMatrix<double> D_inv_sqrt(L.rows(), L.cols());
+
+	std::vector<Eigen::Triplet<double>> triplets;
+	for (int i = 0; i < D.size(); ++i) {
+		if (D(i) > 1e-9) {  // Avoid division by zero for isolated vertices
+			triplets.emplace_back(i, i, 1.0 / std::sqrt(D(i)));
+		}
+	}
+
+	D_inv_sqrt.setFromTriplets(triplets.begin(), triplets.end());
+
+	// L_normalized = D_inv_sqrt * L * D_inv_sqrt
+	return D_inv_sqrt * L * D_inv_sqrt;
+}
+Eigen::SparseMatrix<double> regularize_matrix(const Eigen::SparseMatrix<double>& L, double epsilon)
+{
+	Eigen::SparseMatrix<double> I(L.rows(), L.cols());
+	I.setIdentity();
+	return L + epsilon * I;
+}
+
+bool check_if_matrix_symmetric(const Eigen::SparseMatrix<double>& mat)
+{
+	if (mat.rows() != mat.cols()) {
+		std::cerr << "Matrix is not square!" << std::endl;
+		return false;
+	}
+
+	for (int k = 0; k < mat.outerSize(); ++k) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(mat, k); it; ++it) {
+			if (std::abs(it.value() - mat.coeff(it.col(), it.row())) > 1e-9) {
+				std::cerr << "Matrix is not symmetric at (" << it.row() << ", " << it.col() << ")" << std::endl;
+				return false;
+			}
+		}
+	}
+	std::cout << "Matrix is symmetric." << std::endl;
+	return true;
+}
 // Function to compute the Laplace-Beltrami operator
 static MatrixXd laplace_beltrami(const Mesh& mesh) {
 	MatrixXd L = cotangent_laplacian(mesh);
