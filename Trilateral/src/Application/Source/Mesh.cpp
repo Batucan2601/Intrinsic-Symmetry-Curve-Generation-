@@ -202,11 +202,26 @@ void Mesh::read_ply_format(char* filename)
 		p2_exists = false;
 	}
 }
+static int countFloatsInLine(const std::string& line) {
+	std::stringstream ss(line);
+	float value;
+	int count = 0;
+
+	// Try to extract floats from the line
+	while (ss >> value) {
+		count++;
+		// Clear the bad input state if there's any non-float
+		ss.clear();
+		// Ignore any non-numeric characters after the float
+		ss.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
+	}
+
+	return count;
+}
 void Mesh::read_off_format(char* filename)
 {
 	// standart readeing 
 	errno = 0;
-
 	FILE* fPtr = fopen(filename, "r");
 	if (errno != 0)
 	{
@@ -218,22 +233,38 @@ void Mesh::read_off_format(char* filename)
 	
 	int nVerts, nTris, n, i = 0;
 	float x, y, z;
+	float r, g, b;
+	r = 0; g = 0; b = 0;
 
 	fscanf(fPtr, "%d %d %d\n", &nVerts, &nTris, &n);
 	// fill the needed vectors
 	std::vector<std::pair<int, float>> temp_vector;
 	for (size_t i = 0; i < nVerts; i++)
 	{
-
 		adjacenies.push_back(temp_vector);
 	}
-
+	bool isColorExist = false;
+	int originalPos = ftell(fPtr);
+	char buffer[100];
+	if (fgets(buffer, sizeof(buffer), fPtr)) {
+		printf("Temporarily read line: %s", buffer);
+	}
+	fseek(fPtr, originalPos-2, SEEK_SET);
+	int float_count = countFloatsInLine(buffer);
+	if (float_count == 6)
+	{
+		isColorExist = true;
+	}
 	while (i++ < nVerts)
 	{
 		fscanf(fPtr, "%f %f %f", &x, &y, &z);
+		if (isColorExist)
+		{
+			fscanf(fPtr, "%f %f %f", &r, &g, &b);
+		}
 		glm::vec3 point = glm::vec3(x, y, z);
 		vertices.push_back(point);
-		this->colors.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+		this->colors.push_back(glm::vec3(r,g,b));
 	}
 	while (fscanf(fPtr, "%d", &i) != EOF)
 	{

@@ -287,7 +287,9 @@ int main(void)
 
 
     Mesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.8.off");
-   
+    //Mesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\pyhks\\hks5.off");
+
+
     
     
     
