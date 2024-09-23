@@ -4,4 +4,4 @@
 
 void HKS_extract_kernel_signature(Mesh* m);
 
-
+void HKS_read_kernel_signature(Mesh* m);

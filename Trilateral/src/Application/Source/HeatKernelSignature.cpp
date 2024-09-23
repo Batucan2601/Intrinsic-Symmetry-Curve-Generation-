@@ -3,6 +3,7 @@
 #include <Spectra/SymEigsSolver.h>
 #include <Spectra/MatOp/SparseSymMatProd.h>
 #include <numeric>
+#include <fstream>
 
 int no_of_samples = 10 ;
 int no_of_eigen_val = 3;
@@ -88,4 +89,46 @@ void HKS_extract_kernel_signature(Mesh* m)
 	}
 
 
+}
+
+void HKS_read_kernel_signature(Mesh* m)
+{
+	//go read the hks file 
+	std::string path = "../../Trilateral/Mesh/off/HKS/";
+	std::string file_name = m->file_name;
+	std::string to_insert = ".hks";
+	file_name.insert(file_name.size() - 4, to_insert);
+	path = path + file_name;
+	std::ifstream file(path );  // Open the file for reading
+
+	// Check if the file was successfully opened
+	if (!file.is_open()) {
+		std::cerr << "Could not open the file!" << std::endl;
+		return;
+	}
+
+	std::string line;
+
+
+	// Extract integers from the stream
+	
+	int line_count = 0;
+	// Read the file line by line
+	while (std::getline(file, line)) {
+		std::istringstream iss(line);
+		if (line_count > 1 &&  line_count < m->vertices.size() + 1)
+		{
+			float number;
+			std::vector<float> numbers;
+			// Extract integers from the stream
+			while (iss >> number) {
+				numbers.push_back(number);
+			}
+			m->normalized_heat_kernel_signature.push_back(numbers[3]); 
+		}
+		line_count += 1;
+	}
+
+	file.close();  // Close the file after reading
+	return;
 }
