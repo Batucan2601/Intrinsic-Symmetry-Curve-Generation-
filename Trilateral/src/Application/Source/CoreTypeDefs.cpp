@@ -426,3 +426,19 @@ Plane generate_plane_from_formula(const float& A, const float& B, const float& C
 
 	return p; 
 }
+
+int CoreType_return_smallest_k(std::vector<float>& arr , int k_th_smallest )
+{
+
+	// Ensure n is within the valid range
+	if (k_th_smallest < 1 || k_th_smallest > arr.size()) {
+		std::cerr << "Invalid input: n is out of range." << std::endl;
+		return -1; // Error code
+	}
+
+	// Use nth_element to find the n-th smallest element (0-based index)
+	std::nth_element(arr.begin(), arr.begin() + (k_th_smallest - 1), arr.end());
+
+	// Return the n-th smallest element (1-based index, so subtract 1)
+	return arr[k_th_smallest - 1];
+}

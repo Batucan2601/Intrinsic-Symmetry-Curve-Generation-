@@ -93,6 +93,9 @@ static Skeleton skeleton;
 static BackBone best_backbone;
 static std::vector<std::pair<unsigned int, unsigned int >> skeleton_best_end_point_pairs;
 static std::vector<std::pair<int, int>>  skeletalNLateral_end_point_results;
+
+static std::vector<TrilateralDescriptor> desc_r;
+static std::vector<TrilateralDescriptor> desc_l;
 void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
 {
     if (ImGui::Button("Generate Bounding Box For mesh"))
@@ -252,7 +255,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("separate mesh with dominant symmetry plane "))
     {
-        generate_two_separate_mesh_using_dominant_symmetry_plane(plane, &m_factory.mesh_vec[selected_mesh], &m1, &m2, &m1_map_indices, &m2_map_indices);
+        dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(plane, &m_factory.mesh_vec[selected_mesh], &m1, &m2, &m1_map_indices, &m2_map_indices);
         m_factory.remove_all();
         m_factory.add_all();
     }
@@ -442,6 +445,20 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
     if (ImGui::Button("point matching with dominant plane and skeleton"))
     {
         trilateral_point_matching_with_skeleton_endpoints(m_factory, selected_mesh, skeleton );
+        m_factory.remove_all();
+        m_factory.add_all();
+
+    }
+    if (ImGui::Button("point matching with dominant plane and skeleton and HKS "))
+    {
+        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton , desc_l , desc_r);
+        m_factory.remove_all();
+        m_factory.add_all();
+
+    }
+    if (ImGui::Button(""))
+    {
+        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton, desc_l , desc_r);
         m_factory.remove_all();
         m_factory.add_all();
 

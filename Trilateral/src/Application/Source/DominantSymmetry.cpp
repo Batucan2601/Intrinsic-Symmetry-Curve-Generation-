@@ -31,7 +31,6 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 }
 Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 {
-	
 	// generate PCA weights are same and 1 for now 
 	float s = mesh.vertices.size();
 	glm::vec3 m(0.0f, 0.0f, 0.0f);
@@ -113,8 +112,10 @@ Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 	}
 
 	Plane best_plane = planes[eigen_second_best_index];
-
-	for( int p = 0; p < sym_iter_no; p++ )
+	best_plane.normal = glm::normalize(best_plane.normal);
+	int sym_no = 0; 
+	//for( int p = 0; p < sym_iter_no; p++ )
+	while( 1 )
 	{
 		std::vector<float> di_vec;
 		for (size_t i = 0; i < mesh.vertices.size(); i++)
@@ -227,8 +228,31 @@ Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 			eigen_second_best_index = 2;
 
 		}
+		//check convergence
+		//get their formula
+		float A_A = best_plane.normal.x;
+		float A_B = best_plane.normal.y;
+		float A_C = best_plane.normal.z;
+		float A_D = - ( best_plane.normal.x * best_plane.point.x + best_plane.normal.y * best_plane.point.y + best_plane.normal.z * best_plane.point.z);
+
+		float B_A = planes[eigen_second_best_index].normal.x;
+		float B_B = planes[eigen_second_best_index].normal.y;
+		float B_C = planes[eigen_second_best_index].normal.z;
+		float B_D = -(planes[eigen_second_best_index].normal.x * planes[eigen_second_best_index].point.x + 
+		planes[eigen_second_best_index].normal.y * planes[eigen_second_best_index].point.y + 
+		planes[eigen_second_best_index].normal.z * planes[eigen_second_best_index].point.z);
+		
+		// convergence formula
+		float convergence = sqrt(pow((A_A - B_A), 2) + pow((A_B - B_B), 2) + pow((A_C - B_C), 2) + pow((A_D - B_D), 2) );
+		sym_no++;
+		if (convergence < 0.1)
+		{
+			break; 
+		}
+
 		best_plane = planes[eigen_second_best_index];
-	}
+		best_plane.normal = glm::normalize(best_plane.normal);
+}
 	
 
 
@@ -647,7 +671,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 * m1 represents the points where you get the + sign when you plug the vertices in the plane
 * m2 represents the minus sign 
 */
-void generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
+void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
 {
 	indices_for_m1->resize(mesh_to_be_separated->vertices.size());
 	indices_for_m2->resize(mesh_to_be_separated->vertices.size());

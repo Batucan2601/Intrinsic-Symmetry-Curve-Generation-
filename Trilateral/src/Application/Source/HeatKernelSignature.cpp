@@ -108,15 +108,12 @@ void HKS_read_kernel_signature(Mesh* m)
 	}
 
 	std::string line;
-
-
 	// Extract integers from the stream
-	
 	int line_count = 0;
 	// Read the file line by line
 	while (std::getline(file, line)) {
 		std::istringstream iss(line);
-		if (line_count > 1 &&  line_count < m->vertices.size() + 1)
+		if (line_count > 1 &&  line_count < m->vertices.size() + 2)
 		{
 			float number;
 			std::vector<float> numbers;

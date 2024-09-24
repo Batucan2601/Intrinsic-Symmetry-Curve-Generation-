@@ -321,12 +321,18 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index, std::vector<unsigned int>& indices);
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh*m, std::vector<unsigned int>& indices);
 std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh*m, std::vector<unsigned int>& indices);
+TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton_indices(Mesh*m, unsigned int point_index, 
+std::vector<unsigned int>& skeleton_indices);
+
+
 std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points);
 std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
 
 //static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
 std::vector<float> histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
+	std::vector<int> is_visited, std::vector<int>& global_is_visited);
+std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
 	std::vector<int> is_visited, std::vector<int>& global_is_visited);
 
 // the ultimate trilateral descriptor generator 
@@ -387,3 +393,10 @@ float get_N_ring_area(Mesh* m, float point_index , int N );
 
 
  void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index,Skeleton& skeleton );
+
+
+ void trilateral_point_matching_with_skeleton_endpoints_w_HKS(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
+std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& desc_right , Plane& plane);
+
+ void trilateral_point_matching_with_skeleton_endpoints_anchors(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
+	 std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg, Plane& plane );

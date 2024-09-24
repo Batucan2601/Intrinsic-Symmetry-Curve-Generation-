@@ -46,6 +46,7 @@ enum PointStatus
 	EDGE,
 	MIDPOINT,
 };
+//plane stuff
 Mesh generate_mesh_from_plane( Plane* plane , glm::vec3 * m  );
 float get_point_status_from_plane(Plane* plane, glm::vec3* point);
 glm::vec3 project_point_to_plane(Plane* plane, glm::vec3* point);
@@ -53,6 +54,8 @@ glm::vec3 symmetry_point_from_plane(Plane* plane, glm::vec3* point);
 Plane generate_plane_from_two_vectors(const glm::vec3& vec1 , const glm::vec3& vec2);
 Plane generate_plane_from_three_points(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
 Plane generate_plane_from_formula(const float& A , const float& B, const float& C, const float& D);
+
+
 bool is_triangles_intersect(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3& p3_1, const glm::vec3& p1_2, const glm::vec3& p2_2, const glm::vec3& p2_3);
 float area_of_triangle_intersection(const glm::vec3& p1_1, const glm::vec3& p2_1, const glm::vec3&  p3_1 , const glm::vec3& p1_2 , const glm::vec3& p2_2 , const glm::vec3& p2_3  );
 void get_coefficients_from_plane(const Plane& plane , float& A , float& B , float& C , float& D);
@@ -63,5 +66,8 @@ float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, c
 
 float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
+int CoreType_return_smallest_k(std::vector<float>& arr , int k_th_smallest );
+
 // permuation
 float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2, int N);
+
