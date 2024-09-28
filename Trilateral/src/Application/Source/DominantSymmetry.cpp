@@ -252,9 +252,9 @@ Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 
 		best_plane = planes[eigen_second_best_index];
 		best_plane.normal = glm::normalize(best_plane.normal);
-}
+	}
 	
-
+	dom_sym_save_plane(best_plane, &mesh);
 
 	return best_plane;
 }
@@ -817,5 +817,79 @@ static Plane rotate_plane(Plane plane , float rotation_degree)
 	rotated_plane.normal = glm::vec3(glm::vec4(rotated_plane.normal,1) * rot_mat);
 
 	return rotated_plane;
+	
+}
+void dom_sym_save_plane(Plane& plane, Mesh* m)
+{
+	//go read the hks file 
+	std::string path = "../../Trilateral/Mesh/off/DomSym/";
+	std::string file_name = m->file_name;
+	path = path + file_name;
+	std::ofstream file(path);  // Open the file for reading
+
+	// Check if the file was successfully opened
+	if (!file.is_open()) {
+		std::cerr << "Could not open the file!" << std::endl;
+		return;
+	}
+
+	if (file.is_open()) {
+		// Write data to the file
+		// 1 - normal of plane 
+		file << plane.normal.x << " " << plane.normal.y << " " << plane.normal.z;
+		file << plane.point.x << " " << plane.point.y << " " << plane.point.z;
+		// Close the file after writing
+		file.close();
+
+		std::cout << "Data written to the file successfully." << std::endl;
+	}
+	else {
+		std::cerr << "Unable to open the file for writing!" << std::endl;
+	}
+
+	file.close();  // Close the file after reading
+	return;
+}
+bool dom_sym_read_plane(MeshFactory& mesh_fac , int selected_mesh, Plane& plane)
+{
+	Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
+	//go read the hks file 
+	std::string path = "../../Trilateral/Mesh/off/DomSym/";
+	std::string file_name = m->file_name;
+	path = path + file_name;
+	std::ifstream file(path);  // Open the file for reading
+
+	// Check if the file was successfully opened
+	if (!file.is_open()) {
+		std::cerr << "Could not open the file!" << std::endl;
+		return false;
+	}
+
+	std::string line;
+	// Extract integers from the stream
+	int line_count = 0;
+	std::vector<float> numbers;
+	// Read the file line by line
+	while (std::getline(file, line)) 
+	{
+		std::istringstream iss(line);
+			float number;
+			// Extract integers from the stream
+			while (iss >> number) {
+				numbers.push_back(number);
+			}
+	}
+	plane.normal = glm::vec3(numbers[0] , numbers[1], numbers[2]);
+	plane.point = glm::vec3(numbers[3] , numbers[4], numbers[5]);
+
+	file.close();  // Close the file after reading
+	
+	Mesh plane_mesh = generate_mesh_from_plane(&plane,&plane.point);
+	mesh_fac.add_mesh(plane_mesh);
+	
+	mesh_fac.remove_all();
+	mesh_fac.add_all();
+
+	return true;
 	
 }

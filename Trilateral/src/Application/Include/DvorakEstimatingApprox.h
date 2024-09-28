@@ -9,6 +9,7 @@ typedef struct
 }DvorakPairs;
 Plane dvorak_generate_plane(MeshFactory& mesh_fac , int selected_index );
 std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m , int P );
+std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, std::vector<unsigned int>& indices);
 //criterion
 bool dvorak_curvature_similarity_criterion(std::vector<DvorakPairs>& best_pairs , float S ,int index1 , int index2  );
 bool dvorak_normal_angle_criterion(Mesh* m, std::vector<DvorakPairs>& best_pairs, int index1, int index2, float c_min_norm);

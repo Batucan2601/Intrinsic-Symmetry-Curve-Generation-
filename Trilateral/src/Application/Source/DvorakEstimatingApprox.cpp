@@ -62,6 +62,36 @@ std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, int P)
 	return dvorak_pairs;
 
 }
+std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, std::vector<unsigned int> & indices )
+{
+	std::vector<DvorakPairs> dvorak_pairs;
+	int N = m->vertices.size();
+	int P = indices.size();
+	//sort the indices for biggest P 
+	std::vector<std::pair<float, size_t>> value_index_pairs;
+	std::vector<size_t> sorted_indices;
+	for (size_t i = 0; i < P; ++i)
+	{
+		value_index_pairs.emplace_back(gaussian_curvature(m, indices[i]), indices[i]);
+	}
+	std::sort(value_index_pairs.begin(), value_index_pairs.end(),
+		[](const std::pair<float, size_t>& a, const std::pair<float, size_t>& b) {
+			return a.first < b.first;
+		});
+	for (const auto& pair : value_index_pairs) {
+		sorted_indices.push_back(pair.second);
+	}
+
+	for (size_t i = 0; i < P; i++)
+	{
+		DvorakPairs dvorakPair_i;
+		dvorakPair_i.gaussian_curv = value_index_pairs[i].first;
+		dvorakPair_i.p_index = sorted_indices[i];
+		dvorak_pairs.push_back(dvorakPair_i);
+	}
+	return dvorak_pairs;
+}
+
 Plane dvorak_generate_plane(MeshFactory& mesh_fac, int selected_index , int P , float S , float c_min_norm)
 {
 	Mesh* m = &mesh_fac.mesh_vec[selected_index];

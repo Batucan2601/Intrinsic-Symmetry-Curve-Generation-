@@ -451,14 +451,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("point matching with dominant plane and skeleton and HKS "))
     {
-        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton , desc_l , desc_r);
+        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton , desc_l , desc_r , plane);
         m_factory.remove_all();
         m_factory.add_all();
 
     }
     if (ImGui::Button(""))
     {
-        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton, desc_l , desc_r);
+        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton, desc_l , desc_r , plane);
         m_factory.remove_all();
         m_factory.add_all();
 
@@ -724,6 +724,19 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
                 }
                 ImGui::EndMenu();
             };
+            if (ImGui::BeginMenu("Dominant Symmetry Plane"))
+            {
+                if (ImGui::MenuItem("Save dominant Symmetry Plane"))
+                {
+                    dom_sym_save_plane(plane, &mesh_fac.mesh_vec[selected_mesh]);
+                }
+                if (ImGui::MenuItem("read dominant Symmetry Plane"))
+                {
+                    dom_sym_read_plane(mesh_fac, selected_mesh , plane);
+                }
+                ImGui::EndMenu();
+
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();

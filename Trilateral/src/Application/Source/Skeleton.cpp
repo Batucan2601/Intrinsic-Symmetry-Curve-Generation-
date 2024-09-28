@@ -521,8 +521,8 @@ std::vector<float> generate_skeleton_lines(std::string file_name)
 			skeleton_lines.push_back(  point.z);
 
 			skeleton_lines.push_back(255.0f);
-			skeleton_lines.push_back(0.0f);
-			skeleton_lines.push_back(0.0f);
+			skeleton_lines.push_back(255.0f);
+			skeleton_lines.push_back(255.0f);
 
 		}
 		else
@@ -786,9 +786,9 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 			
 		if (skeletonPoints[i].label == END)
 		{
-			skeleton_points.push_back(0.0f);
-			skeleton_points.push_back(0.0f);
 			skeleton_points.push_back(255.0f);
+			skeleton_points.push_back(0.0f);
+			skeleton_points.push_back(0.0f);
 		}
 		else if (skeletonPoints[i].parent == -1)
 		{
@@ -799,8 +799,8 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 		else
 		{
 			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(0.0f);
-			skeleton_points.push_back(0.0f);
+			skeleton_points.push_back(255.0f);
+			skeleton_points.push_back(255.0f);
 		}
 
 		if (parent >= 0)

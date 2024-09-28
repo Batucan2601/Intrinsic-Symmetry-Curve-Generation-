@@ -5,10 +5,9 @@
 #include "../Include/Geodesic.h"
 #include "../Include/Skeleton.h"
 #include "../Include/DvorakEstimatingApprox.h"
+#define _USE_MATH_DEFINES
 #include "math.h"
-#ifndef PI
-#define PI 3.14159265358979323846
-#endif
+
 
 static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int selectedIndex, std::vector<int>& is_visited,
 	std::vector<double>& principalCurvatures1, std::vector<double>& principalCurvatures2, int partition_no);
@@ -1284,7 +1283,7 @@ std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index
 	//histogram to be returned 
 	std::vector<float> histogram;
 	// fill it with division no 
-	for (size_t i = 0; i < division_no + 1; i++)
+	for (size_t i = 0; i < division_no; i++)
 	{
 		histogram.push_back(0);
 	}
@@ -1298,6 +1297,7 @@ std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index
 	//find the maximum distance from is_visited and paths
 	float max = -999;
 	float min = 100000;
+	std::vector<unsigned int> triangles_inside;
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		if (is_visited[i] == INSIDE) // if vertex is visited 
@@ -1337,8 +1337,6 @@ std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index
 			}
 		}
 	}
-	float step = max / division_no;
-
 	//now recolor
 	std::vector<glm::vec3> new_color_buffer;
 	for (size_t i = 0; i < m->colors.size(); i++)
@@ -1346,86 +1344,306 @@ std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index
 
 		if (is_visited[i] == EDGE) //edge 
 		{
-			//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-			//m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
 			global_is_visited[i] = EDGE;
 		}
 		else if (is_visited[i] == OUTSIDE) //not visited 
 		{
-			//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-			//m->colors[i] = glm::vec3(0.0f, 0.0f, 0.0f);
-
 		}
 		else if (is_visited[i] == INSIDE) // get the max distance
 		{
-			//global_is_visited[i] = INSIDE;
-
 			if (global_is_visited[i] != EDGE)
 			{
 				global_is_visited[i] = INSIDE;
 			}
-			//get distance
-			/*float max_dist_from_index_i = std::max(distance_matrix_p1[i], distance_matrix_p2[i]);
-			max_dist_from_index_i = std::max(max_dist_from_index_i, distance_matrix_p3[i]);
-			int hist_index = max_dist_from_index_i / step;
-			if (hist_index % 2 == 0)
-			{
-				//new_color_buffer.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
-				m->colors[i] = glm::vec3(0.0f, 1.0f, 0.0f);
-
-			}
-			else if (hist_index % 2 == 1)
-			{
-				//new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-				m->colors[i] = glm::vec3(0.0f, 0.0f, 1.0f);
-
-			}*/
 		}
 	}
-
-	//m->colors = new_color_buffer;
-
-	//getting the numbers
+	float max_dist_inside = -1; 
 	for (size_t i = 0; i < m->triangles.size(); i += 3)
 	{
-		if (is_visited[m->triangles[i]] != 0 || is_visited[m->triangles[i + 1]] != 0 || is_visited[m->triangles[i + 2]] != 0) //if any vertex is visited
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i+1];
+		int index3 = m->triangles[i+2];
+		if (is_visited[index1] == INSIDE || is_visited[index2] == INSIDE || is_visited[index3] == INSIDE) //if any vertex is visited
 		{
-			glm::vec3 p1 = m->vertices[m->triangles[i]];
-			glm::vec3 p2 = m->vertices[m->triangles[i + 1]];
-			glm::vec3 p3 = m->vertices[m->triangles[i + 2]];
-
-			float min_dist_from_p1 = std::min(distance_matrix_p1[m->triangles[i]], distance_matrix_p2[m->triangles[i]]);
-			min_dist_from_p1 = std::min(min_dist_from_p1, distance_matrix_p3[m->triangles[i]]);
-
-			float min_dist_from_p2 = std::min(distance_matrix_p1[m->triangles[i + 1]], distance_matrix_p2[m->triangles[i + 1]]);
-			min_dist_from_p2 = std::min(min_dist_from_p2, distance_matrix_p3[m->triangles[i + 1]]);
-
-			float min_dist_from_p3 = std::min(distance_matrix_p1[m->triangles[i + 2]], distance_matrix_p2[m->triangles[i + 2]]);
-			min_dist_from_p3 = std::min(min_dist_from_p3, distance_matrix_p3[m->triangles[i + 2]]);
-
-			float area = compute_triangle_area(p1, p2, p3);
-			int hist_no_p1 = min_dist_from_p1 / step;
-			int hist_no_p2 = min_dist_from_p2 / step;
-			int hist_no_p3 = min_dist_from_p3 / step;
-
-			if (hist_no_p1 > division_no)
+			triangles_inside.push_back(index1);
+			triangles_inside.push_back(index2);
+			triangles_inside.push_back(index3);
+			if (distance_matrix_p1[index1] > max_dist_inside)
 			{
-				hist_no_p1 = division_no;
+				max_dist_inside = distance_matrix_p1[index1];
 			}
-			if (hist_no_p2 > division_no)
+			if (distance_matrix_p1[index2] > max_dist_inside)
 			{
-				hist_no_p2 = division_no;
+				max_dist_inside = distance_matrix_p1[index2];
 			}
-			if (hist_no_p3 > division_no)
+			if (distance_matrix_p1[index3] > max_dist_inside)
 			{
-				hist_no_p3 = division_no;
+				max_dist_inside = distance_matrix_p1[index3];
 			}
-
-			histogram[hist_no_p1] += (area );
-			histogram[hist_no_p2] += (area );
-			histogram[hist_no_p3] += (area );
 		}
 	}
+	float step = max_dist_inside / division_no;
+	for (size_t i = 0; i < triangles_inside.size(); i += 3)
+	{
+		int i1 = triangles_inside[i];
+		int i2 = triangles_inside[i + 1];
+		int i3 = triangles_inside[i + 2];
+		glm::vec3 p1 = m->vertices[i1];
+		glm::vec3 p2 = m->vertices[i2];
+		glm::vec3 p3 = m->vertices[i3];
+		float i1_dist = distance_matrix_p1[i1];
+		float i2_dist = distance_matrix_p1[i2];
+		float i3_dist = distance_matrix_p1[i3];
+
+		int step_no_i1 = i1_dist / step; // floor 
+		int step_no_i2 = i2_dist / step; // floor 
+		int step_no_i3 = i3_dist / step; // floor
+		if (step_no_i1 == division_no)
+		{
+			step_no_i1--;
+		}
+		if (step_no_i2 == division_no)
+		{
+			step_no_i2--;
+		}
+		if (step_no_i3 == division_no)
+		{
+			step_no_i3--;
+		}
+		float triangle_area= compute_triangle_area(p1, p2, p3);
+		if (step_no_i1 == step_no_i2 && step_no_i1 == step_no_i3)
+		{
+			histogram[step_no_i1] += triangle_area;
+		}
+		//one of them is in other step 
+		else /*if (step_no_i1 == step_no_i2 && step_no_i1 != step_no_i3 &&
+			 step_no_i1 == step_no_i3 && step_no_i1 != step_no_i2 &&
+			 step_no_i2 == step_no_i3 && step_no_i2 != step_no_i3)*/
+		{
+			histogram[step_no_i1] += triangle_area/3.0f;
+			histogram[step_no_i2] += triangle_area/3.0f;
+			histogram[step_no_i3] += triangle_area/3.0f;
+
+		}
+
+	}
+
+
+	//normalize histogram.
+	float histogram_sum = 0;
+	for (size_t i = 0; i < histogram.size(); i++)
+	{
+		histogram_sum += histogram[i];
+	}
+	for (size_t i = 0; i < histogram.size(); i++)
+	{
+		histogram[i] /= histogram_sum;
+	}
+	return histogram;
+
+}
+
+std::vector<float> histogram_roi_superior(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
+	std::vector<int> is_visited, std::vector<int>& global_is_visited)
+{
+	//histogram to be returned 
+	std::vector<float> histogram;
+	// fill it with division no 
+	for (size_t i = 0; i < division_no; i++)
+	{
+		histogram.push_back(0);
+	}
+	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
+	//find the maximum distance from is_visited and paths
+	float max = -999;
+	float min = 100000;
+	std::vector<unsigned int> triangles_inside;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		if (is_visited[i] == INSIDE) // if vertex is visited 
+		{
+			for (size_t j = 0; j < path_1_2.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_1_2[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_1_2[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_1_2[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_1_2[j]]);
+				}
+			}
+			for (size_t j = 0; j < path_1_3.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_1_3[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_1_3[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_1_3[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_1_3[j]]);
+				}
+			}
+			for (size_t j = 0; j < path_2_3.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_2_3[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_2_3[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_2_3[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_2_3[j]]);
+				}
+			}
+		}
+	}
+	//now recolor
+	std::vector<glm::vec3> new_color_buffer;
+	for (size_t i = 0; i < m->colors.size(); i++)
+	{
+
+		if (is_visited[i] == EDGE) //edge 
+		{
+			global_is_visited[i] = EDGE;
+		}
+		else if (is_visited[i] == OUTSIDE) //not visited 
+		{
+		}
+		else if (is_visited[i] == INSIDE) // get the max distance
+		{
+			if (global_is_visited[i] != EDGE)
+			{
+				global_is_visited[i] = INSIDE;
+			}
+		}
+	}
+	float max_dist_inside = -1;
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		if (is_visited[index1] == INSIDE || is_visited[index2] == INSIDE || is_visited[index3] == INSIDE) //if any vertex is visited
+		{
+			triangles_inside.push_back(index1);
+			triangles_inside.push_back(index2);
+			triangles_inside.push_back(index3);
+			if (distance_matrix_p1[index1] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index1];
+			}
+			if (distance_matrix_p1[index2] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index2];
+			}
+			if (distance_matrix_p1[index3] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index3];
+			}
+		}
+	}
+	float step = max_dist_inside / division_no;
+	for (size_t i = 0; i < triangles_inside.size(); i += 3)
+	{
+		int i1 = triangles_inside[i];
+		int i2 = triangles_inside[i + 1];
+		int i3 = triangles_inside[i + 2];
+		glm::vec3 p1 = m->vertices[i1];
+		glm::vec3 p2 = m->vertices[i2];
+		glm::vec3 p3 = m->vertices[i3];
+		float i1_dist = distance_matrix_p1[i1];
+		float i2_dist = distance_matrix_p1[i2];
+		float i3_dist = distance_matrix_p1[i3];
+
+		int step_no_i1 = i1_dist / step; // floor 
+		int step_no_i2 = i2_dist / step; // floor 
+		int step_no_i3 = i3_dist / step; // floor
+		if (step_no_i1 == division_no)
+		{
+			step_no_i1--;
+		}
+		if (step_no_i2 == division_no)
+		{
+			step_no_i2--;
+		}
+		if (step_no_i3 == division_no)
+		{
+			step_no_i3--;
+		}
+		float triangle_area = compute_triangle_area(p1, p2, p3);
+		if (step_no_i1 == step_no_i2 && step_no_i1 == step_no_i3)
+		{
+			histogram[step_no_i1] += triangle_area;
+		}
+		//one of them is in other step 
+		else /*if (step_no_i1 == step_no_i2 && step_no_i1 != step_no_i3 &&
+			 step_no_i1 == step_no_i3 && step_no_i1 != step_no_i2 &&
+			 step_no_i2 == step_no_i3 && step_no_i2 != step_no_i3)*/
+		{
+			std::vector<std::pair<int, int>> steps;
+			steps.push_back(std::pair<int, int>(step_no_i1, i1));
+			steps.push_back(std::pair<int, int>(step_no_i2, i2));
+			steps.push_back(std::pair<int, int>(step_no_i3, i3));
+			CoreType_sort_by_value(steps);
+			//they are now in ascending order
+			// 1.1.1 small arc
+			float dist_step_0 = distance_matrix_p1[steps[0].second];
+			//find the distance to other hist
+			float small_r = (step * (steps[0].first + 1)) - dist_step_0;
+			glm::vec3 edge1 = m->vertices[steps[1].second] - m->vertices[steps[0].second];
+			glm::vec3 edge2 = m->vertices[steps[2].second] - m->vertices[steps[0].second];
+			float cosine = glm::dot(edge1, edge2) / (glm::length(edge1) * glm::length(edge2));
+			float small_radian = acos(cosine); //radian
+
+			float area_arc_small = M_PI * small_r * small_r * small_radian / (2 * M_PI);
+
+			histogram[steps[0].first] += area_arc_small;
+
+
+			// 1.1.2 closest arc
+			//a miscalculation but think it like also an arc although it is a reverse arc
+			float dist_step_2 = distance_matrix_p1[steps[2].second];
+			float big_r = dist_step_2 - (steps[2].first * step);
+			edge1 = m->vertices[steps[1].second] - m->vertices[steps[2].second];
+			edge2 = m->vertices[steps[0].second] - m->vertices[steps[2].second];
+			cosine = glm::dot(edge1, edge2) / (glm::length(edge1) * glm::length(edge2));
+			small_radian = acos(cosine); //radian
+			float area_arc_big = M_PI * big_r * big_r * small_radian / (2 * M_PI);
+			histogram[steps[2].first] += area_arc_big;
+
+			
+			float area_left = triangle_area - (area_arc_small + area_arc_big);
+
+			int steps_left = steps[2].first - (steps[0].first + 1);
+			if (steps_left == 0)
+			{
+				histogram[steps[0].first] += area_left;
+				histogram[steps[1].first] += area_left;
+			}
+			else
+			{
+				int total_fraction = steps_left * steps_left;
+				for (size_t step_no = steps[0].first + 1; step_no < steps[2].first; step_no++)
+				{
+					int fraction_no = step_no - (steps[0].first);
+					float fraction_percentage = (pow(fraction_no, 2) - pow(fraction_no - 1, 2)) / fraction_no;
+
+					histogram[step_no] += fraction_percentage * area_left;
+				}
+			}
+			
+			
+
+		}
+
+	}
+
 
 	//normalize histogram.
 	float histogram_sum = 0;
@@ -3246,9 +3464,28 @@ int N,std::vector<std::vector<float>>& trilateral_histograms)
 static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pairing_histogram_w_HKS(Mesh* m, std::vector<TrilateralDescriptor>& trilateral_desc_left,
 	std::vector<TrilateralDescriptor>& trilateral_desc_right)
 {
+	//dvorak externsion
+	std::vector<unsigned int> left_indices;
+	std::vector<unsigned int> right_indices;
+	for (size_t i = 0; i < trilateral_desc_left.size(); i++)
+	{
+		left_indices.push_back(trilateral_desc_left[i].p1);
+	}
+	for (size_t i = 0; i < trilateral_desc_right.size(); i++)
+	{
+		right_indices.push_back(trilateral_desc_right[i].p1);
+	}
+	std::vector<DvorakPairs> left_dvorak = dvorak_extraction_of_significant_points(m, left_indices);
+	std::vector<DvorakPairs> right_dvorak = dvorak_extraction_of_significant_points(m, right_indices);
+	std::vector<DvorakPairs> dvorak_all = dvorak_extraction_of_significant_points(m, right_indices);
+	dvorak_all.insert(dvorak_all.begin(), left_dvorak.begin() , left_dvorak.end());
+	dvorak_all.insert(dvorak_all.begin(), right_dvorak.begin() , right_dvorak.end());
+
+
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	std::vector<std::pair< float, std::pair<unsigned int, unsigned int>>> resemblance_pairs_left_right;
 	//compare each
-	std::vector<std::pair<float, std::pair<int, int>>> compareResults;
+	std::vector<std::pair<float, std::pair<int, int>>> compareResults_left;
 
 	int N_left = trilateral_desc_left.size();
 	int N_right = trilateral_desc_right.size();
@@ -3259,42 +3496,130 @@ static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pai
 		float minimum_value = INFINITY;
 		float hks_i = m->normalized_heat_kernel_signature[trilateral_desc_left[i].p1];
 		std::vector<float> histogram_vec_i = trilateral_desc_left[i].histogram;
-		for (size_t j = 0; j < histogram_size; j++)
+		/*for (size_t j = 0; j < histogram_size; j++)
 		{
 			histogram_vec_i.push_back(hks_i);
-		}
+		}*/
 		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_desc_left[i].histogram);
 		for (size_t j = 0; j < N_right; j++)
 		{
-			float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_left[i].p2];
-			float hks_i = m->normalized_heat_kernel_signature[trilateral_desc_left[i].p1];
+			float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_right[j].p1];
 			std::vector<float> histogram_vec_j = trilateral_desc_right[j].histogram;
-			for (size_t k = 0; k < histogram_size; k++)
+			
+			//check curvature
+			//bool is_curvature  = dvorak_curvature_similarity_criterion(dvorak_all , 0.5, i , j + left_dvorak.size() );
+			//bool is_angle  = dvorak_normal_angle_criterion(m ,dvorak_all , i , j + left_dvorak.size() , 0.985  );
+			bool is_hks_dif = std::abs( (hks_i - hks_j) ) < 0.03;
+			/*for (size_t k = 0; k < histogram_size; k++)
 			{
 				histogram_vec_j.push_back(hks_j);
-			}
+			}*/
 			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_right[j].histogram);
 			float resemblance = (histogram_i - histogram_j).norm() ; // L2 norm
-			//float resemblance = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
-			compareResults.push_back({ resemblance, {i,j} });
+			//float resemblance_c = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
+			if (is_hks_dif)
+			{
+				compareResults_left.push_back({ resemblance, {i,j} });
+			}
 		}
 	}
 
 	std::vector<std::pair<int, int>> selectedPairs;
 	float skeleton_resemblance_error = 0;
-	std::vector<bool> used_left(N_left, false);
-	std::vector<bool> used_right(N_right, false);
-	std::sort(compareResults.begin(), compareResults.end());
+	std::vector<bool> used_left_l(N_left, false);
+	std::vector<bool> used_right_l(N_right, false);
+	std::sort(compareResults_left.begin(), compareResults_left.end());
 
 	// Greedily select pairs with smallest compare() result
-	for (const auto& entry : compareResults) {
+	for (const auto& entry : compareResults_left) {
 		int i = entry.second.first;
 		int j = entry.second.second;
-		if (!used_left[i] && !used_right[j]) {
-			resemblance_pairs.push_back({ trilateral_desc_left[i].p1 , trilateral_desc_right[j].p1 });
-			used_left[i] = used_right[j] = true;  // Mark these objects as used
+		if (!used_left_l[i]) {
+			std::pair<float, std::pair<unsigned int, unsigned int>> pair_with_weight;
+			pair_with_weight.first = entry.first;
+			pair_with_weight.second = std::pair<unsigned int, unsigned int>(i, j);
+			resemblance_pairs_left_right.push_back(pair_with_weight);
+			used_left_l[i] = used_right_l[j] = true;  // Mark these objects as used
 		}
 	}
+	std::vector<std::pair<float, std::pair<int, int>>> compareResults_right;
+	//do it for right to let also
+	for (size_t i = 0; i < N_right; i++)
+	{
+		int minimum_index = -1;
+		float minimum_value = INFINITY;
+		float hks_i = m->normalized_heat_kernel_signature[trilateral_desc_right[i].p1];
+		std::vector<float> histogram_vec_i = trilateral_desc_right[i].histogram;
+		/*for (size_t j = 0; j < histogram_size; j++)
+		{
+			histogram_vec_i.push_back(hks_i);
+		}*/
+		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_desc_right[i].histogram);
+		for (size_t j = 0; j < N_left; j++)
+		{
+			float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_left[j].p1];
+			std::vector<float> histogram_vec_j = trilateral_desc_left[j].histogram;
+			//check curvature
+			//bool is_curvature  = dvorak_curvature_similarity_criterion(dvorak_all , 0.5, i , j + left_dvorak.size() );
+			//bool is_angle  = dvorak_normal_angle_criterion(m ,dvorak_all , i , j + left_dvorak.size() , 0.985  );
+			bool is_hks_dif = std::abs((hks_i - hks_j)) < 0.03;
+			/*for (size_t k = 0; k < histogram_size; k++)
+			{
+				histogram_vec_j.push_back(hks_j);
+			}*/
+			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_left[j].histogram);
+			float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
+			//float resemblance_c = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
+			if (is_hks_dif)
+			{
+				compareResults_right.push_back({ resemblance, {i,j} });
+			}
+		}
+	}
+
+	std::vector<std::pair<int, int>> selectedPairs_r;
+	std::vector<bool> used_left_r(N_left, false);
+	std::vector<bool> used_right_r(N_right, false);
+	std::sort(compareResults_right.begin(), compareResults_right.end());
+
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compareResults_right) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used_right_r[i]  ) {
+			std::pair<float, std::pair<unsigned int, unsigned int >> pair_with_weight;
+			pair_with_weight.first = entry.first;
+			pair_with_weight.second = std::pair<unsigned int, unsigned int>(j, i);
+			resemblance_pairs_left_right.push_back(pair_with_weight);
+			used_right_r[i] = used_left_r[j] = true;  // Mark these objects as used
+		}
+	}
+
+	std::sort(resemblance_pairs_left_right.begin(), resemblance_pairs_left_right.end());
+	std::vector<bool> used;
+	if (N_left > N_right)
+	{
+		used.resize(N_left, false);
+	}
+	else
+	{
+		used.resize(N_right, false);
+	}
+	std::vector<bool> used_right(N_right, false);
+	std::vector<bool> used_left(N_left, false);
+	for (const auto& entry : resemblance_pairs_left_right)
+	{
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used_left[i] || !used_right[j])
+		{
+			used_left[i] = used_right[j] = true;
+			unsigned int p_left = trilateral_desc_left[i].p1;;
+			unsigned int p_right = trilateral_desc_right[j].p1;;
+			resemblance_pairs.push_back(std::pair<unsigned int, unsigned int >(p_left, p_right));
+		}
+	}
+	//lastly check best 
 	return resemblance_pairs;
 }
 static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pairing_histogram(std::vector<TrilateralDescriptor>& trilateral_desc_left,
@@ -3313,6 +3638,7 @@ static std::vector<std::pair<unsigned int, unsigned int>>  trilateral_unique_pai
 		float minimum_value = INFINITY;
 		for (size_t j = 0; j < N_right; j++)
 		{
+			//check dvorak
 			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_right[j].histogram);
 			float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
 			//float resemblance = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
@@ -3812,7 +4138,7 @@ static std::vector<float> computePrincipalCurvatures(MeshFactory& meshFac, int s
 
 		principalCurvatures1.push_back(eigenvalues(0));
 		principalCurvatures2.push_back(eigenvalues(2)); // Smallest and largest eigenvalues correspond to principal curvatures
-		float shape_index = -2 * PI * atan( (eigenvalues(2) - eigenvalues(0)) / (eigenvalues(0) + eigenvalues(2)));
+		float shape_index = -2 * M_PI * atan( (eigenvalues(2) - eigenvalues(0)) / (eigenvalues(0) + eigenvalues(2)));
 		if (_isnanf(shape_index))
 		{
 			int d = 1;
@@ -4129,7 +4455,12 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 		plane_center += m.vertices[i];
 	}
 	plane_center /= m.vertices.size();
-	Plane plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
+
+	Plane plane; 
+	if (!dom_sym_read_plane(mesh_fac, selected_index, plane))
+	{
+		plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
+	}
 
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;
@@ -4276,7 +4607,10 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 		plane_center += m.vertices[i];
 	}
 	plane_center /= m.vertices.size();
-	plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
+	if (!dom_sym_read_plane(mesh_fac, selected_index, plane))
+	{
+		plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
+	}
 
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;
@@ -4310,23 +4644,23 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 	{
 		std::vector<int> global_is_visited(m.vertices.size(), OUTSIDE);
 		std::vector<int> is_visited = trilateral_ROI(&m, desc_left[i].p1,
-			desc_left[i].p2, desc_left[i].p3, 3, false);
-		std::vector<float> histogram = histogramROi_w_HKS(mesh_fac, (int&)selected_index, desc_left[i].p1,
-			desc_left[i].p2, desc_left[i].p3, 3, is_visited, global_is_visited);
+			desc_left[i].p2, desc_left[i].p3, 10, false);
+		std::vector<float> histogram = histogram_roi_superior(mesh_fac, (int&)selected_index, desc_left[i].p1,
+			desc_left[i].p2, desc_left[i].p3, 10, is_visited, global_is_visited);
 		desc_left[i].histogram = histogram;
 	}
 	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
 	{
 		std::vector<int> global_is_visited(m.vertices.size(), OUTSIDE);
 		std::vector<int> is_visited = trilateral_ROI(&m, desc_right[i].p1,
-			desc_right[i].p2, desc_right[i].p3, 3, false);
-		std::vector<float> histogram = histogramROi_w_HKS(mesh_fac, (int&)selected_index, desc_right[i].p1,
-			desc_right[i].p2, desc_right[i].p3, 3, is_visited, global_is_visited);
+			desc_right[i].p2, desc_right[i].p3, 10, false);
+		std::vector<float> histogram = histogram_roi_superior(mesh_fac, (int&)selected_index, desc_right[i].p1,
+			desc_right[i].p2, desc_right[i].p3, 10, is_visited, global_is_visited);
 		desc_right[i].histogram = histogram;
 	}
 	// write a function for comparing two descriptor
 	//irrelevant constants 
-	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = trilateral_unique_pairing_histogram_w_HKS(&m , desc_left,
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = trilateral_unique_pairing_histogram_w_HKS(&m, desc_left,
 		desc_right);//point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
 
 	//check their gaussian curvature
