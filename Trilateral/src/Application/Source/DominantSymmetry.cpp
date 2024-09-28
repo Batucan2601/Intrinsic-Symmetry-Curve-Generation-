@@ -9,11 +9,11 @@ using Eigen::MatrixXd;
 
 static Plane rotate_plane(Plane plane, float rotation_degree);
 
-Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac , int sym_iter_no) 
+Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac , float convergence_ratio) 
 {
 	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
 	
-	Plane plane = generate_dominant_symmetry_plane(mesh , sym_iter_no);
+	Plane plane = generate_dominant_symmetry_plane(mesh , convergence_ratio) ;
 
 	float s = mesh.vertices.size();
 	glm::vec3 m(0.0f, 0.0f, 0.0f);
@@ -26,10 +26,14 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	Mesh plane_mesh = generate_mesh_from_plane(&plane, &m);
 	mesh_fac.add_mesh(plane_mesh);
 
+
+	mesh_fac.remove_all();
+	mesh_fac.add_all();
+
 	return plane;
 	
 }
-Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
+Plane generate_dominant_symmetry_plane(Mesh mesh , float convergence_ratio )
 {
 	// generate PCA weights are same and 1 for now 
 	float s = mesh.vertices.size();
@@ -245,7 +249,7 @@ Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_iter_no)
 		// convergence formula
 		float convergence = sqrt(pow((A_A - B_A), 2) + pow((A_B - B_B), 2) + pow((A_C - B_C), 2) + pow((A_D - B_D), 2) );
 		sym_no++;
-		if (convergence < 0.1)
+		if (convergence < convergence_ratio)
 		{
 			break; 
 		}

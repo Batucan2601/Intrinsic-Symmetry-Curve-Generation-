@@ -1,8 +1,8 @@
 #pragma once 
 #include "MeshFactory.h"
 #include "CoreTypeDefs.h"
-Plane generate_dominant_symmetry_plane(int seletected_mesh , MeshFactory & mesh_fac , int sym_plane_iter);
-Plane generate_dominant_symmetry_plane(Mesh mesh , int sym_plane_iter);
+Plane generate_dominant_symmetry_plane(int seletected_mesh , MeshFactory & mesh_fac , float sym_plane_iter);
+Plane generate_dominant_symmetry_plane(Mesh mesh , float sym_plane_iter);
 Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point , Mesh mesh);
 
 void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2);

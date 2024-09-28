@@ -13,6 +13,7 @@
 #include <map>
 #include "Include/Sampling.h"
 #include "Include/Mesh_imgui.h"
+#include "Include/ImguiMenuBar.h"
 #include "Include/Ray.h"
 
 //include prototypes

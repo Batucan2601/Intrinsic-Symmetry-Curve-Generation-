@@ -31,7 +31,7 @@ set(Header_Files
     "src/Application/Include/Geodesic.h"
     "src/Application/Include/DvorakEstimatingApprox.h"
     "src/Application/Include/HeatKernelSignature.h"
-
+    "src/Application/Include/ImguiMenuBar.h"
 
 
 )
@@ -41,7 +41,6 @@ set(Source_Files
     "src/Application/main.cpp"
     "src/Application/Source/Mesh.cpp"
     "src/Application/Source/MeshFactory.cpp"
-    "src/Application/Source/Vehicle.cpp"
     "src/Application/Source/Sampling.cpp"
     "src/Application/Source/Laplace-Beltrami.cpp"
     "src/Application/Source/DominantSymmetry.cpp"
@@ -69,6 +68,8 @@ set(Source_Files
     "src/Application/Source/Geodesic.cpp"
     "src/Application/Source/DvorakEstimatingApprox.cpp"
     "src/Application/Source/HeatKernelSignature.cpp"
+    "src/Application/Source/ImguiMenuBar.cpp"
+
 
 )
 source_group("Source Files" FILES ${Source_Files})
@@ -82,6 +83,10 @@ set(ALL_FILES
 # Target
 ################################################################################
 add_executable(${PROJECT_NAME} ${ALL_FILES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib/src)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib)
+target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 
 use_props(${PROJECT_NAME} "${CMAKE_CONFIGURATION_TYPES}" "${DEFAULT_CXX_PROPS}")
 set(ROOT_NAMESPACE Trilateral)
