@@ -1,5 +1,5 @@
 #include "../Include/CoreTypeDefs.h"
-#include <src/Application/Include/TrilateralMap.h>
+#include "../Include/TrilateralMap.h"
 
 Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 {

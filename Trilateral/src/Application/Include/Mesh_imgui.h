@@ -3,7 +3,7 @@
 #include "../Include/TrilateralMap.h"
 #include "../Include/Sampling.h"
 #include "../Include/Laplace-Beltrami.h"
-#include <src/Application/Include/DominantSymmetry.h>
+#include "../Include/DominantSymmetry.h"
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/Skeleton.h"
@@ -11,8 +11,8 @@
 #include "../Include/ShapeDiameter.h"
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
+#include "../Include/SkeletalNLateral.h"
 
-#include <src/Application/Include/SkeletalNLateral.h>
 bool if_bilateral_map = true;
 bool if_isocurve_selected = false;
 bool if_bilateral_map_selected = true;

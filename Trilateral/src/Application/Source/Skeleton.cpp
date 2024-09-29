@@ -1,10 +1,10 @@
 #include "../Include/Skeleton.h"
 #include "../Include/Mesh.h"
 #include "../Include/ShapeDiameter.h"
+#include "../Include/MeshFactory.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <src/Application/Include/MeshFactory.h>
 #include <GL/glew.h>
 #include <unordered_set>
 #include <eigen/Eigen/Dense>

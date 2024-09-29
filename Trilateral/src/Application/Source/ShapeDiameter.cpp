@@ -1,5 +1,5 @@
 #include "../Include/ShapeDiameter.h"
-#include <src/Application/Include/Ray.h>
+#include "../Include/Ray.h"
 #include "glm/glm.hpp"
 #define _USE_MATH_DEFINES //for pi 
 #include <math.h>

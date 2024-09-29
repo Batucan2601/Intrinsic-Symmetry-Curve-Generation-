@@ -12,7 +12,7 @@
 #include "Sampling.h"
 #include "CoreTypeDefs.h"
 #include "FuzzyGeodesic.h"
-#include <src/Application/Include/CoreTypeDefs.h>
+#include "../Include/CoreTypeDefs.h"
 #include "../Include/Skeleton.h"
 
 // 1 - use area error
