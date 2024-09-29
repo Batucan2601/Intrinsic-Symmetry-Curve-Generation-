@@ -1,5 +1,5 @@
 #include "../Include/Skeleton.h"
-#include "../Include/Mesh.h"
+#include "../Include/TrilateralMesh.h"
 #include "../Include/ShapeDiameter.h"
 #include "../Include/MeshFactory.h"
 #include <iostream>
@@ -18,7 +18,7 @@ std::vector<float> generate_bounding_box(std::string file_name)
 	int line_count = 0;
 	ifstream indata; // indata is like cin
 	
-	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
+	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
 		return bounding_box;
@@ -53,7 +53,7 @@ std::map<std::string, glm::vec3 > generate_skeleton_keypoints(std::string file_n
 	int line_count = 0;
 	ifstream indata; // indata is like cin
 
-	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
+	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
 		return keypoints;
@@ -95,7 +95,7 @@ std::map<std::string, glm::vec3 > generate_skeleton_keypoints(std::string file_n
 	return keypoints;
 }
 
-void match_skeleton_keypoints( MeshFactory& meshFactory ,Mesh* m , std::vector<float>& skeleton_bounding_box, std::map<std::string, glm::vec3>& keypoints)
+void match_skeleton_keypoints( MeshFactory& meshFactory ,TrilateralMesh* m , std::vector<float>& skeleton_bounding_box, std::map<std::string, glm::vec3>& keypoints)
 {
 	// 1- find the box in world space
 	std::vector<float> bb_mesh;
@@ -497,7 +497,7 @@ std::vector<float> generate_skeleton_lines(std::string file_name)
 	std::vector<float> skeleton_lines;
 	int line_count = 0;
 	ifstream indata; // indata is like cin
-	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
+	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
 		return skeleton_lines;
@@ -538,7 +538,7 @@ std::vector<float> generate_skeleton_lines(std::string file_name)
 	return skeleton_lines;
 }
 
-void match_skeleton_lines(MeshFactory& meshFactory, Mesh* m, std::vector<float>& skeleton_bounding_box, std::vector<float> skeleton_lines)
+void match_skeleton_lines(MeshFactory& meshFactory, TrilateralMesh* m, std::vector<float>& skeleton_bounding_box, std::vector<float> skeleton_lines)
 {
 	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_lines;
 
@@ -709,7 +709,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	Skeleton skeleton; 
 	std::vector<SkeletonFormat> skeletonPoints;
 	ifstream indata; // indata is like cin
-	indata.open("../../Trilateral/Mesh/off/KIDS_skeleton/" + file_name);
+	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
 		return skeleton;
@@ -815,7 +815,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	
 	//lastly get midpoint and get the closest vertex
 	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
-	Mesh* m = &meshFactory.mesh_vec[0];
+	TrilateralMesh* m = &meshFactory.mesh_vec[0];
 	mid_point =  mesh_generate_weighted_mid_point(m);
 
 	//check the closest vertex in skeleton
@@ -1018,7 +1018,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone ,
 std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_left_points )
 {
-	Mesh* mesh = &meshFac.mesh_vec[mesh_index];
+	TrilateralMesh* mesh = &meshFac.mesh_vec[mesh_index];
 	int N = skeleton.skeletonFormat.size();
 	std::vector<unsigned int> end_point_indices;
 	for (size_t i = 0; i < N; i++)
@@ -1383,7 +1383,7 @@ void skeleton_get_distance_and_vertex_list(Skeleton&skeleton,
 
 
 
-void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, Mesh* m, std::vector<unsigned int >& mesh_vertex_indices)
+void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, TrilateralMesh* m, std::vector<unsigned int >& mesh_vertex_indices)
 {
 	std::vector<unsigned int> end_points;
 	skeleton_get_end_points(skeleton , end_points);
@@ -1580,7 +1580,7 @@ void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector
 	return;
 }
 
-unsigned int skeleton_calculate_closest_mesh_point(Skeleton& skeleton, Mesh* m, unsigned int skeleton_point_index)
+unsigned int skeleton_calculate_closest_mesh_point(Skeleton& skeleton, TrilateralMesh* m, unsigned int skeleton_point_index)
 {
 	std::vector<unsigned int> end_points;
 	skeleton_get_end_points(skeleton, end_points);
@@ -1667,7 +1667,7 @@ std::pair<std::vector<std::pair<int, int>>,float> do_unique_pairing(std::vector<
 void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
 	BackBone& best_backbone, std::vector<unsigned int>& right_points, std::vector<unsigned int>& left_points)
 {
-	Mesh* mesh = &meshFac.mesh_vec[mesh_index];
+	TrilateralMesh* mesh = &meshFac.mesh_vec[mesh_index];
 	int skeleton_mid_point_index = skeleton.mid_point_index;
 	int N = skeleton.skeletonFormat.size();
 
@@ -1857,7 +1857,7 @@ void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skelet
 	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.skeleton_points.size() * sizeof(float), &meshFac.mesh_skeleton_vec.skeleton_points[0], GL_STATIC_DRAW);
 }
 
-float skeleton_get_backbone_length(Mesh* m, BackBone* backBone)
+float skeleton_get_backbone_length(TrilateralMesh* m, BackBone* backBone)
 {
 	float total_length = 0;
 	for (size_t i = 0; i < backBone->vertex_list.size()-1; i++)
@@ -1871,7 +1871,7 @@ float skeleton_get_backbone_length(Mesh* m, BackBone* backBone)
 	return total_length;
 }
 
-void skeleton_divide_end_points_left_right(Mesh* mesh, Skeleton& skeleton, std::vector<int> end_point_indices, BackBone candidate_backbone,
+void skeleton_divide_end_points_left_right(TrilateralMesh* mesh, Skeleton& skeleton, std::vector<int> end_point_indices, BackBone candidate_backbone,
  std::vector<std::vector<int>>& end_point_vertex_list,std::vector<std::vector<float>>& end_point_distances,
 std::vector<int>& left_points , std::vector<int>& right_points)
 {
@@ -1890,7 +1890,7 @@ std::vector<int>& left_points , std::vector<int>& right_points)
 }
 
 //used for ladnmarked meshes 
-void skeleton_left_right_test_for_endpoint(Mesh* m , Skeleton* skeleton,
+void skeleton_left_right_test_for_endpoint(TrilateralMesh* m , Skeleton* skeleton,
 std::vector<int>& right, std::vector<int>& left)
 {
 	

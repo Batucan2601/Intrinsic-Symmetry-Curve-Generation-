@@ -1,7 +1,7 @@
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/TrilateralMap.h"
 
-Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
+TrilateralMesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 {
 	// a(x - x0) + b(y - y0) + c(z - z0) = 0
 	// only increase in y and z 
@@ -30,7 +30,7 @@ Mesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 	p4.y = m->y + 200.0f;
 	p4.z = -(plane->normal.x * (p4.x - m->x) + plane->normal.y * (p4.y - m->y)) / plane->normal.z + m->z;
 
-	Mesh plane_mesh(&p1,&p2,&p3,&p4); 
+	TrilateralMesh plane_mesh(&p1,&p2,&p3,&p4); 
 	return plane_mesh;
 }
 

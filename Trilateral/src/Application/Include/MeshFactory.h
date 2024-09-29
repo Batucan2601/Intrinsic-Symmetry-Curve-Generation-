@@ -12,7 +12,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "happly.h"
-#include "../Include/Mesh.h"
+#include "../Include/TrilateralMesh.h"
 
 
 #define INFINITY 10000000
@@ -32,7 +32,7 @@ class MeshFactory
 public:
 	MeshFactory();
 	~MeshFactory();
-	void add_mesh(Mesh &m);
+	void add_mesh(TrilateralMesh &m);
 	void buffer_meshes();
 	void draw_meshes();
 	void draw_mesh(int mesh_no);
@@ -44,7 +44,7 @@ public:
 	void add_lines_between_meshes(int mesh_index1, int mesh_index2, int p1, int p2);
 	void get_camera_and_projection(glm::mat4 view_, glm::mat4  projection_);
 	void remove_lines();
-	std::vector<Mesh> mesh_vec;
+	std::vector<TrilateralMesh> mesh_vec;
 	std::vector<MeshPointPairs> mesh_point_pairs; //point paris for each mesh
 	std::vector<glm::vec3> points;
 	std::vector<glm::vec3> colors;

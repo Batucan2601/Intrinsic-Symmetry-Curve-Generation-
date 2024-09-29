@@ -1,6 +1,6 @@
 #pragma once
 #include "MeshFactory.h"
-#include "Mesh.h"
+#include "TrilateralMesh.h"
 
 typedef struct {
 	float fuzziness;
@@ -16,5 +16,5 @@ typedef struct
 
 
 
-FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex, float sigma);
-float FuzzyGeodesic_FuzzyArea(Mesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );
+FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(TrilateralMesh* m, int startIndex, int endIndex, float sigma);
+float FuzzyGeodesic_FuzzyArea(TrilateralMesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );

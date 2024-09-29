@@ -1,4 +1,6 @@
-#pragma once
+/*#pragma once
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <imgui/implot.h>
 #include <imgui/implot_internal.h>
 void imgui_new_frame()
@@ -37,7 +39,7 @@ void imgui_histogram( std::vector<float> &histogram  , int partition_size )
         ImPlot::EndPlot();
     }
     ImGui::End();
-}
+} */
 
 
 

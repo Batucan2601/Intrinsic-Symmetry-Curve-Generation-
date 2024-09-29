@@ -34,9 +34,9 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
             if (ImGui::MenuItem("Redo")) { /* Redo action */ }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Mesh"))
+        if (ImGui::BeginMenu("TrilateralMesh"))
         {
-            if (ImGui::MenuItem("Save Mesh")) { imgui_menubar_save_mesh(selected_mesh, mesh_fac); }
+            if (ImGui::MenuItem("Save TrilateralMesh")) { imgui_menubar_save_mesh(selected_mesh, mesh_fac); }
             if (ImGui::BeginMenu("Trilateral "))
             {
                 ImGui::EndMenu();
@@ -48,7 +48,7 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
                     if (ImGui::InputInt("no of points ", &dvorak_no_of_significant_points));
                     if (ImGui::MenuItem("Show"))
                     {
-                        Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
+                        TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
                         dvorak_show_signifcant_points(m, dvorak_no_of_significant_points);
                         mesh_fac.remove_all();
                         mesh_fac.add_all();
@@ -75,8 +75,8 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
 // do this for spectral
 static void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac)
 {
-    Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
-    std::string file_name = "C:\\Users\\BATU\\Desktop\\Master\\Trilateral\\Trilateral\\Mesh\\off\\spectral_mesh.off";
+    TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
+    std::string file_name = "C:\\Users\\BATU\\Desktop\\Master\\Trilateral\\Trilateral\\TrilateralMesh\\off\\spectral_mesh.off";
     std::ofstream outFile(file_name);
 
     if (!outFile) {

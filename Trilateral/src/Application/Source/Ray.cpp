@@ -2,7 +2,7 @@
 #include "../Include/CoreTypeDefs.h"
 #include "glm/glm.hpp"
 
-bool ray_triangle_intersection(Ray& ray, glm::vec3 vertex0, glm::vec3 vertex1, glm::vec3 vertex2, glm::vec3& hitpoint)
+bool ray_triangle_intersection(TrilateralRay& ray, glm::vec3 vertex0, glm::vec3 vertex1, glm::vec3 vertex2, glm::vec3& hitpoint)
 {
     glm::vec3 edge1, edge2, h, s, q;
     float a, f, u, v;

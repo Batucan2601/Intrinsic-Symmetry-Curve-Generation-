@@ -7,7 +7,7 @@
 
 #pragma region Nlateral struct
 
-NLateralDescriptor::NLateralDescriptor(Mesh& mesh, const std::vector<unsigned int>& point_indices, int N)
+NLateralDescriptor::NLateralDescriptor(TrilateralMesh& mesh, const std::vector<unsigned int>& point_indices, int N)
 {
 	this->point_indices = point_indices;
 	this->N = N;
@@ -94,7 +94,7 @@ void NLateralDescriptor::get_k_ring_areas(int K)
 
 
 
-NLateralDescriptor generate_NLateralDescriptor(Mesh* m, const std::vector<unsigned int>& mesh_indices  , const std::vector<bool>& parameter_checkbox
+NLateralDescriptor generate_NLateralDescriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices  , const std::vector<bool>& parameter_checkbox
 	, const std::vector<float>& parameter_weights, const std::vector<std::string>& parameter_names)
 {
 	NLateralDescriptor nlateralDescriptor( *m ,  mesh_indices , mesh_indices.size());
@@ -131,7 +131,7 @@ NLateralDescriptor generate_NLateralDescriptor(Mesh* m, const std::vector<unsign
 	return nlateralDescriptor;
 }
 
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Mesh* m, std::vector<unsigned int>& indices
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(TrilateralMesh* m, std::vector<unsigned int>& indices
 , NLateralParameters N_LATERAL_PARAMETERS)
 {
 	int N = N_LATERAL_PARAMETERS.N;
@@ -191,7 +191,7 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_furthest_pairs(Me
 	}
 	return nLateralDescVec;
 }
-std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Mesh* m, std::vector<unsigned int>& indices,  NLateralParameters N_LATERAL_PARAMETERS )
+std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(TrilateralMesh* m, std::vector<unsigned int>& indices,  NLateralParameters N_LATERAL_PARAMETERS )
 {
 	int N = N_LATERAL_PARAMETERS.N;
 	std::vector<NLateralDescriptor> nLateralDescVec;
@@ -287,9 +287,9 @@ NLateralParameters::NLateralParameters()
 
 void start_n_lateral_algorithm(MeshFactory& mesh_fac, int selected_mesh, NLateralParameters N_LATERAL_PARAMETERS)
 {
-	Mesh* mesh = &mesh_fac.mesh_vec[selected_mesh];
+	TrilateralMesh* mesh = &mesh_fac.mesh_vec[selected_mesh];
 
-	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, 3); // 3 is as always 
+	TrilateralMesh L_MDS_mesh = compute_landmark_MDS(mesh, 3); // 3 is as always 
 	//calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
 	for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
@@ -419,7 +419,7 @@ void start_n_lateral_algorithm(MeshFactory& mesh_fac, int selected_mesh, NLatera
 
 }
 
-std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors(Mesh* m, const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right,
+std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors(TrilateralMesh* m, const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right,
 	NLateralParameters N_LATERAL_PARAMETERS)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
@@ -563,7 +563,7 @@ std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descri
 	return resemblance_pairs;
 }
 
-void NLateral_parameters_calculate_maximums(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>& left , std::vector<unsigned int>& right)
+void NLateral_parameters_calculate_maximums(TrilateralMesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>& left , std::vector<unsigned int>& right)
 {
 	// for each parameter calculate the maximum in order to normalize the parameters to give them meaningfull weights
 	for (size_t i = 0; i < N_LATERAL_PARAMETERS.NO_OF_PARAMETERS; i++)
@@ -693,7 +693,7 @@ void start_n_lateral_algorithm_for_mesh(Skeleton& skeleton, NLateralParameters N
 }
 
 
-void start_n_lateral_algorithm_with_skeleton_end_points(Mesh* m, NLateralParameters& N_LATERAL_PARAMETERS,
+void start_n_lateral_algorithm_with_skeleton_end_points(TrilateralMesh* m, NLateralParameters& N_LATERAL_PARAMETERS,
 std::vector<unsigned int>&mesh_left_endpoints, std::vector<unsigned int>&mesh_right_endpoints)
 {
 	// trilateral computation

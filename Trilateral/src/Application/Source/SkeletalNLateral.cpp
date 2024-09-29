@@ -8,7 +8,7 @@ static unsigned int vao;
 static float maximum_sdf; // for sdf filter 
 
 static std::vector<int> get_smallest_N(const std::vector<float>& distances, int N, int index , float constraint);
-static bool compare_two_sdf_values(Mesh* m, Skeleton& skeleton, int index1, int index2, std::vector<float>& sdf_array);
+static bool compare_two_sdf_values(TrilateralMesh* m, Skeleton& skeleton, int index1, int index2, std::vector<float>& sdf_array);
 static void get_maximum_sdf(std::vector<float>& sdf_array);
 
 //only geodesic distances for skeletal end points 
@@ -128,7 +128,7 @@ float SkeletalNLateral_compareTwoSkeletalNLateral(SkeletalNLateral& nLateral1, S
 	return minimum_value;
 }
 
-std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton, Mesh* m ,
+std::vector<std::pair<int, int>> SkeletalNLateral_compare_endpoints_with_SkeletalNlateral(Skeleton& skeleton, TrilateralMesh* m ,
 int N, std::vector<float>& mesh_sdf_array)
 {
 	// declare the endpoint pairs 
@@ -319,7 +319,7 @@ void SkeletalNLateral_draw(MeshFactory& mesh_fac , unsigned int shader_id)
 
 //index1 and index2 are skeleton indices, convert them to  mesh indices an compare their sdf
 // the golden rule seems like if difference in SDF is more than 0.055MAX_SDF you return false 
-static bool compare_two_sdf_values(Mesh* m, Skeleton& skeleton, int end_point_index1, int end_point_index2, std::vector<float>& sdf_array)
+static bool compare_two_sdf_values(TrilateralMesh* m, Skeleton& skeleton, int end_point_index1, int end_point_index2, std::vector<float>& sdf_array)
 {
 
 	if (fabs(sdf_array[end_point_index1] - sdf_array[end_point_index2])  > (SDF_PARAMETER * maximum_sdf) )

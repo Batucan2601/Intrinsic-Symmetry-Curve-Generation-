@@ -1,18 +1,18 @@
 #include <GL/glew.h>
-#include "../Include/Mesh.h"
+#include "../Include/TrilateralMesh.h"
 #include "happly.h"
 #include "glm/gtc/matrix_transform.hpp"
 
 
-static void calculate_areas(Mesh* m);
+static void calculate_areas(TrilateralMesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
-static void calculate_mesh_area(Mesh* m);
+static void calculate_mesh_area(TrilateralMesh* m);
 
-Mesh::Mesh()
+TrilateralMesh::TrilateralMesh()
 {
 
 }
-Mesh::Mesh(char* filename)
+TrilateralMesh::TrilateralMesh(char* filename)
 {
 	model_mat = glm::mat4(1.0f);
 	std::string string_file_name = (std::string)filename;
@@ -43,7 +43,7 @@ Mesh::Mesh(char* filename)
 	calculate_areas(this);
 	calculate_mesh_area(this);
 }
-void Mesh::read_ply_format(char* filename)
+void TrilateralMesh::read_ply_format(char* filename)
 {
 	happly::PLYData plyIn(filename);
 	std::vector<std::array<double, 3U > > vertex_pos = plyIn.getVertexPositions();
@@ -218,7 +218,7 @@ static int countFloatsInLine(const std::string& line) {
 
 	return count;
 }
-void Mesh::read_off_format(char* filename)
+void TrilateralMesh::read_off_format(char* filename)
 {
 	// standart readeing 
 	errno = 0;
@@ -411,7 +411,7 @@ void Mesh::read_off_format(char* filename)
 	fclose(fPtr);
 }
 //plane constructor 
-Mesh::Mesh(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3, glm::vec3* p4)
+TrilateralMesh::TrilateralMesh(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3, glm::vec3* p4)
 {
 	this->model_mat = glm::mat4(1.0f);
 
@@ -434,19 +434,19 @@ Mesh::Mesh(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3, glm::vec3* p4)
 	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
 
 }
-glm::mat4 Mesh::move_mesh(glm::vec3 direction)
+glm::mat4 TrilateralMesh::move_mesh(glm::vec3 direction)
 {
 	glm::mat4 temp = glm::translate(glm::mat4(1.0f), direction);
 	return temp;
 }
-glm::mat4 Mesh::scale_mesh(glm::vec3 scale)
+glm::mat4 TrilateralMesh::scale_mesh(glm::vec3 scale)
 {
 	glm::mat4 temp = glm::scale(glm::mat4(1.0f), scale);
 	return temp;
 }
 
 
-void read_symmetry_format(char* filename, Mesh* m)
+void read_symmetry_format(char* filename, TrilateralMesh* m)
 {
 	std::ifstream symFile(filename);
 	double number = 0;
@@ -481,7 +481,7 @@ void read_symmetry_format(char* filename, Mesh* m)
 }
 
 //gives normal for each point 
-void Mesh::generate_normals()
+void TrilateralMesh::generate_normals()
 {
 	std::vector<glm::vec3> normals(this->vertices.size() , glm::vec3(0.0f,0.0f,0.0f));
 	std::vector<float> each_point_count(this->vertices.size(), 0);
@@ -532,7 +532,7 @@ void Mesh::generate_normals()
 	unsigned int vbo;
 	unsigned int ibo;
 	//need to generate new vao 
-	glGenVertexArrays(1, &this->vao_normals);
+	/*glGenVertexArrays(1, &this->vao_normals);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ibo);
 
@@ -545,13 +545,13 @@ void Mesh::generate_normals()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	glBufferData(GL_ARRAY_BUFFER, this->normals_display.size() * sizeof(float), &this->normals_display[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, this->normals_display.size() * sizeof(float), &this->normals_display[0], GL_STATIC_DRAW);*/
 
 
 }
 
 
-unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point)
+unsigned int mesh_get_closest_index(TrilateralMesh* m, const glm::vec3& point)
 {
 	unsigned int closest_distance_index = -1;
 	float closest_distance = INFINITY;
@@ -577,7 +577,7 @@ static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 	float length = glm::length(cross1) / 2;
 	return length;
 }
-static void calculate_areas(Mesh* m)
+static void calculate_areas(TrilateralMesh* m)
 {
 	m->areas = std::vector<float>(m->vertices.size(), 0);
 	for (size_t i = 0; i < m->triangles.size(); i+=3)
@@ -592,7 +592,7 @@ static void calculate_areas(Mesh* m)
 	}
 }
 
-static void calculate_mesh_area(Mesh* m )
+static void calculate_mesh_area(TrilateralMesh* m )
 {
 	m->mesh_area = 0;
 	for (size_t i = 0; i < m->triangles.size(); i += 3)
@@ -605,7 +605,7 @@ static void calculate_mesh_area(Mesh* m )
 	}
 }
 
-glm::vec3 mesh_generate_weighted_mid_point(Mesh* m) //supposed to be best way
+glm::vec3 mesh_generate_weighted_mid_point(TrilateralMesh* m) //supposed to be best way
 {
 	glm::vec3 midpoint = glm::vec3(0, 0, 0);
 	float biggest_triangle = -INFINITY; 
@@ -641,7 +641,7 @@ glm::vec3 mesh_generate_weighted_mid_point(Mesh* m) //supposed to be best way
 
 // computes all of the areas of triangle for each point
 // normalizes for each point
-std::vector<float> mesh_point_surfel_normalized(Mesh* m)
+std::vector<float> mesh_point_surfel_normalized(TrilateralMesh* m)
 {
 	std::vector<float> triangles_normalized(m->vertices.size() , 0);
 	glm::vec3 midpoint = glm::vec3(0, 0, 0);

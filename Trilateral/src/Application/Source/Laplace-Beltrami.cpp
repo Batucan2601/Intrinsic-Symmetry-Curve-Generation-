@@ -15,7 +15,7 @@ static double cotangent(const glm::vec3& v1, const glm::vec3& v2) {
 }
 
 // Function to compute the area of the Voronoi region around a vertex
-static double voronoi_area(const Mesh& mesh, int vertex) {
+static double voronoi_area(const TrilateralMesh& mesh, int vertex) {
 	double area = 0.0;
 	for (int i = 0; i < mesh.triangles.size(); i += 3 ) {
 		if ( mesh.triangles[i] == vertex || mesh.triangles[i + 1] == vertex || mesh.triangles[i + 2] == vertex) {
@@ -33,7 +33,7 @@ static double voronoi_area(const Mesh& mesh, int vertex) {
 }
 
 // Function to assemble the cotangent Laplacian matrix
-Eigen::SparseMatrix<double> cotangent_laplacian(const Mesh& mesh)
+Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 {
 	int n = mesh.vertices.size();
 	Eigen::SparseMatrix<double> L(n, n);
@@ -116,7 +116,7 @@ bool check_if_matrix_symmetric(const Eigen::SparseMatrix<double>& mat)
 	return true;
 }
 // Function to compute the Laplace-Beltrami operator
-static MatrixXd laplace_beltrami(const Mesh& mesh) {
+static MatrixXd laplace_beltrami(const TrilateralMesh& mesh) {
 	MatrixXd L = cotangent_laplacian(mesh);
 	int n = mesh.vertices.size();
 	MatrixXd A = MatrixXd::Zero(n, n);
@@ -129,7 +129,7 @@ static MatrixXd laplace_beltrami(const Mesh& mesh) {
 }
 
 // Function to embed the original vertices to a 2D domain
-MatrixXd embed_mesh_to_2d(Mesh& mesh) {
+MatrixXd embed_mesh_to_2d(TrilateralMesh& mesh) {
 
 	// Compute Laplace-Beltrami operator
 	MatrixXd L = laplace_beltrami(mesh);
@@ -162,7 +162,7 @@ MatrixXd embed_mesh_to_2d(Mesh& mesh) {
 	return embedding;
 }
 
-Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLateralParameters& nLateralParameters )
+Eigen::MatrixXd embed_mesh_endpoints_to_2d(TrilateralMesh& mesh, Skeleton& skeleton, NLateralParameters& nLateralParameters )
 {
 	std::vector<unsigned int> mesh_indices; //for skeleton end points
 	std::vector<NLateralDescriptor> n_lateral_list;
@@ -170,7 +170,7 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 	int size_of_endpoints = 0;
 	skeleton_calculate_closest_mesh_points(skeleton ,&mesh , mesh_indices);
 	n_lateral_list = get_N_lateral_descriptor_using_closest_pairs(&mesh, mesh_indices, nLateralParameters);
-	Mesh mesh_endpoints = mesh;
+	TrilateralMesh mesh_endpoints = mesh;
 	mesh_endpoints.colors.clear();
 	mesh_endpoints.vertices.clear();
 	mesh_endpoints.triangles.clear();
@@ -245,7 +245,7 @@ Eigen::MatrixXd embed_mesh_endpoints_to_2d(Mesh& mesh, Skeleton& skeleton, NLate
 
 
 // non auto generated.
-MatrixXd generate_L(Mesh* mesh)
+MatrixXd generate_L(TrilateralMesh* mesh)
 {
 	// method =>  L = A_-1 (D - W )
 	MatrixXd L(mesh->vertices.size(), mesh->vertices.size());
@@ -270,7 +270,7 @@ MatrixXd generate_L(Mesh* mesh)
 	// for now !! 
 	return A;
 }
-MatrixXd generate_W_cotangent_laplacian(Mesh* mesh)
+MatrixXd generate_W_cotangent_laplacian(TrilateralMesh* mesh)
 {
 	MatrixXd W(mesh->vertices.size(), mesh->vertices.size());
 	for (size_t i = 0; i < mesh->triangles.size(); i+= 3 )
@@ -299,7 +299,7 @@ MatrixXd generate_W_cotangent_laplacian(Mesh* mesh)
 	}
 	return W;
 }
-Eigen::MatrixXd generate_A(Mesh* mesh)
+Eigen::MatrixXd generate_A(TrilateralMesh* mesh)
 {
 	MatrixXd A(mesh->vertices.size(), mesh->vertices.size());
 	for (size_t i = 0; i < mesh->triangles.size(); i += 3)

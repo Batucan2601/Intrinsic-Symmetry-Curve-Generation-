@@ -8,7 +8,7 @@
 int no_of_samples = 10 ;
 int no_of_eigen_val = 3;
 
-void HKS_extract_kernel_signature(Mesh* m)
+void HKS_extract_kernel_signature(TrilateralMesh* m)
 {
 	Eigen::SparseMatrix<double>  cotangent_mat_sparse = cotangent_laplacian(*m);
 	cotangent_mat_sparse = normalize_laplacian(cotangent_mat_sparse);
@@ -91,10 +91,10 @@ void HKS_extract_kernel_signature(Mesh* m)
 
 }
 
-void HKS_read_kernel_signature(Mesh* m)
+void HKS_read_kernel_signature(TrilateralMesh* m)
 {
 	//go read the hks file 
-	std::string path = "../../Trilateral/Mesh/off/HKS/";
+	std::string path = "../../Trilateral/TrilateralMesh/off/HKS/";
 	std::string file_name = m->file_name;
 	std::string to_insert = ".hks";
 	file_name.insert(file_name.size() - 4, to_insert);

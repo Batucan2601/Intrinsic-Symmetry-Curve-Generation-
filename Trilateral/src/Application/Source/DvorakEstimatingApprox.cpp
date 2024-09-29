@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES 
 #include "../Include/DvorakEstimatingApprox.h"
 #include <cmath>
-float gaussian_curvature(Mesh* mesh , int index )
+float gaussian_curvature(TrilateralMesh* mesh , int index )
 {
 	float area = mesh->areas[index];
 	float A_i = area / 3; // voronoi
@@ -32,7 +32,7 @@ float gaussian_curvature(Mesh* mesh , int index )
 	gaussian_curvature = 1.0 / A_i * (2 * M_PI - phi);
 	return gaussian_curvature;
 }
-std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, int P)
+std::vector<DvorakPairs> dvorak_extraction_of_significant_points(TrilateralMesh* m, int P)
 {
 	std::vector<DvorakPairs> dvorak_pairs;
 	int N = m->vertices.size();
@@ -62,7 +62,7 @@ std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, int P)
 	return dvorak_pairs;
 
 }
-std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, std::vector<unsigned int> & indices )
+std::vector<DvorakPairs> dvorak_extraction_of_significant_points(TrilateralMesh* m, std::vector<unsigned int> & indices )
 {
 	std::vector<DvorakPairs> dvorak_pairs;
 	int N = m->vertices.size();
@@ -94,7 +94,7 @@ std::vector<DvorakPairs> dvorak_extraction_of_significant_points(Mesh* m, std::v
 
 Plane dvorak_generate_plane(MeshFactory& mesh_fac, int selected_index , int P , float S , float c_min_norm)
 {
-	Mesh* m = &mesh_fac.mesh_vec[selected_index];
+	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_index];
 	int N = m->vertices.size();
 	std::vector<DvorakPairs> significant_points = dvorak_extraction_of_significant_points(m, P);
 	std::vector<std::pair<int,int>> best_pairs = dvorak_chose_criterion( m , significant_points , S , c_min_norm );
@@ -112,7 +112,7 @@ bool dvorak_curvature_similarity_criterion(std::vector<DvorakPairs>& best_pairs,
 	}
 	return false;
 }
-bool dvorak_normal_angle_criterion(Mesh* m , std::vector<DvorakPairs>& best_pairs, int index1 , int index2 , float c_min_norm)
+bool dvorak_normal_angle_criterion(TrilateralMesh* m , std::vector<DvorakPairs>& best_pairs, int index1 , int index2 , float c_min_norm)
 {
 	glm::vec3 x_i_x_j = m->vertices[best_pairs[index1].p_index] - m->vertices[best_pairs[index2].p_index];
 	glm::vec3 n_i_n_j = m->normals[best_pairs[index1].p_index] - m->normals[best_pairs[index2].p_index];
@@ -127,7 +127,7 @@ bool dvorak_normal_angle_criterion(Mesh* m , std::vector<DvorakPairs>& best_pair
 	return false; 
 }
 
-std::vector<std::pair<int, int>> dvorak_chose_criterion(Mesh* m , std::vector<DvorakPairs>& significant_points , float S , float c_min_norm )
+std::vector<std::pair<int, int>> dvorak_chose_criterion(TrilateralMesh* m , std::vector<DvorakPairs>& significant_points , float S , float c_min_norm )
 {
 	std::vector<std::pair<int, int>> criter_pairs;
 	// check for each pair
@@ -162,7 +162,7 @@ std::vector<std::pair<int, int>> dvorak_chose_criterion(Mesh* m , std::vector<Dv
 	return criter_pairs;
 }
 
-std::vector<Plane> dvorak_generate_candidate_planes(Mesh* m, std::vector<std::pair<int, int>>& best_pairs ) 
+std::vector<Plane> dvorak_generate_candidate_planes(TrilateralMesh* m, std::vector<std::pair<int, int>>& best_pairs ) 
 {
 	std::vector<Plane> planes; 
 	for (size_t i = 0; i < best_pairs.size(); i++)
@@ -177,7 +177,7 @@ std::vector<Plane> dvorak_generate_candidate_planes(Mesh* m, std::vector<std::pa
 }
 
 
-void dvorak_show_signifcant_points(Mesh* m , int P )
+void dvorak_show_signifcant_points(TrilateralMesh* m , int P )
 {
 	std::vector<DvorakPairs> dvorak_pairs  = dvorak_extraction_of_significant_points(m, P);
 	for (size_t i = 0; i < P; i++)

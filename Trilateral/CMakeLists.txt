@@ -6,7 +6,7 @@ set(PROJECT_NAME Trilateral)
 set(Header_Files
     "src/Application/Include/Callback.h"
     "src/Application/Include/imgui_stuff.h"
-    "src/Application/Include/Mesh.h"
+    "src/Application/Include/TrilateralMesh.h"
     "src/Application/Include/Mesh_imgui.h"
     "src/Application/Include/MeshFactory.h"
     "src/Application/Include/MeshFunctions.h"
@@ -32,6 +32,12 @@ set(Header_Files
     "src/Application/Include/DvorakEstimatingApprox.h"
     "src/Application/Include/HeatKernelSignature.h"
     "src/Application/Include/ImguiMenuBar.h"
+    
+    "src/External/Include/rlImGui/imgui_impl_raylib.h"
+    "src/External/Include/rlImGui/rlImgui.h"
+    "src/External/Include/rlImGui/rlImGuiColors.h"
+
+
 
 
 )
@@ -39,7 +45,7 @@ source_group("Header Files" FILES ${Header_Files})
 
 set(Source_Files
     "src/Application/main.cpp"
-    "src/Application/Source/Mesh.cpp"
+    "src/Application/Source/TrilateralMesh.cpp"
     "src/Application/Source/MeshFactory.cpp"
     "src/Application/Source/Sampling.cpp"
     "src/Application/Source/Laplace-Beltrami.cpp"
@@ -70,6 +76,8 @@ set(Source_Files
     "src/Application/Source/HeatKernelSignature.cpp"
     "src/Application/Source/ImguiMenuBar.cpp"
 
+    "src/External/Include/rlImGui/rlImgui.cpp"
+
 
 )
 source_group("Source Files" FILES ${Source_Files})
@@ -87,6 +95,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC  "$ENV{SolutionDIr}/Trilateral
             "${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib/src)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/imgui)
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib)
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 

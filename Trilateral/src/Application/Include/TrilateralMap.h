@@ -29,14 +29,14 @@ struct TrilateralError
 
 //static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
 
-std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index);
+std::vector<float> compute_geodesic_distances_min_heap_distances(TrilateralMesh& m, int point_index);
 
 void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selected_index, int p1, int p2, int p3);
 
 
 /*static float* trilateral_ROI(MeshFactory& mesh_fac  , int& selected_index, int point_index1, int point_index2, int point_index3, int division_no) // tau is the closeness division_no is the no of how much you want to separate
 {
-	Mesh m = mesh_fac.mesh_vec[selected_index];
+	TrilateralMesh m = mesh_fac.mesh_vec[selected_index];
 	int* is_close = new int[m.vertices.size()];
 	int* is_in_path = new int[m.vertices.size()];
 	float* minimum_distance = new float[m.vertices.size()];
@@ -319,9 +319,9 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	return tau_chart; 
 }*/
 std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(MeshFactory& mesh_fac, const int& selected_index, std::vector<unsigned int>& indices);
-std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(Mesh*m, std::vector<unsigned int>& indices);
-std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(Mesh*m, std::vector<unsigned int>& indices);
-TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton_indices(Mesh*m, unsigned int point_index, 
+std::vector<TrilateralDescriptor> get_trilateral_points_using_closest_pairs(TrilateralMesh*m, std::vector<unsigned int>& indices);
+std::vector<TrilateralDescriptor> get_trilateral_points_using_furthest_pairs(TrilateralMesh*m, std::vector<unsigned int>& indices);
+TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton_indices(TrilateralMesh*m, unsigned int point_index, 
 std::vector<unsigned int>& skeleton_indices);
 
 
@@ -339,20 +339,20 @@ std::vector<float> histogram_roi_superior(MeshFactory& mesh_fac, int& selected_i
 
 // the ultimate trilateral descriptor generator 
 TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);
-TrilateralDescriptor  generate_trilateral_descriptor(Mesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
+TrilateralDescriptor  generate_trilateral_descriptor(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
 
 
-std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh*m, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
+std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(TrilateralMesh*m, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight);
-std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(Mesh* m, std::vector<TrilateralDescriptor>& trilateralDescVecLeft, std::vector<TrilateralDescriptor>& trilateralDescVecRight,const float& curvWeight,
+std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(TrilateralMesh* m, std::vector<TrilateralDescriptor>& trilateralDescVecLeft, std::vector<TrilateralDescriptor>& trilateralDescVecRight,const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight);
-void display_accuracy(Mesh* m, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs);
+void display_accuracy(TrilateralMesh* m, std::vector<std::pair<unsigned int, unsigned int>>& calculated_symmetry_pairs);
 
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 
 //region of interest
-std::vector<int> trilateral_ROI(Mesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color);
-void trilateral_ROI_area(Mesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
+std::vector<int> trilateral_ROI(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color);
+void trilateral_ROI_area(TrilateralMesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
 
 
 // sampling
@@ -364,7 +364,7 @@ void match_points_from2_mesh(MeshFactory& mesh_fac, int mesh_index1, int mesh_in
 std::vector<glm::vec3> generate_spectral_embedding(MeshFactory& meshFac, int mesh_index, std::vector<unsigned int> landmark_vertices);
 
 
-float get_N_ring_area(Mesh* m, float point_index , int N );
+float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
 
 
  void reset_points(MeshFactory& mesh_fac, int meshIndex);

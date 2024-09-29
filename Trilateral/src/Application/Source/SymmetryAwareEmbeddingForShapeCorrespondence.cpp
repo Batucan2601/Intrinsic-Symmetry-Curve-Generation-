@@ -6,13 +6,13 @@
 #pragma comment(linker, "/STACK:2000000")
 #pragma comment(linker, "/HEAP:1000000000")
 
-Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplification_percentage )
+Plane generate_isomap_embedding(TrilateralMesh* mesh , bool simplify_mesh , float simplification_percentage )
 {
 
 	int M = 3 ; //dimensions 
 
 	//simplification part
-	Mesh simplified_mesh = *mesh; 
+	TrilateralMesh simplified_mesh = *mesh; 
 	if (simplify_mesh)
 	{
 		srand(time(0));
@@ -257,7 +257,7 @@ Plane generate_isomap_embedding(Mesh* mesh , bool simplify_mesh , float simplifi
 	return planes[best_index];
 }
 
-float generate_symmetry_score(Mesh mesh, Plane* p1, bool is_simplify_active, std::vector<bool>* is_vertex_exist_vector)
+float generate_symmetry_score(TrilateralMesh mesh, Plane* p1, bool is_simplify_active, std::vector<bool>* is_vertex_exist_vector)
 {
 	// 1-  project the mesh triangles into the plane p1 
 	std::vector<unsigned int> triangles_positive;
@@ -451,7 +451,7 @@ Eigen::MatrixXd ComputeClassicalMds(const Eigen::MatrixXd& D, const unsigned tar
 	return X;
 }
 
-Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
+Plane generate_symmetry_plane_dividing_classical_MDS(TrilateralMesh* mesh)
 {
 	// 1 - create classical MDS
 	// 1.1 - generate NXN distance matrix
@@ -477,7 +477,7 @@ Plane generate_symmetry_plane_dividing_classical_MDS(Mesh* mesh)
 
 
 //computes landmark MDS and returns the embedded mesh
-Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks )
+TrilateralMesh compute_landmark_MDS(TrilateralMesh* mesh, const unsigned target_dim, const int no_of_landmarks )
 {
 	// 1 - get fps wit point determination
 	std::vector<unsigned int> landmark_vertex_indices = furthest_point_sampling(mesh, no_of_landmarks);
@@ -511,7 +511,7 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 		L.row(i) = sqrt(S(i)) * V.col(i).transpose();
 
 	}
-	Mesh landmark_mesh = *mesh;
+	TrilateralMesh landmark_mesh = *mesh;
 	landmark_mesh.vertices.clear();
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{
@@ -571,9 +571,9 @@ Mesh compute_landmark_MDS(Mesh* mesh, const unsigned target_dim, const int no_of
 
 	return landmark_mesh; 
 }
-Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points , float& error_percentage)
+Plane trilateral_symmetry_with_landmark_MDS_with_plane(TrilateralMesh* mesh, const unsigned target_dim, const int no_of_landmarks , const int no_of_trilateral_points , float& error_percentage)
 {
-	Mesh L_MDS_mesh = compute_landmark_MDS(mesh, target_dim);
+	TrilateralMesh L_MDS_mesh = compute_landmark_MDS(mesh, target_dim);
 	//calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
 	for (size_t i = 0; i < L_MDS_mesh.vertices.size(); i++)
@@ -673,7 +673,7 @@ Plane trilateral_symmetry_with_landmark_MDS_with_plane(Mesh* mesh, const unsigne
 	error_percentage = (float)total_error / maximum_geodesic_distance;
 	return plane;
 }
-void create_trilateral_sym_w_landmarl_with_planes(std::vector<Mesh>mesh_vector, const unsigned target_dim, const int no_of_landmarks, const int no_of_trilateral_points, std::string filename)
+void create_trilateral_sym_w_landmarl_with_planes(std::vector<TrilateralMesh>mesh_vector, const unsigned target_dim, const int no_of_landmarks, const int no_of_trilateral_points, std::string filename)
 {
 
 	//create a file
@@ -682,11 +682,11 @@ void create_trilateral_sym_w_landmarl_with_planes(std::vector<Mesh>mesh_vector, 
 	{
 		float error_percentage;
 		trilateral_symmetry_with_landmark_MDS_with_plane(&mesh_vector[i], target_dim, no_of_landmarks, no_of_trilateral_points , error_percentage);
-		txtFile << " Mesh " + std::to_string(i) + " error_percentage " + std::to_string(error_percentage) + "\n";
+		txtFile << " TrilateralMesh " + std::to_string(i) + " error_percentage " + std::to_string(error_percentage) + "\n";
 	}
 	txtFile.close();
 }
-std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(Mesh* mesh, const unsigned target_dim, std::vector<unsigned int> landmark_vertex_indices)
+std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(TrilateralMesh* mesh, const unsigned target_dim, std::vector<unsigned int> landmark_vertex_indices)
 {
 	int no_of_landmarks = landmark_vertex_indices.size();
 
@@ -719,7 +719,7 @@ std::vector<glm::vec3> compute_landmark_MDS_w_givenPoints(Mesh* mesh, const unsi
 		L.row(i) = sqrt(S(i)) * V.col(i).transpose();
 
 	}
-	Mesh landmark_mesh = *mesh;
+	TrilateralMesh landmark_mesh = *mesh;
 	landmark_mesh.vertices.clear();
 	for (size_t i = 0; i < no_of_landmarks; i++)
 	{

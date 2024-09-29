@@ -12,7 +12,7 @@ static float fuzzy_gaussian(float d_x_p, float d_x_q, float d_p_q , float sigma)
 	return res; 
 }
 
-FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, int endIndex , float fuzziness_sigma)
+FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(TrilateralMesh* m, int startIndex, int endIndex , float fuzziness_sigma)
 {
 	FuzzyGeodesicList fuzzyList; 
 	// 1 - calculate dijkstra 
@@ -51,7 +51,7 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(Mesh* m, int startIndex, 
 // use fuzziness as a direct distance
 // for each point
 // get the area covered by fuzziness around the point 
-float FuzzyGeodesic_FuzzyArea(Mesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
+float FuzzyGeodesic_FuzzyArea(TrilateralMesh* m, const FuzzyGeodesicList& fuzzyList, bool color )
 {
 	int N = m->vertices.size();
 	std::vector<int> isPath(N, false);

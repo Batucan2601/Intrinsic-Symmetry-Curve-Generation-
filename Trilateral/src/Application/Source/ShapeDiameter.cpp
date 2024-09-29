@@ -20,7 +20,7 @@ static void calculateRightUpVectors(const glm::vec3& normal, const glm::vec3& po
 	up = glm::normalize(glm::cross(right, normal));
 }
 
-void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , std::vector<float>& shape_diameter)
+void ShapeDiameter_calculate(TrilateralMesh* mesh,  std::vector<unsigned int> indices , std::vector<float>& shape_diameter)
 {
 
 	std::random_device dev;
@@ -34,7 +34,7 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 		//
 		std::vector<float> ray_distances; 
 		//generate ray
-		Ray ray; 
+		TrilateralRay ray;
 		ray.origin = mesh->vertices[indices[i]];
 		ray.direction = mesh->normals[indices[i]] * -1.0f; //inverse of normal
 		glm::vec3 cone_center = ray.origin + ray.direction * (float)CONE_HEIGHT;
@@ -47,7 +47,7 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 			//generate right and up vector
 			calculateRightUpVectors(  ray.direction , cone_center ,right , left  );
 
-			Ray random_ray;
+			TrilateralRay random_ray;
 			random_ray.origin = ray.origin;
 			glm::vec3 point_on_circle = cone_center + right * r * cos(theta) + left * r * sin(theta);
 			random_ray.direction = glm::normalize(point_on_circle - random_ray.origin);
@@ -80,7 +80,7 @@ void ShapeDiameter_calculate(Mesh* mesh,  std::vector<unsigned int> indices , st
 			}*/
 			if (closest_triangle_index == -1) //somehow normal is inverted
 			{
-				Ray random_ray_inverse = random_ray;
+				TrilateralRay random_ray_inverse = random_ray;
 				random_ray_inverse.direction = -1.0f * random_ray.direction;
 				for (size_t k = 0; k < mesh->triangles.size(); k += 3)
 				{

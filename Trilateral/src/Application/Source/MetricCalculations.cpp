@@ -5,7 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 //v6'nin ground-truth simetrik noktasi v66 ise ve senin methodun v6->v77'ye gonderdiyse o zaman geodesic(v66, v77) costun olacak;
-float Metric_get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence, bool isNormalized)
+float Metric_get_geodesic_cost(TrilateralMesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence, bool isNormalized)
 {
 	unsigned int ground_truth = 0;
 
@@ -33,7 +33,7 @@ float Metric_get_geodesic_cost(Mesh* m, unsigned int point_index1, unsigned int 
 	}
 	return dif_ground_vs_corresp; 
 }
-float Metric_get_geodesic_cost_with_list(Mesh* m, std::vector<unsigned int> point_indices, std::vector<unsigned int> calculated_index_correspondence_list)
+float Metric_get_geodesic_cost_with_list(TrilateralMesh* m, std::vector<unsigned int> point_indices, std::vector<unsigned int> calculated_index_correspondence_list)
 {
 	unsigned int N = point_indices.size();
 	float error = 0;
@@ -46,13 +46,13 @@ float Metric_get_geodesic_cost_with_list(Mesh* m, std::vector<unsigned int> poin
 	return error/N ; // return average error
 }
 
-float Metric_get_geodesic_cost(Mesh* m )
+float Metric_get_geodesic_cost(TrilateralMesh* m )
 {
 	unsigned int N = m->calculated_symmetry_pairs.size();
 	float error = 0;
 	
 	// just in case 
-	read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
+	read_symmetry_format((char*)"../../Trilateral/TrilateralMesh/off/sym.txt", m);
 
 
 	for (size_t i = 0; i < N; i++)
@@ -68,7 +68,7 @@ float Metric_get_geodesic_cost(Mesh* m )
 
 // to be fair it is really hard to sample correct indices, therefore these two metrics
 // probably wont use in the end 
-std::vector<std::pair<unsigned int , unsigned int> > Metric_get_correct_pairs(Mesh* m)
+std::vector<std::pair<unsigned int , unsigned int> > Metric_get_correct_pairs(TrilateralMesh* m)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> correct_pairs; 
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
@@ -84,7 +84,7 @@ std::vector<std::pair<unsigned int , unsigned int> > Metric_get_correct_pairs(Me
 	return correct_pairs;
 }
 
-std::vector<std::pair<unsigned int, unsigned int> > Metric_get_incorrect_pairs(Mesh* m)
+std::vector<std::pair<unsigned int, unsigned int> > Metric_get_incorrect_pairs(TrilateralMesh* m)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> incorrect_pairs;
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
@@ -107,7 +107,7 @@ area(M)
 PI*N.We take N = 20 as used in MT.
 */
 
-float Metric_get_correspondance_rate(Mesh* m)
+float Metric_get_correspondance_rate(TrilateralMesh* m)
 {
 	float threshold = sqrtf(m->mesh_area / (M_PI * m->vertices.size()));
 	float percentage = 0;
@@ -136,11 +136,11 @@ static std::string getCurrentDate() {
 	sprintf(date, "%04d-%02d-%02d-%02d-%02d-%02d", 1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday , ltm->tm_hour , ltm->tm_min , ltm->tm_sec );
 	return std::string(date);
 }
-void Metric_write_to_file(Mesh* m, const std::string& file_name)
+void Metric_write_to_file(TrilateralMesh* m, const std::string& file_name)
 {
 	std::string concat_name = file_name;
 	//just in case 
-	read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
+	read_symmetry_format((char*)"../../Trilateral/TrilateralMesh/off/sym.txt", m);
 	
 	std::ofstream out_file;
 	// Specify the file name

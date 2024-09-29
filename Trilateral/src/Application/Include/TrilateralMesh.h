@@ -13,7 +13,7 @@ struct Edge
 	glm::vec3 p2;
 	float distance;
 };
-class Mesh
+class TrilateralMesh
 {
 public:
 	std::vector<glm::vec3> vertices; //fill with constructor  
@@ -42,9 +42,9 @@ public:
 	glm::mat4 MVP;
 	//area
 	float mesh_area; 
-	Mesh();
-	Mesh(char* filename);
-	Mesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);
+	TrilateralMesh();
+	TrilateralMesh(char* filename);
+	TrilateralMesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);
 	glm::mat4 move_mesh(glm::vec3 direction);
 	glm::mat4 scale_mesh(glm::vec3 scale);
 
@@ -58,7 +58,7 @@ typedef struct
 	std::vector<float> skeleton_points;
 	std::vector<unsigned int> skeleton_indices;
 }SkeletonMesh;
-void read_symmetry_format(char* filename, Mesh* m);
-unsigned int mesh_get_closest_index(Mesh* m, const glm::vec3& point);
-glm::vec3 mesh_generate_weighted_mid_point(Mesh* m); //supposed to be best way 
-std::vector<float> mesh_point_surfel_normalized(Mesh*m );
+void read_symmetry_format(char* filename, TrilateralMesh* m);
+unsigned int mesh_get_closest_index(TrilateralMesh* m, const glm::vec3& point);
+glm::vec3 mesh_generate_weighted_mid_point(TrilateralMesh* m); //supposed to be best way 
+std::vector<float> mesh_point_surfel_normalized(TrilateralMesh*m );

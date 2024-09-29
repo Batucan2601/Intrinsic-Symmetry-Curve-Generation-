@@ -14,7 +14,7 @@ MeshFactory::~MeshFactory()
 
 }
 
-void MeshFactory::add_mesh(Mesh& m)
+void MeshFactory::add_mesh(TrilateralMesh& m)
 {
 	mesh_vec.push_back(m);
 	
@@ -128,8 +128,8 @@ void MeshFactory::remove_all()
 //{
 //	srand(time(0));
 //	no_of_lines = no_of_lines_to_draw;
-//	Mesh* m1 = &mesh_vec[mesh_no1];
-//	Mesh* m2 = &mesh_vec[mesh_no2];
+//	TrilateralMesh* m1 = &mesh_vec[mesh_no1];
+//	TrilateralMesh* m2 = &mesh_vec[mesh_no2];
 //	glm::mat4 m1_model = m1->model_mat;
 //	glm::mat4 m2_model = m2->model_mat;
 //	
@@ -169,7 +169,7 @@ void MeshFactory::get_camera_and_projection(glm::mat4 view_ , glm::mat4  project
 }
 void MeshFactory::add_all()
 {
-	std::vector<Mesh> temp_mesh_vector = mesh_vec;
+	std::vector<TrilateralMesh> temp_mesh_vector = mesh_vec;
 	mesh_vec.clear();
 	for (size_t i = 0; i < temp_mesh_vector.size(); i++) // for every mesh  
 	{

@@ -1,5 +1,5 @@
 #include "../Include/Geodesic.h"
-std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
+std::vector<float> Geodesic_dijkstra(TrilateralMesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<float> matrix_vec;
@@ -86,7 +86,7 @@ std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
 	return matrix_vec;
 
 }
-std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
+std::vector<int> Geodesic_dijkstra_predecessors(TrilateralMesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<int> predecessors;
@@ -173,7 +173,7 @@ std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
 	return predecessors;
 
 }
-std::vector<int> Geodesic_between_two_points(Mesh& m, int p1_index, int p2_index)
+std::vector<int> Geodesic_between_two_points(TrilateralMesh& m, int p1_index, int p2_index)
 {
 	std::vector<int> predecessors = Geodesic_dijkstra_predecessors(m, p1_index);
 	std::vector<int> consec_indices;

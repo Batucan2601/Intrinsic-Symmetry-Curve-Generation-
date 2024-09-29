@@ -11,7 +11,7 @@ static Plane rotate_plane(Plane plane, float rotation_degree);
 
 Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac , float convergence_ratio) 
 {
-	Mesh mesh = mesh_fac.mesh_vec[seletected_mesh];
+	TrilateralMesh mesh = mesh_fac.mesh_vec[seletected_mesh];
 	
 	Plane plane = generate_dominant_symmetry_plane(mesh , convergence_ratio) ;
 
@@ -23,7 +23,7 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	}
 
 	m = m / s;
-	Mesh plane_mesh = generate_mesh_from_plane(&plane, &m);
+	TrilateralMesh plane_mesh = generate_mesh_from_plane(&plane, &m);
 	mesh_fac.add_mesh(plane_mesh);
 
 
@@ -33,7 +33,7 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 	return plane;
 	
 }
-Plane generate_dominant_symmetry_plane(Mesh mesh , float convergence_ratio )
+Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_ratio )
 {
 	// generate PCA weights are same and 1 for now 
 	float s = mesh.vertices.size();
@@ -262,7 +262,7 @@ Plane generate_dominant_symmetry_plane(Mesh mesh , float convergence_ratio )
 
 	return best_plane;
 }
-Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
+Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, TrilateralMesh mesh)
 {
 
 	// generate PCA weights are same and 1 for now 
@@ -675,7 +675,7 @@ Plane generate_dominant_symmetry_plane(const glm::vec3& plane_point, Mesh mesh)
 * m1 represents the points where you get the + sign when you plug the vertices in the plane
 * m2 represents the minus sign 
 */
-void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, Mesh* mesh_to_be_separated, Mesh* m1, Mesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
+void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plane, TrilateralMesh* mesh_to_be_separated, TrilateralMesh* m1, TrilateralMesh* m2 , std::vector<int>* indices_for_m1 , std::vector<int>* indices_for_m2)
 {
 	indices_for_m1->resize(mesh_to_be_separated->vertices.size());
 	indices_for_m2->resize(mesh_to_be_separated->vertices.size());
@@ -746,7 +746,7 @@ void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plan
 
 }
 
-void match_two_meshes_with_fps(Mesh* selected_mesh ,  Mesh* m1, Mesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2 , int no_of_samples)
+void match_two_meshes_with_fps(TrilateralMesh* selected_mesh ,  TrilateralMesh* m1, TrilateralMesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2 , int no_of_samples)
 {
 	std::vector<unsigned int> sampled_points_m1 =  furthest_point_sampling(m1, no_of_samples);
 	std::vector<unsigned int> sampled_points_m2 =  furthest_point_sampling(m2, no_of_samples);
@@ -780,7 +780,7 @@ void match_two_meshes_with_fps(Mesh* selected_mesh ,  Mesh* m1, Mesh* m2, std::v
 	display_accuracy(selected_mesh ,  pairs);
 }
 
-std::vector<TrilateralDescriptor> match_two_meshes_with_fps(Mesh* selected_mesh, Plane* plane, int no_of_samples)
+std::vector<TrilateralDescriptor> match_two_meshes_with_fps(TrilateralMesh* selected_mesh, Plane* plane, int no_of_samples)
 {
 	std::vector<unsigned int> sampled_points = furthest_point_sampling(selected_mesh, no_of_samples);
 	
@@ -823,10 +823,10 @@ static Plane rotate_plane(Plane plane , float rotation_degree)
 	return rotated_plane;
 	
 }
-void dom_sym_save_plane(Plane& plane, Mesh* m)
+void dom_sym_save_plane(Plane& plane, TrilateralMesh* m)
 {
 	//go read the hks file 
-	std::string path = "../../Trilateral/Mesh/off/DomSym/";
+	std::string path = "../../Trilateral/TrilateralMesh/off/DomSym/";
 	std::string file_name = m->file_name;
 	path = path + file_name;
 	std::ofstream file(path);  // Open the file for reading
@@ -856,9 +856,9 @@ void dom_sym_save_plane(Plane& plane, Mesh* m)
 }
 bool dom_sym_read_plane(MeshFactory& mesh_fac , int selected_mesh, Plane& plane)
 {
-	Mesh* m = &mesh_fac.mesh_vec[selected_mesh];
+	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
 	//go read the hks file 
-	std::string path = "../../Trilateral/Mesh/off/DomSym/";
+	std::string path = "../../Trilateral/TrilateralMesh/off/DomSym/";
 	std::string file_name = m->file_name;
 	path = path + file_name;
 	std::ifstream file(path);  // Open the file for reading
@@ -888,7 +888,7 @@ bool dom_sym_read_plane(MeshFactory& mesh_fac , int selected_mesh, Plane& plane)
 
 	file.close();  // Close the file after reading
 	
-	Mesh plane_mesh = generate_mesh_from_plane(&plane,&plane.point);
+	TrilateralMesh plane_mesh = generate_mesh_from_plane(&plane,&plane.point);
 	mesh_fac.add_mesh(plane_mesh);
 	
 	mesh_fac.remove_all();

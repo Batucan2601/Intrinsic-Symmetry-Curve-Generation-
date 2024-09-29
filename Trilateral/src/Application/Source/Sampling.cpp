@@ -1,7 +1,7 @@
 #include "../Include/Sampling.h"
 #include "../Include/Geodesic.h"
 #include <stdlib.h>     /* srand, rand */
-std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, bool is_points_colored )
+std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_samples, bool is_points_colored )
 {
 	float* distance = new float[m->vertices.size()];
 	int* sampled = new int[no_of_samples];
@@ -85,7 +85,7 @@ std::vector<unsigned int>  furthest_point_sampling(Mesh* m, int no_of_samples, b
 	return sampled_id_vector;
 }
 
-std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_samples)
+std::vector<unsigned int>  random_symmetry_indices_sampling(TrilateralMesh* m, int no_of_samples)
 {
 	srand(time(NULL));
 	std::vector<unsigned int> random_sym_pairs;
@@ -132,10 +132,10 @@ std::vector<unsigned int>  random_symmetry_indices_sampling(Mesh* m, int no_of_s
 }
 
 //furthest points sampling in specific part of a mesh decided by vector partial points 
-std::vector<unsigned int>  furthest_point_sampling_on_partial_points(Mesh* m, int no_of_samples, std::vector<unsigned int>& map_partial_to_original)
+std::vector<unsigned int>  furthest_point_sampling_on_partial_points(TrilateralMesh* m, int no_of_samples, std::vector<unsigned int>& map_partial_to_original)
 {
 	// generate a new mesh from existing mesh
-	Mesh partial_mesh = *m;
+	TrilateralMesh partial_mesh = *m;
 	// create a boolean vector in order to select partial indices for O(1) selection
 	std::vector<bool> is_point_on_partial_mesh(m->vertices.size() , false);
 	for (size_t i = 0; i < map_partial_to_original.size(); i++)

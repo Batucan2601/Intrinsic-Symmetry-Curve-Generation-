@@ -1,7 +1,7 @@
 #pragma once
 /*
-#include "Mesh.h"
-static void buffer_mesh(Mesh& m)
+#include "TrilateralMesh.h"
+static void buffer_mesh(TrilateralMesh& m)
 {
 	//first convert to float
 
@@ -23,7 +23,7 @@ static void buffer_mesh(Mesh& m)
 	;
 
 }
-static void buffer_mesh(Mesh& m, std::vector<int> path)
+static void buffer_mesh(TrilateralMesh& m, std::vector<int> path)
 {
 	//first convert to float
 
@@ -60,13 +60,13 @@ static void buffer_mesh(Mesh& m, std::vector<int> path)
 	;
 
 }
-static void draw_buffer(Mesh& m)
+static void draw_buffer(TrilateralMesh& m)
 {
 	glDrawElements(GL_LINES, m.vertex_indices.size(), GL_UNSIGNED_INT, 0);
 }
 #pragma region assigment 1 
 // find the distance and path between all points
-static std::vector<int> compute_geodesic_distances_array(Mesh& m, int point_index)
+static std::vector<int> compute_geodesic_distances_array(TrilateralMesh& m, int point_index)
 {
 	//init array 
 	float* matrix = new float[m.vertices.size()];
@@ -149,7 +149,7 @@ static std::vector<int> compute_geodesic_distances_array(Mesh& m, int point_inde
 
 	return predecessors;
 }
-static std::vector<float> compute_geodesic_distances_array_distance(Mesh& m, int point_index)
+static std::vector<float> compute_geodesic_distances_array_distance(TrilateralMesh& m, int point_index)
 {
 	//init array 
 	float* matrix = new float[m.vertices.size()];
@@ -238,7 +238,7 @@ static std::vector<float> compute_geodesic_distances_array_distance(Mesh& m, int
 
 	return distances;
 }
-static std::vector<int> compute_geodesic_distances_min_heap(Mesh& m, int point_index)
+static std::vector<int> compute_geodesic_distances_min_heap(TrilateralMesh& m, int point_index)
 {
 	//create min heap
 	std::priority_queue<std::pair<float, int>, std::vector<std::pair<float, int>>, std::greater<std::pair<float, int>> > min_heap;
@@ -325,7 +325,7 @@ static std::vector<int> compute_geodesic_distances_min_heap(Mesh& m, int point_i
 
 	return predecessors;
 }
-static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m, int point_index)
+static std::vector<float> compute_geodesic_distances_min_heap_distances(TrilateralMesh& m, int point_index)
 {
 	//create min heap
 	std::priority_queue<std::pair<float, int>, std::vector<std::pair<float, int>>, std::greater<std::pair<float, int>> > min_heap;
@@ -411,7 +411,7 @@ static std::vector<float> compute_geodesic_distances_min_heap_distances(Mesh& m,
 	delete predecessor;
 	return distances;
 }
-static std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
+static std::vector<int> Geodesic_dijkstra_predecessors(TrilateralMesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<int> predecessors;
@@ -497,7 +497,7 @@ static std::vector<int> Geodesic_dijkstra_predecessors(Mesh& m, int point_index)
 	delete[] predecessor;
 	return predecessors;
 }
-static std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
+static std::vector<float> Geodesic_dijkstra(TrilateralMesh& m, int point_index)
 {
 	// return for prdecessors
 	std::vector<float> matrix_vec;
@@ -583,7 +583,7 @@ static std::vector<float> Geodesic_dijkstra(Mesh& m, int point_index)
 	delete[] predecessor;
 	return matrix_vec;
 }
-static std::vector<int> draw_with_heap_implementation(Mesh& m, int p1_index, int p2_index)
+static std::vector<int> draw_with_heap_implementation(TrilateralMesh& m, int p1_index, int p2_index)
 {
 	std::vector<int> predecessors = compute_geodesic_distances_min_heap(m, p1_index);
 	std::vector<int> consec_indices;
@@ -595,7 +595,7 @@ static std::vector<int> draw_with_heap_implementation(Mesh& m, int p1_index, int
 	}
 	return consec_indices;
 }
-static std::vector<int> draw_with_array_implementation(Mesh& m, int p1_index, int p2_index)
+static std::vector<int> draw_with_array_implementation(TrilateralMesh& m, int p1_index, int p2_index)
 {
 	std::vector<int> predecessors = compute_geodesic_distances_array(m, p1_index);
 	std::vector<int> consec_indices;
@@ -608,7 +608,7 @@ static std::vector<int> draw_with_array_implementation(Mesh& m, int p1_index, in
 	return consec_indices;
 }
 
-static void compute_all(Mesh& m)
+static void compute_all(TrilateralMesh& m)
 {
 
 	// part 1 - compute for arrays and output
@@ -684,7 +684,7 @@ static void compute_all(Mesh& m)
 // this version returns the matrix 
 //eventually all of them must be 
 
-static std::vector<int> compute_iso_curves(Mesh& m, int point_index_1)
+static std::vector<int> compute_iso_curves(TrilateralMesh& m, int point_index_1)
 {
 	std::vector<int> predecessors = Geodesic_dijkstra_predecessors(m, point_index_1);
 	std::vector<int> distances; // distances in terms of edge no not edge length 
@@ -904,7 +904,7 @@ static std::vector<int> compute_iso_curves(Mesh& m, int point_index_1)
 	;
 	return distances;
 }
-static std::vector<float> compute_curve_distances(Mesh& m, std::vector<int> distances, int point_index1)
+static std::vector<float> compute_curve_distances(TrilateralMesh& m, std::vector<int> distances, int point_index1)
 {
 	std::vector<float> geodesic_distances = Geodesic_dijkstra(m, point_index1);
 	std::vector<float> total_distances;
@@ -1030,7 +1030,7 @@ static std::vector<float> compute_curve_distances(Mesh& m, std::vector<int> dist
 	//returns the normalized distances
 	return total_distances;
 }
-static int find_point_from_histogram(Mesh& m, std::vector<float> histogram)
+static int find_point_from_histogram(TrilateralMesh& m, std::vector<float> histogram)
 {
 	float min_distance = INFINITY;
 	int best_index;
@@ -1059,7 +1059,7 @@ static int find_point_from_histogram(Mesh& m, std::vector<float> histogram)
 	return best_index;
 
 }
-/*static void compute_iso_curves(Mesh &m , int point_index_1 , int k , float offset   ) //k is the number of times
+/*static void compute_iso_curves(TrilateralMesh &m , int point_index_1 , int k , float offset   ) //k is the number of times
 {
 	//number of
 	std::vector<float> distances = Geodesic_dijkstra(m, point_index_1);
@@ -1205,14 +1205,14 @@ static int find_point_from_histogram(Mesh& m, std::vector<float> histogram)
 
 	//dispose matrix
 }*/
-/*void draw_edges_for_isocurve(Mesh &m )
+/*void draw_edges_for_isocurve(TrilateralMesh &m )
 {
 	glDrawArrays(GL_LINES, 0, m.triangles.size() * 2);
 } */
 #pragma endregion assignment part 2
 /*
 #pragma region assignemnt part3 
-static void buffer_vertices_with_triangles(Mesh& m)
+static void buffer_vertices_with_triangles(TrilateralMesh& m)
 {
 	std::vector<float> temp_array;
 	bool is_color_changed = false;
@@ -1231,39 +1231,7 @@ static void buffer_vertices_with_triangles(Mesh& m)
 	glBufferData(GL_ARRAY_BUFFER, temp_array.size() * sizeof(float), &temp_array[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.triangles.size() * sizeof(int), &m.triangles[0], GL_STATIC_DRAW);
 }
-static void buffer_vertices_with_triangles(Mesh& m, std::vector<int> path)
-{
-	std::vector<float> temp_array;
-	bool is_color_changed = false;
-	for (size_t i = 0; i < m.vertices.size(); i++)
-	{
-		is_color_changed = false;
-		temp_array.push_back(m.vertices[i].x);
-		temp_array.push_back(m.vertices[i].y);
-		temp_array.push_back(m.vertices[i].z);
-		for (size_t j = 0; j < path.size(); j++)
-		{
-			if (path[j] == i)
-			{
-				is_color_changed = true;
-				temp_array.push_back(1.0f);
-				temp_array.push_back(0.0f);
-				temp_array.push_back(0.0f);
-			}
-		}
-		//default zero
-		if (!is_color_changed)
-		{
-			temp_array.push_back(0.0f);
-			temp_array.push_back(0.0f);
-			temp_array.push_back(0.0f);
-		}
-
-	}
-	glBufferData(GL_ARRAY_BUFFER, temp_array.size() * sizeof(float), &temp_array[0], GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.triangles.size() * sizeof(int), &m.triangles[0], GL_STATIC_DRAW);
-}
-static void buffer_vertices_with_triangles_region_of_interest(Mesh& m, std::vector<int> path)
+static void buffer_vertices_with_triangles(TrilateralMesh& m, std::vector<int> path)
 {
 	std::vector<float> temp_array;
 	bool is_color_changed = false;
@@ -1295,7 +1263,39 @@ static void buffer_vertices_with_triangles_region_of_interest(Mesh& m, std::vect
 	glBufferData(GL_ARRAY_BUFFER, temp_array.size() * sizeof(float), &temp_array[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.triangles.size() * sizeof(int), &m.triangles[0], GL_STATIC_DRAW);
 }
-static void draw_vertices_with_triangles(Mesh& m)
+static void buffer_vertices_with_triangles_region_of_interest(TrilateralMesh& m, std::vector<int> path)
+{
+	std::vector<float> temp_array;
+	bool is_color_changed = false;
+	for (size_t i = 0; i < m.vertices.size(); i++)
+	{
+		is_color_changed = false;
+		temp_array.push_back(m.vertices[i].x);
+		temp_array.push_back(m.vertices[i].y);
+		temp_array.push_back(m.vertices[i].z);
+		for (size_t j = 0; j < path.size(); j++)
+		{
+			if (path[j] == i)
+			{
+				is_color_changed = true;
+				temp_array.push_back(1.0f);
+				temp_array.push_back(0.0f);
+				temp_array.push_back(0.0f);
+			}
+		}
+		//default zero
+		if (!is_color_changed)
+		{
+			temp_array.push_back(0.0f);
+			temp_array.push_back(0.0f);
+			temp_array.push_back(0.0f);
+		}
+
+	}
+	glBufferData(GL_ARRAY_BUFFER, temp_array.size() * sizeof(float), &temp_array[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m.triangles.size() * sizeof(int), &m.triangles[0], GL_STATIC_DRAW);
+}
+static void draw_vertices_with_triangles(TrilateralMesh& m)
 {
 	glDrawElements(GL_TRIANGLES, m.triangles.size(), GL_UNSIGNED_INT, 0);
 }
@@ -1305,7 +1305,7 @@ static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 	float length = glm::length(cross1) / 2;
 	return length;
 }
-static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, float tau, int division_no) // tau is the closeness division_no is the no of how much you want to separate
+static void compute_bilateral_map(TrilateralMesh& m, int point_index1, int point_index2, float tau, int division_no) // tau is the closeness division_no is the no of how much you want to separate
 {
 	//1 - extract the path from point1 to point2 
 	std::vector<int> path = Geodesic_between_two_points(m, point_index1, point_index2);
@@ -1469,7 +1469,7 @@ static void compute_bilateral_map(Mesh& m, int point_index1, int point_index2, f
 }
 
 //compute the bilateral map accoridng to a point 
-static void compute_bilateral_map_according_to_point(Mesh& m, int point1_index, float tau, int division_no) //tau is the distance d here 
+static void compute_bilateral_map_according_to_point(TrilateralMesh& m, int point1_index, float tau, int division_no) //tau is the distance d here 
 {
 	//declare variable 
 	std::vector<float> histogram;
