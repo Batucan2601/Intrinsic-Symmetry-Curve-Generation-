@@ -14,9 +14,13 @@
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
 static void dominant_symmetry_plane(TrilateralMesh* m);
+static void skeleton_generation(TrilateralMesh* m);
 
 static bool is_draw_plane = false;
+static bool is_draw_skeleton = false;
 static Plane plane;
+static Skeleton skeleton;
+
 static int dvorak_no_of_significant_points = 0;
 void imgui_menu_bar(TrilateralMesh* m)
 {
@@ -37,6 +41,11 @@ void imgui_menu_bar(TrilateralMesh* m)
         if (ImGui::BeginMenu("Mesh"))
         {
             if (ImGui::MenuItem("Save TrilateralMesh")) { imgui_menubar_save_mesh(m); }
+            if (ImGui::BeginMenu("Skeleton "))
+            {
+                skeleton_generation(m);
+                ImGui::EndMenu();
+            }
             if (ImGui::BeginMenu("Trilateral "))
             {
                 ImGui::EndMenu();
@@ -95,6 +104,16 @@ static void imgui_menubar_save_mesh(TrilateralMesh* m )
 }
 
 
+static void skeleton_generation(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("Generate Skeleton"))
+    {
+        skeleton = skeleton_read_swc_file(m, "0001.isometry.8.swc");
+        is_draw_skeleton = true;
+    }
+
+}
+
 static float convergence_ratio;
 static void dominant_symmetry_plane(TrilateralMesh* m )
 {
@@ -119,8 +138,17 @@ static void dominant_symmetry_plane(TrilateralMesh* m )
 
 
 #pragma region drawsection
+static void draw_dom_sym();
+static void draw_skeleton();
 
-void draw_dom_sym()
+void draw_all()
+{
+    draw_dom_sym();
+    draw_skeleton();
+}
+
+
+static void draw_dom_sym()
 {
     if (is_draw_plane)
     {
@@ -128,4 +156,21 @@ void draw_dom_sym()
         DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p2), CoreType_conv_glm_raylib_vec3(plane.p3), RED);
         DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p3), CoreType_conv_glm_raylib_vec3(plane.p4), RED);
     }
+}
+
+static void draw_skeleton()
+{
+    if (is_draw_skeleton)
+    {
+        for (size_t i = 0; i < skeleton.adjacencies.size(); i++)
+        {
+            std::vector<unsigned int> skeleton_adj_i = skeleton.adjacencies[i];
+            for (size_t j = 0; j < skeleton_adj_i.size(); j++)
+            {
+                DrawLine3D(CoreType_conv_glm_raylib_vec3(skeleton.skeletonFormat[i].point),
+                    CoreType_conv_glm_raylib_vec3(skeleton.skeletonFormat[skeleton_adj_i[j]].point), RED);
+            }
+        }
+    }
+    
 }

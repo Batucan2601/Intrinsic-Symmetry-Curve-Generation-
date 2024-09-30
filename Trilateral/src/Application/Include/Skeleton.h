@@ -53,7 +53,7 @@ typedef struct
 void skeleton_generate_buffer( MeshFactory& mesh_fac);
 void skeleton_buffer(const MeshFactory& mesh_fac);
 
-Skeleton skeleton_read_swc_file(MeshFactory& meshFactory , std::string file_name);
+Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name);
 
 void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances);
 void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,

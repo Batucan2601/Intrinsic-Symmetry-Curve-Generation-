@@ -117,7 +117,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     ImGui::LabelText("Skeleton generation with Cohen-Or's method", "Value");
     if (ImGui::Button("Generate Skeleton"))
     {
-        skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
+       // skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
     }
     if (ImGui::Button("Generate Backbone"))
     {
@@ -187,7 +187,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("Generate Spectral Skeleton"))
     {
-        skeleton = skeleton_read_swc_file(m_factory, "skeletonSpectral.swc");
+       // skeleton = skeleton_read_swc_file(m_factory, "skeletonSpectral.swc");
     }
 }
 

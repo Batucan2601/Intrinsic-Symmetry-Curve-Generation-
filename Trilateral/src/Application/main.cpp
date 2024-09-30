@@ -57,7 +57,7 @@ int main(void)
         UpdateCamera(&camera, CAMERA_FREE);
         BeginMode3D(camera);
         DrawMesh( m1.raylib_mesh, LoadMaterialDefault(), identity);
-        draw_dom_sym();
+        draw_all();
         
         EndMode3D();
 

@@ -704,7 +704,7 @@ void match_skeleton_lines(MeshFactory& meshFactory, TrilateralMesh* m, std::vect
 
 
 
-Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
+Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 {
 	Skeleton skeleton; 
 	std::vector<SkeletonFormat> skeletonPoints;
@@ -712,6 +712,7 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
 	if (!indata)
 	{
+		std::cout << "failed to read file " << std::endl; 
 		return skeleton;
 	}
 	std::string line;
@@ -815,7 +816,6 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	
 	//lastly get midpoint and get the closest vertex
 	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
-	TrilateralMesh* m = &meshFactory.mesh_vec[0];
 	mid_point =  mesh_generate_weighted_mid_point(m);
 
 	//check the closest vertex in skeleton
@@ -842,13 +842,6 @@ Skeleton skeleton_read_swc_file(MeshFactory& meshFactory,std::string file_name)
 	skeleton.adjacencies = adjacencies;
 	skeleton.mid_point_index = minimum_index;
 	skeleton.skeleton_mid_point = mid_point;
-
-
-	meshFactory.mesh_skeleton_vec.skeleton_points = skeleton_points;
-	meshFactory.mesh_skeleton_vec.skeleton_indices = skeleton_indices;
-
-	skeleton_generate_buffer(meshFactory);
-	skeleton_buffer(meshFactory);
 
 	return skeleton;
 }
