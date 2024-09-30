@@ -709,7 +709,7 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 	Skeleton skeleton; 
 	std::vector<SkeletonFormat> skeletonPoints;
 	ifstream indata; // indata is like cin
-	indata.open("../../Trilateral/TrilateralMesh/off/KIDS_skeleton/" + file_name);
+	indata.open( file_name);
 	if (!indata)
 	{
 		std::cout << "failed to read file " << std::endl; 

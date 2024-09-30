@@ -39,7 +39,10 @@ set(Header_Files
     "src/External/Include/rlImGui/rlImgui.h"
     "src/External/Include/rlImGui/rlImGuiColors.h"
     
+    "src/External/Include/imgui/ImGuiFileDialog.h"
+    "src/External/Include/imgui/ImGuiFileDialogConfig.h"
 
+    
 
 
 )
@@ -78,6 +81,7 @@ set(Source_Files
     "src/Application/Source/ImguiMenuBar.cpp"
     "src/Application/Source/RaylibExtras.cpp"
 
+    "src/External/Include/imgui/ImGuiFileDialog.cpp"
 
     "src/External/Include/rlImGui/rlImgui.cpp"
 

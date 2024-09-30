@@ -60,6 +60,13 @@ TrilateralMesh::TrilateralMesh(char* filename)
 	}
 	std::vector<unsigned char > zeroes(this->vertices.size() * 4, 0);
 	this->raylib_mesh.colors = (unsigned char*)malloc(this->vertices.size() * 4 * 1 );
+	for (size_t i = 0; i < this->vertices.size() * 4 ; i+=4 )
+	{
+		this->raylib_mesh.colors[i] = 0;
+		this->raylib_mesh.colors[i + 1 ] = 0;
+		this->raylib_mesh.colors[i + 2] = 0;
+		this->raylib_mesh.colors[i + 3] = 255;
+	}
 	this->raylib_mesh.texcoords = (float*)malloc(this->vertices.size() * 2 * 4 );
 	this->raylib_mesh.vaoId = 0;
 

@@ -11,16 +11,20 @@
 #include "../Include/ShapeDiameter.h"
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
+#include "ImGuiFileDialog.h"
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
 static void dominant_symmetry_plane(TrilateralMesh* m);
 static void skeleton_generation(TrilateralMesh* m);
-
+static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type);
+static void display_file_dialogs(TrilateralMesh* m);
+std::string file_path;
+std::string file_path_name = "";
+static bool is_searching_swc = false; 
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static Plane plane;
 static Skeleton skeleton;
-
 static int dvorak_no_of_significant_points = 0;
 void imgui_menu_bar(TrilateralMesh* m)
 {
@@ -74,6 +78,7 @@ void imgui_menu_bar(TrilateralMesh* m)
         }
         ImGui::EndMainMenuBar();
     }
+    display_file_dialogs(m);
 }
 
 
@@ -108,8 +113,8 @@ static void skeleton_generation(TrilateralMesh* m)
 {
     if (ImGui::MenuItem("Generate Skeleton"))
     {
-        skeleton = skeleton_read_swc_file(m, "0001.isometry.8.swc");
-        is_draw_skeleton = true;
+        is_searching_swc = true; 
+       
     }
 
 }
@@ -173,4 +178,39 @@ static void draw_skeleton()
         }
     }
     
+}
+
+void drawFileDialog(std::string& file_path , std::string& file_path_name , std::string file_type , bool& is_open) {
+    if (!is_open)
+    {
+        return; 
+    }
+    // open Dialog Simple
+    IGFD::FileDialogConfig config;
+    config.path = ".";
+    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", file_type.c_str(), config);
+    // display
+    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+        if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+            file_path_name = ImGuiFileDialog::Instance()->GetFilePathName();
+            file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
+            // action
+        }
+
+        // close
+        ImGuiFileDialog::Instance()->Close();
+        is_open = false;
+    }
+}
+
+static void display_file_dialogs(TrilateralMesh* m )
+{
+    drawFileDialog(file_path, file_path_name, ".swc", is_searching_swc);
+    if (file_path_name != "")
+    {
+        skeleton = skeleton_read_swc_file(m, file_path_name);
+        is_draw_skeleton = true;
+        file_path_name = "";
+    }
+       
 }

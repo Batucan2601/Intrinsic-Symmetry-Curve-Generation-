@@ -53,7 +53,7 @@ int main(void)
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(GREEN);
         UpdateCamera(&camera, CAMERA_FREE);
         BeginMode3D(camera);
         DrawMesh( m1.raylib_mesh, LoadMaterialDefault(), identity);
