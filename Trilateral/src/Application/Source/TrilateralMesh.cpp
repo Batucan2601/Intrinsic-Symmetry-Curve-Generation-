@@ -1,8 +1,7 @@
-#include <GL/glew.h>
 #include "../Include/TrilateralMesh.h"
 #include "happly.h"
 #include "glm/gtc/matrix_transform.hpp"
-
+#include <glm/gtc/type_ptr.hpp>
 
 static void calculate_areas(TrilateralMesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
@@ -42,6 +41,29 @@ TrilateralMesh::TrilateralMesh(char* filename)
 	generate_normals();
 	calculate_areas(this);
 	calculate_mesh_area(this);
+
+	this->raylib_mesh.vertices = (float*) &this->vertices[0];
+	this->raylib_mesh.animVertices = NULL;
+	this->raylib_mesh.normals = NULL;
+	this->raylib_mesh.tangents = NULL;
+	this->raylib_mesh.texcoords2 = NULL;
+	this->raylib_mesh.boneIds = NULL;
+	this->raylib_mesh.boneWeights = NULL;
+
+	this->raylib_mesh.vertexCount = this->vertices.size();
+	this->raylib_mesh.triangleCount = this->triangles.size()/3;
+	//copy indices
+	this->raylib_mesh.indices = (unsigned short*)malloc(this->triangles.size() * sizeof(unsigned short));
+	for (size_t i = 0; i < this->triangles.size(); i++)
+	{
+		this->raylib_mesh.indices[i] = this->triangles[i];
+	}
+	std::vector<unsigned char > zeroes(this->vertices.size() * 4, 0);
+	this->raylib_mesh.colors = (unsigned char*)malloc(this->vertices.size() * 4 * 1 );
+	this->raylib_mesh.texcoords = (float*)malloc(this->vertices.size() * 2 * 4 );
+	this->raylib_mesh.vaoId = 0;
+
+	UploadMesh(&this->raylib_mesh, false);
 }
 void TrilateralMesh::read_ply_format(char* filename)
 {

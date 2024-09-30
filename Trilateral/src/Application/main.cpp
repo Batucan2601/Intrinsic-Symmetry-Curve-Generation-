@@ -4,7 +4,6 @@
 #include "raylib.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_stdlib.h"
 #include "imgui/imgui.h"
@@ -219,15 +218,14 @@ int main(void)
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);*/
 
-    InitWindow(500,500 , " Trialteral");
-    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    InitWindow(GetScreenWidth(), GetScreenHeight(), " Trialteral");
     /*if (glewInit() != GLEW_OK)
     {
         std::cout << "problems" << std::endl;
     }
     // variables for the camera movement
     glEnable(GL_DEPTH_TEST);*/
-    proj = glm::perspective(glm::radians(90.0f), (float)mode->width / (float)mode->height, 0.1f, 1000.0f);
+    proj = glm::perspective(glm::radians(90.0f), (float)GetScreenWidth() / (float)GetScreenHeight(), 0.1f, 1000.0f);
     view = glm::mat4(1.0f);
     model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 0.0));
     // build and compile our shader program
@@ -250,18 +248,24 @@ int main(void)
 
 #pragma region cs589 before loop init
 
-    TrilateralMesh m1((char*)"../../Trilateral/Mesh/off/0001.isometry.8.off");
+    TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.8.off");
 
 
     
     
     
-    MeshFactory mesh_fac;
-    mesh_fac.add_mesh(m1);
+    //MeshFactory mesh_fac;
+    //mesh_fac.add_mesh(m1);
 
 
 
-   
+    Camera camera;
+    camera.position = { 0,0,-40 };
+    camera.projection= CAMERA_PERSPECTIVE;
+    camera.target = {0,0,0};
+    camera.fovy = 90;
+    camera.up = { 0 , 1 ,0 };
+
     // END OF SUGGESTED MESHES
     /*glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -285,7 +289,12 @@ int main(void)
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(VAO);*/
-
+    Matrix identity = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
     
 #pragma endregion cs589 before loop init
     // render loop
@@ -318,14 +327,24 @@ int main(void)
 
         
         BeginDrawing();
+        ClearBackground(WHITE);
         rlImGuiBegin();
-
         // show ImGui Content
         bool open = true;
         ImGui::ShowDemoWindow(&open);
-
+        /*imgui_mesh_window(selected_mesh, mesh_fac);
+        imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
+        imgui_KIDS_skeleton(selected_mesh, mesh_fac);
+        imgui_N_Lateral_Parameters(selected_mesh, mesh_fac);
+        imgui_debug_layer(selected_mesh, mesh_fac, cameraPos, cameraFront, cameraUp);
+        imgui_menu_bar(selected_mesh, mesh_fac);*/
         // end ImGui Content
         rlImGuiEnd();
+        UpdateCamera(&camera, CAMERA_ORBITAL);
+        BeginMode3D(camera);
+        DrawMesh( m1.raylib_mesh, LoadMaterialDefault(), identity);
+        EndMode3D();
+
         DrawLine(0, 0, 100, 100, RED);
         EndDrawing();
         
@@ -432,7 +451,7 @@ int main(void)
     //imgui_close();
 
     rlImGuiShutdown();
-    CloseWindow();
+    CloseWindow_();
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     return 0;

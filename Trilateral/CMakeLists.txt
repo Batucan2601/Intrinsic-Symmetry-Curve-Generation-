@@ -32,11 +32,13 @@ set(Header_Files
     "src/Application/Include/DvorakEstimatingApprox.h"
     "src/Application/Include/HeatKernelSignature.h"
     "src/Application/Include/ImguiMenuBar.h"
+    "src/Application/Include/RaylibExtras.h"
+
     
     "src/External/Include/rlImGui/imgui_impl_raylib.h"
     "src/External/Include/rlImGui/rlImgui.h"
     "src/External/Include/rlImGui/rlImGuiColors.h"
-
+    
 
 
 
@@ -55,7 +57,6 @@ set(Source_Files
     "src/External/Include/imgui/imgui.cpp"
     "src/External/Include/imgui/imgui_demo.cpp"
     "src/External/Include/imgui/imgui_draw.cpp"
-    "src/External/Include/imgui/imgui_impl_glfw.cpp"
     "src/External/Include/imgui/imgui_impl_opengl3.cpp"
     "src/External/Include/imgui/imgui_stdlib.cpp"
     "src/External/Include/imgui/imgui_tables.cpp"
@@ -75,6 +76,8 @@ set(Source_Files
     "src/Application/Source/DvorakEstimatingApprox.cpp"
     "src/Application/Source/HeatKernelSignature.cpp"
     "src/Application/Source/ImguiMenuBar.cpp"
+    "src/Application/Source/RaylibExtras.cpp"
+
 
     "src/External/Include/rlImGui/rlImgui.cpp"
 

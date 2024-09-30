@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "glm/glm.hpp"
+#include "raylib.h"
 using std::ofstream;
 using std::ifstream;
 #define INFINITY 10000000
@@ -32,7 +33,8 @@ public:
 	std::vector<float> areas; // vertex information of normals
 	std::vector<float> normalized_heat_kernel_signature; // vertex information of normals
 	glm::mat4 model_mat;
-	std::string file_name; 
+	std::string file_name;
+	Mesh raylib_mesh;
 	//VAO object
 	unsigned int vao_normals; 
 	//project 

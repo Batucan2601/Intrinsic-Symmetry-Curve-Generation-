@@ -1,4 +1,5 @@
 #pragma once
+#include "raylib.h"
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 
@@ -22,38 +23,38 @@ void poll_keys()
 
              camera_mouse_lock = true;
          }*/
-
+        
          // w a s d movement keys ( for data testing will be removed later)
         float movement_speed = cameraSpeed / 50;
         if (!is_e_pressed)
         {
-            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            if (IsKeyPressed(KEY_A))
                 cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * movement_speed;
             else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
                 cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * movement_speed;
-            else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            else if (IsKeyPressed(KEY_W))
             {
                 cameraPos += movement_speed * glm::normalize(cameraFront);
                 //cameraPos.z += movement_speed * glm::normalize(cameraFront).z;
             }
-            else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            else if (IsKeyPressed(KEY_S))
             {
                 cameraPos -= movement_speed * glm::normalize(cameraFront);
             }
             // return to original location
-            else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+            else if (IsKeyPressed(KEY_KP_1))
             {
                 cameraPos = glm::vec3(0.0f, 0.0f, -5.0f); // where camera starts
                 cameraFront = glm::vec3(0.0f, 0.0f, 0.0f);
                 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
             }
-            else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+            else if (IsKeyPressed(KEY_KP_2))
             {
                  cameraPos = glm::vec3(20.0f, 1.25f, 0.0f); // where camera starts
                  cameraFront = glm::vec3(-1.0f, 0.0f, 0.0f);
                  cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
             }
-            else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+            else if (IsKeyPressed(KEY_KP_3))
             {
                 cameraPos = glm::vec3(0.0f, 1.25f, 70.0f); // where camera starts
                 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -113,19 +114,17 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_E && action == GLFW_RELEASE)
+    if (IsKeyReleased(KEY_E))
     {
         is_e_pressed = !is_e_pressed;
         if (is_e_pressed)
         {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+           ShowCursor_();
         }
         else
         {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            DisableCursor();
 
         }
-        std::cout << "e released" << std::endl;
-        
     }
 }
