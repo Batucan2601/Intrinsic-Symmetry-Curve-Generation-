@@ -9,7 +9,7 @@ using Eigen::MatrixXd;
 
 static Plane rotate_plane(Plane plane, float rotation_degree);
 
-Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac , float convergence_ratio) 
+/*Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac, float convergence_ratio)
 {
 	TrilateralMesh mesh = mesh_fac.mesh_vec[seletected_mesh];
 	
@@ -32,21 +32,21 @@ Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fa
 
 	return plane;
 	
-}
-Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_ratio )
+}*/
+Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_ratio )
 {
 	// generate PCA weights are same and 1 for now 
-	float s = mesh.vertices.size();
+	float s = mesh->vertices.size();
 	glm::vec3 m(0.0f, 0.0f, 0.0f);
-	for (size_t i = 0; i < mesh.vertices.size(); i++)
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
-		m += mesh.vertices[i];
+		m += mesh->vertices[i];
 	}
 	m = m / s;
 
 	// surfel weights 
-	std::vector<float> surfel_weights(mesh.vertices.size() , 0);
-	surfel_weights = mesh_point_surfel_normalized(&mesh);
+	std::vector<float> surfel_weights(mesh->vertices.size() , 0);
+	surfel_weights = mesh_point_surfel_normalized(mesh);
 
 
 	MatrixXd Co(3, 3);
@@ -60,10 +60,10 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_r
 	Co(2, 0) = 0;
 	Co(2, 1) = 0;
 	Co(2, 2) = 0;
-	for (size_t i = 0; i < mesh.vertices.size(); i++)
+	for (size_t i = 0; i < mesh->vertices.size(); i++)
 	{
 		glm::vec3 pi_m;
-		pi_m = mesh.vertices[i] - m;
+		pi_m = mesh->vertices[i] - m;
 		Eigen::VectorXd pi(3);
 		pi(0) = pi_m.x;
 		pi(1) = pi_m.y;
@@ -119,27 +119,27 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_r
 	best_plane.normal = glm::normalize(best_plane.normal);
 	int sym_no = 0; 
 	//for( int p = 0; p < sym_iter_no; p++ )
-	while( 1 )
+	while( 0 )
 	{
 		std::vector<float> di_vec;
-		for (size_t i = 0; i < mesh.vertices.size(); i++)
+		for (size_t i = 0; i < mesh->vertices.size(); i++)
 		{
-			glm::vec3 s_ir = symmetry_point_from_plane(&best_plane, &mesh.vertices[i]);
+			glm::vec3 s_ir = symmetry_point_from_plane(&best_plane, &mesh->vertices[i]);
 			float s_ir_status = get_point_status_from_plane(&best_plane, &s_ir);
 			float d_i= INFINITY;
 			int minimum_index = -1;
-			for (size_t j = 0; j < mesh.vertices.size(); j++)
+			for (size_t j = 0; j < mesh->vertices.size(); j++)
 			{
 				if (i == j)
 				{
 					continue;
 				}
-				float s_j = get_point_status_from_plane(&best_plane, &mesh.vertices[j]);
+				float s_j = get_point_status_from_plane(&best_plane, &mesh->vertices[j]);
 				if (s_j * s_ir_status < 0) //different side 
 				{
 					continue;
 				}
-				float distance = glm::distance(s_ir, mesh.vertices[j]);
+				float distance = glm::distance(s_ir, mesh->vertices[j]);
 				if (distance < d_i)
 				{
 					d_i  = distance;
@@ -155,7 +155,7 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_r
 		float sigma = c * di_median;
 
 		//redo surfels
-		for (size_t i = 0; i < mesh.vertices.size(); i++)
+		for (size_t i = 0; i < mesh->vertices.size(); i++)
 		{
 			float d_i = di_vec[i];
 			if (d_i > sigma)
@@ -178,10 +178,10 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_r
 		Co(2, 0) = 0;
 		Co(2, 1) = 0;
 		Co(2, 2) = 0;
-		for (size_t i = 0; i < mesh.vertices.size(); i++)
+		for (size_t i = 0; i < mesh->vertices.size(); i++)
 		{
 			glm::vec3 pi_m;
-			pi_m = mesh.vertices[i] - m;
+			pi_m = mesh->vertices[i] - m;
 			Eigen::VectorXd pi(3);
 			pi(0) = pi_m.x;
 			pi(1) = pi_m.y;
@@ -258,7 +258,23 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh mesh , float convergence_r
 		best_plane.normal = glm::normalize(best_plane.normal);
 	}
 	
-	dom_sym_save_plane(best_plane, &mesh);
+	dom_sym_save_plane(best_plane, mesh);
+
+	//generate displayable points
+	glm::vec3 arbitraryVector = (std::abs(best_plane.normal.y) < 1.0) ? glm::vec3( 0, 1, 0 ) : glm::vec3( 1, 0, 0 );
+	glm::vec3 u = glm::cross(best_plane.normal, glm::normalize(arbitraryVector));
+	glm::vec3 v =glm::cross( best_plane.normal , glm::normalize(u));
+	v = glm::normalize(v);
+
+	// 2. Scale the vectors by the given size
+	u = u * 100.0f;
+	v = v * 100.0f;
+
+	// 3. Generate the 4 points
+	best_plane.p1 =	best_plane.point + u + v;   // Point 1
+	best_plane.p2 =	best_plane.point + u - v;   // Point 2
+	best_plane.p3 =	best_plane.point - u - v;   // Point 3
+	best_plane.p4 =	best_plane.point - u + v;   // Point 4
 
 	return best_plane;
 }
@@ -854,9 +870,8 @@ void dom_sym_save_plane(Plane& plane, TrilateralMesh* m)
 	file.close();  // Close the file after reading
 	return;
 }
-bool dom_sym_read_plane(MeshFactory& mesh_fac , int selected_mesh, Plane& plane)
+bool dom_sym_read_plane(TrilateralMesh* m ,  Plane& plane)
 {
-	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
 	//go read the hks file 
 	std::string path = "../../Trilateral/TrilateralMesh/off/DomSym/";
 	std::string file_name = m->file_name;
@@ -889,10 +904,6 @@ bool dom_sym_read_plane(MeshFactory& mesh_fac , int selected_mesh, Plane& plane)
 	file.close();  // Close the file after reading
 	
 	TrilateralMesh plane_mesh = generate_mesh_from_plane(&plane,&plane.point);
-	mesh_fac.add_mesh(plane_mesh);
-	
-	mesh_fac.remove_all();
-	mesh_fac.add_all();
 
 	return true;
 	

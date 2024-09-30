@@ -394,7 +394,7 @@ float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
 	 float fuzziness_sigma, Skeleton& skeleton, bool recordTxt);
 
 
- void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index,Skeleton& skeleton );
+ void trilateral_point_matching_with_skeleton_endpoints(TrilateralMesh*m,Skeleton& skeleton );
 
 
  void trilateral_point_matching_with_skeleton_endpoints_w_HKS(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,

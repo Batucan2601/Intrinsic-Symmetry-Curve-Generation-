@@ -1,6 +1,8 @@
 #pragma once 
 #include "glm/glm.hpp"
 #include "TrilateralMesh.h"
+#include "raylib.h"
+
 #include <eigen/Eigen/Dense>
 #include <algorithm>
 #include <vector>
@@ -10,6 +12,10 @@
 typedef struct {
 	glm::vec3 point;
 	glm::vec3 normal;
+	glm::vec3 p1;
+	glm::vec3 p2;
+	glm::vec3 p3;
+	glm::vec3 p4;
 }Plane;
 
 struct TrilateralDescriptor
@@ -69,7 +75,8 @@ float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, c
 
 float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
-
+glm::vec3 CoreType_conv_raylib_glm_vec3(Vector3 vec3);
+Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3);
 // permuation
 float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2, int N);
 
@@ -99,3 +106,5 @@ void CoreType_sort_by_value(std::vector<std::pair<T, int>>& vec) {
 		return a.first < b.first;
 		});
 }
+
+

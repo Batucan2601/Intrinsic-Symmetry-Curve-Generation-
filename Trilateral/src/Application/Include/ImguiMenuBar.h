@@ -4,4 +4,8 @@
 #include "../Include/SkeletalNLateral.h"
 
 
-void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac);
+void imgui_menu_bar(TrilateralMesh* m );
+
+
+//draw functions
+void draw_dom_sym();

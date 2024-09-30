@@ -3272,7 +3272,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 		 plane_center += mesh.vertices[i];
 	 }
 	 plane_center /= mesh.vertices.size();
-	 Plane plane = generate_dominant_symmetry_plane(selected_index, mesh_fac , sym_iter_no);
+	 Plane plane = generate_dominant_symmetry_plane(&mesh , sym_iter_no);
 
 #pragma endregion
 
@@ -4437,29 +4437,28 @@ float fuzziness_sigma,Skeleton& skeleton,bool recordTxt)
 	}
 }
 
-void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton)
+void trilateral_point_matching_with_skeleton_endpoints(TrilateralMesh* m , Skeleton& skeleton)
 {
-	TrilateralMesh m = mesh_fac.mesh_vec[selected_index];
-	int N = m.vertices.size();
+	int N = m->vertices.size();
 	int mesh_mid_point_index = -1;
 	glm::vec3 mesh_mid_point;
 	// 1 - get end points from skeleton
 	std::vector<unsigned int> mesh_endpoints;
-	skeleton_calculate_closest_mesh_points(skeleton, &m, mesh_endpoints);
+	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
 	int sample_no = mesh_endpoints.size();
 	// 2- generate plane 
 	 //calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
-	for (size_t i = 0; i < m.vertices.size(); i++)
+	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
-		plane_center += m.vertices[i];
+		plane_center += m->vertices[i];
 	}
-	plane_center /= m.vertices.size();
+	plane_center /= m->vertices.size();
 
 	Plane plane; 
-	if (!dom_sym_read_plane(mesh_fac, selected_index, plane))
+	if (!dom_sym_read_plane(m, plane))
 	{
-		plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
+		plane = generate_dominant_symmetry_plane(m, 0.1);
 	}
 
 	//divide the end points 
@@ -4467,7 +4466,7 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 	std::vector<unsigned int> right_skeleton_indices;
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		if (get_point_status_from_plane(&plane, &m.vertices[mesh_endpoints[i]]) > 0  ) 
+		if (get_point_status_from_plane(&plane, &m->vertices[mesh_endpoints[i]]) > 0  ) 
 		{
 			right_skeleton_indices.push_back(mesh_endpoints[i]);
 		}
@@ -4477,22 +4476,22 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 		}
 	}
 
-	std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&m, right_skeleton_indices);
-	std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&m, left_skeleton_indices);
+	//std::vector<TrilateralDescriptor> positive_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&m, right_skeleton_indices);
+	//std::vector<TrilateralDescriptor> negative_mesh_trilateral_descriptor = get_trilateral_points_using_closest_pairs(&m, left_skeleton_indices);
 
 	//color
-	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	/*for (size_t i = 0; i < right_skeleton_indices.size(); i++)
 	{
-		m.colors[right_skeleton_indices[i]] = glm::vec3(0, 0, 255);
+		m->colors[right_skeleton_indices[i]] = glm::vec3(0, 0, 255);
 	}
 	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
 	{
-		m.colors[left_skeleton_indices[i]] = glm::vec3(0, 255, 0);
+		m->colors[left_skeleton_indices[i]] = glm::vec3(0, 255, 0);
 	}
 
 	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
 	{
-		std::vector<int> global_is_visited(m.vertices.size(), OUTSIDE);
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
 		std::vector<int> is_visited = trilateral_ROI(&m, positive_mesh_trilateral_descriptor[i].p1,
 			positive_mesh_trilateral_descriptor[i].p2, positive_mesh_trilateral_descriptor[i].p3, 3, false);
 		std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index, positive_mesh_trilateral_descriptor[i].p1,
@@ -4501,7 +4500,7 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 	}
 	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
 	{
-		std::vector<int> global_is_visited(m.vertices.size(), OUTSIDE);
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
 		std::vector<int> is_visited = trilateral_ROI(&m, negative_mesh_trilateral_descriptor[i].p1,
 			negative_mesh_trilateral_descriptor[i].p2, negative_mesh_trilateral_descriptor[i].p3, 3, false);
 		std::vector<float> histogram = histogramROi(mesh_fac, (int&)selected_index, negative_mesh_trilateral_descriptor[i].p1,
@@ -4511,7 +4510,9 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 	// write a function for comparing two descriptor
 	//irrelevant constants 
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = trilateral_unique_pairing_histogram(positive_mesh_trilateral_descriptor,
-		negative_mesh_trilateral_descriptor);//point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+		negative_mesh_trilateral_descriptor);*/ 
+	
+		//point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
 
 	//check their gaussian curvature
 	/*std::vector<std::pair<unsigned int, unsigned int>> new_resemblance_pairs;
@@ -4545,20 +4546,20 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 	resemblance_pairs = new_resemblance_pairs;*/
 
 	//forge it into two list
-	std::vector<unsigned int> left_correspondences;
+	/*std::vector<unsigned int> left_correspondences;
 	std::vector<unsigned int> right_correspondences;
 	for (size_t i = 0; i < resemblance_pairs.size(); i++)
 	{
 		left_correspondences.push_back(resemblance_pairs[i].first);
 		right_correspondences.push_back(resemblance_pairs[i].second);
 	}
-	float total_error = Metric_get_geodesic_cost_with_list(&m, left_correspondences, right_correspondences);
+	float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
 
 	// now use fps points to get maximum distance in order to compare to 
 	float maximum_geodesic_distance = 0;
 	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
 	{
-		std::vector<float> distances = Geodesic_dijkstra(m, right_skeleton_indices[i]);
+		std::vector<float> distances = Geodesic_dijkstra(*m, right_skeleton_indices[i]);
 		for (size_t j = 0; j < distances.size(); j++)
 		{
 			if (maximum_geodesic_distance < distances[j])
@@ -4569,24 +4570,22 @@ void trilateral_point_matching_with_skeleton_endpoints(MeshFactory& mesh_fac, co
 	}
 
 	// color left red
-	std::vector<unsigned int> is_selected(m.vertices.size(), 0);
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
 	for (size_t i = 0; i < resemblance_pairs.size(); i++)
 	{
-		m.colors[resemblance_pairs[i].first].r = 255;
-		m.colors[resemblance_pairs[i].first].g = 0;
-		m.colors[resemblance_pairs[i].first].b = 0;
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
 
-		m.colors[resemblance_pairs[i].second].r = 0;
-		m.colors[resemblance_pairs[i].second].g = 0;
-		m.colors[resemblance_pairs[i].second].b = 255;
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 0;
+		m->colors[resemblance_pairs[i].second].b = 255;
 	}
 
-	m.calculated_symmetry_pairs = resemblance_pairs;
+	m->calculated_symmetry_pairs = resemblance_pairs;
 
-	Metric_write_to_file(&m, "../../Results/Trilateral_W_LMDS_AND_DOMINANTPLANE.txt");
+	Metric_write_to_file(m, "../../Results/Trilateral_W_LMDS_AND_DOMINANTPLANE.txt"); */
 
-
-	mesh_fac.mesh_vec[selected_index] = m;
 }
 void trilateral_point_matching_with_skeleton_endpoints_w_HKS(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton , std::vector<TrilateralDescriptor>&desc_left,
 std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
@@ -4607,10 +4606,10 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 		plane_center += m.vertices[i];
 	}
 	plane_center /= m.vertices.size();
-	if (!dom_sym_read_plane(mesh_fac, selected_index, plane))
+	/*if (!dom_sym_read_plane(mesh_fac, selected_index, plane))
 	{
 		plane = generate_dominant_symmetry_plane(selected_index, mesh_fac, 2);
-	}
+	}*/
 
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;

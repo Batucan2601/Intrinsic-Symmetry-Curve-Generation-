@@ -427,3 +427,22 @@ Plane generate_plane_from_formula(const float& A, const float& B, const float& C
 	return p; 
 }
 
+
+
+glm::vec3 CoreType_conv_raylib_glm_vec3(Vector3 vec3)
+{
+	glm::vec3 vec; 
+	vec.x = vec3.x;
+	vec.y = vec3.y;
+	vec.z = vec3.z;
+	return vec; 
+}
+
+Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3)
+{
+	Vector3 vec;
+	vec.x = vec3.x;
+	vec.y = vec3.y;
+	vec.z = vec3.z;
+	return vec;
+}

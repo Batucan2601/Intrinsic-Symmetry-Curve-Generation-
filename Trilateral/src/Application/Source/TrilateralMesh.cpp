@@ -455,6 +455,28 @@ TrilateralMesh::TrilateralMesh(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3, glm:
 	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
 	this->colors.push_back(glm::vec3(1.0f, 0.5f, 0.5f));
 
+
+	this->raylib_mesh.vertices = (float*)&this->vertices[0];
+	this->raylib_mesh.animVertices = NULL;
+	this->raylib_mesh.normals = NULL;
+	this->raylib_mesh.tangents = NULL;
+	this->raylib_mesh.texcoords2 = NULL;
+	this->raylib_mesh.boneIds = NULL;
+	this->raylib_mesh.boneWeights = NULL;
+
+	this->raylib_mesh.vertexCount = this->vertices.size();
+	this->raylib_mesh.triangleCount = this->triangles.size() / 3;
+	//copy indices
+	this->raylib_mesh.indices = (unsigned short*)malloc(this->triangles.size() * sizeof(unsigned short));
+	for (size_t i = 0; i < this->triangles.size(); i++)
+	{
+		this->raylib_mesh.indices[i] = this->triangles[i];
+	}
+	std::vector<unsigned char > zeroes(this->vertices.size() * 4, 0);
+	this->raylib_mesh.colors = (unsigned char*)malloc(this->vertices.size() * 4 * 1);
+	this->raylib_mesh.texcoords = (float*)malloc(this->vertices.size() * 2 * 4);
+	this->raylib_mesh.vaoId = 0;
+
 }
 glm::mat4 TrilateralMesh::move_mesh(glm::vec3 direction)
 {

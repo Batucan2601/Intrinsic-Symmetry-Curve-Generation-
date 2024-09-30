@@ -12,12 +12,13 @@
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
 
-static void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac);
-static void dominant_symmetry_plane(MeshFactory& mesh_fac, int selected_mesh);
+static void imgui_menubar_save_mesh(TrilateralMesh* m );
+static void dominant_symmetry_plane(TrilateralMesh* m);
 
-static int dvorak_no_of_significant_points = 0;
+static bool is_draw_plane = false;
 static Plane plane;
-void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
+static int dvorak_no_of_significant_points = 0;
+void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -33,9 +34,9 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
             if (ImGui::MenuItem("Redo")) { /* Redo action */ }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("TrilateralMesh"))
+        if (ImGui::BeginMenu("Mesh"))
         {
-            if (ImGui::MenuItem("Save TrilateralMesh")) { imgui_menubar_save_mesh(selected_mesh, mesh_fac); }
+            if (ImGui::MenuItem("Save TrilateralMesh")) { imgui_menubar_save_mesh(m); }
             if (ImGui::BeginMenu("Trilateral "))
             {
                 ImGui::EndMenu();
@@ -47,10 +48,7 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
                     if (ImGui::InputInt("no of points ", &dvorak_no_of_significant_points));
                     if (ImGui::MenuItem("Show"))
                     {
-                        TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
                         dvorak_show_signifcant_points(m, dvorak_no_of_significant_points);
-                        mesh_fac.remove_all();
-                        mesh_fac.add_all();
                     }
 
                     ImGui::EndMenu();
@@ -59,7 +57,7 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
             };
             if (ImGui::BeginMenu("Dominant Symmetry Plane"))
             {
-                dominant_symmetry_plane(mesh_fac, selected_mesh);
+                dominant_symmetry_plane(m);
                 ImGui::EndMenu();
 
             }
@@ -72,9 +70,8 @@ void imgui_menu_bar(int& selected_mesh, MeshFactory& mesh_fac)
 
 //manaul save for now
 // do this for spectral
-static void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac)
+static void imgui_menubar_save_mesh(TrilateralMesh* m )
 {
-    TrilateralMesh* m = &mesh_fac.mesh_vec[selected_mesh];
     std::string file_name = "C:\\Users\\BATU\\Desktop\\Master\\Trilateral\\Trilateral\\TrilateralMesh\\off\\spectral_mesh.off";
     std::ofstream outFile(file_name);
 
@@ -99,19 +96,36 @@ static void imgui_menubar_save_mesh(int& selected_mesh, MeshFactory& mesh_fac)
 
 
 static float convergence_ratio;
-static void dominant_symmetry_plane(MeshFactory& mesh_fac , int selected_mesh)
+static void dominant_symmetry_plane(TrilateralMesh* m )
 {
     ImGui::InputFloat("convergence ratio", &convergence_ratio);
     if (ImGui::MenuItem("Generate Dominant Symmetry Plane "))
     {
-        plane = generate_dominant_symmetry_plane(selected_mesh, mesh_fac, convergence_ratio);
+        plane = generate_dominant_symmetry_plane(m, convergence_ratio);
+        is_draw_plane = true;
     }
     if (ImGui::MenuItem("Save dominant Symmetry Plane"))
     {
-        dom_sym_save_plane(plane, &mesh_fac.mesh_vec[selected_mesh]);
+        dom_sym_save_plane(plane, m);
     }
     if (ImGui::MenuItem("read dominant Symmetry Plane"))
     {
-        dom_sym_read_plane(mesh_fac, selected_mesh, plane);
+        dom_sym_read_plane(m, plane);
+    }
+}
+
+
+
+
+
+#pragma region drawsection
+
+void draw_dom_sym()
+{
+    if (is_draw_plane)
+    {
+
+        DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p2), CoreType_conv_glm_raylib_vec3(plane.p3), RED);
+        DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p3), CoreType_conv_glm_raylib_vec3(plane.p4), RED);
     }
 }

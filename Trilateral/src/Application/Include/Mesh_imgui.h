@@ -442,21 +442,21 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
     }
     if (ImGui::Button("point matching with dominant plane and skeleton"))
     {
-        trilateral_point_matching_with_skeleton_endpoints(m_factory, selected_mesh, skeleton );
+       // trilateral_point_matching_with_skeleton_endpoints(m_factory, selected_mesh, skeleton );
         m_factory.remove_all();
         m_factory.add_all();
 
     }
     if (ImGui::Button("point matching with dominant plane and skeleton and HKS "))
     {
-        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton , desc_l , desc_r , plane);
+     //   trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton , desc_l , desc_r , plane);
         m_factory.remove_all();
         m_factory.add_all();
 
     }
     if (ImGui::Button(""))
     {
-        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton, desc_l , desc_r , plane);
+     //   trilateral_point_matching_with_skeleton_endpoints_w_HKS(m_factory, selected_mesh, skeleton, desc_l , desc_r , plane);
         m_factory.remove_all();
         m_factory.add_all();
 
