@@ -42,12 +42,6 @@ int main(void)
     camera.fovy = 90;
     camera.up = { 0 , 1 ,0 };
 
-    Matrix identity = {
-        1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f
-    };
     
     rlImGuiSetup(true);
     while (!WindowShouldClose())
@@ -56,9 +50,8 @@ int main(void)
         ClearBackground(GREEN);
         UpdateCamera(&camera, CAMERA_FREE);
         BeginMode3D(camera);
-        DrawMesh( m1.raylib_mesh, LoadMaterialDefault(), identity);
-        draw_all();
-        
+
+        draw_all(&m1);
         EndMode3D();
 
         rlImGuiBegin();

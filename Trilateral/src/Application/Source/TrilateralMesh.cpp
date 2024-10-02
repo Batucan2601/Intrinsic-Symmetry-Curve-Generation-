@@ -42,35 +42,7 @@ TrilateralMesh::TrilateralMesh(char* filename)
 	calculate_areas(this);
 	calculate_mesh_area(this);
 
-	this->raylib_mesh.vertices = (float*) &this->vertices[0];
-	this->raylib_mesh.animVertices = NULL;
-	this->raylib_mesh.normals = NULL;
-	this->raylib_mesh.tangents = NULL;
-	this->raylib_mesh.texcoords2 = NULL;
-	this->raylib_mesh.boneIds = NULL;
-	this->raylib_mesh.boneWeights = NULL;
-
-	this->raylib_mesh.vertexCount = this->vertices.size();
-	this->raylib_mesh.triangleCount = this->triangles.size()/3;
-	//copy indices
-	this->raylib_mesh.indices = (unsigned short*)malloc(this->triangles.size() * sizeof(unsigned short));
-	for (size_t i = 0; i < this->triangles.size(); i++)
-	{
-		this->raylib_mesh.indices[i] = this->triangles[i];
-	}
-	std::vector<unsigned char > zeroes(this->vertices.size() * 4, 0);
-	this->raylib_mesh.colors = (unsigned char*)malloc(this->vertices.size() * 4 * 1 );
-	for (size_t i = 0; i < this->vertices.size() * 4 ; i+=4 )
-	{
-		this->raylib_mesh.colors[i] = 0;
-		this->raylib_mesh.colors[i + 1 ] = 0;
-		this->raylib_mesh.colors[i + 2] = 0;
-		this->raylib_mesh.colors[i + 3] = 255;
-	}
-	this->raylib_mesh.texcoords = (float*)malloc(this->vertices.size() * 2 * 4 );
-	this->raylib_mesh.vaoId = 0;
-
-	UploadMesh(&this->raylib_mesh, false);
+	this->generate_raylib_mesh();
 }
 void TrilateralMesh::read_ply_format(char* filename)
 {
@@ -496,12 +468,71 @@ glm::mat4 TrilateralMesh::scale_mesh(glm::vec3 scale)
 	return temp;
 }
 
+void TrilateralMesh::generate_raylib_mesh()
+{
 
+	this->raylib_mesh.vertices = (float*)malloc(this->vertices.size() * 3 * sizeof(float));
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		this->raylib_mesh.vertices[i * 3] = this->vertices[i].x;
+		this->raylib_mesh.vertices[i * 3 + 1] = this->vertices[i].y;
+		this->raylib_mesh.vertices[i * 3 + 2] = this->vertices[i].z;
+	}
+	this->raylib_mesh.animVertices = NULL;
+	this->raylib_mesh.boneMatrices = NULL;
+	this->raylib_mesh.animNormals = NULL;
+	this->raylib_mesh.normals = NULL;
+	this->raylib_mesh.tangents = NULL;
+	this->raylib_mesh.texcoords2 = NULL;
+	this->raylib_mesh.boneIds = NULL;
+	this->raylib_mesh.boneWeights = NULL;
+
+	this->raylib_mesh.vertexCount = this->vertices.size();
+	this->raylib_mesh.triangleCount = this->triangles.size() / 3;
+	//copy indices
+	this->raylib_mesh.indices = (unsigned short*)malloc(this->triangles.size() * sizeof(unsigned short));
+	for (size_t i = 0; i < this->triangles.size(); i++)
+	{
+		this->raylib_mesh.indices[i] = this->triangles[i];
+	}
+	std::vector<unsigned char > zeroes(this->vertices.size() * 4, 0);
+	this->raylib_mesh.colors = (unsigned char*)malloc(this->vertices.size() * 4 * 1);
+	for (size_t i = 0; i < this->vertices.size() * 4; i += 4)
+	{
+		this->raylib_mesh.colors[i] = 0;
+		this->raylib_mesh.colors[i + 1] = 0;
+		this->raylib_mesh.colors[i + 2] = 0;
+		this->raylib_mesh.colors[i + 3] = 255;
+	}
+	this->raylib_mesh.texcoords = (float*)malloc(this->vertices.size() * 2 * 4);
+	this->raylib_mesh.vaoId = 0;
+
+	UploadMesh(&this->raylib_mesh, false);
+}
+void TrilateralMesh::update_raylib_mesh()
+{
+	//save color
+	this->raylib_colors_temp = (unsigned char *)malloc( sizeof(this->vertices.size() )  * 4  );
+	memcpy(this->raylib_colors_temp, this->raylib_mesh.colors, sizeof(this->vertices.size()) * 4);
+
+	UnloadMesh(this->raylib_mesh);
+	this->generate_raylib_mesh();
+
+	//give color back
+	memcpy( this->raylib_mesh.colors, this->raylib_colors_temp, sizeof(this->vertices.size()) * 4);
+	free(this->raylib_colors_temp);
+
+}
 void read_symmetry_format(char* filename, TrilateralMesh* m)
 {
 	std::ifstream symFile(filename);
 	double number = 0;
 	int index = 0;
+	if (!symFile.is_open())
+	{
+		std::cout << " failed to open the file " << std::endl; 
+		return;
+	}
 	while (symFile >> number)
 	{
 		std::pair<unsigned int, unsigned int> sym_pair;

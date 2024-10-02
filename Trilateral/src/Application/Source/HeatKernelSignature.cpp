@@ -94,7 +94,7 @@ void HKS_extract_kernel_signature(TrilateralMesh* m)
 void HKS_read_kernel_signature(TrilateralMesh* m)
 {
 	//go read the hks file 
-	std::string path = "../../Trilateral/TrilateralMesh/off/HKS/";
+	std::string path = "../../Trilateral/Mesh/off/HKS/";
 	std::string file_name = m->file_name;
 	std::string to_insert = ".hks";
 	file_name.insert(file_name.size() - 4, to_insert);
@@ -103,6 +103,7 @@ void HKS_read_kernel_signature(TrilateralMesh* m)
 
 	// Check if the file was successfully opened
 	if (!file.is_open()) {
+		std::cout << path << std::endl; 
 		std::cerr << "Could not open the file!" << std::endl;
 		return;
 	}

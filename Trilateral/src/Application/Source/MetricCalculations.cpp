@@ -140,7 +140,7 @@ void Metric_write_to_file(TrilateralMesh* m, const std::string& file_name)
 {
 	std::string concat_name = file_name;
 	//just in case 
-	read_symmetry_format((char*)"../../Trilateral/TrilateralMesh/off/sym.txt", m);
+	read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
 	
 	std::ofstream out_file;
 	// Specify the file name

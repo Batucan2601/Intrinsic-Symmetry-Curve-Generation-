@@ -8,4 +8,4 @@ void imgui_menu_bar(TrilateralMesh* m );
 
 
 //draw functions
-void draw_all();
+void draw_all(TrilateralMesh* m);

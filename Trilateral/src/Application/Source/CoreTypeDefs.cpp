@@ -446,3 +446,4 @@ Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3)
 	vec.z = vec3.z;
 	return vec;
 }
+

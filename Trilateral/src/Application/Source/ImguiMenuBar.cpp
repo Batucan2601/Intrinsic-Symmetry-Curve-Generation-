@@ -12,20 +12,28 @@
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
 #include "ImGuiFileDialog.h"
+#include "raymath.h"
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
 static void dominant_symmetry_plane(TrilateralMesh* m);
 static void skeleton_generation(TrilateralMesh* m);
+static void trilateral_functions(TrilateralMesh* m);
+static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type);
 static void display_file_dialogs(TrilateralMesh* m);
+
 std::string file_path;
 std::string file_path_name = "";
 static bool is_searching_swc = false; 
+static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
+static bool is_draw_mesh = true;
 static Plane plane;
 static Skeleton skeleton;
 static int dvorak_no_of_significant_points = 0;
+std::vector<TrilateralDescriptor> positive_desc; 
+std::vector<TrilateralDescriptor> negative_desc; 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -44,7 +52,26 @@ void imgui_menu_bar(TrilateralMesh* m)
         }
         if (ImGui::BeginMenu("Mesh"))
         {
-            if (ImGui::MenuItem("Save TrilateralMesh")) { imgui_menubar_save_mesh(m); }
+            if (ImGui::BeginMenu("Mesh properties "))
+            {
+                if (!is_mesh_wires)
+                {
+                    if (ImGui::Button("Draw mesh with wireframe "))
+                    {
+                        is_mesh_wires = !is_mesh_wires;
+                    }
+                }
+                else
+                {
+                    if (ImGui::Button("Draw mesh with polygon "))
+                    {
+                        is_mesh_wires = !is_mesh_wires;
+
+                    }
+                }
+          
+                ImGui::EndMenu();
+            }
             if (ImGui::BeginMenu("Skeleton "))
             {
                 skeleton_generation(m);
@@ -52,6 +79,7 @@ void imgui_menu_bar(TrilateralMesh* m)
             }
             if (ImGui::BeginMenu("Trilateral "))
             {
+                trilateral_functions(m);
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Dvorak"))
@@ -73,6 +101,11 @@ void imgui_menu_bar(TrilateralMesh* m)
                 dominant_symmetry_plane(m);
                 ImGui::EndMenu();
 
+            }
+            if (ImGui::BeginMenu("Mesh Drawing"))
+            {
+                mesh_drawing();
+                ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
@@ -114,7 +147,6 @@ static void skeleton_generation(TrilateralMesh* m)
     if (ImGui::MenuItem("Generate Skeleton"))
     {
         is_searching_swc = true; 
-       
     }
 
 }
@@ -138,18 +170,40 @@ static void dominant_symmetry_plane(TrilateralMesh* m )
     }
 }
 
+static void trilateral_functions(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("Setup mesh for operations  "))
+    {
+        std::cout << "reading symmetries " << std::endl;
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
+        std::cout << "reading symmetries DONE " << std::endl;
+        std::cout << "reading respective heat kernel signature" << std::endl;
+        HKS_read_kernel_signature(m);
+        std::cout << "reading respective heat kernel signature DONE " << std::endl;
+        std::cout << "select skeleton " << std::endl;
+        is_searching_swc = true;
+    }
+    if (ImGui::MenuItem("Point matching with skeleton endpoints "))
+    {
+        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m, skeleton, positive_desc, negative_desc, plane);
+        is_draw_plane = true; 
+    }
+
+}
 
 
-
-
-#pragma region drawsection
+#pragma region draw section
 static void draw_dom_sym();
 static void draw_skeleton();
+static void draw_resemblance_pairs(TrilateralMesh* m );
+static void draw_mesh(TrilateralMesh* m);
 
-void draw_all()
+void draw_all(TrilateralMesh* m)
 {
     draw_dom_sym();
     draw_skeleton();
+    draw_mesh(m);
+    draw_resemblance_pairs(m);
 }
 
 
@@ -157,7 +211,6 @@ static void draw_dom_sym()
 {
     if (is_draw_plane)
     {
-
         DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p2), CoreType_conv_glm_raylib_vec3(plane.p3), RED);
         DrawTriangle3D(CoreType_conv_glm_raylib_vec3(plane.p1), CoreType_conv_glm_raylib_vec3(plane.p3), CoreType_conv_glm_raylib_vec3(plane.p4), RED);
     }
@@ -180,6 +233,31 @@ static void draw_skeleton()
     
 }
 
+static void draw_resemblance_pairs(TrilateralMesh* m )
+{
+    for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+    {
+        int index1 = m->calculated_symmetry_pairs[i].first;
+        int index2 = m->calculated_symmetry_pairs[i].second;
+        DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+            CoreType_conv_glm_raylib_vec3(m->vertices[index2]), BLUE);
+    }
+}
+static void draw_mesh(TrilateralMesh* m)
+{
+    if (is_draw_mesh)
+    {
+        if (!is_mesh_wires)
+        {
+            DrawMesh(m->raylib_mesh, LoadMaterialDefault(), MatrixIdentity());
+        }
+        else
+        {
+            DrawMeshWires(m->raylib_mesh, Vector3{ 0,0,0 }, 1, BLACK);
+        }
+    }
+    
+}
 void drawFileDialog(std::string& file_path , std::string& file_path_name , std::string file_type , bool& is_open) {
     if (!is_open)
     {
@@ -213,4 +291,53 @@ static void display_file_dialogs(TrilateralMesh* m )
         file_path_name = "";
     }
        
+}
+
+static void mesh_drawing()
+{
+    if (is_draw_plane)
+    {
+        if (ImGui::MenuItem("Disable Plane Drawing"))
+        {
+            is_draw_plane = !is_draw_plane;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable Plane Drawing "))
+        {
+            is_draw_plane = !is_draw_plane;
+        }
+    }
+    if (is_draw_skeleton)
+    {
+        if (ImGui::MenuItem("Disable Skeleton Drawing"))
+        {
+            is_draw_skeleton = !is_draw_skeleton;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable Skeleton Drawing "))
+        {
+            is_draw_skeleton = !is_draw_skeleton;
+        }
+    }
+
+    if (is_draw_mesh)
+    {
+        if (ImGui::MenuItem("Disable Mesh Drawing"))
+        {
+            is_draw_mesh = !is_draw_mesh;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable mesh Drawing "))
+        {
+            is_draw_mesh = !is_draw_mesh;
+        }
+    }
+
+    
 }

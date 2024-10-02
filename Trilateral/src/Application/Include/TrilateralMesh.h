@@ -34,7 +34,9 @@ public:
 	std::vector<float> normalized_heat_kernel_signature; // vertex information of normals
 	glm::mat4 model_mat;
 	std::string file_name;
+
 	Mesh raylib_mesh;
+	unsigned char* raylib_colors_temp;
 	//VAO object
 	unsigned int vao_normals; 
 	//project 
@@ -50,6 +52,8 @@ public:
 	glm::mat4 move_mesh(glm::vec3 direction);
 	glm::mat4 scale_mesh(glm::vec3 scale);
 
+	void generate_raylib_mesh();
+	void update_raylib_mesh();
 	private:
 	void read_ply_format(char* filename);
 	void read_off_format(char* filename);

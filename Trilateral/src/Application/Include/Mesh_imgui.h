@@ -557,7 +557,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
     }
     if (ImGui::Button("Read symmetry values"))
     {
-        read_symmetry_format((char*)"../../Trilateral/TrilateralMesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
+        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m_factory.mesh_vec[selected_mesh]);
     }
     if (ImGui::Button("Start algorithm for current mesh"))
     {
