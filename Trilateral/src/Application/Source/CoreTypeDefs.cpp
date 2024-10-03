@@ -447,3 +447,6 @@ Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3)
 	return vec;
 }
 
+TrilateralDescriptor::TrilateralDescriptor()
+{
+}

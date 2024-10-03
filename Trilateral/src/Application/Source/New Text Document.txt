@@ -1,0 +1,248 @@
+#include "../Include/Histogram.h"
+#include "../Include/Geodesic.h"
+#include "../Include/ROI.h"
+#define _USE_MATH_DEFINES
+#include "math.h"
+
+
+Histogram::Histogram(int size )
+{
+	for (size_t i = 0; i < size; i++)
+	{
+		this->histogram.push_back(0);
+	}
+}
+//normalize to N  ( usually 1 ) 
+void Histogram::normalize(float N)
+{
+	//normalize histogram.
+	float histogram_sum = 0;
+	for (size_t i = 0; i < this->histogram.size(); i++)
+	{
+		histogram_sum += this->histogram[i];
+	}
+	for (size_t i = 0; i < this->histogram.size(); i++)
+	{
+		this->histogram[i] /= histogram_sum;
+		this->histogram[i] *= N;
+	}
+
+}
+int Histogram::size()
+{
+	return  this->histogram.size();
+}
+Histogram histogram_roi_area_detailed(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no,
+	std::vector<int> is_visited, std::vector<int>& global_is_visited)
+{
+	//histogram to be returned 
+	Histogram histogram(division_no);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
+	//find the maximum distance from is_visited and paths
+	float max = -999;
+	float min = 100000;
+	std::vector<unsigned int> triangles_inside;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		if (is_visited[i] == INSIDE) // if vertex is visited 
+		{
+			for (size_t j = 0; j < path_1_2.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_1_2[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_1_2[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_1_2[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_1_2[j]]);
+				}
+			}
+			for (size_t j = 0; j < path_1_3.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_1_3[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_1_3[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_1_3[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_1_3[j]]);
+				}
+			}
+			for (size_t j = 0; j < path_2_3.size(); j++)
+			{
+				if (glm::length(m->vertices[i] - m->vertices[path_2_3[j]]) > max)
+				{
+					max = glm::length(m->vertices[i] - m->vertices[path_2_3[j]]);
+				}
+				if (glm::length(m->vertices[i] - m->vertices[path_2_3[j]]) < min)
+				{
+					min = glm::length(m->vertices[i] - m->vertices[path_2_3[j]]);
+				}
+			}
+		}
+	}
+	//now recolor
+	std::vector<glm::vec3> new_color_buffer;
+	for (size_t i = 0; i < m->colors.size(); i++)
+	{
+
+		if (is_visited[i] == EDGE) //edge 
+		{
+			global_is_visited[i] = EDGE;
+		}
+		else if (is_visited[i] == OUTSIDE) //not visited 
+		{
+		}
+		else if (is_visited[i] == INSIDE) // get the max distance
+		{
+			if (global_is_visited[i] != EDGE)
+			{
+				global_is_visited[i] = INSIDE;
+			}
+		}
+	}
+	float max_dist_inside = -1;
+	float min_dist_inside = -1;
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		if (is_visited[index1] == INSIDE || is_visited[index2] == INSIDE || is_visited[index3] == INSIDE) //if any vertex is visited
+		{
+			triangles_inside.push_back(index1);
+			triangles_inside.push_back(index2);
+			triangles_inside.push_back(index3);
+			if (distance_matrix_p1[index1] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index1];
+			}
+			if (distance_matrix_p1[index2] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index2];
+			}
+			if (distance_matrix_p1[index3] > max_dist_inside)
+			{
+				max_dist_inside = distance_matrix_p1[index3];
+			}
+
+			if (distance_matrix_p1[index1] < min_dist_inside)
+			{
+				min_dist_inside = distance_matrix_p1[index1];
+			}
+			if (distance_matrix_p1[index2] < min_dist_inside)
+			{
+				min_dist_inside = distance_matrix_p1[index2];
+			}
+			if (distance_matrix_p1[index3] < min_dist_inside)
+			{
+				min_dist_inside = distance_matrix_p1[index3];
+			}
+		}
+	}
+	float step = max_dist_inside / division_no;
+	for (size_t i = 0; i < triangles_inside.size(); i += 3)
+	{
+		int i1 = triangles_inside[i];
+		int i2 = triangles_inside[i + 1];
+		int i3 = triangles_inside[i + 2];
+		glm::vec3 p1 = m->vertices[i1];
+		glm::vec3 p2 = m->vertices[i2];
+		glm::vec3 p3 = m->vertices[i3];
+		float i1_dist = distance_matrix_p1[i1];
+		float i2_dist = distance_matrix_p1[i2];
+		float i3_dist = distance_matrix_p1[i3];
+
+		int step_no_i1 = i1_dist / step; // floor 
+		int step_no_i2 = i2_dist / step; // floor 
+		int step_no_i3 = i3_dist / step; // floor
+		if (step_no_i1 == division_no)
+		{
+			step_no_i1--;
+		}
+		if (step_no_i2 == division_no)
+		{
+			step_no_i2--;
+		}
+		if (step_no_i3 == division_no)
+		{
+			step_no_i3--;
+		}
+		float triangle_area = compute_triangle_area(p1, p2, p3);
+		if (step_no_i1 == step_no_i2 && step_no_i1 == step_no_i3)
+		{
+			histogram[step_no_i1] += triangle_area;
+		}
+		//one of them is in other step 
+		else /*if (step_no_i1 == step_no_i2 && step_no_i1 != step_no_i3 &&
+			 step_no_i1 == step_no_i3 && step_no_i1 != step_no_i2 &&
+			 step_no_i2 == step_no_i3 && step_no_i2 != step_no_i3)*/
+		{
+			std::vector<std::pair<int, int>> steps;
+			steps.push_back(std::pair<int, int>(step_no_i1, i1));
+			steps.push_back(std::pair<int, int>(step_no_i2, i2));
+			steps.push_back(std::pair<int, int>(step_no_i3, i3));
+			CoreType_sort_by_value(steps);
+			//they are now in ascending order
+			// 1.1.1 small arc
+			float dist_step_0 = distance_matrix_p1[steps[0].second];
+			//find the distance to other hist
+			float small_r = (step * (steps[0].first + 1)) - dist_step_0;
+			glm::vec3 edge1 = m->vertices[steps[1].second] - m->vertices[steps[0].second];
+			glm::vec3 edge2 = m->vertices[steps[2].second] - m->vertices[steps[0].second];
+			float cosine = glm::dot(edge1, edge2) / (glm::length(edge1) * glm::length(edge2));
+			float small_radian = acos(cosine); //radian
+
+			float area_arc_small = M_PI * small_r * small_r * small_radian / (2 * M_PI);
+
+			histogram[steps[0].first] += area_arc_small;
+
+
+			// 1.1.2 closest arc
+			//a miscalculation but think it like also an arc although it is a reverse arc
+			float dist_step_2 = distance_matrix_p1[steps[2].second];
+			float big_r = dist_step_2 - (steps[2].first * step);
+			edge1 = m->vertices[steps[1].second] - m->vertices[steps[2].second];
+			edge2 = m->vertices[steps[0].second] - m->vertices[steps[2].second];
+			cosine = glm::dot(edge1, edge2) / (glm::length(edge1) * glm::length(edge2));
+			small_radian = acos(cosine); //radian
+			float area_arc_big = M_PI * big_r * big_r * small_radian / (2 * M_PI);
+			histogram[steps[2].first] += area_arc_big;
+
+
+			float area_left = triangle_area - (area_arc_small + area_arc_big);
+
+			int steps_left = steps[2].first - (steps[0].first + 1);
+			if (steps_left == 0)
+			{
+				histogram[steps[0].first] += area_left;
+				histogram[steps[1].first] += area_left;
+			}
+			else
+			{
+				int total_fraction = steps_left * steps_left;
+				for (size_t step_no = steps[0].first + 1; step_no < steps[2].first; step_no++)
+				{
+					int fraction_no = step_no - (steps[0].first);
+					float fraction_percentage = (pow(fraction_no, 2) - pow(fraction_no - 1, 2)) / fraction_no;
+
+					histogram[step_no] += fraction_percentage * area_left;
+				}
+			}
+
+
+
+		}
+
+	}
+
+	histogram.normalize(1);
+	
+	return histogram;
+
+}

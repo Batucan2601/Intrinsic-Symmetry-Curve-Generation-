@@ -1,6 +1,7 @@
 #pragma once 
 #include "glm/glm.hpp"
 #include "TrilateralMesh.h"
+#include "Histogram.h"
 #include "raylib.h"
 
 #include <eigen/Eigen/Dense>
@@ -39,7 +40,9 @@ struct TrilateralDescriptor
 	float n_ring_area_p2;
 	float n_ring_area_p3;
 	// histogram
-	std::vector<float> histogram; 
+	Histogram histogram; 
+
+	TrilateralDescriptor();
 
 };
 

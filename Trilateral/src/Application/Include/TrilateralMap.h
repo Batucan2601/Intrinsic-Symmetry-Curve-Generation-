@@ -12,7 +12,6 @@
 #include "Sampling.h"
 #include "CoreTypeDefs.h"
 #include "FuzzyGeodesic.h"
-#include "../Include/CoreTypeDefs.h"
 #include "../Include/Skeleton.h"
 
 // 1 - use area error
@@ -27,6 +26,12 @@ struct TrilateralError
 	float curvatureError;
 };
 
+struct Pair_w // pair with weight
+{
+	int first;
+	int second;
+	float weight; 
+};
 //static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
 
 std::vector<float> compute_geodesic_distances_min_heap_distances(TrilateralMesh& m, int point_index);
@@ -330,8 +335,7 @@ std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& se
 
 
 //static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);
-std::vector<float> histogramROi(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
-	std::vector<int> is_visited, std::vector<int>& global_is_visited);
+
 std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no,
 	std::vector<int> is_visited, std::vector<int>& global_is_visited);
 std::vector<float> histogram_roi_superior(TrilateralMesh* m , int point_index1, int point_index2, int point_index3, int division_no,
@@ -351,7 +355,6 @@ void display_accuracy(TrilateralMesh* m, std::vector<std::pair<unsigned int, uns
 void point_matching_with_dominant_symmetry_plane(MeshFactory& mesh_fac, int& selected_index, Plane* plane, int sampling_no);
 
 //region of interest
-std::vector<int> trilateral_ROI(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color);
 void trilateral_ROI_area(TrilateralMesh* m, const std::vector<int>& trilateral_vertices,  float& total_area);
 
 
