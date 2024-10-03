@@ -3610,24 +3610,7 @@ std::vector<float> trilateral_generate_spin_image(MeshFactory& mesh_fac, int sel
 	return histogram;
 }
 
-float chi_squre_distance(std::vector<float>& vec1, std::vector<float>& vec2)
-{
-	if (vec1.size() != vec2.size()) {
-		std::cerr << "Error: Vectors must be of the same length." << std::endl;
-		return -1;
-	}
 
-	float chiSquareDist = 0.0;
-	for (size_t i = 0; i < vec1.size(); ++i) {
-		float numerator = std::pow(vec1[i] - vec2[i], 2);
-		float denominator = vec1[i] + vec2[i];
-		if (denominator != 0) {
-			chiSquareDist += numerator / denominator;
-		}
-	}
-
-	return chiSquareDist;
-}
 
 void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
 {
@@ -3679,7 +3662,9 @@ void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const
 			{
 				continue;
 			}
-			float dist = chi_squre_distance(trilateral_histograms[i] , trilateral_histograms[j]);
+			Histogram h1(trilateral_histograms[i]);
+			Histogram h2(trilateral_histograms[j]);
+			float dist = Histogram_ChiSquareDistance(h1 , h2);
 			if (smallest_dist > dist)
 			{
 				smallest_dist = dist; 
@@ -3759,7 +3744,9 @@ void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, c
 			{
 				continue;
 			}
-			float dist = chi_squre_distance(trilateral_histograms[i], trilateral_histograms[j]);
+			Histogram h1(trilateral_histograms[i]);
+			Histogram h2(trilateral_histograms[j]);
+			float dist = Histogram_ChiSquareDistance(h1, h2);
 			if (smallest_dist > dist)
 			{
 				smallest_dist = dist;
