@@ -582,3 +582,146 @@ Histogram  Histogram_triangle_area(TrilateralMesh* m, int point_index1, int poin
 	}
 	return histogram;
 }
+
+
+Histogram2D::Histogram2D(int rows, int cols)
+{
+	this->histogram.resize(rows, cols);
+	this->histogram.setZero();
+}
+
+void Histogram2D::normalize(float num)
+{
+	float sum = 0;
+	for (size_t i = 0; i < this->histogram.rows(); i++)
+	{
+		for (size_t j = 0; j < this->histogram.cols(); j++)
+		{
+			sum += this->histogram(i, j);
+		}
+	}
+
+	for (size_t i = 0; i < this->histogram.rows(); i++)
+	{
+		for (size_t j = 0; j < this->histogram.cols(); j++)
+		{
+			this->histogram(i, j) = this->histogram(i, j)/ sum  * num ;
+		}
+	}
+}
+
+std::pair<int, int> Histogram2D::size()
+{
+	return std::pair<int, int>(this->histogram.rows()  , this->histogram.cols());
+}
+
+
+float Histogram2D_earthMoversDistance(const Histogram2D& h1, const Histogram2D& h2) 
+{
+	// Check if both vectors are of the same length
+	if (h1.histogram.size() != h2.histogram.size()) {
+		return -1;
+	}
+
+	// Check if the vectors are valid probability distributions
+	double h1_sum = 0.0, h2_sum = 0.0;
+	for (size_t i = 0; i < h1.histogram.rows(); ++i) 
+	{
+		for (size_t j = 0; i < h1.histogram.cols(); ++i)
+		{
+			h2_sum += h2.histogram(i,j);
+			h1_sum += h1.histogram(i,j);
+		}
+	}
+	if (fabs(h1_sum - 1.0) > 1e-9 || fabs(h2_sum - 1.0) > 1e-9) {
+		return -1;
+	}
+	// Compute the Earth Mover's Distance
+	double cumulativeDifference = 0.0;
+	double totalDistance = 0.0;
+
+	for (size_t i = 0; i < h1.histogram.rows(); ++i) 
+	{
+		for (size_t j = 0; j < h1.histogram.cols(); j++)
+		{
+			cumulativeDifference += h1.histogram(i, j) - h2.histogram(i,j);
+			totalDistance += fabs(cumulativeDifference);
+		}
+	}
+
+	return totalDistance;
+}
+
+float Histogram2D_bhattacharyyaDistance(const Histogram2D& h1, const Histogram2D& h2)
+{
+	// Check if both vectors are of the same length
+	if (h1.histogram.size() != h2.histogram.size()) {
+		return -1;
+	}
+
+	// Check if the vectors are valid probability distributions
+	double sumP = 0.0, sumQ = 0.0;
+	for (size_t i = 0; i < h1.histogram.rows(); i++) 
+	{
+		for (size_t j = 0; j < h1.histogram.cols(); j++)
+		{
+			sumP += h1.histogram(i,j);
+			sumQ += h2.histogram(i,j);
+		}
+	}
+	if (fabs(sumP - 1.0) > 1e-9 || fabs(sumQ - 1.0) > 1e-9) {
+		return  -1;
+	}
+
+	// Calculate the Bhattacharyya coefficient
+	double bc = 0.0;  // Bhattacharyya coefficient
+	for (size_t i = 0; i < h1.histogram.rows(); ++i) {
+		for (size_t j = 0; j < h1.histogram.cols(); ++j) {
+			if (h1.histogram(i, j) > 0.0 && h2.histogram(i,j)> 0.0) {
+				bc += sqrt(h1.histogram(i,j) * h2.histogram(i, j));
+			}
+		}
+	}
+
+	// Return the Bhattacharyya distance
+	return -log(bc);
+}
+
+
+float Histogram2D_ChiSquareDistance(const Histogram2D& h1, const Histogram2D& h2)
+{
+	if (h1.histogram.size() != h2.histogram.size()) {
+		std::cerr << "Error: Vectors must be of the same length." << std::endl;
+		return -1;
+	}
+	float chiSquareDist = 0.0;
+	for (size_t i = 0; i < h1.histogram.rows(); ++i) 
+	{
+		for (size_t j = 0; j < h1.histogram.cols(); ++j)
+		{
+			float numerator = std::pow(h1.histogram(i,j) - h2.histogram(i,j), 2);
+			float denominator = h1.histogram(i, j) + h2.histogram(i, j);
+			if (denominator != 0) {
+				chiSquareDist += numerator / denominator;
+			}
+		}
+		
+	}
+
+	return chiSquareDist;
+}
+
+float Histogram2D_L2Norm(const Histogram2D& h1, const Histogram2D& h2)
+{
+	float total_dif = 0;
+	for (size_t i = 0; i < h1.histogram.rows(); ++i)
+	{
+		for (size_t j = 0; j < h1.histogram.cols(); ++j)
+		{
+			float dif = abs(h1.histogram(i, j) - h2.histogram(i, j));
+			total_dif += dif;
+		}
+
+	}
+	return total_dif;
+}

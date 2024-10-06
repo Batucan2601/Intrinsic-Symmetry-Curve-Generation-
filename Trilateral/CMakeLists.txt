@@ -35,6 +35,8 @@ set(Header_Files
     "src/Application/Include/RaylibExtras.h"
     "src/Application/Include/ROI.h"
     "src/Application/Include/Histogram.h"
+    "src/Application/Include/SpinImage.h"
+
     
     "src/External/Include/rlImGui/imgui_impl_raylib.h"
     "src/External/Include/rlImGui/rlImgui.h"
@@ -83,6 +85,8 @@ set(Source_Files
     "src/Application/Source/RaylibExtras.cpp"
     "src/Application/Source/ROI.cpp"
     "src/Application/Source/Histogram.cpp"
+    "src/Application/Source/SpinImage.cpp"
+
 
     "src/External/Include/imgui/ImGuiFileDialog.cpp"
 

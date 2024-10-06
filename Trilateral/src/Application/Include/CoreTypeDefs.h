@@ -4,7 +4,6 @@
 #include "Histogram.h"
 #include "raylib.h"
 
-#include <eigen/Eigen/Dense>
 #include <algorithm>
 #include <vector>
 

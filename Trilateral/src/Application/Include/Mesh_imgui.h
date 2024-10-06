@@ -393,22 +393,6 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
 
     }
-    if (ImGui::Button("FPS and histogram matching w/ spin images "))
-    {
-        trilateral_FPS_histogram_matching_w_spin_image(m_factory, selected_mesh, no_of_points, no_of_hist_division);
-        m_factory.remove_all();
-        m_factory.add_all();
-        //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
-
-    }
-    if (ImGui::Button("FPS and histogram matching w/ spin images w/ Multidimensional scaling "))
-    {
-        trilateral_FPS_histogram_matching_w_spin_image_MDS(m_factory, selected_mesh, no_of_points, no_of_hist_division);
-        m_factory.remove_all();
-        m_factory.add_all();
-        //void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
-
-    }
     if (ImGui::Button("mesh and histogram matching w/ principal components "))
     {
         trilateral_FPS_histogram_matching_w_principal_comp(m_factory, selected_mesh, no_of_points, no_of_hist_division);

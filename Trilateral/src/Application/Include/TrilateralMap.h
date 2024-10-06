@@ -405,3 +405,6 @@ std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& 
 
  void trilateral_point_matching_with_skeleton_endpoints_anchors(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
 	 std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg, Plane& plane );
+
+ void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh* m, Skeleton& skeleton, std::vector<TrilateralDescriptor>& desc_left,
+	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane);

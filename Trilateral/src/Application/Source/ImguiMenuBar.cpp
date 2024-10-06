@@ -11,6 +11,7 @@
 #include "../Include/ShapeDiameter.h"
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
+#include "../Include/SpinImage.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 
@@ -183,12 +184,17 @@ static void trilateral_functions(TrilateralMesh* m)
         std::cout << "select skeleton " << std::endl;
         is_searching_swc = true;
     }
-    if (ImGui::MenuItem("Point matching with skeleton endpoints "))
+    if (ImGui::MenuItem("Point matching with skeleton endpoints triangle area "))
     {
         trilateral_point_matching_with_skeleton_endpoints_w_HKS(m, skeleton, positive_desc, negative_desc, plane);
         is_draw_plane = true; 
     }
-
+    if (ImGui::MenuItem("Point matching with skeleton endpoints  "))
+    {
+        trilateral_point_matching_with_skeleton_endpoints_SpinImage(m, skeleton, positive_desc,
+            negative_desc, plane);
+    }
+    
 }
 
 

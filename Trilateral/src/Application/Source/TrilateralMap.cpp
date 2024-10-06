@@ -7,6 +7,7 @@
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/ROI.h"
 #include "../Include/Histogram.h"
+#include "../Include/SpinImage.h"
 #define _USE_MATH_DEFINES
 #include "math.h"
 
@@ -3151,19 +3152,19 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 	int sample_no = N_left + N_right;
 
 	std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
-	std::vector<std::vector<float>> histograms_left;
-	std::vector<std::vector<float>> histograms_right;
+	std::vector<Histogram> histograms_left;
+	std::vector<Histogram> histograms_right;
 	for (size_t i = 0; i <  N_left; i++)
 	{
 		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_left[i].p1, trilateral_desc_left[i].p2, trilateral_desc_left[i].p3, histogram_size, false);
-		std::vector<float> histogram = histogramROi_hks(m, trilateral_desc_left[i].p1,
+		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_left[i].p1,
 			trilateral_desc_left[i].p2, trilateral_desc_left[i].p3, histogram_size, is_visited, global_is_visited);
 		histograms_left.push_back(histogram);
 	}
 	for (size_t i = 0; i < N_right; i++)
 	{
 		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_right[i].p1, trilateral_desc_right[i].p2, trilateral_desc_right[i].p3, histogram_size, false);
-		std::vector<float> histogram = histogramROi_hks(m, trilateral_desc_right[i].p1,
+		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_right[i].p1,
 			trilateral_desc_right[i].p2, trilateral_desc_right[i].p3, histogram_size, is_visited, global_is_visited);
 		histograms_right.push_back(histogram);
 	}
@@ -3172,16 +3173,11 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 	{
 		int minimum_index = -1;
 		float minimum_value = INFINITY;
-		std::vector<float> histogram_vec_i = histograms_left[i];
+		Histogram histogram_vec_i = histograms_left[i];
 		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_desc_left[i].histogram.histogram);
 		for (size_t j = 0; j < N_right; j++)
 		{
-			float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_right[j].p1];
-			std::vector<float> histogram_vec_j = histograms_left[j];
-			for (size_t k = 0; k < histogram_size; k++)
-			{
-				histogram_vec_j.push_back(hks_j);
-			}
+			Histogram histogram_vec_j = histograms_left[j];
 			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_right[j].histogram.histogram);
 			float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
 			//float resemblance_c = histogram_i.dot(histogram_j) / (histogram_i.norm() * histogram_j.norm()); // cosine similarity 
@@ -3212,11 +3208,11 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 
 	for (size_t i = 0; i < N_right; i++)
 	{
-		std::vector<float> histogram_vec_i = histograms_right[i];
+		Histogram histogram_vec_i = histograms_right[i];
 		Eigen::VectorXd histogram_i = stdVectorToEigenVectorXd(trilateral_desc_right[i].histogram.histogram);
 		for (size_t j = 0; j < N_left; j++)
 		{
-			std::vector<float> histogram_vec_j = histograms_left[j];
+			Histogram histogram_vec_j = histograms_left[j];
 			Eigen::VectorXd histogram_j = stdVectorToEigenVectorXd(trilateral_desc_left[j].histogram.histogram);
 			float resemblance = (histogram_i - histogram_j).norm(); // L2 norm
 			compareResults_right.push_back({ resemblance, {i,j} });
@@ -3546,231 +3542,6 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 
 }
 
-std::vector<float> trilateral_generate_spin_image(MeshFactory& mesh_fac, int selected_index , std::vector<int>& vertices_in_tri_area, int division_no)
-{
-	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_index];
-	int N = vertices_in_tri_area.size(); //number of vertices in area
-	// 1 - select a reference point
-	glm::vec3 reference_point(0.0f, 0.0f, 0.0f);
-	// 1.1 select reference point as average
-	for (size_t i = 0; i < N; i++)
-	{
-		reference_point = reference_point + m->vertices[vertices_in_tri_area[i]];
-	}
-	reference_point = reference_point / (float)N;
-	
-	
-	//2 - subtract  reference from each point for normalization
-	std::vector<glm::vec3> normalized_points; 
-	for (size_t i = 0; i < N; i++)
-	{
-		normalized_points.push_back(m->vertices[vertices_in_tri_area[i]]);
-		normalized_points[i] = normalized_points[i] - reference_point;
-	}
-
-	// 3 -  our normal direction is y
-	// WARNING: this is true  only for KIDS DATASET
-	glm::vec3 normal_dir(0.0f, 1.0f, 0.0f);
-	glm::vec3 ref_point_and_normal = reference_point + normal_dir;
-	std::vector<float> point_distances(N);
-	for (size_t i = 0; i < N; i++)
-	{
-		point_distances[i] = distancePointToLine(normalized_points[i], reference_point, ref_point_and_normal);
-	}
-	//generate histogram
-
-	// 1- get min and max
-	float min  = INFINITY;
-	float max = -INFINITY ;
-	for(size_t i = 0; i < N; i++)
-	{
-		if (point_distances[i] > max)
-		{
-			max = point_distances[i];
-		}
-		if (point_distances[i] < min)
-		{
-			min = point_distances[i];
-		}
-	}
-
-	//fill histogram
-	std::vector<float> histogram(division_no,0);
-	float hist_interval = (max - min) / division_no;
-	for(size_t i = 0; i < N; i++)
-	{
-		int index = (point_distances[i] - min) / hist_interval;
-		if (point_distances[i] == max)
-		{
-			index = index - 1; 
-		}
-		histogram[index] += 1;
-	}
-
-	return histogram;
-}
-
-
-
-void trilateral_FPS_histogram_matching_w_spin_image(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
-{
-	TrilateralMesh* mesh = &mesh_fac.mesh_vec[selected_index];
-	std::vector<std::vector<float>> trilateral_histograms;
-	std::vector<unsigned int> sampled_points = furthest_point_sampling(mesh, sample_no, true);
-
-	// use dijkstra to get each beest neihbours
-	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
-	std::vector<int> global_is_visited;
-	for (size_t i = 0; i < mesh->vertices.size(); i++)
-	{
-		global_is_visited.push_back(OUTSIDE);
-	}
-	for (size_t i = 0; i < sample_no; i++)
-	{
-		std::vector<int> is_visited = ROI_trilateral(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false );
-		std::vector<int> points_inside; 
-		for (size_t i = 0; i < is_visited.size(); i++)
-		{
-			if (is_visited[i] == INSIDE)
-			{
-				points_inside.push_back(i);
-			}
-		}
-		std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside, division_no);
-		trilateral_histograms.push_back(histogram);
-	}
-	for (size_t i = 0; i < mesh->colors.size(); i++)
-	{
-		if (global_is_visited[i] == EDGE)
-		{
-			mesh->colors[i] = glm::vec3(255.0f, 0.0f, 0.0f);
-		}
-		if (global_is_visited[i] == INSIDE)
-		{
-			mesh->colors[i] = glm::vec3(0.0f, 255.0f, 0.0f);
-		}
-	}
-	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-	//compare each
-	for (size_t i = 0; i < sample_no; i++)
-	{
-		float smallest_dist = INFINITY; 
-		int smallest_index = -1;
-		for (size_t j = 0; j < sample_no; j++)
-		{
-			if (j == i)
-			{
-				continue;
-			}
-			Histogram h1(trilateral_histograms[i]);
-			Histogram h2(trilateral_histograms[j]);
-			float dist = Histogram_ChiSquareDistance(h1 , h2);
-			if (smallest_dist > dist)
-			{
-				smallest_dist = dist; 
-				smallest_index = j; 
-			}
-		}
-		resemblance_pairs.push_back(std::pair<int, int>(sampled_points[i],sampled_points[smallest_index]));
-	}
-
-	//buffer
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
-	{
-		mesh->colors[resemblance_pairs[i].first].r = 255;
-		mesh->colors[resemblance_pairs[i].first].g = 0;
-		mesh->colors[resemblance_pairs[i].first].b = 0;
-
-		mesh->colors[resemblance_pairs[i].second].r = 0;
-		mesh->colors[resemblance_pairs[i].second].g = 0;
-		mesh->colors[resemblance_pairs[i].second].b = 255;
-	}
-
-	mesh->calculated_symmetry_pairs = resemblance_pairs;
-
-}
-// exact same with function above except do the histogram in MDS 
-void trilateral_FPS_histogram_matching_w_spin_image_MDS(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
-{
-	TrilateralMesh* mesh = &mesh_fac.mesh_vec[selected_index];
-	std::vector<std::vector<float>> trilateral_histograms;
-	std::vector<glm::vec3> mds_points;
-	std::vector<unsigned int> sampled_points = furthest_point_sampling(mesh, sample_no, true);
-	int N = mesh->vertices.size();
-	//MDS points
-	mds_points = compute_landmark_MDS_w_givenPoints(mesh, 3, sampled_points);
-
-	// use dijkstra to get each beest neihbours
-	std::vector<TrilateralDescriptor> trilateral_desc = get_trilateral_points_using_closest_pairs(mesh_fac, selected_index, sampled_points);
-	std::vector<int> global_is_visited;
-	std::vector<std::vector<int>> is_visited_list(mesh->vertices.size()); 
-	std::vector<std::vector<int>> points_inside_list(mesh->vertices.size()); 
-	for (size_t i = 0; i < mesh->vertices.size(); i++)
-	{
-		global_is_visited.push_back(OUTSIDE);
-	}
-	for (size_t i = 0; i < sample_no; i++)
-	{
-		is_visited_list[i] = ROI_trilateral(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false);
-		std::vector<int> points_inside;
-		for (size_t j = 0; j < N; j++)
-		{
-			if (is_visited_list[i][j] == INSIDE)
-			{
-				points_inside.push_back(j);
-			}
-		}
-		points_inside_list[i] = points_inside;
-		/*std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside, division_no);
-		trilateral_histograms.push_back(histogram);*/
-	}
-
-	mesh->vertices = mds_points;
-	for (size_t i = 0; i < sample_no; i++)
-	{
-		std::vector<float> histogram = trilateral_generate_spin_image(mesh_fac, selected_index, points_inside_list[i], division_no);
-		trilateral_histograms.push_back(histogram);
-
-	}
-	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-	//compare each
-	for (size_t i = 0; i < sample_no; i++)
-	{
-		float smallest_dist = INFINITY;
-		int smallest_index = -1;
-		for (size_t j = 0; j < sample_no; j++)
-		{
-			if (j == i)
-			{
-				continue;
-			}
-			Histogram h1(trilateral_histograms[i]);
-			Histogram h2(trilateral_histograms[j]);
-			float dist = Histogram_ChiSquareDistance(h1, h2);
-			if (smallest_dist > dist)
-			{
-				smallest_dist = dist;
-				smallest_index = j;
-			}
-		}
-		resemblance_pairs.push_back(std::pair<int, int>(sampled_points[i], sampled_points[smallest_index]));
-	}
-
-	//buffer
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
-	{
-		mesh->colors[resemblance_pairs[i].first].r = 255;
-		mesh->colors[resemblance_pairs[i].first].g = 0;
-		mesh->colors[resemblance_pairs[i].first].b = 0;
-
-		mesh->colors[resemblance_pairs[i].second].r = 0;
-		mesh->colors[resemblance_pairs[i].second].g = 0;
-		mesh->colors[resemblance_pairs[i].second].b = 255;
-	}
-
-	mesh->calculated_symmetry_pairs = resemblance_pairs;
-
-}
 
 // exact same with function above except do the histogram in MDS 
 void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, const int& selected_index, int sample_no, int division_no)
@@ -4560,4 +4331,113 @@ TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton
 
 	TrilateralDescriptor  desc = generate_trilateral_descriptor(m, (int)point_index , smallest_index , second_smallest_index, false );
 	return desc;
+}
+
+
+
+void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh* m, Skeleton& skeleton, std::vector<TrilateralDescriptor>& desc_left,
+	std::vector<TrilateralDescriptor>& desc_right, Plane& plane)
+{
+	int N = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	glm::vec3 mesh_mid_point;
+	// 1 - get end points from skeleton
+	std::vector<unsigned int> mesh_endpoints;
+	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
+	int sample_no = mesh_endpoints.size();
+	// 2- generate plane 
+	 //calculate center of the plane 
+	glm::vec3 plane_center(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		plane_center += m->vertices[i];
+	}
+	plane_center /= m->vertices.size();
+	if (!dom_sym_read_plane(m, plane))
+	{
+		plane = generate_dominant_symmetry_plane(m, 2);
+	}
+	//divide the end points 
+	std::vector<unsigned int> left_skeleton_indices;
+	std::vector<unsigned int> right_skeleton_indices;
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		if (get_point_status_from_plane(&plane, &m->vertices[mesh_endpoints[i]]) > 0)
+		{
+			right_skeleton_indices.push_back(mesh_endpoints[i]);
+		}
+		else
+		{
+			left_skeleton_indices.push_back(mesh_endpoints[i]);
+		}
+	}
+
+	desc_left = get_trilateral_points_using_closest_pairs(m, right_skeleton_indices);
+	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
+
+	std::vector<std::vector<int> > desc_left_visited_vertices;
+	std::vector<std::vector<int> > desc_right_visited_vertices;
+	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	{
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
+		std::vector<int> is_visited = ROI_trilateral(m, desc_left[i].p1,
+			desc_left[i].p2, desc_left[i].p3, 10, true);
+		desc_left_visited_vertices.push_back(is_visited);
+	}
+	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
+	{
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
+		std::vector<int> is_visited = ROI_trilateral(m, desc_right[i].p1,
+			desc_right[i].p2, desc_right[i].p3, 10, true);
+		desc_right_visited_vertices.push_back(is_visited);
+	}
+	std::vector<std::pair<unsigned int, unsigned int>> resemblances;
+	for (size_t i = 0; i < desc_left.size(); i++)
+	{
+		Histogram2D spin_image_i = SpinImage_generate_spin_image(m, desc_left[i].p1, desc_left_visited_vertices[i]
+			, 4);
+		float smallest = INFINITY;
+		int smallest_index = -1;
+		for (size_t j = 0; j < desc_right.size(); j++)
+		{
+			Histogram2D spin_image_j = SpinImage_generate_spin_image(m, desc_right[j].p1, desc_right_visited_vertices[j]
+				, 4);
+			float resemblance = Histogram2D_L2Norm(spin_image_i, spin_image_j);
+			if (smallest > resemblance)
+			{
+				smallest = resemblance;
+				smallest_index = j; 
+			}
+		}
+		int index_i = desc_left[i].p1;
+		int index_j = desc_right[smallest_index].p1;
+		resemblances.push_back(std::pair<unsigned int, unsigned int>( index_i ,index_j));
+	}
+	for (size_t i = 0; i < desc_right.size(); i++)
+	{
+		Histogram2D spin_image_i = SpinImage_generate_spin_image(m, desc_right[i].p1, desc_right_visited_vertices[i]
+			, 4);
+		float smallest = INFINITY;
+		int smallest_index = -1;
+		for (size_t j = 0; j < desc_left.size(); j++)
+		{
+			Histogram2D spin_image_j = SpinImage_generate_spin_image(m, desc_left[j].p1, desc_left_visited_vertices[j]
+				, 4);
+			float resemblance = Histogram2D_L2Norm(spin_image_i, spin_image_j);
+			if (smallest > resemblance)
+			{
+				smallest = resemblance;
+				smallest_index = j;
+			}
+		}
+		int index_i = desc_right[i].p1;
+		int index_j = desc_left[smallest_index].p1;
+		resemblances.push_back(std::pair<int, int>(index_j, index_i));
+	}
+
+	m->calculated_symmetry_pairs = resemblances; 
+
+	Metric_write_to_file(m, "../../Results/Trilateral_W_SKELETON_AND_HKS.txt");
+
+
 }
