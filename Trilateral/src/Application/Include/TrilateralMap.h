@@ -408,3 +408,7 @@ std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& 
 
  void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh* m, Skeleton& skeleton, std::vector<TrilateralDescriptor>& desc_left,
 	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane);
+
+
+ void trilateral_display_trilateral_from_skeleton_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
+	 , std::vector<TrilateralDescriptor>& negative_desc, Skeleton& skeleton, Plane& plane);

@@ -14,22 +14,31 @@
 #include "../Include/SpinImage.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
+#include <fstream>  // Include for file stream handling
+
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
 static void dominant_symmetry_plane(TrilateralMesh* m);
 static void skeleton_generation(TrilateralMesh* m);
 static void trilateral_functions(TrilateralMesh* m);
 static void mesh_drawing();
-static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type);
+static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
-
+static void save_trilateral_descriptors();
+static void load_trilateral_descriptors();
+static void write_trilateral_descriptors(std::string filename);
+static void read_trilateral_descriptors(std::string filename);
+static void  display_descriptor(TrilateralMesh* m);
 std::string file_path;
 std::string file_path_name = "";
 static bool is_searching_swc = false; 
+static bool is_writing_dsc = false; 
+static bool is_reading_dsc = false; 
 static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static bool is_draw_mesh = true;
+static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
 static int dvorak_no_of_significant_points = 0;
@@ -184,17 +193,38 @@ static void trilateral_functions(TrilateralMesh* m)
         std::cout << "select skeleton " << std::endl;
         is_searching_swc = true;
     }
+    if (ImGui::BeginMenu("Trilateral Descriptor"))
+    {
+        if (ImGui::MenuItem("Save trilateral desscriptors"))
+        {
+            save_trilateral_descriptors();
+        }
+        if (ImGui::MenuItem("Load trilateral descriptors"))
+        {
+            load_trilateral_descriptors();
+        }
+        if (ImGui::InputInt("descriptor no ", &descriptor_no));
+        if (ImGui::MenuItem("Display descriptor"))
+        {
+            display_descriptor(m);
+        }
+        ImGui::EndMenu();
+
+    }
     if (ImGui::MenuItem("Point matching with skeleton endpoints triangle area "))
     {
         trilateral_point_matching_with_skeleton_endpoints_w_HKS(m, skeleton, positive_desc, negative_desc, plane);
         is_draw_plane = true; 
     }
-    if (ImGui::MenuItem("Point matching with skeleton endpoints  "))
+    if (ImGui::MenuItem("Point matching with skeleton endpoints with spin image  "))
     {
         trilateral_point_matching_with_skeleton_endpoints_SpinImage(m, skeleton, positive_desc,
             negative_desc, plane);
     }
-    
+    if (ImGui::MenuItem("Generate trilaterals using endpoints "))
+    {
+        trilateral_display_trilateral_from_skeleton_endpoints(m, positive_desc , negative_desc , skeleton , plane );
+    }
 }
 
 
@@ -264,7 +294,7 @@ static void draw_mesh(TrilateralMesh* m)
     }
     
 }
-void drawFileDialog(std::string& file_path , std::string& file_path_name , std::string file_type , bool& is_open) {
+static void drawFileDialog(std::string& file_path , std::string& file_path_name , std::string file_type , bool& is_open) {
     if (!is_open)
     {
         return; 
@@ -294,6 +324,19 @@ static void display_file_dialogs(TrilateralMesh* m )
     {
         skeleton = skeleton_read_swc_file(m, file_path_name);
         is_draw_skeleton = true;
+        file_path_name = "";
+    }
+    drawFileDialog(file_path, file_path_name, ".dsc", is_writing_dsc);
+    if (file_path_name != "")
+    {
+        write_trilateral_descriptors(file_path_name);
+        file_path_name = "";
+    }
+    drawFileDialog(file_path, file_path_name, ".dsc", is_reading_dsc);
+    if (file_path_name != "")
+    {
+        read_trilateral_descriptors(file_path_name);
+
         file_path_name = "";
     }
        
@@ -346,4 +389,147 @@ static void mesh_drawing()
     }
 
     
+}
+
+
+#pragma region trilateral save load 
+static void save_trilateral_descriptors()
+{
+    is_writing_dsc = true; 
+    
+}
+static void load_trilateral_descriptors()
+{
+    is_reading_dsc = true;
+}
+static void write_trilateral_descriptors(std::string filename)
+{
+    std::ofstream file;                // Create an ofstream object for file output
+
+    // Open the file in write mode
+    file.open(filename);
+
+    // Check if the file was opened successfully
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return ;
+    }
+
+    // Write some data to the file
+    //desc format 1 - 
+    for (size_t i = 0; i < positive_desc.size(); i++)
+    {
+        file << " desc ";
+        file << positive_desc[i].p1 << " " << positive_desc[i].p2 << " " << positive_desc[i].p3 << std::endl;
+        for (size_t j = 0; j < positive_desc[i].visited_indices.size(); j++)
+        {
+            file << positive_desc[i].visited_indices[j] << " ";
+        }
+        file << std::endl;
+    }
+    file << "negative" << std::endl;
+    for (size_t i = 0; i < negative_desc.size(); i++)
+    {
+        file << " desc ";
+        file << negative_desc[i].p1 << " " << negative_desc[i].p2 << " " << negative_desc[i].p3 << std::endl;
+        for (size_t j = 0; j < negative_desc[i].visited_indices.size(); j++)
+        {
+            file << negative_desc[i].visited_indices[j] << " ";
+        }
+        file << std::endl;
+    }
+    // Close the file
+    file.close();
+
+}
+
+static void read_trilateral_descriptors(std::string filename)
+{
+    std::ifstream file(filename);                // Create an ofstream object for file output
+
+    // Check if the file was opened successfully
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+
+    // Write some data to the file
+    //desc format 1 - 
+    int pos_size = positive_desc.size();
+    std::vector<TrilateralDescriptor> descriptors;
+    int negative_start_index = -1;
+    bool is_pos_desc = true; 
+    std::string line;
+
+    TrilateralDescriptor desc; 
+    while (std::getline(file, line))
+    {
+
+        if (line.find("negative") != std::string::npos)
+        {
+            is_pos_desc = false;
+            negative_start_index = descriptors.size();
+        }
+        if (line.find("desc") != std::string::npos)
+        {
+            line = line.substr(5);
+            std::stringstream ss(line);
+            std::vector<int> nums;
+            int num;
+            while (ss >> num)
+            {
+                nums.push_back(num);
+            }
+            desc.p1 = nums[0];
+            desc.p2 = nums[1];
+            desc.p3 = nums[2];
+        }
+        else
+        {
+            std::stringstream ss(line);
+            std::vector<unsigned int> visited;
+            unsigned int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.visited_indices = visited;
+            descriptors.push_back(desc);
+        }
+    }
+    // Close the file
+    file.close();
+    
+    for (size_t i = 0; i < negative_start_index; i++)
+    {
+        positive_desc.push_back(descriptors[i]);
+    }  
+    for (size_t i = negative_start_index; i < descriptors.size(); i++)
+    {
+        negative_desc.push_back(descriptors[i]);
+    }
+    return;
+}
+
+static void  display_descriptor(TrilateralMesh* m )
+{
+    TrilateralDescriptor desc; 
+    if (descriptor_no < positive_desc.size())
+    {
+        desc = positive_desc[descriptor_no];
+    }
+    else
+    {
+        desc = positive_desc[descriptor_no - positive_desc.size()];
+    }
+    for (size_t i = 0; i < desc.visited_indices.size() ; i++)
+    {
+        int index = desc.visited_indices[i];
+
+        m->raylib_mesh.colors[index * 4] = 255;
+        m->raylib_mesh.colors[index * 4 + 1] = 0;
+        m->raylib_mesh.colors[index * 4 + 2] = 0;
+        m->raylib_mesh.colors[index * 4 + 3] = 255;
+    }
+    m->update_raylib_mesh();
 }

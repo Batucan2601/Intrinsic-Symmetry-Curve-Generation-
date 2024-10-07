@@ -2767,8 +2767,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 for (size_t i = 0; i < fps_positive.size(); i++)
 	 {
 		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
-		 std::vector<int> is_visited = ROI_trilateral(&mesh, positive_mesh_trilateral_descriptor[i].p1,
-		 positive_mesh_trilateral_descriptor[i].p2, positive_mesh_trilateral_descriptor[i].p3, 3, false);
+		 std::vector<int> is_visited = ROI_trilateral(&mesh, positive_mesh_trilateral_descriptor[i], 3, false);
 		 Histogram histogram = Histogram_triangle_area(&mesh, positive_mesh_trilateral_descriptor[i].p1,
 		 positive_mesh_trilateral_descriptor[i].p2, positive_mesh_trilateral_descriptor[i].p3, 3, is_visited, global_is_visited);
 		 positive_mesh_trilateral_descriptor[i].histogram = histogram;
@@ -2776,8 +2775,7 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 for (size_t i = 0; i < fps_negative.size(); i++)
 	 {
 		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
-		 std::vector<int> is_visited = ROI_trilateral(&mesh, negative_mesh_trilateral_descriptor[i].p1,
-			 negative_mesh_trilateral_descriptor[i].p2, negative_mesh_trilateral_descriptor[i].p3, 3, false);
+		 std::vector<int> is_visited = ROI_trilateral(&mesh, negative_mesh_trilateral_descriptor[i], 3, false);
 		 Histogram histogram = Histogram_triangle_area(&mesh, negative_mesh_trilateral_descriptor[i].p1,
 			 negative_mesh_trilateral_descriptor[i].p2, negative_mesh_trilateral_descriptor[i].p3, 3, is_visited, global_is_visited);
 		 negative_mesh_trilateral_descriptor[i].histogram = histogram;
@@ -3156,14 +3154,14 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 	std::vector<Histogram> histograms_right;
 	for (size_t i = 0; i <  N_left; i++)
 	{
-		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_left[i].p1, trilateral_desc_left[i].p2, trilateral_desc_left[i].p3, histogram_size, false);
+		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_left[i], histogram_size, false);
 		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_left[i].p1,
 			trilateral_desc_left[i].p2, trilateral_desc_left[i].p3, histogram_size, is_visited, global_is_visited);
 		histograms_left.push_back(histogram);
 	}
 	for (size_t i = 0; i < N_right; i++)
 	{
-		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_right[i].p1, trilateral_desc_right[i].p2, trilateral_desc_right[i].p3, histogram_size, false);
+		std::vector<int> is_visited = ROI_trilateral(m, trilateral_desc_right[i], histogram_size, false);
 		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_right[i].p1,
 			trilateral_desc_right[i].p2, trilateral_desc_right[i].p3, histogram_size, is_visited, global_is_visited);
 		histograms_right.push_back(histogram);
@@ -3479,7 +3477,7 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	std::vector<int> global_is_visited( N , OUTSIDE); 
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		std::vector<int> is_visited = ROI_trilateral(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no , false );
+		std::vector<int> is_visited = ROI_trilateral(mesh, trilateral_desc[i], division_no , false );
 		Histogram histogram = Histogram_triangle_area(mesh,trilateral_desc[i].p1 ,
 		trilateral_desc[i].p2 , trilateral_desc[i].p3 , division_no,is_visited , global_is_visited);
 		trilateral_histograms.push_back(histogram);
@@ -3562,7 +3560,7 @@ void trilateral_FPS_histogram_matching_w_principal_comp(MeshFactory& mesh_fac, c
 	}
 	for (size_t i = 0; i < sample_no; i++)
 	{
-		is_visited_list[i] = ROI_trilateral(mesh, trilateral_desc[i].p1, trilateral_desc[i].p2, trilateral_desc[i].p3, division_no,false);
+		is_visited_list[i] = ROI_trilateral(mesh, trilateral_desc[i], division_no,false);
 		std::vector<int> points_inside;
 		for (size_t j = 0; j < N; j++)
 		{
@@ -4342,7 +4340,7 @@ void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh*
 	int mesh_mid_point_index = -1;
 	glm::vec3 mesh_mid_point;
 	// 1 - get end points from skeleton
-	std::vector<unsigned int> mesh_endpoints;
+	std::vector<unsigned int> mesh_endpoints; 
 	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
 	int sample_no = mesh_endpoints.size();
 	// 2- generate plane 
@@ -4380,15 +4378,13 @@ void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh*
 	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
 	{
 		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
-		std::vector<int> is_visited = ROI_trilateral(m, desc_left[i].p1,
-			desc_left[i].p2, desc_left[i].p3, 10, true);
+		std::vector<int> is_visited = ROI_trilateral(m, desc_left[i], 10, true);
 		desc_left_visited_vertices.push_back(is_visited);
 	}
 	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
 	{
 		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
-		std::vector<int> is_visited = ROI_trilateral(m, desc_right[i].p1,
-			desc_right[i].p2, desc_right[i].p3, 10, true);
+		std::vector<int> is_visited = ROI_trilateral(m, desc_right[i], 10, true);
 		desc_right_visited_vertices.push_back(is_visited);
 	}
 	std::vector<std::pair<unsigned int, unsigned int>> resemblances;
@@ -4440,4 +4436,61 @@ void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh*
 	Metric_write_to_file(m, "../../Results/Trilateral_W_SKELETON_AND_HKS.txt");
 
 
+}
+
+void trilateral_display_trilateral_from_skeleton_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
+, std::vector<TrilateralDescriptor>& negative_desc,Skeleton& skeleton, Plane& plane )
+{
+	int N = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	glm::vec3 mesh_mid_point;
+	// 1 - get end points from skeleton
+	std::vector<unsigned int> mesh_endpoints; 
+	skeleton_calculate_closest_mesh_points(skeleton, m, mesh_endpoints);
+	int sample_no = mesh_endpoints.size();
+	// 2- generate plane 
+	 //calculate center of the plane 
+	glm::vec3 plane_center(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		plane_center += m->vertices[i];
+	}
+	plane_center /= m->vertices.size();
+	if (!dom_sym_read_plane(m, plane))
+	{
+		plane = generate_dominant_symmetry_plane(m, 2);
+	}
+	//divide the end points 
+	std::vector<unsigned int> left_skeleton_indices;
+	std::vector<unsigned int> right_skeleton_indices;
+	for (size_t i = 0; i < sample_no; i++)
+	{
+		if (get_point_status_from_plane(&plane, &m->vertices[mesh_endpoints[i]]) > 0)
+		{
+			right_skeleton_indices.push_back(mesh_endpoints[i]);
+		}
+		else
+		{
+			left_skeleton_indices.push_back(mesh_endpoints[i]);
+		}
+	}
+
+	positive_desc = get_trilateral_points_using_closest_pairs(m, right_skeleton_indices);
+	negative_desc= get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
+
+	std::vector<std::vector<int> > desc_left_visited_vertices;
+	std::vector<std::vector<int> > desc_right_visited_vertices;
+	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	{
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
+		std::vector<int> is_visited = ROI_trilateral(m, positive_desc[i], 10, true);
+		desc_left_visited_vertices.push_back(is_visited);
+	}
+	for (size_t i = 0; i < left_skeleton_indices.size(); i++)
+	{
+		std::vector<int> global_is_visited(m->vertices.size(), OUTSIDE);
+		std::vector<int> is_visited = ROI_trilateral(m, negative_desc[i], 10, true);
+		desc_right_visited_vertices.push_back(is_visited);
+	}
+	m->update_raylib_mesh();
 }

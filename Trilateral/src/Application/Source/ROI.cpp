@@ -4,14 +4,14 @@
 static std::vector<int> check_vertices_visited(TrilateralMesh* m, std::vector<int>& path_1_2, std::vector<int>& path_1_3, std::vector<int>& path_2_3);
 static std::vector<int> breadth_first_search(TrilateralMesh* m, int point_index, std::vector<int> is_visited);
 
-std::vector<int> ROI_trilateral(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no, bool is_color)
+std::vector<int> ROI_trilateral(TrilateralMesh* m,TrilateralDescriptor& desc, int division_no, bool is_color)
 {
-	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
-	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
-	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
-	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, point_index1);
-	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, point_index2);
-	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, point_index3);
+	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, desc.p1, desc.p2);
+	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, desc.p1, desc.p3);
+	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, desc.p2, desc.p3);
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, desc.p1);
+	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, desc.p2);
+	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, desc.p3);
 
 	std::vector<int> is_visited = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
 
@@ -19,33 +19,37 @@ std::vector<int> ROI_trilateral(TrilateralMesh* m, int point_index1, int point_i
 	{
 		for (size_t i = 0; i < m->colors.size(); i++)
 		{
-
-			if (is_visited[i] == EDGE) //edge 
+			if (is_visited[i] == OUTSIDE) //edge 
 			{
-				//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-				m->raylib_mesh.colors[i * 4] = 255;
-				m->raylib_mesh.colors[i * 4 + 1] = 0;
-				m->raylib_mesh.colors[i * 4 + 2] = 0;
-				m->raylib_mesh.colors[i * 4 + 3] = 255;
+				continue;
 			}
-			else if (is_visited[i] == OUTSIDE) //not visited 
+			else
 			{
-
+				if (is_visited[i] == EDGE) //edge 
+				{
+					//new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+					m->raylib_mesh.colors[i * 4] = 255;
+					m->raylib_mesh.colors[i * 4 + 1] = 0;
+					m->raylib_mesh.colors[i * 4 + 2] = 0;
+					m->raylib_mesh.colors[i * 4 + 3] = 255;
+				}
+				else if (is_visited[i] == INSIDE)
+				{
+					m->raylib_mesh.colors[i * 4] = 0;
+					m->raylib_mesh.colors[i * 4 + 1] = 255;
+					m->raylib_mesh.colors[i * 4 + 2] = 0;
+					m->raylib_mesh.colors[i * 4 + 3] = 255;
+				}
+				else if (is_visited[i] == MIDPOINT)
+				{
+					m->raylib_mesh.colors[i * 4] = 255;
+					m->raylib_mesh.colors[i * 4 + 1] = 255;
+					m->raylib_mesh.colors[i * 4 + 2] = 255;
+					m->raylib_mesh.colors[i * 4 + 3] = 255;
+				}
+				desc.visited_indices.push_back(i);
 			}
-			else if (is_visited[i] == INSIDE)
-			{
-				m->raylib_mesh.colors[i * 4] = 0;
-				m->raylib_mesh.colors[i * 4 + 1] = 255;
-				m->raylib_mesh.colors[i * 4 + 2] = 0;
-				m->raylib_mesh.colors[i * 4 + 3] = 255;
-			}
-			else if (is_visited[i] == MIDPOINT)
-			{
-				m->raylib_mesh.colors[i * 4] = 255;
-				m->raylib_mesh.colors[i * 4 + 1] = 255;
-				m->raylib_mesh.colors[i * 4 + 2] = 255;
-				m->raylib_mesh.colors[i * 4 + 3] = 255;
-			}
+			
 		}
 	}
 

@@ -2,6 +2,7 @@
 #include "happly.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include "../Include/CoreTypeDefs.h"
 
 static void calculate_areas(TrilateralMesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
@@ -511,16 +512,9 @@ void TrilateralMesh::generate_raylib_mesh()
 }
 void TrilateralMesh::update_raylib_mesh()
 {
-	//save color
-	this->raylib_colors_temp = (unsigned char *)malloc( sizeof(this->vertices.size() )  * 4  );
-	memcpy(this->raylib_colors_temp, this->raylib_mesh.colors, sizeof(this->vertices.size()) * 4);
 
-	UnloadMesh(this->raylib_mesh);
-	this->generate_raylib_mesh();
-
-	//give color back
-	memcpy( this->raylib_mesh.colors, this->raylib_colors_temp, sizeof(this->vertices.size()) * 4);
-	free(this->raylib_colors_temp);
+	//color update
+	UpdateMeshBuffer(this->raylib_mesh, 3, this->raylib_mesh.colors, this->vertices.size() * 4 * sizeof(unsigned char), 0); // Buffer index 3 is for color
 
 }
 void read_symmetry_format(char* filename, TrilateralMesh* m)
@@ -756,3 +750,5 @@ std::vector<float> mesh_point_surfel_normalized(TrilateralMesh* m)
 
 	return triangles_normalized;
 }
+
+

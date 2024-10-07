@@ -231,7 +231,7 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
     {
         //trilateral_map(m_factory , selected_mesh, point_1_index, point_2_index, point_3_index);
 
-        is_visited = ROI_trilateral(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no, true);
+        //is_visited = ROI_trilateral(&m_factory.mesh_vec[selected_mesh], point_1_index, point_2_index, point_3_index, partition_no, true);
         m_factory.remove_all();
         m_factory.add_all();
     }

@@ -68,3 +68,5 @@ void read_symmetry_format(char* filename, TrilateralMesh* m);
 unsigned int mesh_get_closest_index(TrilateralMesh* m, const glm::vec3& point);
 glm::vec3 mesh_generate_weighted_mid_point(TrilateralMesh* m); //supposed to be best way 
 std::vector<float> mesh_point_surfel_normalized(TrilateralMesh*m );
+
+

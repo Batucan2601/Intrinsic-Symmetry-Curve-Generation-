@@ -17,7 +17,13 @@ typedef struct {
 	glm::vec3 p3;
 	glm::vec3 p4;
 }Plane;
-
+enum PointStatus
+{
+	INSIDE,
+	OUTSIDE,
+	EDGE,
+	MIDPOINT,
+};
 struct TrilateralDescriptor
 {
 	double area; // ROI
@@ -39,8 +45,8 @@ struct TrilateralDescriptor
 	float n_ring_area_p2;
 	float n_ring_area_p3;
 	// histogram
-	Histogram histogram; 
-
+	Histogram histogram;
+	std::vector<unsigned int> visited_indices; 
 	TrilateralDescriptor();
 
 };
@@ -50,13 +56,7 @@ enum  ComparisonMethod
 	absoulute_dif,
 	quadratic_dif,
 };
-enum PointStatus
-{
-	INSIDE,
-	OUTSIDE,
-	EDGE,
-	MIDPOINT,
-};
+
 
 //plane stuff
 TrilateralMesh generate_mesh_from_plane( Plane* plane , glm::vec3 * m  );
