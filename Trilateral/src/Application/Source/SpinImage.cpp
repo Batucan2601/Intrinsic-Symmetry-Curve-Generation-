@@ -2,7 +2,7 @@
 
 
 Histogram2D SpinImage_generate_spin_image(TrilateralMesh* m, int reference_point_index,
-	std::vector<int>& vertices_in_tri_area, int spin_image_width)
+	std::vector<unsigned int>& vertices_in_tri_area, int spin_image_width)
 {
 
 	int N = vertices_in_tri_area.size(); //number of vertices in area

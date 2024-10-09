@@ -6,7 +6,6 @@
 #include "raylib.h"
 using std::ofstream;
 using std::ifstream;
-#define INFINITY 10000000
 
 struct Edge
 {
@@ -34,7 +33,6 @@ public:
 	std::vector<float> normalized_heat_kernel_signature; // vertex information of normals
 	glm::mat4 model_mat;
 	std::string file_name;
-
 	Mesh raylib_mesh;
 	unsigned char* raylib_colors_temp;
 	//VAO object

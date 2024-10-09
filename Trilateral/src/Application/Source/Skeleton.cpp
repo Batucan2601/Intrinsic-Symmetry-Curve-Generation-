@@ -1398,6 +1398,20 @@ void skeleton_calculate_closest_mesh_points(Skeleton& skeleton, TrilateralMesh* 
 
 	}
 }
+void skeleton_get_end_points_update_mesh(TrilateralMesh* m , Skeleton& skeleton, std::vector<unsigned int >& end_vertex_indices)
+{
+	skeleton_calculate_closest_mesh_points(skeleton, m , end_vertex_indices);
+	for (size_t i = 0; i < end_vertex_indices.size(); i++)
+	{
+		int index = end_vertex_indices[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+
+}
 void skeleton_get_end_points(Skeleton& skeleton, std::vector<unsigned int >& end_vertex_indices)
 {
 	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)

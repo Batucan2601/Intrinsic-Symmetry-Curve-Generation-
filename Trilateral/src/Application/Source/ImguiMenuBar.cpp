@@ -26,9 +26,10 @@ static void drawFileDialog(std::string& file_path, std::string& file_path_name, 
 static void display_file_dialogs(TrilateralMesh* m);
 static void save_trilateral_descriptors();
 static void load_trilateral_descriptors();
-static void write_trilateral_descriptors(std::string filename);
-static void read_trilateral_descriptors(std::string filename);
+static void write_trilateral_descriptors( std::string filename);
+static void read_trilateral_descriptors( std::string filename);
 static void  display_descriptor(TrilateralMesh* m);
+static void  display_descriptor_all(TrilateralMesh* m);
 std::string file_path;
 std::string file_path_name = "";
 static bool is_searching_swc = false; 
@@ -158,6 +159,11 @@ static void skeleton_generation(TrilateralMesh* m)
     {
         is_searching_swc = true; 
     }
+    if (ImGui::MenuItem("Show Skeleton End points on Mesh "))
+    {
+        std::vector<unsigned int> vertices;
+        skeleton_get_end_points_update_mesh(m, skeleton, vertices);
+    }
 
 }
 
@@ -207,6 +213,10 @@ static void trilateral_functions(TrilateralMesh* m)
         if (ImGui::MenuItem("Display descriptor"))
         {
             display_descriptor(m);
+        }
+        if (ImGui::MenuItem("Display descriptor all"))
+        {
+            display_descriptor_all(m);
         }
         ImGui::EndMenu();
 
@@ -336,7 +346,6 @@ static void display_file_dialogs(TrilateralMesh* m )
     if (file_path_name != "")
     {
         read_trilateral_descriptors(file_path_name);
-
         file_path_name = "";
     }
        
@@ -402,7 +411,7 @@ static void load_trilateral_descriptors()
 {
     is_reading_dsc = true;
 }
-static void write_trilateral_descriptors(std::string filename)
+static void write_trilateral_descriptors( std::string filename)
 {
     std::ofstream file;                // Create an ofstream object for file output
 
@@ -421,9 +430,28 @@ static void write_trilateral_descriptors(std::string filename)
     {
         file << " desc ";
         file << positive_desc[i].p1 << " " << positive_desc[i].p2 << " " << positive_desc[i].p3 << std::endl;
+        file << " vertices inside ";
         for (size_t j = 0; j < positive_desc[i].visited_indices.size(); j++)
         {
             file << positive_desc[i].visited_indices[j] << " ";
+        }
+        file << std::endl;
+        file << " path12";
+        for (size_t j = 0; j < positive_desc[i].path_1_2.size(); j++)
+        {
+            file << positive_desc[i].path_1_2[j] << " ";
+        }
+        file << std::endl;
+        file << " path13";
+        for (size_t j = 0; j < positive_desc[i].path_1_3.size(); j++)
+        {
+            file << positive_desc[i].path_1_3[j] << " ";
+        }
+        file << std::endl;
+        file << " path23";
+        for (size_t j = 0; j < positive_desc[i].path_2_3.size(); j++)
+        {
+            file << positive_desc[i].path_2_3[j] << " ";
         }
         file << std::endl;
     }
@@ -432,18 +460,36 @@ static void write_trilateral_descriptors(std::string filename)
     {
         file << " desc ";
         file << negative_desc[i].p1 << " " << negative_desc[i].p2 << " " << negative_desc[i].p3 << std::endl;
+        file << " vertices inside ";
         for (size_t j = 0; j < negative_desc[i].visited_indices.size(); j++)
         {
             file << negative_desc[i].visited_indices[j] << " ";
         }
         file << std::endl;
+        file << " path12";
+        for (size_t j = 0; j < negative_desc[i].path_1_2.size(); j++)
+        {
+            file << negative_desc[i].path_1_2[j] << " ";
+        }
+        file << std::endl;
+        file << " path13";
+        for (size_t j = 0; j < negative_desc[i].path_1_3.size(); j++)
+        {
+            file << negative_desc[i].path_1_3[j] << " ";
+        }
+        file << std::endl;
+        file << " path23";
+        for (size_t j = 0; j < negative_desc[i].path_2_3.size(); j++)
+        {
+            file << negative_desc[i].path_2_3[j] << " ";
+        }
     }
     // Close the file
     file.close();
 
 }
 
-static void read_trilateral_descriptors(std::string filename)
+static void read_trilateral_descriptors( std::string filename)
 {
     std::ifstream file(filename);                // Create an ofstream object for file output
 
@@ -484,8 +530,9 @@ static void read_trilateral_descriptors(std::string filename)
             desc.p2 = nums[1];
             desc.p3 = nums[2];
         }
-        else
+        if( line.find("vertices inside") != std::string::npos)
         {
+            line = line.substr(16);
             std::stringstream ss(line);
             std::vector<unsigned int> visited;
             unsigned int num;
@@ -494,6 +541,42 @@ static void read_trilateral_descriptors(std::string filename)
                 visited.push_back(num);
             }
             desc.visited_indices = visited;
+        }
+        if (line.find("path12") != std::string::npos)
+        {   
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_1_2 = visited;
+        }
+        if (line.find("path13") != std::string::npos)
+        {
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_1_3 = visited;
+        }
+        if (line.find("path23") != std::string::npos)
+        {
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_2_3 = visited;
             descriptors.push_back(desc);
         }
     }
@@ -520,16 +603,136 @@ static void  display_descriptor(TrilateralMesh* m )
     }
     else
     {
-        desc = positive_desc[descriptor_no - positive_desc.size()];
+        desc = negative_desc[descriptor_no - positive_desc.size()];
     }
+
+    for (size_t i = 0; i < m->vertices.size(); i++)
+    {
+        m->raylib_mesh.colors[i * 4] = 0;
+        m->raylib_mesh.colors[i * 4+1] = 0;
+        m->raylib_mesh.colors[i * 4+2] = 0;
+        m->raylib_mesh.colors[i * 4+3] = 255;
+    }
+
     for (size_t i = 0; i < desc.visited_indices.size() ; i++)
     {
         int index = desc.visited_indices[i];
 
+        m->raylib_mesh.colors[index * 4] = 0;
+        m->raylib_mesh.colors[index * 4 + 1] = 255;
+        m->raylib_mesh.colors[index * 4 + 2] = 0;
+        m->raylib_mesh.colors[index * 4 + 3] = 255;
+    }
+    for (size_t i = 0; i < desc.path_1_2.size(); i++)
+    {
+        int index = desc.path_1_2[i];
+        m->raylib_mesh.colors[index * 4] = 255;
+        m->raylib_mesh.colors[index * 4 + 1] = 0;
+        m->raylib_mesh.colors[index * 4 + 2] = 0;
+        m->raylib_mesh.colors[index * 4 + 3] = 255;
+    }
+    for (size_t i = 0; i < desc.path_1_3.size(); i++)
+    {
+        int index = desc.path_1_3[i];
+        m->raylib_mesh.colors[index * 4] = 255;
+        m->raylib_mesh.colors[index * 4 + 1] = 0;
+        m->raylib_mesh.colors[index * 4 + 2] = 0;
+        m->raylib_mesh.colors[index * 4 + 3] = 255;
+    }
+    for (size_t i = 0; i < desc.path_2_3.size(); i++)
+    {
+        int index = desc.path_2_3[i];
         m->raylib_mesh.colors[index * 4] = 255;
         m->raylib_mesh.colors[index * 4 + 1] = 0;
         m->raylib_mesh.colors[index * 4 + 2] = 0;
         m->raylib_mesh.colors[index * 4 + 3] = 255;
     }
     m->update_raylib_mesh();
+}
+
+static void  display_descriptor_all(TrilateralMesh* m)
+{
+    int N_pos = positive_desc.size();
+    int N_neg = negative_desc.size();
+    //first color inside
+    for (size_t i = 0; i < N_pos; i++)
+    {
+        for (size_t j = 0; j < positive_desc[i].visited_indices.size(); j++)
+        {
+            int index = positive_desc[i].visited_indices[j];
+            m->raylib_mesh.colors[index * 4] = 0;
+            m->raylib_mesh.colors[index * 4 + 1] = 255;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+    }
+    for (size_t i = 0; i < N_neg; i++)
+    {
+        for (size_t j = 0; j < negative_desc[i].visited_indices.size(); j++)
+        {
+            int index = negative_desc[i].visited_indices[j];
+            m->raylib_mesh.colors[index * 4] = 0;
+            m->raylib_mesh.colors[index * 4 + 1] = 255;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+    }
+    for (size_t i = 0; i < N_pos; i++)
+    {
+        for (size_t j = 0; j < positive_desc[i].path_1_2.size(); j++)
+        {
+            int index = positive_desc[i].path_1_2[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+        for (size_t j = 0; j < positive_desc[i].path_1_3.size(); j++)
+        {
+            int index = positive_desc[i].path_1_3[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+        for (size_t j = 0; j < positive_desc[i].path_2_3.size(); j++)
+        {
+            int index = positive_desc[i].path_2_3[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+    }
+    for (size_t i = 0; i < N_neg; i++)
+    {
+        for (size_t j = 0; j < negative_desc[i].path_1_2.size(); j++)
+        {
+            int index = negative_desc[i].path_1_2[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+        for (size_t j = 0; j < negative_desc[i].path_1_3.size(); j++)
+        {
+            int index = negative_desc[i].path_1_3[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+        for (size_t j = 0; j < negative_desc[i].path_2_3.size(); j++)
+        {
+            int index = negative_desc[i].path_2_3[j];
+            m->raylib_mesh.colors[index * 4] = 255;
+            m->raylib_mesh.colors[index * 4 + 1] = 0;
+            m->raylib_mesh.colors[index * 4 + 2] = 0;
+            m->raylib_mesh.colors[index * 4 + 3] = 255;
+        }
+    }
+
+
+    m->update_raylib_mesh();
+
 }

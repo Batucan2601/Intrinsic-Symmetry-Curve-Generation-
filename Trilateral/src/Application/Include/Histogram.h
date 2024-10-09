@@ -33,8 +33,3 @@ float Histogram2D_ChiSquareDistance(const Histogram2D& h1, const Histogram2D& h2
 float Histogram2D_L2Norm(const Histogram2D& h1, const Histogram2D& h2);
 
 
-Histogram  Histogram_triangle_area(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no,
-	std::vector<int> is_visited, std::vector<int>& global_is_visited);
-
-Histogram histogram_roi_area_detailed(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, int division_no,
-	std::vector<int> is_visited, std::vector<int>& global_is_visited);

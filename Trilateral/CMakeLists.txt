@@ -36,6 +36,7 @@ set(Header_Files
     "src/Application/Include/ROI.h"
     "src/Application/Include/Histogram.h"
     "src/Application/Include/SpinImage.h"
+    "src/Application/Include/HistogramFunctions.h"
 
     
     "src/External/Include/rlImGui/imgui_impl_raylib.h"
@@ -44,6 +45,7 @@ set(Header_Files
     
     "src/External/Include/imgui/ImGuiFileDialog.h"
     "src/External/Include/imgui/ImGuiFileDialogConfig.h"
+
 
     
 
@@ -86,6 +88,7 @@ set(Source_Files
     "src/Application/Source/ROI.cpp"
     "src/Application/Source/Histogram.cpp"
     "src/Application/Source/SpinImage.cpp"
+    "src/Application/Source/HistogramFunctions.cpp"
 
 
     "src/External/Include/imgui/ImGuiFileDialog.cpp"

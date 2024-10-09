@@ -47,7 +47,7 @@ int main(void)
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(GREEN);
+        ClearBackground(LIGHTGRAY);
         UpdateCamera(&camera, CAMERA_FREE);
         BeginMode3D(camera);
 

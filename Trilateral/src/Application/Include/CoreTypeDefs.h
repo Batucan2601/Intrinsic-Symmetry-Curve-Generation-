@@ -24,6 +24,12 @@ enum PointStatus
 	EDGE,
 	MIDPOINT,
 };
+enum TrilateralGeometry
+{
+	ENCLOSED, // expected case
+	LINEAR, // no closed space
+	ENCLOSED_TWO // two points enclose 
+};
 struct TrilateralDescriptor
 {
 	double area; // ROI
@@ -46,7 +52,11 @@ struct TrilateralDescriptor
 	float n_ring_area_p3;
 	// histogram
 	Histogram histogram;
-	std::vector<unsigned int> visited_indices; 
+	std::vector<unsigned int> visited_indices;
+	std::vector<int> path_1_2;
+	std::vector<int> path_1_3;
+	std::vector<int> path_2_3;
+	TrilateralGeometry geo;
 	TrilateralDescriptor();
 
 };
