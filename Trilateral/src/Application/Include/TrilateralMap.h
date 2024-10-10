@@ -13,6 +13,8 @@
 #include "CoreTypeDefs.h"
 #include "FuzzyGeodesic.h"
 #include "../Include/Skeleton.h"
+#include "../Include/TrilateralDescriptor.h"
+
 
 // 1 - use area error
 // 2 - use geodesic error

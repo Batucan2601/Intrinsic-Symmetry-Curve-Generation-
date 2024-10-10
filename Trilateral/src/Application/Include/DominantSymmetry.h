@@ -1,5 +1,6 @@
 #pragma once 
 #include "MeshFactory.h"
+#include "TrilateralDescriptor.h"
 #include "CoreTypeDefs.h"
 Plane generate_dominant_symmetry_plane(int seletected_mesh , MeshFactory & mesh_fac , float sym_plane_iter);
 Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float sym_plane_iter);
