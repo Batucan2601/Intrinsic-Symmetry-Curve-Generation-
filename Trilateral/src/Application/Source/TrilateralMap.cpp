@@ -2982,12 +2982,12 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 	std::vector<Histogram> histograms_right;
 	for (size_t i = 0; i <  N_left; i++)
 	{
-		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_left[i], histogram_size, global_is_visited);
+		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_left[i], histogram_size, 1);
 		histograms_left.push_back(histogram);
 	}
 	for (size_t i = 0; i < N_right; i++)
 	{
-		Histogram histogram = Histogram_triangle_area(m, trilateral_desc_right[i], histogram_size,global_is_visited);
+		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_right[i], histogram_size,1);
 		histograms_right.push_back(histogram);
 	}
 

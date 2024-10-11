@@ -9,30 +9,6 @@ using Eigen::MatrixXd;
 
 static Plane rotate_plane(Plane plane, float rotation_degree);
 
-/*Plane generate_dominant_symmetry_plane(int seletected_mesh, MeshFactory& mesh_fac, float convergence_ratio)
-{
-	TrilateralMesh mesh = mesh_fac.mesh_vec[seletected_mesh];
-	
-	Plane plane = generate_dominant_symmetry_plane(mesh , convergence_ratio) ;
-
-	float s = mesh.vertices.size();
-	glm::vec3 m(0.0f, 0.0f, 0.0f);
-	for (size_t i = 0; i < mesh.vertices.size(); i++)
-	{
-		m += mesh.vertices[i];
-	}
-
-	m = m / s;
-	TrilateralMesh plane_mesh = generate_mesh_from_plane(&plane, &m);
-	mesh_fac.add_mesh(plane_mesh);
-
-
-	mesh_fac.remove_all();
-	mesh_fac.add_all();
-
-	return plane;
-	
-}*/
 Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_ratio )
 {
 	// generate PCA weights are same and 1 for now 

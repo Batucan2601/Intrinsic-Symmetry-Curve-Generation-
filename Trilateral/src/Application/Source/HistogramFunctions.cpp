@@ -303,3 +303,87 @@ Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc
 	}
 	return histogram;
 }
+
+//use m_inner 
+Histogram Histogram_triangle_area_w_res(TrilateralMesh* m, TrilateralDescriptor& desc, int division_no , int resolution)
+{
+	Histogram histogram(division_no);
+	std::vector<int> path_1_2 = desc.path_1_2;
+	std::vector<int> path_1_3 = desc.path_1_3;
+	std::vector<int> path_2_3 = desc.path_2_3;
+
+	int p1_index = desc.p1;
+	glm::vec3 p1_point = m->vertices[p1_index];
+	//generate m_inner
+
+	int p1_new_index = -1;
+	TrilateralDescriptor_generate_mesh_with_resolution(m ,desc , resolution);
+	TrilateralMesh* m_inside = &desc.m_inside;
+	for (size_t i = 0; i < desc.m_inside.vertices.size(); i++)
+	{
+		if (glm::length(desc.m_inside.vertices[i] - p1_point) < 1e-7)
+		{
+			p1_new_index = i;
+		}
+	}
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(desc.m_inside, p1_new_index);
+
+	float max = -INFINITY; 
+	for (size_t i = 0; i < m_inside->vertices.size(); i++)
+	{
+		float len = distance_matrix_p1[i];
+		if (len > max && i != p1_new_index)
+		{
+			max = len;
+		}
+	}
+
+	float step = max / division_no;
+
+
+	
+	for (size_t i = 0; i < m_inside->triangles.size(); i += 3)
+	{
+		glm::vec3 p1 = m_inside->vertices[m_inside->triangles[i]];
+		glm::vec3 p2 = m_inside->vertices[m_inside->triangles[i + 1]];
+		glm::vec3 p3 = m_inside->vertices[m_inside->triangles[i + 2]];
+
+		float distp1 = distance_matrix_p1[m_inside->triangles[i]];
+		float distp2 = distance_matrix_p1[m_inside->triangles[i + 1]];
+		float distp3 = distance_matrix_p1[m_inside->triangles[i + 2]];
+
+		float area = compute_triangle_area(p1, p2, p3);
+
+		int hist_no_p1 = distp1 / step;
+		int hist_no_p2 = distp2 / step;
+		int hist_no_p3 = distp3 / step;
+
+		if (hist_no_p1 >= division_no)
+		{
+			hist_no_p1 = division_no - 1;
+		}
+		if (hist_no_p2 >= division_no)
+		{
+			hist_no_p2 = division_no - 1;
+		}
+		if (hist_no_p3 >= division_no)
+		{
+			hist_no_p3 = division_no - 1;
+		}
+		histogram[hist_no_p1] += area;
+		histogram[hist_no_p2] += area;
+		histogram[hist_no_p3] += area;
+	}
+
+	//normalize histogram.
+	float histogram_sum = 0;
+	for (size_t i = 0; i < histogram.size(); i++)
+	{
+		histogram_sum += histogram[i];
+	}
+	for (size_t i = 0; i < histogram.size(); i++)
+	{
+		histogram[i] /= histogram_sum;
+	}
+	return histogram;
+}

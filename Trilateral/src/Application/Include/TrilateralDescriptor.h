@@ -44,5 +44,9 @@ struct TrilateralDescriptor
 	TrilateralMesh m_inside;
 	TrilateralGeometry geo;
 	TrilateralDescriptor();
-
+	bool check_colinearity();
 };
+
+void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDescriptor& desc);
+void TrilateralDescriptor_generate_descriptor_with_resolution(TrilateralMesh* m_inside, TrilateralDescriptor& desc);
+void TrilateralDescriptor_generate_mesh_with_resolution(TrilateralMesh* m, TrilateralDescriptor& desc, int res);

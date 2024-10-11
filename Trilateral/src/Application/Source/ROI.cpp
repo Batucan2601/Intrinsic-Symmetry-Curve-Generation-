@@ -69,7 +69,7 @@ static std::vector<unsigned int> check_vertices_visited(TrilateralMesh* m, std::
 	// get the neighbours
 	for (size_t i = 0; i < edge_vertices.size(); i++)
 	{
-		for (size_t j = 0; j < m->adjacenies[edge_vertices[i]].size(); j++) //only check 1 neighbour this should emirically work ?
+		for (size_t j = 0; j < 1; j++) //only check 1 neighbour this should emirically work ?
 		{
 			int point_index = m->adjacenies[edge_vertices[i]][j].first;
 			if (is_visited[point_index] != EDGE)
@@ -93,16 +93,16 @@ static std::vector<unsigned int> check_vertices_visited(TrilateralMesh* m, std::
 			minimum_index = i;
 		}
 	}
-	
+
 	// colinear no Inside 
 	if (minimum_size > 95.0 / 100.0 * m->vertices.size())
 	{
-		std::vector<unsigned int> empty_list; 
+		std::vector<unsigned int> empty_list;
 		return empty_list;
 	}
-	//check colinearity
+
+
 	// if every index has same length they are colinear
-	
 	return visited_vertices_list[minimum_index];
 }
 

@@ -1,33 +1,84 @@
 #include "../Include/TrilateralDescriptor.h"
+#include "../Include/Geodesic.h"
 #include "../Include/glm/glm.hpp"
+
+
+bool TrilateralDescriptor::check_colinearity()
+{
+    //select the biggest path
+    if (this->path_1_2.size() > this->path_1_3.size() && this->path_1_2.size() >= this->path_2_3.size())
+    {
+        for (size_t i = 0; i < this->path_1_2.size(); i++)
+        {
+            if (this->path_1_2[i] == this->p3)
+            {
+                return true; 
+            }
+        }
+    }
+    if (this->path_1_3.size() > this->path_1_2.size() && this->path_1_3.size() >= this->path_2_3.size())
+    {
+        for (size_t i = 0; i < this->path_1_3.size(); i++)
+        {
+            if (this->path_1_3[i] == this->p2)
+            {
+                return true;
+            }
+        }
+    }
+    if (this->path_2_3.size() > this->path_1_2.size() && this->path_2_3.size() >= this->path_1_3.size())
+    {
+        for (size_t i = 0; i < this->path_2_3.size(); i++)
+        {
+            if (this->path_2_3[i] == this->p1)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDescriptor& desc)
 {
     //we need to create a new mesh and adjacencies
     TrilateralMesh m_inside;
-    std::vector<unsigned int > mesh_to_mesh_map(m->vertices.size(), -1);
+    std::vector< int > mesh_to_mesh_map(m->vertices.size(), -1);
     //add the points
     for (size_t i = 0; i < desc.visited_indices.size(); i++)
     {
-        m_inside.vertices.push_back(m->vertices[desc.visited_indices[i]]);
-        mesh_to_mesh_map[desc.visited_indices[i]] = m_inside.vertices.size() - 1;
+        if (mesh_to_mesh_map[desc.visited_indices[i]] == -1)
+        {
+            m_inside.vertices.push_back(m->vertices[desc.visited_indices[i]]);
+            mesh_to_mesh_map[desc.visited_indices[i]] = m_inside.vertices.size() - 1;
+        }
     }
     for (size_t i = 0; i < desc.path_1_2.size(); i++)
     {
-        m_inside.vertices.push_back(m->vertices[desc.path_1_2[i]]);
-        mesh_to_mesh_map[desc.path_1_2[i]] = m_inside.vertices.size() - 1;
+        if (mesh_to_mesh_map[desc.path_1_2[i]] == -1)
+        {
+            m_inside.vertices.push_back(m->vertices[desc.path_1_2[i]]);
+            mesh_to_mesh_map[desc.path_1_2[i]] = m_inside.vertices.size() - 1;
+        }
 
     }
     for (size_t i = 0; i < desc.path_1_3.size(); i++)
     {
-        m_inside.vertices.push_back(m->vertices[desc.path_1_3[i]]);
-        mesh_to_mesh_map[desc.path_1_3[i]] = m_inside.vertices.size() - 1;
+        if (mesh_to_mesh_map[desc.path_1_3[i]] == -1)
+        {
+            m_inside.vertices.push_back(m->vertices[desc.path_1_3[i]]);
+            mesh_to_mesh_map[desc.path_1_3[i]] = m_inside.vertices.size() - 1;
+        }
+       
 
     }
     for (size_t i = 0; i < desc.path_2_3.size(); i++)
     {
-        m_inside.vertices.push_back(m->vertices[desc.path_2_3[i]]);
-        mesh_to_mesh_map[desc.path_2_3[i]] = m_inside.vertices.size() - 1;
+        if (mesh_to_mesh_map[desc.path_2_3[i]] == -1)
+        {
+            m_inside.vertices.push_back(m->vertices[desc.path_2_3[i]]);
+            mesh_to_mesh_map[desc.path_2_3[i]] = m_inside.vertices.size() - 1;
+        }
     }
 
     //get triangles 
@@ -51,34 +102,31 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
     //get adjacencies
 
     m_inside.adjacenies = std::vector<std::vector<std::pair<int, float>>>(m_inside.vertices.size());
-    for (size_t i = 0; i < m_inside.triangles.size(); i += 3)
+    for (size_t i = 0; i < m->adjacenies.size(); i ++)
     {
-        int index1 = m_inside.triangles[i];
-        int index2 = m_inside.triangles[i + 1];
-        int index3 = m_inside.triangles[i + 2];
-        float len12 = glm::length(m_inside.vertices[index1] -  m_inside.vertices[index2]);
-        float len13 = glm::length(m_inside.vertices[index1] -  m_inside.vertices[index3]);
-        float len23 = glm::length(m_inside.vertices[index2] -  m_inside.vertices[index3]);
-        std::pair<int, float> pair;
-        pair.first = index2;
-        pair.second = len12;
-        m_inside.adjacenies[index1].push_back(pair);
-        pair.first = index1;
-        m_inside.adjacenies[index2].push_back(pair);
-        pair.second = len13;
-        m_inside.adjacenies[index1].push_back(pair);
-        pair.first = index3;
-        m_inside.adjacenies[index3].push_back(pair);
-        pair.second = len23;
-        m_inside.adjacenies[index2].push_back(pair);
-        pair.first = index2;
-        m_inside.adjacenies[index3].push_back(pair);
+        int index = mesh_to_mesh_map[i];
+        if (index == -1)
+        {
+            continue; 
+        }
+        for (size_t j = 0; j <m->adjacenies[i].size(); j++)
+        {
+            int index_adj = mesh_to_mesh_map[m->adjacenies[i][j].first];
+            if (index_adj == -1)
+            {
+                continue;
+            }
+            std::pair<int, float> pair;
+            pair.first = index_adj;
+            pair.second = m->adjacenies[i][j].second;
+            m_inside.adjacenies[index].push_back(pair); 
+        }
     }
     desc.m_inside = m_inside;
 
 }
 
-TrilateralMesh TrilateralDescriptor_generate_mesh_with_resolution(TrilateralMesh* m, TrilateralDescriptor& desc,  int res )
+void TrilateralDescriptor_generate_mesh_with_resolution(TrilateralMesh* m, TrilateralDescriptor& desc,  int res )
 {
     TrilateralDescriptor_generate_mesh_inside(m ,desc);
     for (size_t i = 0; i < res; i++)
@@ -104,14 +152,33 @@ void TrilateralDescriptor_generate_descriptor_with_resolution(TrilateralMesh* m_
         //add p_new as a point
         m_inside->vertices.push_back(p_new);
 
-        std::pair<int, float>pair(p_new_index,glm::length(p1-p_new));
+        float len_1 = glm::length(p1 - p_new);
+        std::pair<int, float>pair(p_new_index, len_1);
         m_inside->adjacenies[index1].push_back(pair);
         
-        pair.second = glm::length(p2 - p_new);
+        float len_2 = glm::length(p2 - p_new);
+        pair.second = len_2;
         m_inside->adjacenies[index2].push_back(pair);
 
-        pair.second = glm::length(p3 - p_new);
+        float len_3 = glm::length(p3 - p_new);
+        pair.second = len_3;
         m_inside->adjacenies[index3].push_back(pair);
+
+        std::vector<std::pair<int, float>> pairs;
+        m_inside->adjacenies.push_back(pairs);
+        
+        pair.first = index1;
+        pair.second = len_1;
+        m_inside->adjacenies[p_new_index].push_back(pair);
+        
+        pair.first = index2;
+        pair.second = len_2;
+        m_inside->adjacenies[p_new_index].push_back(pair);
+
+        pair.first = index3;
+        pair.second = len_3;
+        m_inside->adjacenies[p_new_index].push_back(pair);
+
 
         triangles_new.push_back(p_new_index);
         triangles_new.push_back(index1);
