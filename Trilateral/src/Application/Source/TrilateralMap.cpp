@@ -2982,12 +2982,12 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 	std::vector<Histogram> histograms_right;
 	for (size_t i = 0; i <  N_left; i++)
 	{
-		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_left[i], histogram_size, 1);
+		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_left[i], histogram_size, 4);
 		histograms_left.push_back(histogram);
 	}
 	for (size_t i = 0; i < N_right; i++)
 	{
-		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_right[i], histogram_size,1);
+		Histogram histogram = Histogram_triangle_area_w_res(m, trilateral_desc_right[i], histogram_size,4);
 		histograms_right.push_back(histogram);
 	}
 
@@ -2996,11 +2996,35 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 		int minimum_index = -1;
 		float minimum_value = INFINITY;
 		Histogram histogram_vec_i = histograms_left[i];
+		//float hks_i = m->normalized_heat_kernel_signature[trilateral_desc_left[i].p1];
+		float desci_p1_dist_p2 = trilateral_desc_left[i].geodesic_lenght_1_2;
+		float desci_p1_dist_p3 = trilateral_desc_left[i].geodesic_lenght_1_3;
+		float desci_ratio = desci_p1_dist_p2 / desci_p1_dist_p3;
+		if (desci_ratio > 1)
+		{
+			desci_ratio = 1.0f / desci_ratio;
+		}
 		for (size_t j = 0; j < N_right; j++)
 		{
 			Histogram histogram_vec_j = histograms_right[j];
 			float resemblance = Histogram_L2Norm(histogram_vec_i, histogram_vec_j);
-;			compareResults_left.push_back({ resemblance, {i,j} });
+			float descj_p1_dist_p2 = trilateral_desc_left[i].geodesic_lenght_1_2;
+			float descj_p1_dist_p3 = trilateral_desc_left[i].geodesic_lenght_1_3;
+			float descj_ratio = descj_p1_dist_p2 / descj_p1_dist_p3;
+			if (descj_ratio > 1)
+			{
+				descj_ratio = 1.0f / descj_ratio;
+			}
+			if (std::fabs(desci_ratio - descj_ratio) > 0.2)
+			{
+				continue; 
+			}
+			//float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_right[j].p1];
+			//if (std::abs(hks_i - hks_j) < 0.03)
+			{
+				compareResults_left.push_back({ resemblance, {i,j} });
+			}
+
 		}
 	}
 
@@ -4045,7 +4069,95 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 
 
 }
+void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
+	std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no )
+{
+	int N = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	glm::vec3 mesh_mid_point;
+	// 1 - get dvork significant points
+	std::vector<DvorakPairs> dvorak_pairs  = dvorak_extraction_of_significant_points(m, dvorak_enpoint_no);
+	//sweep 
+	dvorak_pairs = dvorak_distance_sweep(m, dvorak_pairs, 3.0f);
+	// 2- generate plane 
+	 //calculate center of the plane 
+	glm::vec3 plane_center(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		plane_center += m->vertices[i];
+	}
+	plane_center /= m->vertices.size();
+	if (!dom_sym_read_plane(m, plane))
+	{
+		plane = generate_dominant_symmetry_plane(m, 0.3);
+	}
+	//divide the end points 
+	std::vector<unsigned int> left_skeleton_indices;
+	std::vector<unsigned int> right_skeleton_indices;
+	for (size_t i = 0; i < dvorak_pairs.size(); i++)
+	{
+		if (get_point_status_from_plane(&plane, &m->vertices[dvorak_pairs[i].p_index]) > 0)
+		{
+			right_skeleton_indices.push_back(dvorak_pairs[i].p_index);
+		}
+		else
+		{
+			left_skeleton_indices.push_back(dvorak_pairs[i].p_index);
+		}
+	}
 
+	desc_left = get_trilateral_points_using_closest_pairs(m, right_skeleton_indices);
+	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
+
+
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs = trilateral_hks_histogram(m, desc_left,
+		desc_right, 5, 3);//point_match_trilateral_weights(&L_MDS_mesh, positive_mesh_trilateral_descriptor, negative_mesh_trilateral_descriptor, const1, const2, const3);
+
+	//check their gaussian curvature
+
+
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+
+	// now use fps points to get maximum distance in order to compare to 
+	float maximum_geodesic_distance = 0;
+	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	{
+		std::vector<float> distances = Geodesic_dijkstra(*m, right_skeleton_indices[i]);
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (maximum_geodesic_distance < distances[j])
+			{
+				maximum_geodesic_distance = distances[j];
+			}
+		}
+	}
+
+	// color left red
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 255;
+		m->colors[resemblance_pairs[i].second].b = 0;
+	}
+
+	m->calculated_symmetry_pairs = resemblance_pairs;
+
+	Metric_write_to_file(m, "../../Results/Trilateral_W_SKELETON_AND_HKS.txt");
+
+}
 void trilateral_point_matching_with_skeleton_endpoints_anchors(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
 	std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg , Plane& plane )
 {

@@ -773,7 +773,7 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 		}
 	}
 
-	std::vector<float> skeleton_points; 
+	std::vector<float> skeleton_points;
 	std::vector<unsigned int> skeleton_indices; 
 	// another pass needed to generate lines with according parent
 	for (size_t i = 0; i < skeletonPoints.size(); i++)
@@ -785,24 +785,7 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 		skeleton_points.push_back(point.y);
 		skeleton_points.push_back(point.z);
 			
-		if (skeletonPoints[i].label == END)
-		{
-			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(0.0f);
-			skeleton_points.push_back(0.0f);
-		}
-		else if (skeletonPoints[i].parent == -1)
-		{
-			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(255.0f);
-		}
-		else
-		{
-			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(255.0f);
-			skeleton_points.push_back(255.0f);
-		}
+		
 
 		if (parent >= 0)
 		{
@@ -824,19 +807,26 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 	for (size_t i = 0; i < skeletonPoints.size(); i++)
 	{
 		float dist = glm::distance(skeletonPoints[i].point, mid_point);
+		Color c; 
 		if ( minimum_dist > dist)
 		{
 			minimum_dist = dist; 
 			minimum_index = i;
 		}
+		if (skeletonPoints[i].label == END)
+		{
+			c = RED;
+		}
+		else if (skeletonPoints[i].parent == -1)
+		{
+			c = BLUE; 
+		}
+		else
+		{
+			c = GREEN; 
+		}
+		skeletonPoints[i].color = c; 
 	}
-
-
-	//color mid point white
-	skeleton_points[minimum_index * 6 + 3] = 0.0f;
-	skeleton_points[minimum_index * 6 + 4] = 255.0f;
-	skeleton_points[minimum_index * 6 + 5] = 0.0f;
-
 
 	skeleton.skeletonFormat = skeletonPoints;
 	skeleton.adjacencies = adjacencies;
@@ -1008,10 +998,9 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 //	
 //}
 
-void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,BackBone& best_backbone ,
+void skeleton_generate_backbone(TrilateralMesh* mesh , Skeleton skeleton, BackBone& best_backbone ,
 std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_left_points )
 {
-	TrilateralMesh* mesh = &meshFac.mesh_vec[mesh_index];
 	int N = skeleton.skeletonFormat.size();
 	std::vector<unsigned int> end_point_indices;
 	for (size_t i = 0; i < N; i++)
@@ -1029,8 +1018,8 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 	//before generating please calculate  the sdf
 	std::vector<unsigned int>mesh_index_vertices; 
 	std::vector<float> shape_diameter_values;
-	skeleton_calculate_closest_mesh_points(skeleton, &meshFac.mesh_vec[mesh_index], mesh_index_vertices);
-	ShapeDiameter_calculate(&meshFac.mesh_vec[mesh_index], mesh_index_vertices, shape_diameter_values);
+	skeleton_calculate_closest_mesh_points(skeleton, mesh, mesh_index_vertices);
+	ShapeDiameter_calculate(mesh, mesh_index_vertices, shape_diameter_values);
 	// brute force generating backbone
 	std::vector<BackBone> candidate_backbones; 
 	for (size_t i = 0; i < N_end_points; i++)
@@ -1310,20 +1299,19 @@ std::vector<unsigned int>& best_right_points , std::vector<unsigned int>& best_l
 	//best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
 	//paint the backbone to blue
 	//meshFac.mesh_skeleton_vec.skeleton_points.clear();
-	glBindVertexArray(meshFac.skeleton_VAO);
 	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
 	{
 		for (size_t j = 0; j < best_backbone.vertex_list.size(); j++)
 		{
 			if (i == best_backbone.vertex_list[j])
 			{
-				meshFac.mesh_skeleton_vec.skeleton_points[i * 6 + 3] = 0;
-				meshFac.mesh_skeleton_vec.skeleton_points[i * 6 + 4] = 0;
-				meshFac.mesh_skeleton_vec.skeleton_points[i * 6 + 5] = 255;
+				skeleton.skeletonFormat[i].color.r = 0;
+				skeleton.skeletonFormat[i].color.g = 255;
+				skeleton.skeletonFormat[i].color.b = 0;
+				skeleton.skeletonFormat[i].color.a = 255;
 			}
 		}
 	}
-	glBufferData(GL_ARRAY_BUFFER, meshFac.mesh_skeleton_vec.skeleton_points.size() * sizeof(float), &meshFac.mesh_skeleton_vec.skeleton_points[0], GL_STATIC_DRAW);
 
 
 }
@@ -1901,4 +1889,36 @@ void skeleton_left_right_test_for_endpoint(TrilateralMesh* m , Skeleton* skeleto
 std::vector<int>& right, std::vector<int>& left)
 {
 	
+}
+
+
+void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& skeleton, BackBone& b, std::vector<DvorakPairs>& dvorakPairs
+, std::vector<std::pair<unsigned int, unsigned int>> early_res_pairs)
+{
+	// get closest skeleton endpoints with dovrak pairs
+	std::vector<unsigned int> skeleton_end_points;
+	skeleton_get_end_points(skeleton, skeleton_end_points);
+	std::vector<unsigned int> skeleton_corresponding_endpoints; 
+
+	for (size_t i = 0; i < dvorakPairs.size(); i++)
+	{
+		int dvorak_index = dvorakPairs[i].p_index;
+		float smallest_dist = INFINITY;
+		int index = -1; 
+		for (size_t j = 0; j < skeleton_end_points.size(); j++)
+		{
+			int skel_index = skeleton_end_points[j];
+			glm::vec3 skel_p = skeleton.skeletonFormat[skel_index].point;
+
+			float dist = glm::distance(m->vertices[dvorak_index], skel_p);
+
+			if (dist < smallest_dist)
+			{
+				index = j;
+				smallest_dist = dist;
+			}
+		}
+		skeleton_corresponding_endpoints.push_back(skeleton_end_points[index]);
+	}
+
 }

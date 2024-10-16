@@ -4,6 +4,7 @@
 #include <map>
 #include <glm/ext/vector_float3.hpp>
 #include "../Include/TrilateralMesh.h"
+#include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/MeshFactory.h"
 
 std::vector<float> generate_bounding_box(std::string file_name);
@@ -24,6 +25,7 @@ typedef struct
 	int parent;
 	POINT_LABEL label;
 	glm::vec3 point;
+	Color color;
 }SkeletonFormat;
 typedef struct
 {
@@ -56,7 +58,7 @@ void skeleton_buffer(const MeshFactory& mesh_fac);
 Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name);
 
 void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances);
-void skeleton_generate_backbone(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
+void skeleton_generate_backbone(TrilateralMesh* m, Skeleton skeleton,
 BackBone& best_backbone, std::vector<unsigned int>& right_points  , std::vector<unsigned int>& left_points);
 
 void skeleton_generate_backbone_w_midpoint(MeshFactory& meshFac, Skeleton skeleton, unsigned int mesh_index,
@@ -79,5 +81,6 @@ float skeleton_get_backbone_length(TrilateralMesh* m,BackBone* backBone);
 
 void skeleton_left_right_test_for_endpoint(std::vector<int>& right , std::vector<int>& left );
 
+void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& skeleton,BackBone& b, std::vector<DvorakPairs>& dvorakPairs  );
 //TODO
 void skeleton_generate_backbone_with_dominant_sym(MeshFactory& meshFactory , int selected_mesh , Skeleton& skeleton);

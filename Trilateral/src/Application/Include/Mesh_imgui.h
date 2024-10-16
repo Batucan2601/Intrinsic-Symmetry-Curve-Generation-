@@ -124,7 +124,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     {
         std::vector<unsigned int> right_mesh_end_points;
         std::vector<unsigned int> left_mesh_end_points;
-        skeleton_generate_backbone(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
+        //skeleton_generate_backbone(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
         //skeleton = skeleton_read_swc_file(m_factory, "0001.isometry.8.swc");
         m_factory.remove_all();
         m_factory.add_all();
@@ -144,7 +144,7 @@ void imgui_KIDS_skeleton(const int& selected_mesh, MeshFactory& m_factory)
     {
         std::vector<unsigned int> right_mesh_end_points;
         std::vector<unsigned int> left_mesh_end_points;
-        skeleton_generate_backbone(m_factory, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
+       // skeleton_generate_backbone(mesh, skeleton, selected_mesh, best_backbone, right_mesh_end_points, left_mesh_end_points);
         skeleton_get_N_Lateral_points(m_factory, skeleton, selected_mesh, best_backbone, skeleton_best_end_point_pairs
             , right_mesh_end_points, left_mesh_end_points);
 

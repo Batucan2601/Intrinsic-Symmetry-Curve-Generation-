@@ -95,7 +95,7 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_
 	best_plane.normal = glm::normalize(best_plane.normal);
 	int sym_no = 0; 
 	//for( int p = 0; p < sym_iter_no; p++ )
-	while( 0 )
+	while( 1 )
 	{
 		std::vector<float> di_vec;
 		for (size_t i = 0; i < mesh->vertices.size(); i++)

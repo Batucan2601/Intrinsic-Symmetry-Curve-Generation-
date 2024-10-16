@@ -308,20 +308,76 @@ void TrilateralMesh::read_off_format(char* filename)
 		//adjacencies
 
 		//for first 
-		adjacenies[x].push_back(std::make_pair(y, e1.distance));
-		adjacenies[x].push_back(std::make_pair(z, e2.distance));
+		bool is_x = false;
+		bool is_y = false;
+		bool is_z = false;
+		for (size_t i = 0; i < adjacenies[x].size(); i++)
+		{
+			if (adjacenies[x][i].first == (int)y)
+			{
+				is_y = true; 
+			}
+			if (adjacenies[x][i].first == (int)z)
+			{
+				is_z = true;
+			}
+		}
+		if (!is_y)
+		{
+			adjacenies[x].push_back(std::make_pair(y, e1.distance));
+		}
+		if (!is_z)
+		{
+			adjacenies[x].push_back(std::make_pair(z, e2.distance));
+		}
+		is_x = false;
+		is_y = false;
+		is_z = false;
+		for (size_t i = 0; i < adjacenies[y].size(); i++)
+		{
+			if (adjacenies[y][i].first == (int)x)
+			{
+				is_x = true;
+			}
+			if (adjacenies[y][i].first == (int)z)
+			{
+				is_z = true;
+			}
+		}
 		//for second 
-		adjacenies[y].push_back(std::make_pair(x, e1.distance));
-		adjacenies[y].push_back(std::make_pair(z, e3.distance));
+		if (!is_x)
+		{
+			adjacenies[y].push_back(std::make_pair(x, e1.distance));
+		}
+		if (!is_z)
+		{
+			adjacenies[y].push_back(std::make_pair(z, e3.distance));
+		}
+		is_x = false;
+		is_y = false;
+		is_z = false;
+		for (size_t i = 0; i < adjacenies[z].size(); i++)
+		{
+			if (adjacenies[z][i].first == (int)x)
+			{
+				is_x = true;
+			}
+			if (adjacenies[z][i].first == (int)y)
+			{
+				is_z = true;
+			}
+		}
 		//for third
+		if (!is_x)
 		adjacenies[z].push_back(std::make_pair(x, e2.distance));
+
+		if (!is_y)
 		adjacenies[z].push_back(std::make_pair(y, e3.distance));
 
 		//triangles
 		triangles.push_back(x);
 		triangles.push_back(y);
 		triangles.push_back(z);
-
 
 	}
 	for (size_t i = 0; i < this->vertices.size(); i++)

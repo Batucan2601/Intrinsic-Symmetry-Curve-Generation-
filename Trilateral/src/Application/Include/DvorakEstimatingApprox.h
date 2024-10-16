@@ -10,6 +10,8 @@ typedef struct
 Plane dvorak_generate_plane(MeshFactory& mesh_fac , int selected_index );
 std::vector<DvorakPairs> dvorak_extraction_of_significant_points(TrilateralMesh* m , int P );
 std::vector<DvorakPairs> dvorak_extraction_of_significant_points(TrilateralMesh* m, std::vector<unsigned int>& indices);
+std::vector<DvorakPairs> dvorak_distance_sweep(TrilateralMesh* m, std::vector<DvorakPairs>& dvorak_pairs, float dist);
+
 //criterion
 bool dvorak_curvature_similarity_criterion(std::vector<DvorakPairs>& best_pairs , float S ,int index1 , int index2  );
 bool dvorak_normal_angle_criterion(TrilateralMesh* m, std::vector<DvorakPairs>& best_pairs, int index1, int index2, float c_min_norm);

@@ -21,6 +21,7 @@ static void imgui_menubar_save_mesh(TrilateralMesh* m );
 static void dominant_symmetry_plane(TrilateralMesh* m);
 static void skeleton_generation(TrilateralMesh* m);
 static void trilateral_functions(TrilateralMesh* m);
+static void dvorak_functions(TrilateralMesh* m);
 static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
@@ -43,6 +44,7 @@ static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
 static int dvorak_no_of_significant_points = 0;
+static float dvorak_geodesic_dist_param = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
 void imgui_menu_bar(TrilateralMesh* m)
@@ -95,16 +97,8 @@ void imgui_menu_bar(TrilateralMesh* m)
             }
             if (ImGui::BeginMenu("Dvorak"))
             {
-                if (ImGui::BeginMenu("Dvorak Extraction of significant points "))
-                {
-                    if (ImGui::InputInt("no of points ", &dvorak_no_of_significant_points));
-                    if (ImGui::MenuItem("Show"))
-                    {
-                        dvorak_show_signifcant_points(m, dvorak_no_of_significant_points);
-                    }
-
-                    ImGui::EndMenu();
-                }
+                dvorak_functions(m);
+               
                 ImGui::EndMenu();
             };
             if (ImGui::BeginMenu("Dominant Symmetry Plane"))
@@ -226,6 +220,11 @@ static void trilateral_functions(TrilateralMesh* m)
         trilateral_point_matching_with_skeleton_endpoints_w_HKS(m, skeleton, positive_desc, negative_desc, plane);
         is_draw_plane = true; 
     }
+    if (ImGui::MenuItem("Point matching with Dvorak significant poins triangle area "))
+    {
+        trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points);
+        is_draw_plane = true;
+    }
     if (ImGui::MenuItem("Point matching with skeleton endpoints with spin image  "))
     {
         trilateral_point_matching_with_skeleton_endpoints_SpinImage(m, skeleton, positive_desc,
@@ -272,7 +271,7 @@ static void draw_skeleton()
             for (size_t j = 0; j < skeleton_adj_i.size(); j++)
             {
                 DrawLine3D(CoreType_conv_glm_raylib_vec3(skeleton.skeletonFormat[i].point),
-                    CoreType_conv_glm_raylib_vec3(skeleton.skeletonFormat[skeleton_adj_i[j]].point), RED);
+                    CoreType_conv_glm_raylib_vec3(skeleton.skeletonFormat[skeleton_adj_i[j]].point), skeleton.skeletonFormat[i].color);
             }
         }
     }
@@ -399,7 +398,31 @@ static void mesh_drawing()
 
     
 }
+static void dvorak_functions(TrilateralMesh* m)
+{
+    if (ImGui::BeginMenu("Dvorak Extraction of significant points "))
+    {
+        if (ImGui::InputInt("no of points ", &dvorak_no_of_significant_points));
+        if (ImGui::MenuItem("Show"))
+        {
+            dvorak_show_signifcant_points(m, dvorak_no_of_significant_points);
+        }
 
+        ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Dvorak Sweep points with geodesic dist "))
+    {
+        if (ImGui::InputFloat("no of points ", &dvorak_geodesic_dist_param));
+        if (ImGui::MenuItem("start sweep"))
+        {
+            std::vector<DvorakPairs> dvorak_pairs = dvorak_extraction_of_significant_points(m, dvorak_no_of_significant_points);
+            dvorak_distance_sweep(m, dvorak_pairs , dvorak_geodesic_dist_param);
+
+        }
+        ImGui::EndMenu();
+
+    }
+}
 
 #pragma region trilateral save load 
 static void save_trilateral_descriptors()

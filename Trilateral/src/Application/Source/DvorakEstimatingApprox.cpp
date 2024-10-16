@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES 
 #include "../Include/DvorakEstimatingApprox.h"
 #include <cmath>
+#include "../Include/Geodesic.h"
 float gaussian_curvature(TrilateralMesh* mesh , int index )
 {
 	float area = mesh->areas[index];
@@ -23,7 +24,8 @@ float gaussian_curvature(TrilateralMesh* mesh , int index )
 					//calculate the cosine
 					glm::vec3 p3 = mesh->vertices[index_j];
 					float cosine = glm::dot(p3-p1 , p2-p1) / (glm::length(p2 - p1) * glm::length(p3 - p1));
-					phi += std::acosf(cosine);
+					float arc_cos = std::acosf(cosine);
+					phi += arc_cos;
 				}
 			}
 		}
@@ -183,7 +185,64 @@ void dvorak_show_signifcant_points(TrilateralMesh* m , int P )
 	for (size_t i = 0; i < P; i++)
 	{
 		int index = dvorak_pairs[i].p_index;
-		m->colors[i] = glm::vec3(1.0f, 0.0f, 0.0f);
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
-	
+	m->update_raylib_mesh();
+}
+
+std::vector<DvorakPairs> dvorak_distance_sweep(TrilateralMesh* m, std::vector<DvorakPairs>& dvorak_pairs, float dist )
+{
+	std::vector<DvorakPairs> extracted_dvorak_pairs;
+	while (dvorak_pairs.size() > 0 )
+	{
+		DvorakPairs p = dvorak_pairs[0];
+		extracted_dvorak_pairs.push_back(p);
+		dvorak_pairs.erase(dvorak_pairs.begin(), dvorak_pairs.begin() + 1);
+
+		int index = p.p_index;
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		std::vector<unsigned int> close_vertices;
+		for (size_t i = 0; i < dvorak_pairs.size(); i++)
+		{
+			if (distances[dvorak_pairs[i].p_index] < dist)
+			{
+				close_vertices.push_back(i);
+			}
+		}
+
+		std::sort(close_vertices.begin(), close_vertices.end(), std::greater<unsigned int>());
+
+		// Remove elements from the vector starting from the highest index
+		for (int index : close_vertices) {
+			if (index >= 0 && index < dvorak_pairs.size()) {
+				dvorak_pairs.erase(dvorak_pairs.begin() + index);
+			}
+			else {
+				std::cerr << "Invalid index: " << index << std::endl;
+			}
+		}
+
+	}
+
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = 0;
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+	for (size_t i = 0; i < extracted_dvorak_pairs.size(); i++)
+	{
+		int index = extracted_dvorak_pairs[i].p_index;
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+
+	}
+	m->update_raylib_mesh();
+	return extracted_dvorak_pairs;
 }
