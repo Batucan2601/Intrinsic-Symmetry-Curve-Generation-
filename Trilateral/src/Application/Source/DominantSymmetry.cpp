@@ -134,7 +134,7 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_
 		for (size_t i = 0; i < mesh->vertices.size(); i++)
 		{
 			float d_i = di_vec[i];
-			if (d_i > sigma)
+			if (sigma > d_i )
 			{
 				surfel_weights[i] = (2 * sigma * sigma) /  pow((sigma*sigma + d_i * d_i ),2);
 			}
