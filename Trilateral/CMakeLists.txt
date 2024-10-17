@@ -121,13 +121,16 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/sr
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib)
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES}"  "glew32"
+target_link_libraries(${PROJECT_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES}"  "glew32s"
 "glfw3"
 "opengl32")
+
 target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/spectra)
 target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/eigen)
-target_link_directories(${PROJECT_NAME} PUBLIC   "${CMAKE_SOURCE_DIR}//Trilateral/Dependencies")
 
+target_link_directories(${PROJECT_NAME} PUBLIC   "${CMAKE_SOURCE_DIR}/Dependencies")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLEW_STATIC)
 
 ################################################################################
 # Compile definitions
