@@ -31,6 +31,10 @@ TrilateralMesh generate_mesh_from_plane( Plane* plane, glm::vec3 * m)
 	p4.z = -(plane->normal.x * (p4.x - m->x) + plane->normal.y * (p4.y - m->y)) / plane->normal.z + m->z;
 
 	TrilateralMesh plane_mesh(&p1,&p2,&p3,&p4); 
+	plane->p1 = p1;
+	plane->p2 = p2;
+	plane->p3 = p3;
+	plane->p4 = p4;
 	return plane_mesh;
 }
 
@@ -449,4 +453,18 @@ Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3)
 
 TrilateralDescriptor::TrilateralDescriptor()
 {
+}
+
+Plane::Plane()
+{
+	this->normal = glm::vec3(0,0,0);
+	this->point = glm::vec3(0,0,0);
+}
+bool Plane::isNull()
+{
+	if (this->normal == glm::vec3(0, 0, 0) && this->point == glm::vec3(0, 0, 0))
+	{
+		return true;
+	}
+	return false;
 }

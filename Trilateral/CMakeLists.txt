@@ -38,6 +38,7 @@ set(Header_Files
     "src/Application/Include/SpinImage.h"
     "src/Application/Include/HistogramFunctions.h"
     "src/Application/Include/TrilateralDescriptor.h"
+    "src/Application/Include/VarianceMinimizingTransportPlan.h"
 
     
     "src/External/Include/rlImGui/imgui_impl_raylib.h"
@@ -91,6 +92,7 @@ set(Source_Files
     "src/Application/Source/SpinImage.cpp"
     "src/Application/Source/HistogramFunctions.cpp"
     "src/Application/Source/TrilateralDescriptor.cpp"
+    "src/Application/Source/VarianceMinimizingTransportPlan.cpp"
 
 
     "src/External/Include/imgui/ImGuiFileDialog.cpp"

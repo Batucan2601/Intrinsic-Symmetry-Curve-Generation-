@@ -662,7 +662,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 			 }
 		 }
 		 desc.p3 = smallestIndex;
-		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
+		 desc = TrilateralDescriptor_create(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
 		 trilateralDesc.push_back(desc);
 	 }
 	 return trilateralDesc;
@@ -725,7 +725,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 		 desc.p3 = maxIndexSecond;
 
 
-		 desc = generate_trilateral_descriptor(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
+		 desc = TrilateralDescriptor_create(m, desc.p1, desc.p2, desc.p3, true); // do not compute area for now
 		 trilateralDesc.push_back(desc);
 	 }
 	 return trilateralDesc;
@@ -1282,37 +1282,7 @@ std::vector<float> histogramROi_w_HKS(MeshFactory& mesh_fac, int& selected_index
 
 	return trilateral_descriptor;
 }
-TrilateralDescriptor  generate_trilateral_descriptor(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified)
-{
-	TrilateralDescriptor trilateral_descriptor;//trialteral descriptor 
-	//init descriptor
-	trilateral_descriptor.p1 = point_index1;
-	trilateral_descriptor.p2 = point_index2;
-	trilateral_descriptor.p3 = point_index3;
 
-	ROI_trilateral(m, trilateral_descriptor, 10, false);
-
-	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
-	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
-	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
-
-	trilateral_descriptor.euclidian_lenght_1_2 = glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
-	trilateral_descriptor.euclidian_lenght_1_3 = glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
-	trilateral_descriptor.euclidian_lenght_2_3 = glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
-
-	trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / trilateral_descriptor.euclidian_lenght_1_2;
-	trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / trilateral_descriptor.euclidian_lenght_1_3;
-	trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / trilateral_descriptor.euclidian_lenght_2_3;
-
-
-
-	trilateral_descriptor.n_ring_area_p1 = get_N_ring_area(m, trilateral_descriptor.p1, 1);
-	trilateral_descriptor.n_ring_area_p2 = get_N_ring_area(m, trilateral_descriptor.p2, 1);
-	trilateral_descriptor.n_ring_area_p3 = get_N_ring_area(m, trilateral_descriptor.p3, 1);
-	//for only brute force research 
-	return trilateral_descriptor;
-
-}
  std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(TrilateralMesh*mesh, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
 	const float& geodesicWeight, const float& areaWeight)
 {
@@ -2996,31 +2966,17 @@ static std::vector<std::pair<unsigned int, unsigned int>> trilateral_hks_histogr
 		int minimum_index = -1;
 		float minimum_value = INFINITY;
 		Histogram histogram_vec_i = histograms_left[i];
-		//float hks_i = m->normalized_heat_kernel_signature[trilateral_desc_left[i].p1];
-		float desci_p1_dist_p2 = trilateral_desc_left[i].geodesic_lenght_1_2;
-		float desci_p1_dist_p3 = trilateral_desc_left[i].geodesic_lenght_1_3;
-		float desci_ratio = desci_p1_dist_p2 / desci_p1_dist_p3;
-		if (desci_ratio > 1)
-		{
-			desci_ratio = 1.0f / desci_ratio;
-		}
+
 		for (size_t j = 0; j < N_right; j++)
 		{
 			Histogram histogram_vec_j = histograms_right[j];
 			float resemblance = Histogram_L2Norm(histogram_vec_i, histogram_vec_j);
-			float descj_p1_dist_p2 = trilateral_desc_left[i].geodesic_lenght_1_2;
-			float descj_p1_dist_p3 = trilateral_desc_left[i].geodesic_lenght_1_3;
-			float descj_ratio = descj_p1_dist_p2 / descj_p1_dist_p3;
-			if (descj_ratio > 1)
-			{
-				descj_ratio = 1.0f / descj_ratio;
-			}
-			if (std::fabs(desci_ratio - descj_ratio) > 0.2)
-			{
-				continue; 
-			}
-			//float hks_j = m->normalized_heat_kernel_signature[trilateral_desc_right[j].p1];
-			//if (std::abs(hks_i - hks_j) < 0.03)
+			
+			float resemblance_1_2 = Histogram_L2Norm_DifferentSize(trilateral_desc_left[i].hist_path_1_2, trilateral_desc_right[j].hist_path_1_2);
+			float resemblance_1_3 = Histogram_L2Norm_DifferentSize(trilateral_desc_left[i].hist_path_1_3, trilateral_desc_right[j].hist_path_1_3);
+			float resemblance_2_3 = Histogram_L2Norm_DifferentSize(trilateral_desc_left[i].hist_path_2_3, trilateral_desc_right[j].hist_path_2_3);
+
+			if (resemblance_1_2 + resemblance_1_3 + resemblance_2_3 < 0.3)
 			{
 				compareResults_left.push_back({ resemblance, {i,j} });
 			}
@@ -3848,10 +3804,10 @@ void trilateral_point_matching_with_skeleton_endpoints(TrilateralMesh* m , Skele
 	plane_center /= m->vertices.size();
 
 	Plane plane; 
-	if (!dom_sym_read_plane(m, plane))
+	/*if (!dom_sym_read_plane(m, plane))
 	{
 		plane = generate_dominant_symmetry_plane(m, 0.1);
-	}
+	}*/
 
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;
@@ -3997,7 +3953,7 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 		plane_center += m->vertices[i];
 	}
 	plane_center /= m->vertices.size();
-	if (!dom_sym_read_plane(m, plane))
+	//if (!dom_sym_read_plane(m, plane, plane_path))
 	{
 		plane = generate_dominant_symmetry_plane(m, 2);
 	}
@@ -4087,7 +4043,7 @@ void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vec
 		plane_center += m->vertices[i];
 	}
 	plane_center /= m->vertices.size();
-	if (!dom_sym_read_plane(m, plane))
+	if (plane.isNull() )
 	{
 		plane = generate_dominant_symmetry_plane(m, 0.3);
 	}
@@ -4212,7 +4168,7 @@ TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton
 	int smallest_index = CoreType_return_smallest_k(distances, 1);
 	int second_smallest_index = CoreType_return_smallest_k(distances, 2);
 
-	TrilateralDescriptor  desc = generate_trilateral_descriptor(m, (int)point_index , smallest_index , second_smallest_index, false );
+	TrilateralDescriptor  desc = TrilateralDescriptor_create(m, (int)point_index , smallest_index , second_smallest_index, false );
 	return desc;
 }
 
@@ -4236,10 +4192,10 @@ void trilateral_point_matching_with_skeleton_endpoints_SpinImage(TrilateralMesh*
 		plane_center += m->vertices[i];
 	}
 	plane_center /= m->vertices.size();
-	if (!dom_sym_read_plane(m, plane))
+	/*if (!dom_sym_read_plane(m, plane))
 	{
 		plane = generate_dominant_symmetry_plane(m, 2);
-	}
+	}*/
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;
 	std::vector<unsigned int> right_skeleton_indices;
@@ -4330,7 +4286,7 @@ void trilateral_display_trilateral_from_skeleton_endpoints(TrilateralMesh* m, st
 		plane_center += m->vertices[i];
 	}
 	plane_center /= m->vertices.size();
-	if (!dom_sym_read_plane(m, plane))
+	if( plane.isNull() )
 	{
 		plane = generate_dominant_symmetry_plane(m, 2);
 	}

@@ -345,7 +345,6 @@ std::vector<float> histogram_roi_superior(TrilateralMesh* m , int point_index1, 
 
 // the ultimate trilateral descriptor generator 
 TrilateralDescriptor  generate_trilateral_descriptor(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, bool is_simplified);
-TrilateralDescriptor  generate_trilateral_descriptor(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
 
 
 std::vector<std::pair<unsigned int, unsigned int>>  point_match_trilateral_weights(TrilateralMesh*m, std::vector<TrilateralDescriptor>& trilateralDescVec, const float& curvWeight,
@@ -405,7 +404,8 @@ float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
 	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no);
 
  void trilateral_point_matching_with_skeleton_endpoints_w_HKS(TrilateralMesh* m , Skeleton& skeleton,
-std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& desc_right , Plane& plane);
+std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& desc_right , Plane& plane
+);
 
  void trilateral_point_matching_with_skeleton_endpoints_anchors(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
 	 std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg, Plane& plane );

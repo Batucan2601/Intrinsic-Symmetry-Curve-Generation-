@@ -1,6 +1,7 @@
 #include "../Include/TrilateralDescriptor.h"
 #include "../Include/Geodesic.h"
 #include "../Include/glm/glm.hpp"
+#include "../Include/ROI.h"
 
 
 bool TrilateralDescriptor::check_colinearity()
@@ -195,4 +196,34 @@ void TrilateralDescriptor_generate_descriptor_with_resolution(TrilateralMesh* m_
     }
     m_inside->triangles = triangles_new;
 
+}
+TrilateralDescriptor  TrilateralDescriptor_create(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified)
+{
+    TrilateralDescriptor trilateral_descriptor;//trialteral descriptor 
+    //init descriptor
+    trilateral_descriptor.p1 = point_index1;
+    trilateral_descriptor.p2 = point_index2;
+    trilateral_descriptor.p3 = point_index3;
+
+    ROI_trilateral(m, trilateral_descriptor, 10, false);
+
+    trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+    trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+    trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
+
+    trilateral_descriptor.euclidian_lenght_1_2 = glm::distance(m->vertices[point_index1], m->vertices[point_index2]);
+    trilateral_descriptor.euclidian_lenght_1_3 = glm::distance(m->vertices[point_index1], m->vertices[point_index3]);
+    trilateral_descriptor.euclidian_lenght_2_3 = glm::distance(m->vertices[point_index2], m->vertices[point_index3]);
+
+    trilateral_descriptor.curvature_1_2 = trilateral_descriptor.geodesic_lenght_1_2 / trilateral_descriptor.euclidian_lenght_1_2;
+    trilateral_descriptor.curvature_1_3 = trilateral_descriptor.geodesic_lenght_1_3 / trilateral_descriptor.euclidian_lenght_1_3;
+    trilateral_descriptor.curvature_2_3 = trilateral_descriptor.geodesic_lenght_2_3 / trilateral_descriptor.euclidian_lenght_2_3;
+
+    trilateral_descriptor.n_ring_area_p1 = get_N_ring_area(m, trilateral_descriptor.p1, 1);
+    trilateral_descriptor.n_ring_area_p2 = get_N_ring_area(m, trilateral_descriptor.p2, 1);
+    trilateral_descriptor.n_ring_area_p3 = get_N_ring_area(m, trilateral_descriptor.p3, 1);
+
+
+    //for only brute force research 
+    return trilateral_descriptor;
 }

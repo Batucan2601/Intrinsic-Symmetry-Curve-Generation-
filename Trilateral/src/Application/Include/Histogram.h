@@ -32,4 +32,5 @@ float Histogram2D_bhattacharyyaDistance(const Histogram2D& h1, const Histogram2D
 float Histogram2D_ChiSquareDistance(const Histogram2D& h1, const Histogram2D& h2);
 float Histogram2D_L2Norm(const Histogram2D& h1, const Histogram2D& h2);
 
+float Histogram_L2Norm_DifferentSize(Histogram& h1, Histogram& h2);
 

@@ -10,6 +10,6 @@ void dom_sym_generate_two_separate_mesh_using_dominant_symmetry_plane(Plane plan
 void match_two_meshes_with_fps(TrilateralMesh* selected_mesh, TrilateralMesh* m1, TrilateralMesh* m2, std::vector<int>* indices_for_m1, std::vector<int>* indices_for_m2, int no_of_samples);
 std::vector<TrilateralDescriptor> match_two_meshes_with_fps(TrilateralMesh* selected_mesh, Plane* plane, int no_of_samples);
 
-void dom_sym_save_plane(Plane& plane, TrilateralMesh* m);
-bool dom_sym_read_plane(TrilateralMesh* m , Plane& plane);
+void dom_sym_write_plane(TrilateralMesh* m, Plane& plane, std::string path);
+bool dom_sym_read_plane(TrilateralMesh* m , Plane& plane , std::string path);
 void dom_sym_draw_plane();

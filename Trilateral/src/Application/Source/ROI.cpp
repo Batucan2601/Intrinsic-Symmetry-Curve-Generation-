@@ -6,10 +6,17 @@ static std::vector<unsigned int> breadth_first_search(TrilateralMesh* m, int poi
 
 void ROI_trilateral(TrilateralMesh* m,TrilateralDescriptor& desc, int division_no, bool is_color)
 {
+	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, desc.p1);
+	if (distance_matrix_p1[desc.p3] < distance_matrix_p1[desc.p2])
+	{
+		int temp = desc.p3;
+		desc.p3 = desc.p2;
+		desc.p2 = temp;
+	}
+	
 	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, desc.p1, desc.p2);
 	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, desc.p1, desc.p3);
 	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, desc.p2, desc.p3);
-	std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, desc.p1);
 	std::vector<float> distance_matrix_p2 = Geodesic_dijkstra(*m, desc.p2);
 	std::vector<float> distance_matrix_p3 = Geodesic_dijkstra(*m, desc.p3);
 	desc.path_1_2 = path_1_2;
@@ -21,6 +28,34 @@ void ROI_trilateral(TrilateralMesh* m,TrilateralDescriptor& desc, int division_n
 	desc.geodesic_lenght_2_3 = distance_matrix_p2[desc.p3];
 	std::vector<unsigned int> visited_indices = check_vertices_visited(m, path_1_2, path_1_3, path_2_3);
 	desc.visited_indices = visited_indices;
+
+	//generate histograms with the areas
+	std::vector<float> path_1_2_area;
+	for (size_t i = 0; i < path_1_2.size(); i++)
+	{
+		int index = path_1_2[i];
+		path_1_2_area.push_back(m->areas[index]);
+	}
+	desc.hist_path_1_2.histogram = path_1_2_area;
+	desc.hist_path_1_2.normalize(1);
+	std::vector<float> path_1_3_area;
+	for (size_t i = 0; i < path_1_3.size(); i++)
+	{
+		int index = path_1_3[i];
+		path_1_3_area.push_back(m->areas[index]);
+	}
+	desc.hist_path_1_3.histogram = path_1_3_area;
+	desc.hist_path_1_3.normalize(1);
+
+	std::vector<float> path_2_3_area;
+	for (size_t i = 0; i < path_2_3.size(); i++)
+	{
+		int index = path_2_3[i];
+		path_2_3_area.push_back(m->areas[index]);
+	}
+	desc.hist_path_2_3.histogram = path_2_3_area;
+	desc.hist_path_2_3.normalize(1);
+
 }
 
 

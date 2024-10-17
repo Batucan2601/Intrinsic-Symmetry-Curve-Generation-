@@ -9,14 +9,16 @@
 
 
 
-typedef struct {
+struct Plane{
 	glm::vec3 point;
 	glm::vec3 normal;
 	glm::vec3 p1;
 	glm::vec3 p2;
 	glm::vec3 p3;
 	glm::vec3 p4;
-}Plane;
+	Plane();
+	bool isNull();
+};
 
 
 
@@ -51,7 +53,6 @@ glm::vec3 CoreType_conv_raylib_glm_vec3(Vector3 vec3);
 Vector3 CoreType_conv_glm_raylib_vec3(glm::vec3 vec3);
 // permuation
 float permutation_return_smallest_dif(Eigen::VectorXf vec1, Eigen::VectorXf vec2, int N);
-
 
 //templates
 template <typename T>

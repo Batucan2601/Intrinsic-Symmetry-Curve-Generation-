@@ -36,6 +36,8 @@ std::string file_path_name = "";
 static bool is_searching_swc = false; 
 static bool is_writing_dsc = false; 
 static bool is_reading_dsc = false; 
+static bool is_writing_pln = false;
+static bool is_reading_pln = false;
 static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
@@ -47,6 +49,7 @@ static int dvorak_no_of_significant_points = 0;
 static float dvorak_geodesic_dist_param = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
+
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -172,11 +175,11 @@ static void dominant_symmetry_plane(TrilateralMesh* m )
     }
     if (ImGui::MenuItem("Save dominant Symmetry Plane"))
     {
-        dom_sym_save_plane(plane, m);
+        is_writing_pln = true; 
     }
     if (ImGui::MenuItem("read dominant Symmetry Plane"))
     {
-        dom_sym_read_plane(m, plane);
+        is_reading_pln = true;
     }
 }
 
@@ -215,20 +218,10 @@ static void trilateral_functions(TrilateralMesh* m)
         ImGui::EndMenu();
 
     }
-    if (ImGui::MenuItem("Point matching with skeleton endpoints triangle area "))
-    {
-        trilateral_point_matching_with_skeleton_endpoints_w_HKS(m, skeleton, positive_desc, negative_desc, plane);
-        is_draw_plane = true; 
-    }
     if (ImGui::MenuItem("Point matching with Dvorak significant poins triangle area "))
     {
         trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points);
         is_draw_plane = true;
-    }
-    if (ImGui::MenuItem("Point matching with skeleton endpoints with spin image  "))
-    {
-        trilateral_point_matching_with_skeleton_endpoints_SpinImage(m, skeleton, positive_desc,
-            negative_desc, plane);
     }
     if (ImGui::MenuItem("Generate trilaterals using endpoints "))
     {
@@ -347,7 +340,20 @@ static void display_file_dialogs(TrilateralMesh* m )
         read_trilateral_descriptors(file_path_name);
         file_path_name = "";
     }
-       
+    drawFileDialog(file_path, file_path_name, ".pln", is_writing_pln);
+    if (file_path_name != "")
+    {
+        dom_sym_write_plane(m, plane,  file_path_name);
+        is_draw_plane = true;
+        file_path_name = "";
+    }
+    drawFileDialog(file_path, file_path_name, ".pln", is_reading_pln);
+    if (file_path_name != "")
+    {
+        dom_sym_read_plane(m, plane, file_path_name);
+        is_draw_plane = true;
+        file_path_name = "";
+    }
 }
 
 static void mesh_drawing()

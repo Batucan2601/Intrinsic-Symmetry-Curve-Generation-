@@ -1,0 +1,1 @@
+VarianceMin_generate_map(TrilateralDescripto& desc1 ,TrilateralDescripto& desc2  );

@@ -375,3 +375,31 @@ float Histogram2D_L2Norm(const Histogram2D& h1, const Histogram2D& h2)
 	}
 	return total_dif;
 }
+
+
+float Histogram_L2Norm_DifferentSize(Histogram& h1, Histogram& h2)
+{
+	Histogram smaller;
+	Histogram bigger;
+
+	int big_size = std::max(h1.histogram.size(), h2.histogram.size());
+	if (h1.histogram.size() < h2.histogram.size())
+	{
+		smaller = h1;
+		bigger = h2; 
+	}
+	else
+	{
+		smaller = h2;
+		bigger = h1;
+	}
+
+	// just pad smaller with 0's
+	int size_dif = bigger.size() - smaller.size();
+	for (size_t i = 0; i < size_dif; i++)
+	{
+		smaller.histogram.push_back(0.0f);
+	}
+
+	return Histogram_L2Norm(smaller, bigger);
+}

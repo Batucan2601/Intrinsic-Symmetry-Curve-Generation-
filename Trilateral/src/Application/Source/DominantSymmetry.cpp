@@ -234,7 +234,6 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_
 		best_plane.normal = glm::normalize(best_plane.normal);
 	}
 	
-	dom_sym_save_plane(best_plane, mesh);
 
 	//generate displayable points
 	glm::vec3 arbitraryVector = (std::abs(best_plane.normal.y) < 1.0) ? glm::vec3( 0, 1, 0 ) : glm::vec3( 1, 0, 0 );
@@ -815,12 +814,8 @@ static Plane rotate_plane(Plane plane , float rotation_degree)
 	return rotated_plane;
 	
 }
-void dom_sym_save_plane(Plane& plane, TrilateralMesh* m)
+void dom_sym_write_plane(TrilateralMesh* m , Plane& plane, std::string path )
 {
-	//go read the hks file 
-	std::string path = "../../Trilateral/TrilateralMesh/off/DomSym/";
-	std::string file_name = m->file_name;
-	path = path + file_name;
 	std::ofstream file(path);  // Open the file for reading
 
 	// Check if the file was successfully opened
@@ -846,12 +841,8 @@ void dom_sym_save_plane(Plane& plane, TrilateralMesh* m)
 	file.close();  // Close the file after reading
 	return;
 }
-bool dom_sym_read_plane(TrilateralMesh* m ,  Plane& plane)
+bool dom_sym_read_plane(TrilateralMesh* m ,  Plane& plane , std::string path)
 {
-	//go read the hks file 
-	std::string path = "../../Trilateral/TrilateralMesh/off/DomSym/";
-	std::string file_name = m->file_name;
-	path = path + file_name;
 	std::ifstream file(path);  // Open the file for reading
 
 	// Check if the file was successfully opened

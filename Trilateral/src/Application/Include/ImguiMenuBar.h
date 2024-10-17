@@ -3,7 +3,6 @@
 #include "../Include/TrilateralMap.h"
 #include "../Include/SkeletalNLateral.h"
 
-
 void imgui_menu_bar(TrilateralMesh* m );
 
 
