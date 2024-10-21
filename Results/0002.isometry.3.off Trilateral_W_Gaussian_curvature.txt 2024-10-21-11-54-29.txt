@@ -1,0 +1,2 @@
+Normalize geodesic cost === -nan(ind)
+correspondance rate === -nan(ind)

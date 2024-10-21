@@ -1,4 +1,5 @@
 #include "CoreTypeDefs.h"
 #include "TrilateralDescriptor.h"
-void VarianceMin_generate_map(TrilateralMesh* m,
-TrilateralDescriptor& desc1 ,TrilateralDescriptor& desc2  );
+float VarianceMin_compare(TrilateralMesh* m, TrilateralDescriptor& desc1, TrilateralDescriptor& desc2);
+
+std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& des_neg);

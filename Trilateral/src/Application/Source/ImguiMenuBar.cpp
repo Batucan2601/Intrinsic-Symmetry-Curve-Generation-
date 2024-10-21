@@ -24,7 +24,7 @@ static void skeleton_generation(TrilateralMesh* m);
 static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
-static void KIDS_dataset();
+static void KIDS_dataset(TrilateralMesh* m);
 static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
@@ -47,6 +47,7 @@ static Skeleton skeleton;
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
+static int mesh_index = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
 std::vector<unsigned int> distributed_indices;
@@ -123,7 +124,7 @@ void imgui_menu_bar(TrilateralMesh* m)
             }
             if (ImGui::BeginMenu("dataset"))
             {
-                KIDS_dataset();
+                KIDS_dataset(m);
                 ImGui::EndMenu();
 
             }
@@ -235,9 +236,10 @@ static void trilateral_functions(TrilateralMesh* m)
         trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points , convergence_ratio);
         is_draw_plane = true;
     }
-    if (ImGui::MenuItem("End point matching with Dvorak significant poins triangle area "))
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform"))
     {
-
+        trilateral_point_matching_with_gaussian_endpoints_and_OT(m, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
+        is_draw_plane = true;
     }
     if (ImGui::MenuItem("Generate trilaterals using endpoints "))
     {
@@ -245,11 +247,16 @@ static void trilateral_functions(TrilateralMesh* m)
     }
 }
 
-static void KIDS_dataset()
+static void KIDS_dataset(TrilateralMesh* m)
 {
     if (ImGui::MenuItem("read KIDS"))
     {
         KIDS_read_meshes();
+    }
+    ImGui::InputInt("Mesh Index", &mesh_index);
+    if (ImGui::MenuItem("display mesh "))
+    {
+        KIDS_select_mesh(*m , mesh_index);
     }
     if (ImGui::MenuItem("generate KIDS planes"))
     {
@@ -259,7 +266,10 @@ static void KIDS_dataset()
     {
         KIDS_generate_gaussians(dvorak_no_of_significant_points, dvorak_geodesic_dist_param);
     }
-
+    if (ImGui::MenuItem("use gaussian for endpoint matching "))
+    {
+        KIDS_endpoint_matching_w_gaussian(dvorak_no_of_significant_points, convergence_ratio);
+    }
    
 }
 #pragma region draw section

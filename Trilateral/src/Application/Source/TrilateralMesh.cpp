@@ -601,14 +601,6 @@ void read_symmetry_format(char* filename, TrilateralMesh* m)
 	{
 		m->ground_truth_symmetry_pairs[m->symmetry_pairs[i].second] = m->symmetry_pairs[i].first;
 	}	
-	/*while (symFile >> number)
-	{
-		std::pair<unsigned int, unsigned int> sym_pair;
-		sym_pair.first = (unsigned int)number; 
-		symFile >> number;
-		sym_pair.second= (unsigned int)number;
-		m->symmetry_pairs.push_back(sym_pair);
-	}*/
 	return;
 }
 
