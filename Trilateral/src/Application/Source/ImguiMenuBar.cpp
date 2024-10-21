@@ -12,6 +12,7 @@
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/HeatKernelSignature.h"
 #include "../Include/SpinImage.h"
+#include "../Include/KIDS.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
@@ -22,13 +23,11 @@ static void dominant_symmetry_plane(TrilateralMesh* m);
 static void skeleton_generation(TrilateralMesh* m);
 static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
+static void distribution_functions(TrilateralMesh* m);
+static void KIDS_dataset();
 static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
-static void save_trilateral_descriptors();
-static void load_trilateral_descriptors();
-static void write_trilateral_descriptors( std::string filename);
-static void read_trilateral_descriptors( std::string filename);
 static void  display_descriptor(TrilateralMesh* m);
 static void  display_descriptor_all(TrilateralMesh* m);
 std::string file_path;
@@ -46,9 +45,11 @@ static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
 static int dvorak_no_of_significant_points = 0;
+static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
+std::vector<unsigned int> distributed_indices;
 
 void imgui_menu_bar(TrilateralMesh* m)
 {
@@ -110,10 +111,21 @@ void imgui_menu_bar(TrilateralMesh* m)
                 ImGui::EndMenu();
 
             }
+            if (ImGui::BeginMenu("Distributions"))
+            {
+                distribution_functions(m);
+                ImGui::EndMenu();
+            }
             if (ImGui::BeginMenu("Mesh Drawing"))
             {
                 mesh_drawing();
                 ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("dataset"))
+            {
+                KIDS_dataset();
+                ImGui::EndMenu();
+
             }
             ImGui::EndMenu();
         }
@@ -200,11 +212,11 @@ static void trilateral_functions(TrilateralMesh* m)
     {
         if (ImGui::MenuItem("Save trilateral desscriptors"))
         {
-            save_trilateral_descriptors();
+            is_writing_dsc = true;
         }
         if (ImGui::MenuItem("Load trilateral descriptors"))
         {
-            load_trilateral_descriptors();
+            is_reading_dsc = true;
         }
         if (ImGui::InputInt("descriptor no ", &descriptor_no));
         if (ImGui::MenuItem("Display descriptor"))
@@ -218,10 +230,14 @@ static void trilateral_functions(TrilateralMesh* m)
         ImGui::EndMenu();
 
     }
-    if (ImGui::MenuItem("Point matching with Dvorak significant poins triangle area "))
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins triangle area "))
     {
-        trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points);
+        trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points , convergence_ratio);
         is_draw_plane = true;
+    }
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins triangle area "))
+    {
+
     }
     if (ImGui::MenuItem("Generate trilaterals using endpoints "))
     {
@@ -229,7 +245,23 @@ static void trilateral_functions(TrilateralMesh* m)
     }
 }
 
+static void KIDS_dataset()
+{
+    if (ImGui::MenuItem("read KIDS"))
+    {
+        KIDS_read_meshes();
+    }
+    if (ImGui::MenuItem("generate KIDS planes"))
+    {
+        KIDS_dom_sym_generate_or_read_planes(convergence_ratio);
+    }
+    if (ImGui::MenuItem(" select N curvature points "))
+    {
+        KIDS_generate_gaussians(dvorak_no_of_significant_points, dvorak_geodesic_dist_param);
+    }
 
+   
+}
 #pragma region draw section
 static void draw_dom_sym();
 static void draw_skeleton();
@@ -331,13 +363,13 @@ static void display_file_dialogs(TrilateralMesh* m )
     drawFileDialog(file_path, file_path_name, ".dsc", is_writing_dsc);
     if (file_path_name != "")
     {
-        write_trilateral_descriptors(file_path_name);
+        TrilateralDescriptor_write(file_path_name , positive_desc , negative_desc);
         file_path_name = "";
     }
     drawFileDialog(file_path, file_path_name, ".dsc", is_reading_dsc);
     if (file_path_name != "")
     {
-        read_trilateral_descriptors(file_path_name);
+        TrilateralDescriptor_read(file_path_name , positive_desc , negative_desc);
         file_path_name = "";
     }
     drawFileDialog(file_path, file_path_name, ".pln", is_writing_pln);
@@ -418,7 +450,7 @@ static void dvorak_functions(TrilateralMesh* m)
     }
     if (ImGui::BeginMenu("Dvorak Sweep points with geodesic dist "))
     {
-        if (ImGui::InputFloat("no of points ", &dvorak_geodesic_dist_param));
+        if (ImGui::InputFloat("geodesic dist ", &dvorak_geodesic_dist_param));
         if (ImGui::MenuItem("start sweep"))
         {
             std::vector<DvorakPairs> dvorak_pairs = dvorak_extraction_of_significant_points(m, dvorak_no_of_significant_points);
@@ -429,199 +461,23 @@ static void dvorak_functions(TrilateralMesh* m)
 
     }
 }
+static void distribution_functions(TrilateralMesh* m)
+{ 
+    if (ImGui::BeginMenu("Furthest Point Sampling"))
+    {
+        if (ImGui::InputInt("no of points ", &no_of_dist_points));
+        if (ImGui::MenuItem("Furthest point Sampling "))
+        {
+           distributed_indices = furthest_point_sampling(m, no_of_dist_points, true);
+        }
 
+        ImGui::EndMenu();
+    }
+
+}
 #pragma region trilateral save load 
-static void save_trilateral_descriptors()
-{
-    is_writing_dsc = true; 
-    
-}
-static void load_trilateral_descriptors()
-{
-    is_reading_dsc = true;
-}
-static void write_trilateral_descriptors( std::string filename)
-{
-    std::ofstream file;                // Create an ofstream object for file output
 
-    // Open the file in write mode
-    file.open(filename);
 
-    // Check if the file was opened successfully
-    if (!file) {
-        std::cerr << "Error opening file: " << filename << std::endl;
-        return ;
-    }
-
-    // Write some data to the file
-    //desc format 1 - 
-    for (size_t i = 0; i < positive_desc.size(); i++)
-    {
-        file << " desc ";
-        file << positive_desc[i].p1 << " " << positive_desc[i].p2 << " " << positive_desc[i].p3 << std::endl;
-        file << " vertices inside ";
-        for (size_t j = 0; j < positive_desc[i].visited_indices.size(); j++)
-        {
-            file << positive_desc[i].visited_indices[j] << " ";
-        }
-        file << std::endl;
-        file << " path12";
-        for (size_t j = 0; j < positive_desc[i].path_1_2.size(); j++)
-        {
-            file << positive_desc[i].path_1_2[j] << " ";
-        }
-        file << std::endl;
-        file << " path13";
-        for (size_t j = 0; j < positive_desc[i].path_1_3.size(); j++)
-        {
-            file << positive_desc[i].path_1_3[j] << " ";
-        }
-        file << std::endl;
-        file << " path23";
-        for (size_t j = 0; j < positive_desc[i].path_2_3.size(); j++)
-        {
-            file << positive_desc[i].path_2_3[j] << " ";
-        }
-        file << std::endl;
-    }
-    file << "negative" << std::endl;
-    for (size_t i = 0; i < negative_desc.size(); i++)
-    {
-        file << " desc ";
-        file << negative_desc[i].p1 << " " << negative_desc[i].p2 << " " << negative_desc[i].p3 << std::endl;
-        file << " vertices inside ";
-        for (size_t j = 0; j < negative_desc[i].visited_indices.size(); j++)
-        {
-            file << negative_desc[i].visited_indices[j] << " ";
-        }
-        file << std::endl;
-        file << " path12";
-        for (size_t j = 0; j < negative_desc[i].path_1_2.size(); j++)
-        {
-            file << negative_desc[i].path_1_2[j] << " ";
-        }
-        file << std::endl;
-        file << " path13";
-        for (size_t j = 0; j < negative_desc[i].path_1_3.size(); j++)
-        {
-            file << negative_desc[i].path_1_3[j] << " ";
-        }
-        file << std::endl;
-        file << " path23";
-        for (size_t j = 0; j < negative_desc[i].path_2_3.size(); j++)
-        {
-            file << negative_desc[i].path_2_3[j] << " ";
-        }
-    }
-    // Close the file
-    file.close();
-
-}
-
-static void read_trilateral_descriptors( std::string filename)
-{
-    std::ifstream file(filename);                // Create an ofstream object for file output
-
-    // Check if the file was opened successfully
-    if (!file) {
-        std::cerr << "Error opening file: " << filename << std::endl;
-        return;
-    }
-
-    // Write some data to the file
-    //desc format 1 - 
-    int pos_size = positive_desc.size();
-    std::vector<TrilateralDescriptor> descriptors;
-    int negative_start_index = -1;
-    bool is_pos_desc = true; 
-    std::string line;
-
-    TrilateralDescriptor desc; 
-    while (std::getline(file, line))
-    {
-
-        if (line.find("negative") != std::string::npos)
-        {
-            is_pos_desc = false;
-            negative_start_index = descriptors.size();
-        }
-        if (line.find("desc") != std::string::npos)
-        {
-            line = line.substr(5);
-            std::stringstream ss(line);
-            std::vector<int> nums;
-            int num;
-            while (ss >> num)
-            {
-                nums.push_back(num);
-            }
-            desc.p1 = nums[0];
-            desc.p2 = nums[1];
-            desc.p3 = nums[2];
-        }
-        if( line.find("vertices inside") != std::string::npos)
-        {
-            line = line.substr(16);
-            std::stringstream ss(line);
-            std::vector<unsigned int> visited;
-            unsigned int num;
-            while (ss >> num)
-            {
-                visited.push_back(num);
-            }
-            desc.visited_indices = visited;
-        }
-        if (line.find("path12") != std::string::npos)
-        {   
-            line = line.substr(7);
-            std::stringstream ss(line);
-            std::vector<int> visited;
-            int num;
-            while (ss >> num)
-            {
-                visited.push_back(num);
-            }
-            desc.path_1_2 = visited;
-        }
-        if (line.find("path13") != std::string::npos)
-        {
-            line = line.substr(7);
-            std::stringstream ss(line);
-            std::vector<int> visited;
-            int num;
-            while (ss >> num)
-            {
-                visited.push_back(num);
-            }
-            desc.path_1_3 = visited;
-        }
-        if (line.find("path23") != std::string::npos)
-        {
-            line = line.substr(7);
-            std::stringstream ss(line);
-            std::vector<int> visited;
-            int num;
-            while (ss >> num)
-            {
-                visited.push_back(num);
-            }
-            desc.path_2_3 = visited;
-            descriptors.push_back(desc);
-        }
-    }
-    // Close the file
-    file.close();
-    
-    for (size_t i = 0; i < negative_start_index; i++)
-    {
-        positive_desc.push_back(descriptors[i]);
-    }  
-    for (size_t i = negative_start_index; i < descriptors.size(); i++)
-    {
-        negative_desc.push_back(descriptors[i]);
-    }
-    return;
-}
 
 static void  display_descriptor(TrilateralMesh* m )
 {

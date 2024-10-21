@@ -95,7 +95,8 @@ Plane generate_dominant_symmetry_plane(TrilateralMesh* mesh , float convergence_
 	best_plane.normal = glm::normalize(best_plane.normal);
 	int sym_no = 0; 
 	//for( int p = 0; p < sym_iter_no; p++ )
-	while( 1 )
+
+	while(sym_no < 20 ) // in case stuck 
 	{
 		std::vector<float> di_vec;
 		for (size_t i = 0; i < mesh->vertices.size(); i++)
@@ -827,7 +828,7 @@ void dom_sym_write_plane(TrilateralMesh* m , Plane& plane, std::string path )
 	if (file.is_open()) {
 		// Write data to the file
 		// 1 - normal of plane 
-		file << plane.normal.x << " " << plane.normal.y << " " << plane.normal.z;
+		file << plane.normal.x << " " << plane.normal.y << " " << plane.normal.z << " ";
 		file << plane.point.x << " " << plane.point.y << " " << plane.point.z;
 		// Close the file after writing
 		file.close();
@@ -874,4 +875,23 @@ bool dom_sym_read_plane(TrilateralMesh* m ,  Plane& plane , std::string path)
 
 	return true;
 	
+}
+
+void dom_sym_generate_planes_for_KIDS(std::vector<TrilateralMesh>& dataset , float convergence_ratio)
+{
+	for (size_t i = 0; i < dataset.size(); i++)
+	{
+		TrilateralMesh* m = &dataset[i];
+		snprintf(NULL, 0, "%f", convergence_ratio);
+		std::string name = m->file_name + std::to_string(convergence_ratio) + ".pln";
+		std::string path("../../Trilateral/Mesh/off/DomSym/");
+		path = path + name;
+		Plane plane; 
+		// try to read the plane
+		if( !dom_sym_read_plane( m, plane, path));
+		{
+			plane = generate_dominant_symmetry_plane(m, convergence_ratio);
+		}
+		dom_sym_write_plane(m, plane, path);
+	}
 }

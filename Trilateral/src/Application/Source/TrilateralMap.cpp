@@ -4026,7 +4026,7 @@ std::vector<TrilateralDescriptor>& desc_right , Plane& plane  )
 
 }
 void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
-	std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no )
+	std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no , float convergence_ratio )
 {
 	int N = m->vertices.size();
 	int mesh_mid_point_index = -1;
@@ -4045,7 +4045,7 @@ void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vec
 	plane_center /= m->vertices.size();
 	if (plane.isNull() )
 	{
-		plane = generate_dominant_symmetry_plane(m, 0.3);
+		plane = generate_dominant_symmetry_plane(m, convergence_ratio);
 	}
 	//divide the end points 
 	std::vector<unsigned int> left_skeleton_indices;
@@ -4111,7 +4111,9 @@ void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vec
 
 	m->calculated_symmetry_pairs = resemblance_pairs;
 
-	Metric_write_to_file(m, "../../Results/Trilateral_W_SKELETON_AND_HKS.txt");
+	std::string path = "../../Results/";
+	path = path + m->file_name + " Trilateral_W_Gaussian_curvature.txt ";
+	Metric_write_to_file(m, path);
 
 }
 void trilateral_point_matching_with_skeleton_endpoints_anchors(MeshFactory& mesh_fac, const int& selected_index, Skeleton& skeleton,
@@ -4309,4 +4311,85 @@ void trilateral_display_trilateral_from_skeleton_endpoints(TrilateralMesh* m, st
 	negative_desc= get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
 
 	m->update_raylib_mesh();
+}
+
+void trilateral_sampled_point_matching_with_descriptors(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
+	, std::vector<TrilateralDescriptor>& negative_desc, Plane& plane, std::vector<unsigned int>& fps_points , float sweep_distance)
+{
+	// 1 - divide fps points into two
+	std::vector<unsigned int> positive_fps_points;
+	std::vector<unsigned int> negative_fps_points;
+	for (size_t i = 0; i < fps_points.size(); i++)
+	{
+		int index = fps_points[i];
+		if (get_point_status_from_plane(&plane, &m->vertices[index]) > 0)
+		{
+			positive_fps_points.push_back(index);
+		}
+		else
+		{
+			negative_fps_points.push_back(index);
+		}
+
+	}
+	 // 1 - check if  fps points are closer than sweep_distances
+	std::vector<unsigned int> vertices_deleted(positive_fps_points.size() , 0);
+	for (size_t i = 0; i < positive_desc.size(); i++)
+	{
+		int desc_index = positive_desc[i].p1;
+		glm::vec3 pi = m->vertices[desc_index];
+		//do a geodesic 
+		std::vector<float> distances = Geodesic_dijkstra(*m, desc_index);
+		for (size_t j = 0; j < positive_fps_points.size(); j++)
+		{
+			int fps_index = positive_fps_points[j];
+			float distance_i_j = distances[fps_index];
+			if (distance_i_j < sweep_distance)
+			{
+				vertices_deleted[j] = 1;
+			}
+		}
+	}
+	//delete
+	std::vector<unsigned int> temp_vec;
+	for (size_t i = 0; i < positive_fps_points.size(); i++)
+	{
+		if (vertices_deleted[i] == 0)
+		{
+			temp_vec.push_back(positive_fps_points[i]);
+		}
+	}
+	positive_fps_points = temp_vec; 
+
+	//negative 
+	vertices_deleted.resize(negative_fps_points.size(), 0);
+	for (size_t i = 0; i < negative_desc.size(); i++)
+	{
+		int desc_index = negative_desc[i].p1;
+		glm::vec3 pi = m->vertices[desc_index];
+		//do a geodesic 
+		std::vector<float> distances = Geodesic_dijkstra(*m, desc_index);
+		for (size_t j = 0; j < negative_fps_points.size(); j++)
+		{
+			int fps_index = negative_fps_points[j];
+			float distance_i_j = distances[fps_index];
+			if (distance_i_j < sweep_distance)
+			{
+				vertices_deleted[j] = 1;
+			}
+		}
+	}
+	//delete
+	temp_vec.clear();
+	for (size_t i = 0; i < negative_fps_points.size(); i++)
+	{
+		if (vertices_deleted[i] == 0)
+		{
+			temp_vec.push_back(negative_fps_points[i]);
+		}
+	}
+	negative_fps_points = temp_vec;
+
+
+	// 2 - 
 }

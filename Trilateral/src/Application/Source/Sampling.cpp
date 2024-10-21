@@ -56,31 +56,16 @@ std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_
 	// redrawing part
 	if (is_points_colored)
 	{
-		std::vector<glm::vec3> new_color_buffer;
-		for (size_t i = 0; i < m->colors.size(); i++)
+		for (size_t i = 0; i < sampled_id_vector.size(); i++)
 		{
-			bool is_sampled = false;
-			for (size_t j = 0; j < no_of_samples; j++)
-			{
-				if (sampled_id_vector[j] == i)
-				{
-					is_sampled = true;
-					break;
-				}
-			}
-			if (is_sampled)
-			{
-				new_color_buffer.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-			}
-			else
-			{
-				new_color_buffer.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
-			}
-
+			int index = sampled_id_vector[i];
+			m->raylib_mesh.colors[index * 4] = 255;
+			m->raylib_mesh.colors[index * 4 + 1] = 0;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
 		}
-		m->colors = new_color_buffer;
 	}
-	
+	m->update_raylib_mesh();
 
 	return sampled_id_vector;
 }

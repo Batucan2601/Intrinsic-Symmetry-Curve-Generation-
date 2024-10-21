@@ -54,3 +54,5 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
 void TrilateralDescriptor_generate_descriptor_with_resolution(TrilateralMesh* m_inside, TrilateralDescriptor& desc);
 void TrilateralDescriptor_generate_mesh_with_resolution(TrilateralMesh* m, TrilateralDescriptor& desc, int res);
 TrilateralDescriptor  TrilateralDescriptor_create(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
+void TrilateralDescriptor_write(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);
+void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);

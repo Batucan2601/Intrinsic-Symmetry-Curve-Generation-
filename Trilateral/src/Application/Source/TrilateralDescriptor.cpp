@@ -227,3 +227,186 @@ TrilateralDescriptor  TrilateralDescriptor_create(TrilateralMesh* m, int point_i
     //for only brute force research 
     return trilateral_descriptor;
 }
+
+void TrilateralDescriptor_write(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc)
+{
+    std::ofstream file;                // Create an ofstream object for file output
+
+    // Open the file in write mode
+    file.open(filename);
+
+    // Check if the file was opened successfully
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+
+    // Write some data to the file
+    //desc format 1 - 
+    for (size_t i = 0; i < positive_desc.size(); i++)
+    {
+        file << " desc ";
+        file << positive_desc[i].p1 << " " << positive_desc[i].p2 << " " << positive_desc[i].p3 << std::endl;
+        file << " vertices inside ";
+        for (size_t j = 0; j < positive_desc[i].visited_indices.size(); j++)
+        {
+            file << positive_desc[i].visited_indices[j] << " ";
+        }
+        file << std::endl;
+        file << " path12";
+        for (size_t j = 0; j < positive_desc[i].path_1_2.size(); j++)
+        {
+            file << positive_desc[i].path_1_2[j] << " ";
+        }
+        file << std::endl;
+        file << " path13";
+        for (size_t j = 0; j < positive_desc[i].path_1_3.size(); j++)
+        {
+            file << positive_desc[i].path_1_3[j] << " ";
+        }
+        file << std::endl;
+        file << " path23";
+        for (size_t j = 0; j < positive_desc[i].path_2_3.size(); j++)
+        {
+            file << positive_desc[i].path_2_3[j] << " ";
+        }
+        file << std::endl;
+    }
+    file << "negative" << std::endl;
+    for (size_t i = 0; i < negative_desc.size(); i++)
+    {
+        file << " desc ";
+        file << negative_desc[i].p1 << " " << negative_desc[i].p2 << " " << negative_desc[i].p3 << std::endl;
+        file << " vertices inside ";
+        for (size_t j = 0; j < negative_desc[i].visited_indices.size(); j++)
+        {
+            file << negative_desc[i].visited_indices[j] << " ";
+        }
+        file << std::endl;
+        file << " path12";
+        for (size_t j = 0; j < negative_desc[i].path_1_2.size(); j++)
+        {
+            file << negative_desc[i].path_1_2[j] << " ";
+        }
+        file << std::endl;
+        file << " path13";
+        for (size_t j = 0; j < negative_desc[i].path_1_3.size(); j++)
+        {
+            file << negative_desc[i].path_1_3[j] << " ";
+        }
+        file << std::endl;
+        file << " path23";
+        for (size_t j = 0; j < negative_desc[i].path_2_3.size(); j++)
+        {
+            file << negative_desc[i].path_2_3[j] << " ";
+        }
+    }
+    // Close the file
+    file.close();
+
+}
+
+void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc)
+{
+    std::ifstream file(filename);                // Create an ofstream object for file output
+
+    // Check if the file was opened successfully
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+
+    // Write some data to the file
+    //desc format 1 - 
+    int pos_size = positive_desc.size();
+    std::vector<TrilateralDescriptor> descriptors;
+    int negative_start_index = -1;
+    bool is_pos_desc = true;
+    std::string line;
+
+    TrilateralDescriptor desc;
+    while (std::getline(file, line))
+    {
+
+        if (line.find("negative") != std::string::npos)
+        {
+            is_pos_desc = false;
+            negative_start_index = descriptors.size();
+        }
+        if (line.find("desc") != std::string::npos)
+        {
+            line = line.substr(5);
+            std::stringstream ss(line);
+            std::vector<int> nums;
+            int num;
+            while (ss >> num)
+            {
+                nums.push_back(num);
+            }
+            desc.p1 = nums[0];
+            desc.p2 = nums[1];
+            desc.p3 = nums[2];
+        }
+        if (line.find("vertices inside") != std::string::npos)
+        {
+            line = line.substr(16);
+            std::stringstream ss(line);
+            std::vector<unsigned int> visited;
+            unsigned int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.visited_indices = visited;
+        }
+        if (line.find("path12") != std::string::npos)
+        {
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_1_2 = visited;
+        }
+        if (line.find("path13") != std::string::npos)
+        {
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_1_3 = visited;
+        }
+        if (line.find("path23") != std::string::npos)
+        {
+            line = line.substr(7);
+            std::stringstream ss(line);
+            std::vector<int> visited;
+            int num;
+            while (ss >> num)
+            {
+                visited.push_back(num);
+            }
+            desc.path_2_3 = visited;
+            descriptors.push_back(desc);
+        }
+    }
+    // Close the file
+    file.close();
+
+    for (size_t i = 0; i < negative_start_index; i++)
+    {
+        positive_desc.push_back(descriptors[i]);
+    }
+    for (size_t i = negative_start_index; i < descriptors.size(); i++)
+    {
+        negative_desc.push_back(descriptors[i]);
+    }
+    return;
+}

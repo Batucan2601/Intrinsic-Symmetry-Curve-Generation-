@@ -34,7 +34,9 @@ public:
 	glm::mat4 model_mat;
 	std::string file_name;
 	Mesh raylib_mesh;
-	unsigned char* raylib_colors_temp;
+	//plane properties
+	glm::vec3 plane_normal;
+	glm::vec3 plane_point;
 	//VAO object
 	unsigned int vao_normals; 
 	//project 

@@ -13,3 +13,4 @@ std::vector<TrilateralDescriptor> match_two_meshes_with_fps(TrilateralMesh* sele
 void dom_sym_write_plane(TrilateralMesh* m, Plane& plane, std::string path);
 bool dom_sym_read_plane(TrilateralMesh* m , Plane& plane , std::string path);
 void dom_sym_draw_plane();
+void dom_sym_generate_planes_for_KIDS(std::vector<TrilateralMesh>& dataset, float convergence_ratio);

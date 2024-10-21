@@ -401,7 +401,7 @@ float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
  void trilateral_point_matching_with_skeleton_endpoints(TrilateralMesh*m,Skeleton& skeleton );
 
  void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
-	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no);
+	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no , float convergence_ratio );
 
  void trilateral_point_matching_with_skeleton_endpoints_w_HKS(TrilateralMesh* m , Skeleton& skeleton,
 std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& desc_right , Plane& plane
@@ -416,3 +416,6 @@ std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& 
 
  void trilateral_display_trilateral_from_skeleton_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
 	 , std::vector<TrilateralDescriptor>& negative_desc, Skeleton& skeleton, Plane& plane);
+ 
+ void  trilateral_sampled_point_matching_with_descriptors(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
+	 , std::vector<TrilateralDescriptor>& negative_desc, Plane& plane, std::vector<unsigned int>& fps_points, float sweep_distance);
