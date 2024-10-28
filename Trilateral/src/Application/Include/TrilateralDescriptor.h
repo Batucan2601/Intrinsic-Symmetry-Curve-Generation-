@@ -46,6 +46,7 @@ struct TrilateralDescriptor
 	Histogram hist_path_1_2;
 	Histogram hist_path_1_3;
 	Histogram hist_path_2_3;
+	Eigen::VectorXd weight; 
 	TrilateralDescriptor();
 	bool check_colinearity();
 };
@@ -56,3 +57,4 @@ void TrilateralDescriptor_generate_mesh_with_resolution(TrilateralMesh* m, Trila
 TrilateralDescriptor  TrilateralDescriptor_create(TrilateralMesh* m, int point_index1, int point_index2, int point_index3, bool is_simplified);
 void TrilateralDescriptor_write(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);
 void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);
+Histogram TrilateralDescriptor_generate_cdf_of_areas(TrilateralMesh* m, TrilateralDescriptor& desc1, int division_no);

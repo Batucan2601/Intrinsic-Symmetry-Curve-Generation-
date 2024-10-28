@@ -2568,15 +2568,14 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 {
 		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
 		 ROI_trilateral(&mesh, positive_mesh_trilateral_descriptor[i], 3, false);
-		 Histogram histogram = Histogram_triangle_area(&mesh, positive_mesh_trilateral_descriptor[i],
-		 3, global_is_visited);
+		 Histogram histogram = Histogram_triangle_area(&mesh, positive_mesh_trilateral_descriptor[i],3);
 		 positive_mesh_trilateral_descriptor[i].histogram = histogram;
 	 }
 	 for (size_t i = 0; i < fps_negative.size(); i++)
 	 {
 		 std::vector<int> global_is_visited(mesh.vertices.size(), OUTSIDE);
 		 ROI_trilateral(&mesh, negative_mesh_trilateral_descriptor[i], 3, false);
-		 Histogram histogram = Histogram_triangle_area(&mesh, negative_mesh_trilateral_descriptor[i], 3, global_is_visited);
+		 Histogram histogram = Histogram_triangle_area(&mesh, negative_mesh_trilateral_descriptor[i], 3);
 		 negative_mesh_trilateral_descriptor[i].histogram = histogram;
 	 }
 	 // write a function for comparing two descriptor
@@ -3281,7 +3280,7 @@ void trilateral_FPS_histogram_matching(MeshFactory& mesh_fac, const int& selecte
 	for (size_t i = 0; i < sample_no; i++)
 	{
 		ROI_trilateral(mesh, trilateral_desc[i], division_no , false );
-		Histogram histogram = Histogram_triangle_area(mesh,trilateral_desc[i], division_no, global_is_visited);
+		Histogram histogram = Histogram_triangle_area(mesh,trilateral_desc[i], division_no);
 		trilateral_histograms.push_back(histogram);
 	}
 	for (size_t i = 0; i < mesh->colors.size(); i++)
@@ -4036,6 +4035,8 @@ void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vec
 	std::vector<DvorakPairs> dvorak_pairs  = dvorak_extraction_of_significant_points(m, dvorak_enpoint_no);
 	//sweep 
 	dvorak_pairs = dvorak_distance_sweep(m, dvorak_pairs, 3.0f);
+	Metric_set_gaussian(m, dvorak_enpoint_no, 3.0f);
+
 	// 2- generate plane 
 	 //calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
@@ -4129,6 +4130,8 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 	std::vector<DvorakPairs> dvorak_pairs = dvorak_extraction_of_significant_points(m, dvorak_enpoint_no);
 	//sweep 
 	dvorak_pairs = dvorak_distance_sweep(m, dvorak_pairs, 3.0f);
+	Metric_set_gaussian(m, dvorak_enpoint_no, 3.0f);
+
 	// 2- generate plane 
 	 //calculate center of the plane 
 	glm::vec3 plane_center(0, 0, 0);
@@ -4160,7 +4163,8 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
 
 
-	std::vector<std::vector<float>> optimal_transforms = VarianceMin_compare_all(m, desc_left, desc_right);
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 20 , 3);
+	std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all(m, desc_right, desc_left ,true , 20 , 3) ;
 	std::vector<std::pair<unsigned int, unsigned int >> resemblance_pairs;
 	for (size_t i = 0; i < desc_left.size(); i++)
 	{
@@ -4168,16 +4172,35 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 		int index = -1;
 		for (size_t j = 0; j < desc_right.size(); j++)
 		{
-			if (optimal_transforms[i][j] < smallest)
+			if (optimal_transforms_pos_neg[i][j] < smallest)
 			{
-				smallest = optimal_transforms[i][j];
+				smallest = optimal_transforms_pos_neg[i][j];
 				index = j;
 			}
 		}
-		std::pair<unsigned int, unsigned int> pair; 
+		std::pair<unsigned int, unsigned int> pair;
 		pair.first = desc_left[i].p1;
 		pair.second = desc_right[index].p1;
 		resemblance_pairs.push_back(pair);
+		std::cout << " left == " << i << " right == " << desc_left.size() + index << " " << optimal_transforms_pos_neg[i][index] <<  std::endl;
+	}
+	for (size_t i = 0; i < desc_right.size(); i++)
+	{
+		float smallest = INFINITY;
+		int index = -1;
+		for (size_t j = 0; j < desc_left.size(); j++)
+		{
+			if (optimal_transforms_neg_pos[i][j] < smallest)
+			{
+				smallest = optimal_transforms_neg_pos[i][j];
+				index = j;
+			}
+		}
+		std::pair<unsigned int, unsigned int> pair;
+		pair.first = desc_right[i].p1;
+		pair.second = desc_left[index].p1;
+		resemblance_pairs.push_back(pair);
+		std::cout << " left == " << index << " right == " << desc_left.size() + i <<  " " << optimal_transforms_neg_pos[i][index] << std::endl;
 	}
 	
 	//check their gaussian curvature
@@ -4222,8 +4245,138 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 
 	m->calculated_symmetry_pairs = resemblance_pairs;
 
+
+
 	std::string path = "../../Results/";
 	path = path + m->file_name + " Trilateral_W_Gaussian_curvature_and_Optimal_Transform.txt ";
+	Metric_write_to_file(m, path);
+
+}
+
+//OT being optimal transform
+void trilateral_point_matching_with_gaussian_endpoints_and_OT_w_CDF(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
+	std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no, float convergence_ratio)
+{
+	int N = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	glm::vec3 mesh_mid_point;
+	// 1 - get dvork significant points
+	std::vector<DvorakPairs> dvorak_pairs = dvorak_extraction_of_significant_points(m, dvorak_enpoint_no);
+	//sweep 
+	dvorak_pairs = dvorak_distance_sweep(m, dvorak_pairs, 3.0f);
+	Metric_set_gaussian(m, dvorak_enpoint_no, 3.0f);
+	// 2- generate plane 
+	 //calculate center of the plane 
+	glm::vec3 plane_center(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		plane_center += m->vertices[i];
+	}
+	plane_center /= m->vertices.size();
+	if (plane.isNull())
+	{
+		plane = generate_dominant_symmetry_plane(m, convergence_ratio);
+	}
+	//divide the end points 
+	std::vector<unsigned int> left_skeleton_indices;
+	std::vector<unsigned int> right_skeleton_indices;
+	for (size_t i = 0; i < dvorak_pairs.size(); i++)
+	{
+		if (get_point_status_from_plane(&plane, &m->vertices[dvorak_pairs[i].p_index]) > 0)
+		{
+			right_skeleton_indices.push_back(dvorak_pairs[i].p_index);
+		}
+		else
+		{
+			left_skeleton_indices.push_back(dvorak_pairs[i].p_index);
+		}
+	}
+
+	desc_left = get_trilateral_points_using_closest_pairs(m, right_skeleton_indices);
+	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
+
+
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all_w_CDF(m, desc_left, desc_right,50);
+	std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all_w_CDF(m, desc_right, desc_left,50);
+	std::vector<std::pair<unsigned int, unsigned int >> resemblance_pairs;
+	for (size_t i = 0; i < desc_left.size(); i++)
+	{
+		float smallest = INFINITY;
+		int index = -1;
+		for (size_t j = 0; j < desc_right.size(); j++)
+		{
+			if (optimal_transforms_pos_neg[i][j] < smallest)
+			{
+				smallest = optimal_transforms_pos_neg[i][j];
+				index = j;
+			}
+		}
+		std::pair<unsigned int, unsigned int> pair;
+		pair.first = desc_left[i].p1;
+		pair.second = desc_right[index].p1;
+		resemblance_pairs.push_back(pair);
+	}
+	for (size_t i = 0; i < desc_right.size(); i++)
+	{
+		float smallest = INFINITY;
+		int index = -1;
+		for (size_t j = 0; j < desc_left.size(); j++)
+		{
+			if (optimal_transforms_neg_pos[i][j] < smallest)
+			{
+				smallest = optimal_transforms_neg_pos[i][j];
+				index = j;
+			}
+		}
+		std::pair<unsigned int, unsigned int> pair;
+		pair.first = desc_right[i].p1;
+		pair.second = desc_left[index].p1;
+		resemblance_pairs.push_back(pair);
+	}
+	//check their gaussian curvature
+
+
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+
+	// now use fps points to get maximum distance in order to compare to 
+	float maximum_geodesic_distance = 0;
+	for (size_t i = 0; i < right_skeleton_indices.size(); i++)
+	{
+		std::vector<float> distances = Geodesic_dijkstra(*m, right_skeleton_indices[i]);
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (maximum_geodesic_distance < distances[j])
+			{
+				maximum_geodesic_distance = distances[j];
+			}
+		}
+	}
+
+	// color left red
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 255;
+		m->colors[resemblance_pairs[i].second].b = 0;
+	}
+
+	m->calculated_symmetry_pairs = resemblance_pairs;
+
+	std::string path = "../../Results/";
+	path = path + m->file_name + " Trilateral_W_Gaussian_curvature_and_Optimal_Transform_w_CDF.txt ";
 	Metric_write_to_file(m, path);
 
 }

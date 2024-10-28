@@ -406,6 +406,9 @@ float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
  void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
 	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no, float convergence_ratio);
 
+ void trilateral_point_matching_with_gaussian_endpoints_and_OT_w_CDF(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
+	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no, float convergence_ratio);
+
  void trilateral_point_matching_with_skeleton_endpoints_w_HKS(TrilateralMesh* m , Skeleton& skeleton,
 std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& desc_right , Plane& plane
 );

@@ -241,6 +241,11 @@ static void trilateral_functions(TrilateralMesh* m)
         trilateral_point_matching_with_gaussian_endpoints_and_OT(m, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
         is_draw_plane = true;
     }
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform w CDF"))
+    {
+        trilateral_point_matching_with_gaussian_endpoints_and_OT_w_CDF(m, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
+        is_draw_plane = true;
+    }
     if (ImGui::MenuItem("Generate trilaterals using endpoints "))
     {
         trilateral_display_trilateral_from_skeleton_endpoints(m, positive_desc , negative_desc , skeleton , plane );
@@ -542,6 +547,10 @@ static void  display_descriptor(TrilateralMesh* m )
         m->raylib_mesh.colors[index * 4 + 2] = 0;
         m->raylib_mesh.colors[index * 4 + 3] = 255;
     }
+    m->raylib_mesh.colors[desc.p1 * 4] = 0;
+    m->raylib_mesh.colors[desc.p1 * 4 + 1] = 0;
+    m->raylib_mesh.colors[desc.p1 * 4 + 2] = 255;
+    m->raylib_mesh.colors[desc.p1 * 4 + 3] = 255;
     m->update_raylib_mesh();
 }
 

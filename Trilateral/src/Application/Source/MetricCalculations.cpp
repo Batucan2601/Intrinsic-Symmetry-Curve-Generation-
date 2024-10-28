@@ -129,6 +129,21 @@ float Metric_get_correspondance_rate(TrilateralMesh* m)
 	return percentage;
 }
 
+static float s_gaussian_swipe_distance;
+static int s_gaussian_point_no;
+void Metric_set_gaussian(TrilateralMesh* m , int gaussian_point , float gaussian_dist )
+{
+	s_gaussian_point_no = gaussian_point;
+	s_gaussian_swipe_distance = gaussian_dist;
+}
+float Metric_get_gaussian_dist(TrilateralMesh* m)
+{
+	return s_gaussian_swipe_distance;
+}
+int Metric_get_gaussian_point_no(TrilateralMesh* m)
+{
+	return s_gaussian_point_no;
+}
 static std::string getCurrentDate() {
 	time_t now = time(0);
 	tm* ltm = localtime(&now);
@@ -159,6 +174,7 @@ void Metric_write_to_file(TrilateralMesh* m, const std::string& file_name)
 	// 1 - write geodesic cost
 	out_file << "Normalize geodesic cost === " << std::to_string(Metric_get_geodesic_cost(m)) << std::endl;
 	out_file << "correspondance rate === " << std::to_string(Metric_get_correspondance_rate(m)) << std::endl;
-
+	out_file << " gaussian point size == " << std::to_string(Metric_get_gaussian_point_no(m)) << std::endl;
+	out_file << " gaussian sweep distance == " << std::to_string(Metric_get_gaussian_dist(m)) << std::endl;
 	out_file.close();
 }

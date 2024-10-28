@@ -2,6 +2,7 @@
 #include "../Include/Geodesic.h"
 #include "../Include/glm/glm.hpp"
 #include "../Include/ROI.h"
+#include "../Include/HistogramFunctions.h"
 
 
 bool TrilateralDescriptor::check_colinearity()
@@ -409,4 +410,18 @@ void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescr
         negative_desc.push_back(descriptors[i]);
     }
     return;
+}
+
+//returns cdf normalized
+Histogram TrilateralDescriptor_generate_cdf_of_areas(TrilateralMesh* m, TrilateralDescriptor& desc1 , int division_no)
+{
+    Histogram h = Histogram_triangle_area_w_res( m,desc1,division_no,6);
+    Histogram cdf(division_no); 
+    float sum = 0;
+    for (size_t i = 0; i < division_no; i++)
+    {
+        sum += h[i];
+        cdf[i] = sum; 
+    }
+    return cdf;
 }

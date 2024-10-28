@@ -218,7 +218,7 @@ Histogram histogram_roi_area_detailed(TrilateralMesh* m, int point_index1, int p
 }
 
 
-Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc, int division_no, std::vector<int>& global_is_visited)
+Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc, int division_no)
 {
 	Histogram histogram(division_no);
 	std::vector<int> path_1_2 = desc.path_1_2;
@@ -374,16 +374,60 @@ Histogram Histogram_triangle_area_w_res(TrilateralMesh* m, TrilateralDescriptor&
 		histogram[hist_no_p2] += area;
 		histogram[hist_no_p3] += area;
 	}
+	for (size_t i = 0; i < desc.path_1_2.size(); i += 3)
+	{
+		int index = desc.path_1_2[i];
 
+		float distp1 = distance_matrix_p1[index];
+
+		float area = m->areas[index];
+
+		int hist_no_p1 = distp1 / step;
+
+		if (hist_no_p1 >= division_no)
+		{
+			hist_no_p1 = division_no - 1;
+		}
+		histogram[hist_no_p1] += area;
+	}
+	for (size_t i = 0; i < desc.path_1_3.size(); i += 3)
+	{
+		int index = desc.path_1_3[i];
+
+		float distp1 = distance_matrix_p1[index];
+
+		float area = m->areas[index];
+
+		int hist_no_p1 = distp1 / step;
+
+		if (hist_no_p1 >= division_no)
+		{
+			hist_no_p1 = division_no - 1;
+		}
+		histogram[hist_no_p1] += area;
+	}
+	for (size_t i = 0; i < desc.path_2_3.size(); i += 3)
+	{
+		int index = desc.path_2_3[i];
+
+		float distp1 = distance_matrix_p1[index];
+
+		float area = m->areas[index];
+
+		int hist_no_p1 = distp1 / step;
+
+		if (hist_no_p1 >= division_no)
+		{
+			hist_no_p1 = division_no - 1;
+		}
+		histogram[hist_no_p1] += area;
+	}
 	//normalize histogram.
 	float histogram_sum = 0;
 	for (size_t i = 0; i < histogram.size(); i++)
 	{
 		histogram_sum += histogram[i];
 	}
-	for (size_t i = 0; i < histogram.size(); i++)
-	{
-		histogram[i] /= histogram_sum;
-	}
+
 	return histogram;
 }
