@@ -13,6 +13,7 @@
 #include "../Include/HeatKernelSignature.h"
 #include "../Include/SpinImage.h"
 #include "../Include/KIDS.h"
+#include "../Include/Laplace-Beltrami.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
@@ -25,6 +26,7 @@ static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
+static void laplace_beltrami_operations(TrilateralMesh* m);
 static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
@@ -51,7 +53,7 @@ static int mesh_index = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
 std::vector<unsigned int> distributed_indices;
-
+static Eigen::SparseMatrix<double> L; //laplacian 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -115,6 +117,11 @@ void imgui_menu_bar(TrilateralMesh* m)
             if (ImGui::BeginMenu("Distributions"))
             {
                 distribution_functions(m);
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Laplace beltrami"))
+            {
+                laplace_beltrami_operations(m);
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Mesh Drawing"))
@@ -277,6 +284,32 @@ static void KIDS_dataset(TrilateralMesh* m)
     }
    
 }
+static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
+static void laplace_beltrami_operations(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem(" Generate Laplace beltrami "))
+    {
+        L = laplace_beltrami(m);
+    }
+    if (ImGui::MenuItem(" EigenDecompose "))
+    {
+        eigen_pairs = laplace_beltrami_eigendecompose(L,10);
+    }
+    if (ImGui::MenuItem(" Heat kernel signature "))
+    {
+        std::vector<double> time_cons = { 0.1 ,0.2 , 0.3 , 0.4 , 1.0 , 2.0 };
+        HKS_compute_kernel(m, eigen_pairs , time_cons);
+    }
+    if (ImGui::MenuItem(" Heat kernel signature on a descriptor "))
+    {
+        HKS_hks_on_descriptor(m, positive_desc[0]);
+
+    }
+
+}
+
+
+
 #pragma region draw section
 static void draw_dom_sym();
 static void draw_skeleton();

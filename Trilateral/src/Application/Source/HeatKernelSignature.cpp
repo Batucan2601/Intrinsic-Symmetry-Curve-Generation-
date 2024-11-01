@@ -130,3 +130,83 @@ void HKS_read_kernel_signature(TrilateralMesh* m)
 	file.close();  // Close the file after reading
 	return;
 }
+
+std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair<Eigen::VectorXd, Eigen::MatrixXd>& eigen_pairs , const std::vector<double>& timeSteps)
+{
+	int nPoints = m->vertices.size();
+	int nTimeSteps = timeSteps.size();
+	std::vector<std::vector<double>> hks(nPoints, std::vector<double>(nTimeSteps, 0.0));
+	double biggest = -1;
+
+	for (int t = 0; t < nTimeSteps; ++t) {
+		double time = timeSteps[t];
+		for (int i = 0; i < nPoints; ++i) {
+			double hksValue = 0.0;
+			for (int k = 0; k < eigen_pairs.first.size(); ++k) {
+				double eigenValue = eigen_pairs.first(eigen_pairs.first.size() - k - 1);
+				double expTerm = exp(-eigenValue * time);
+				hksValue += expTerm * pow(eigen_pairs.second(i, eigen_pairs.first.size() - k - 1), 2);
+			}
+			hks[i][t] = hksValue;
+			if (hks[i][t] > biggest)
+			{
+				biggest = hks[i][t];
+			}
+		}
+	}
+
+	// color
+	for (size_t i = 0; i < nPoints; i++)
+	{
+		m->raylib_mesh.colors[i * 4] =  (unsigned char) (hks[i][0] / biggest  * 255);
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i*4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+	return hks;
+}
+
+
+
+void HKS_hks_on_descriptor(TrilateralMesh* m, TrilateralDescriptor& desc)
+{
+	//  1 - generate a sparse matrix with vertices inside
+	TrilateralDescriptor_generate_mesh_inside(m, desc);
+	Eigen::SparseMatrix<double> L = laplace_beltrami(&desc.m_inside);
+
+	std::pair<Eigen::VectorXd, Eigen::MatrixXd> eigen_pairs = laplace_beltrami_eigendecompose(L, 3);
+	std::vector<double> time_steps = { 0.1, 0.2, 0.5, 1, 2 };
+	
+	int nPoints = desc.m_inside.vertices.size();
+	int nTimeSteps = time_steps.size();
+	std::vector<std::vector<double>> hks(nPoints, std::vector<double>(nTimeSteps, 0.0));
+	double biggest = -1;
+
+	for (int t = 0; t < nTimeSteps; ++t) {
+		double time = time_steps[t];
+		for (int i = 0; i < nPoints; ++i) {
+			double hksValue = 0.0;
+			for (int k = 0; k < eigen_pairs.first.size(); ++k) {
+				double eigenValue = eigen_pairs.first(eigen_pairs.first.size() - k - 1);
+				double expTerm = exp(-eigenValue * time);
+				hksValue += expTerm * pow(eigen_pairs.second(i, eigen_pairs.first.size() - k - 1), 2);
+			}
+			hks[i][t] = hksValue;
+			if (hks[i][t] > biggest)
+			{
+				biggest = hks[i][t];
+			}
+		}
+	}
+
+	// color
+	for (size_t i = 0; i < nPoints; i++)
+	{
+		m->raylib_mesh.colors[desc.m_inside.mesh_to_desc_map[i] * 4] = (unsigned char)(hks[i][0] / biggest * 255);
+		m->raylib_mesh.colors[desc.m_inside.mesh_to_desc_map[i] * 4 + 1] = 0;
+		m->raylib_mesh.colors[desc.m_inside.mesh_to_desc_map[i] * 4 + 2] = 0;
+		m->raylib_mesh.colors[desc.m_inside.mesh_to_desc_map[i] * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+}

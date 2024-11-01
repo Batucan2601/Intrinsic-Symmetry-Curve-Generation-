@@ -45,41 +45,50 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
 {
     //we need to create a new mesh and adjacencies
     TrilateralMesh m_inside;
-    std::vector< int > mesh_to_mesh_map(m->vertices.size(), -1);
+    std::vector< int > desc_to_mesh_map(m->vertices.size(), -1);
+    std::vector< int > mesh_to_desc_map;
     //add the points
     for (size_t i = 0; i < desc.visited_indices.size(); i++)
     {
-        if (mesh_to_mesh_map[desc.visited_indices[i]] == -1)
+        if (desc_to_mesh_map[desc.visited_indices[i]] == -1)
         {
             m_inside.vertices.push_back(m->vertices[desc.visited_indices[i]]);
-            mesh_to_mesh_map[desc.visited_indices[i]] = m_inside.vertices.size() - 1;
+            desc_to_mesh_map[desc.visited_indices[i]] = m_inside.vertices.size() - 1;
+            mesh_to_desc_map.push_back(m_inside.vertices.size() - 1);
+            m_inside.areas.push_back(desc.visited_indices[i]);
         }
     }
     for (size_t i = 0; i < desc.path_1_2.size(); i++)
     {
-        if (mesh_to_mesh_map[desc.path_1_2[i]] == -1)
+        if (desc_to_mesh_map[desc.path_1_2[i]] == -1)
         {
             m_inside.vertices.push_back(m->vertices[desc.path_1_2[i]]);
-            mesh_to_mesh_map[desc.path_1_2[i]] = m_inside.vertices.size() - 1;
+            desc_to_mesh_map[desc.path_1_2[i]] = m_inside.vertices.size() - 1;
+            mesh_to_desc_map.push_back(m_inside.vertices.size() - 1);
+            m_inside.areas.push_back(desc.path_1_2[i]);
         }
 
     }
     for (size_t i = 0; i < desc.path_1_3.size(); i++)
     {
-        if (mesh_to_mesh_map[desc.path_1_3[i]] == -1)
+        if (desc_to_mesh_map[desc.path_1_3[i]] == -1)
         {
             m_inside.vertices.push_back(m->vertices[desc.path_1_3[i]]);
-            mesh_to_mesh_map[desc.path_1_3[i]] = m_inside.vertices.size() - 1;
+            desc_to_mesh_map[desc.path_1_3[i]] = m_inside.vertices.size() - 1;
+            mesh_to_desc_map.push_back(desc.path_1_3[i]);
+            m_inside.areas.push_back(m->areas[desc.path_1_3[i]]);
         }
        
 
     }
     for (size_t i = 0; i < desc.path_2_3.size(); i++)
     {
-        if (mesh_to_mesh_map[desc.path_2_3[i]] == -1)
+        if (desc_to_mesh_map[desc.path_2_3[i]] == -1)
         {
             m_inside.vertices.push_back(m->vertices[desc.path_2_3[i]]);
-            mesh_to_mesh_map[desc.path_2_3[i]] = m_inside.vertices.size() - 1;
+            desc_to_mesh_map[desc.path_2_3[i]] = m_inside.vertices.size() - 1;
+            mesh_to_desc_map.push_back(desc.path_2_3[i]);
+            m_inside.areas.push_back(m->areas[desc.path_2_3[i]]);
         }
     }
 
@@ -90,9 +99,9 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
         int index2 = m->triangles[i + 1];
         int index3 = m->triangles[i + 2];
 
-        int new_index1 = mesh_to_mesh_map[index1];
-        int new_index2 = mesh_to_mesh_map[index2];
-        int new_index3 = mesh_to_mesh_map[index3];
+        int new_index1 = desc_to_mesh_map[index1];
+        int new_index2 = desc_to_mesh_map[index2];
+        int new_index3 = desc_to_mesh_map[index3];
         if (new_index1 != -1 && new_index2 != -1 && new_index3 != -1)
         {
             m_inside.triangles.push_back(new_index1);
@@ -106,14 +115,14 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
     m_inside.adjacenies = std::vector<std::vector<std::pair<int, float>>>(m_inside.vertices.size());
     for (size_t i = 0; i < m->adjacenies.size(); i ++)
     {
-        int index = mesh_to_mesh_map[i];
+        int index = desc_to_mesh_map[i];
         if (index == -1)
         {
             continue; 
         }
         for (size_t j = 0; j <m->adjacenies[i].size(); j++)
         {
-            int index_adj = mesh_to_mesh_map[m->adjacenies[i][j].first];
+            int index_adj = desc_to_mesh_map[m->adjacenies[i][j].first];
             if (index_adj == -1)
             {
                 continue;
@@ -124,7 +133,10 @@ void TrilateralDescriptor_generate_mesh_inside(TrilateralMesh* m, TrilateralDesc
             m_inside.adjacenies[index].push_back(pair); 
         }
     }
+    
     desc.m_inside = m_inside;
+    desc.m_inside.desc_to_mesh_map = desc_to_mesh_map;
+    desc.m_inside.mesh_to_desc_map = mesh_to_desc_map;
 
 }
 

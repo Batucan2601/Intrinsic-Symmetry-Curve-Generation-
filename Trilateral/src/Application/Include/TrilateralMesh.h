@@ -34,6 +34,8 @@ public:
 	glm::mat4 model_mat;
 	std::string file_name;
 	Mesh raylib_mesh;
+	std::vector< int > desc_to_mesh_map; // only for descriptors 
+	std::vector< int > mesh_to_desc_map; // only for descriptors 
 	//plane properties
 	glm::vec3 plane_normal;
 	glm::vec3 plane_point;

@@ -4,6 +4,13 @@
 #include <vector>
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/CoreTypeDefs.h"
+#include "../Include/CoreTypeDefs.h"
+#include <Spectra/SymEigsSolver.h>
+#include <Spectra/SymEigsShiftSolver.h>
+#include <Spectra/MatOp/SparseSymMatProd.h>
+#include <Spectra/MatOp/SparseSymShiftSolve.h>
+#include <cmath> 
+#include <algorithm>
 #include <windows.h>
 using Eigen::MatrixXd;
 using Eigen::VectorXcd;
@@ -15,10 +22,15 @@ static double cotangent(const glm::vec3& v1, const glm::vec3& v2) {
 }
 
 // Function to compute the area of the Voronoi region around a vertex
-static double voronoi_area(const TrilateralMesh& mesh, int vertex) {
+double laplace_beltrami_voronoi_area(const TrilateralMesh& mesh, int vertex) {
 	double area = 0.0;
-	for (int i = 0; i < mesh.triangles.size(); i += 3 ) {
-		if ( mesh.triangles[i] == vertex || mesh.triangles[i + 1] == vertex || mesh.triangles[i + 2] == vertex) {
+	area = mesh.areas[vertex] / 3.0;
+	return area;
+}
+static double voronoi_area_normalized(const TrilateralMesh& mesh, int vertex) {
+	double area = 0.0;
+	for (int i = 0; i < mesh.triangles.size(); i += 3) {
+		if (mesh.triangles[i] == vertex || mesh.triangles[i + 1] == vertex || mesh.triangles[i + 2] == vertex) {
 			glm::vec3 v0 = mesh.vertices[mesh.triangles[i]];
 			glm::vec3 v1 = mesh.vertices[mesh.triangles[i + 1]];
 			glm::vec3 v2 = mesh.vertices[mesh.triangles[i + 2]];
@@ -31,7 +43,6 @@ static double voronoi_area(const TrilateralMesh& mesh, int vertex) {
 	}
 	return area;
 }
-
 // Function to assemble the cotangent Laplacian matrix
 Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 {
@@ -39,6 +50,9 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 	Eigen::SparseMatrix<double> L(n, n);
 	std::vector<Eigen::Triplet<double>> triplets;
 
+	
+
+	Eigen::VectorXd diagonal = Eigen::VectorXd::Zero(n);
 	for (int index = 0; index < mesh.triangles.size(); index += 3) {
 		int i = mesh.triangles[index];
 		int j = mesh.triangles[index + 1];
@@ -48,28 +62,37 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 		glm::vec3 vj = mesh.vertices[j];
 		glm::vec3 vk = mesh.vertices[k];
 
-		double cot_alpha = cotangent(vj - vi, vk - vi);
-		double cot_beta = cotangent(vi - vj, vk - vj);
-		double cot_gamma = cotangent(vi - vk, vj - vk);
+		double cot_alpha = cotangent(vj - vi, vk - vi) /2.0;
+		double cot_beta = cotangent(vi - vj, vk - vj)  / 2.0;
+		double cot_gamma = cotangent(vi - vk, vj - vk) / 2.0;
 
 		// Symmetrically add off-diagonal entries
-		triplets.emplace_back(i, j, -cot_alpha / 2.0 );
-		triplets.emplace_back(j, i, -cot_alpha / 2.0 );
+		triplets.emplace_back(i, j, -cot_gamma  );
+		triplets.emplace_back(j, i, -cot_gamma  );
 
-		triplets.emplace_back(j, k, -cot_beta / 2.0);
-		triplets.emplace_back(k, j, -cot_beta / 2.0);
+		triplets.emplace_back(j, k, -cot_alpha );
+		triplets.emplace_back(k, j, -cot_alpha );
 
-		triplets.emplace_back(k, i, -cot_gamma / 2.0);
-		triplets.emplace_back(i, k, -cot_gamma / 2.0);
+		triplets.emplace_back(k, i, -cot_beta );
+		triplets.emplace_back(i, k, -cot_beta );
 
 		// Diagonal entries (sum of cotangent weights for the current vertex)
-		triplets.emplace_back(i, i, (cot_alpha + cot_gamma) / 2.0);
-		triplets.emplace_back(j, j, (cot_alpha + cot_beta) / 2.0);
-		triplets.emplace_back(k, k, (cot_beta + cot_gamma) / 2.0);
+		//triplets.emplace_back(i, i, -(cot_alpha + cot_gamma) / 2.0);
+		//triplets.emplace_back(j, j, -(cot_alpha + cot_beta) / 2.0);
+		//triplets.emplace_back(k, k, -(cot_beta + cot_gamma) / 2.0);
+		diagonal(i) += (cot_beta + cot_gamma);
+		diagonal(j) += (cot_alpha + cot_gamma);
+		diagonal(k) += (cot_alpha + cot_beta);
+	}
+	
+
+	// Set diagonal entries in triplets
+	for (int i = 0; i < n; ++i) {
+		triplets.emplace_back(i, i, diagonal(i));
 	}
 
 	L.setFromTriplets(triplets.begin(), triplets.end());
-	L.makeCompressed();
+	//L.makeCompressed();
 	return L;
 }
 
@@ -116,23 +139,79 @@ bool check_if_matrix_symmetric(const Eigen::SparseMatrix<double>& mat)
 	return true;
 }
 // Function to compute the Laplace-Beltrami operator
-static MatrixXd laplace_beltrami(const TrilateralMesh& mesh) {
-	MatrixXd L = cotangent_laplacian(mesh);
-	int n = mesh.vertices.size();
-	MatrixXd A = MatrixXd::Zero(n, n);
+Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
+{
+	Eigen::SparseMatrix<double> M = cotangent_laplacian(*mesh);
+	
+	int n = mesh->vertices.size();
+	Eigen::VectorXd A(n);
 
 	for (int i = 0; i < n; ++i) {
-		A(i, i) = voronoi_area(mesh, i);
+		A(i) = laplace_beltrami_voronoi_area(*mesh, i);
 	}
+	//A = A.array() / A.sum();
+	//A = A.array() + 1e-6;
+	A = A.array().sqrt();
+	//Eigen::Spatrix<double> A_inv_sqrt_diag = A.asDiagonal().inverse();
+	//Eigen::SparseMatrix<double> L = -1.0 * M ;
+	for (int k = 0; k < M.outerSize(); ++k)
+	{
+		for (Eigen::SparseMatrix<double>::InnerIterator it(M, k); it; ++it)
+		{
+			//shift
+			//std::cout << "i == " << it.row() << "j == " << it.col() << " val " << it.valueRef() << std::endl;
+			//it.row();   // row index
+			//it.col();   // col index (here it is equal to k)
+			//it.index(); // inner index, here it is equal to it.row()
+		}
+	}
+	Eigen::SparseMatrix<double> L = A.asDiagonal().inverse() * M * A.asDiagonal().inverse();
+	//Eigen::SparseMatrix<double> L = -1.0 * A.asDiagonal().inverse() *  M;
+	if (!M.isApprox(M.transpose(), 1e-10)) {
+		std::cerr << "M Matrix is not symmetric!" << std::endl;
+	}
+	if (!L.isApprox(L.transpose(), 1e-7)) {
+		std::cerr << "L Matrix is not symmetric!" << std::endl;
+	}
+	return L; 
+}
 
-	return A.inverse() * L;
+std::pair<Eigen::VectorXd, Eigen::MatrixXd>  laplace_beltrami_eigendecompose(Eigen::SparseMatrix<double>& L, int n_eigenvectors)
+{
+	
+
+	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver(L);
+
+
+	Spectra::SparseSymMatProd<double> op(L );
+	
+	// Construct eigen solver object, requesting the largest three eigenvalues
+	Spectra::SymEigsSolver<Spectra::SparseSymMatProd<double>> eigs(op, n_eigenvectors, n_eigenvectors*2);
+
+	// Initialize and compute
+	eigs.init();
+	int nconv = eigs.compute(Spectra::SortRule::SmallestAlge);
+
+	// Retrieve results
+	Eigen::VectorXd evalues;
+	if (eigs.info() == Spectra::CompInfo::Successful)
+		evalues = eigs.eigenvalues();
+
+	std::cout << "Eigenvalues found:\n" << evalues << std::endl;
+	std::cout << "compInfo found:\n" << (int)eigs.info() << std::endl;
+
+
+	std::pair<Eigen::VectorXd, Eigen::MatrixXd> eigen_pair;
+	eigen_pair.first = evalues;
+	eigen_pair.second = eigs.eigenvectors();
+	return eigen_pair;
 }
 
 // Function to embed the original vertices to a 2D domain
 MatrixXd embed_mesh_to_2d(TrilateralMesh& mesh) {
 
 	// Compute Laplace-Beltrami operator
-	MatrixXd L = laplace_beltrami(mesh);
+	MatrixXd L;// = laplace_beltrami(mesh);
 
 	// Compute eigendecomposition
 	Eigen::SelfAdjointEigenSolver<MatrixXd> es(L);
@@ -318,3 +397,7 @@ Eigen::MatrixXd generate_A(TrilateralMesh* mesh)
 	}
 	return A; 
 }
+
+
+
+
