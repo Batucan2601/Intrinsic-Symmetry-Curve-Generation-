@@ -146,11 +146,11 @@ std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair
 		for (int i = 0; i < nPoints; ++i) {
 			double hksValue = 0.0;
 			for (int k = 0; k < eigen_pairs.first.size(); ++k) {
-				double eigenValue = eigen_pairs.first(eigen_pairs.first.size() - k - 1);
+				double eigenValue = eigen_pairs.first(k);
 				//std::cout << " 1 - " << eigenValue << std::endl;
 				double expTerm = exp(-eigenValue * time);
 				//std::cout << " 2 - " << expTerm << std::endl;
-				hksValue += expTerm * pow(eigen_pairs.second(i, eigen_pairs.first.size() - k - 1), 2);
+				hksValue += expTerm * pow(eigen_pairs.second(i, k), 2);
 				//std::cout << " 3 - " << hksValue << std::endl;
 
 			}
@@ -169,6 +169,14 @@ std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair
 
 		return std::vector<std::vector<double>>();
 	}
+	Eigen::VectorXd hks_total(nPoints);
+	hks_total = hks_total.array() * 0;
+
+	for (size_t i = 0; i < nPoints; i++)
+	{
+		hks_total(i) = hks_total(i) + hks.row(i).sum();
+	}
+	hks_total = (hks_total.array() - hks_total.minCoeff()) / (hks_total.maxCoeff() - hks_total.minCoeff());
 	for (size_t i = 0; i < hks.cols(); i++)
 	{
 		hks.col(i) = (hks.col(i).array() - hks.col(i).minCoeff()) / (hks.col(i).maxCoeff()- hks.col(i).minCoeff());
@@ -178,6 +186,7 @@ std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair
 	for (size_t i = 0; i < nPoints; i++)
 	{
 		m->raylib_mesh.colors[i * 4] = hks(i, time_step_no) * 255;
+		//m->raylib_mesh.colors[i * 4] = hks_total(i) * 255;
 		m->raylib_mesh.colors[i * 4 + 1] = 0;
 		m->raylib_mesh.colors[i * 4 + 2] = 0;
 		m->raylib_mesh.colors[i * 4 + 3] = 255;

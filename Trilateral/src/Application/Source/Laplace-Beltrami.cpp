@@ -49,7 +49,8 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 	int n = mesh.vertices.size();
 	Eigen::SparseMatrix<double> L(n, n);
 	std::vector<Eigen::Triplet<double>> triplets;
-
+	double maxCoeff = -INFINITY; 
+	double minCoeff = INFINITY; 
 	
 
 	Eigen::VectorXd diagonal = Eigen::VectorXd::Zero(n);
@@ -67,22 +68,22 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 		double cot_gamma = cotangent(vi - vk, vj - vk) / 2.0;
 
 		// Symmetrically add off-diagonal entries
-		triplets.emplace_back(i, j, -cot_gamma  );
-		triplets.emplace_back(j, i, -cot_gamma  );
+		triplets.emplace_back(i, j, cot_gamma  );
+		triplets.emplace_back(j, i, cot_gamma  );
 
-		triplets.emplace_back(j, k, -cot_alpha );
-		triplets.emplace_back(k, j, -cot_alpha );
+		triplets.emplace_back(j, k, cot_alpha );
+		triplets.emplace_back(k, j, cot_alpha );
 
-		triplets.emplace_back(k, i, -cot_beta );
-		triplets.emplace_back(i, k, -cot_beta );
+		triplets.emplace_back(k, i, cot_beta );
+		triplets.emplace_back(i, k, cot_beta );
 
 		// Diagonal entries (sum of cotangent weights for the current vertex)
 		//triplets.emplace_back(i, i, -(cot_alpha + cot_gamma) / 2.0);
 		//triplets.emplace_back(j, j, -(cot_alpha + cot_beta) / 2.0);
 		//triplets.emplace_back(k, k, -(cot_beta + cot_gamma) / 2.0);
-		diagonal(i) += (cot_beta + cot_gamma);
-		diagonal(j) += (cot_alpha + cot_gamma);
-		diagonal(k) += (cot_alpha + cot_beta);
+		diagonal(i) += -(cot_beta + cot_gamma);
+		diagonal(j) += -(cot_alpha + cot_gamma);
+		diagonal(k) += -(cot_alpha + cot_beta);
 	}
 	
 
@@ -92,6 +93,29 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 	}
 
 	L.setFromTriplets(triplets.begin(), triplets.end());
+
+	//normalize
+	for (int k = 0; k < L.outerSize(); ++k)
+	{
+		for (Eigen::SparseMatrix<double>::InnerIterator it(L, k); it; ++it)
+		{
+			if (it.value() > maxCoeff)
+			{
+				maxCoeff = it.value();
+			}
+			if (it.value() < minCoeff)
+			{
+				minCoeff = it.value();
+			}
+		}
+	}
+	for (int k = 0; k < L.outerSize(); ++k)
+	{
+		for (Eigen::SparseMatrix<double>::InnerIterator it(L, k); it; ++it)
+		{
+			it.valueRef() = (it.valueRef() - minCoeff)/(maxCoeff - minCoeff);
+		}
+	}
 	//L.makeCompressed();
 	return L;
 }
@@ -168,8 +192,8 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 		}
 	}
 	//Eigen::SparseMatrix<double> L = -1.0 * A.asDiagonal().inverse() * M * A.asDiagonal().inverse();// +Eigen::MatrixXd::Identity(A.rows(), A.cols()) * 1e-6;
-	Eigen::SparseMatrix<double> L =M;
-	for (int k = 0; k < M.outerSize(); ++k)
+	Eigen::SparseMatrix<double> L = M;
+	/*for (int k = 0; k < M.outerSize(); ++k)
 	{
 		for (Eigen::SparseMatrix<double>::InnerIterator it(M, k); it; ++it)
 		{
@@ -181,7 +205,7 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 			int j = it.col();
 			it.valueRef() = it.valueRef() * 1.0 / (A(i) *  A(j));
 		}
-	}
+	}*/
 	//Eigen::SparseMatrix<double> L = -1.0 * (A.asDiagonal().inverse() *  M);
 	if (!M.isApprox(M.transpose(), 1e-10)) {
 		std::cerr << "M Matrix is not symmetric!" << std::endl;
@@ -203,7 +227,7 @@ std::pair<Eigen::VectorXd, Eigen::MatrixXd>  laplace_beltrami_eigendecompose(Eig
 	 
 	// Initialize and compute
 	eigs.init();
-	int nconv = eigs.compute(Spectra::SortRule::LargestAlge);
+	int nconv = eigs.compute(Spectra::SortRule::LargestAlge, 1000, 1e-10 ,Spectra::SortRule::SmallestAlge);
 
 	// Retrieve results
 	Eigen::VectorXd evalues;
@@ -211,6 +235,7 @@ std::pair<Eigen::VectorXd, Eigen::MatrixXd>  laplace_beltrami_eigendecompose(Eig
 		evalues = eigs.eigenvalues();
 
 	std::cout << "Eigenvalues found:\n" << evalues << std::endl;
+	std::cout << "Eigenvalues found: 0 \n" << evalues(0) << std::endl;
 	std::cout << "compInfo found:\n" << (int)eigs.info() << std::endl;
 
 

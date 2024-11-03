@@ -294,7 +294,7 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
     }
     if (ImGui::MenuItem(" EigenDecompose "))
     {
-        eigen_pairs = laplace_beltrami_eigendecompose(L,10);
+        eigen_pairs = laplace_beltrami_eigendecompose(L,30);
     }
     ImGui::InputInt("time step == ", &time_step);
     if (ImGui::MenuItem(" Heat kernel signature "))
