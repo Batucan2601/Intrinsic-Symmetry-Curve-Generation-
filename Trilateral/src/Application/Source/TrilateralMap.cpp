@@ -4163,8 +4163,8 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
 
 
-	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 20 , 3);
-	std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all(m, desc_right, desc_left ,true , 20 , 3) ;
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 20 , 1);
+	//std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all(m, desc_right, desc_left ,true , 20 , 3) ;
 	std::vector<std::pair<unsigned int, unsigned int >> resemblance_pairs;
 	for (size_t i = 0; i < desc_left.size(); i++)
 	{
@@ -4184,7 +4184,7 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 		resemblance_pairs.push_back(pair);
 		std::cout << " left == " << i << " right == " << desc_left.size() + index << " " << optimal_transforms_pos_neg[i][index] <<  std::endl;
 	}
-	for (size_t i = 0; i < desc_right.size(); i++)
+	/*for (size_t i = 0; i < desc_right.size(); i++)
 	{
 		float smallest = INFINITY;
 		int index = -1;
@@ -4201,7 +4201,7 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 		pair.second = desc_left[index].p1;
 		resemblance_pairs.push_back(pair);
 		std::cout << " left == " << index << " right == " << desc_left.size() + i <<  " " << optimal_transforms_neg_pos[i][index] << std::endl;
-	}
+	}*/
 	
 	//check their gaussian curvature
 

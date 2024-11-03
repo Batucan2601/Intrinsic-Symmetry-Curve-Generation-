@@ -149,9 +149,11 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 	for (int i = 0; i < n; ++i) {
 		A(i) = laplace_beltrami_voronoi_area(*mesh, i);
 	}
+	//A = A.array() * 1.0 / A.minCoeff(); 
+	A = A.array().sqrt();
+	//std::cout << A << std::endl;
 	//A = A.array() / A.sum();
 	//A = A.array() + 1e-6;
-	A = A.array().sqrt();
 	//Eigen::Spatrix<double> A_inv_sqrt_diag = A.asDiagonal().inverse();
 	//Eigen::SparseMatrix<double> L = -1.0 * M ;
 	for (int k = 0; k < M.outerSize(); ++k)
@@ -165,8 +167,22 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 			//it.index(); // inner index, here it is equal to it.row()
 		}
 	}
-	Eigen::SparseMatrix<double> L = A.asDiagonal().inverse() * M * A.asDiagonal().inverse();
-	//Eigen::SparseMatrix<double> L = -1.0 * A.asDiagonal().inverse() *  M;
+	//Eigen::SparseMatrix<double> L = -1.0 * A.asDiagonal().inverse() * M * A.asDiagonal().inverse();// +Eigen::MatrixXd::Identity(A.rows(), A.cols()) * 1e-6;
+	Eigen::SparseMatrix<double> L =M;
+	for (int k = 0; k < M.outerSize(); ++k)
+	{
+		for (Eigen::SparseMatrix<double>::InnerIterator it(M, k); it; ++it)
+		{
+			//std::cout << "i == " << it.row() << "j == " << it.col() << " val " << it.valueRef() << std::endl;
+			//it.row();   // row index
+			//it.col();   // col index (here it is equal to k)
+			//it.index(); // inner index, here it is equal to it.row()
+			int i = it.row();
+			int j = it.col();
+			it.valueRef() = it.valueRef() * 1.0 / (A(i) *  A(j));
+		}
+	}
+	//Eigen::SparseMatrix<double> L = -1.0 * (A.asDiagonal().inverse() *  M);
 	if (!M.isApprox(M.transpose(), 1e-10)) {
 		std::cerr << "M Matrix is not symmetric!" << std::endl;
 	}
@@ -178,19 +194,16 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 
 std::pair<Eigen::VectorXd, Eigen::MatrixXd>  laplace_beltrami_eigendecompose(Eigen::SparseMatrix<double>& L, int n_eigenvectors)
 {
+
+	Spectra::SparseSymShiftSolve<double> op(L );
+	Spectra::SymEigsShiftSolver<Spectra::SparseSymShiftSolve<double>> eigs(op, n_eigenvectors, n_eigenvectors*2,0);
 	
-
-	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver(L);
-
-
-	Spectra::SparseSymMatProd<double> op(L );
-	
-	// Construct eigen solver object, requesting the largest three eigenvalues
-	Spectra::SymEigsSolver<Spectra::SparseSymMatProd<double>> eigs(op, n_eigenvectors, n_eigenvectors*2);
-
+	//Spectra::SparseSymMatProd<double> op(L );
+	//Spectra::SymEigsSolver<Spectra::SparseSymMatProd<double>> eigs(op, n_eigenvectors, n_eigenvectors*2);
+	 
 	// Initialize and compute
 	eigs.init();
-	int nconv = eigs.compute(Spectra::SortRule::SmallestAlge);
+	int nconv = eigs.compute(Spectra::SortRule::LargestAlge);
 
 	// Retrieve results
 	Eigen::VectorXd evalues;
@@ -202,8 +215,9 @@ std::pair<Eigen::VectorXd, Eigen::MatrixXd>  laplace_beltrami_eigendecompose(Eig
 
 
 	std::pair<Eigen::VectorXd, Eigen::MatrixXd> eigen_pair;
-	eigen_pair.first = evalues;
+	eigen_pair.first =  evalues;
 	eigen_pair.second = eigs.eigenvectors();
+
 	return eigen_pair;
 }
 

@@ -131,12 +131,15 @@ void HKS_read_kernel_signature(TrilateralMesh* m)
 	return;
 }
 
-std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair<Eigen::VectorXd, Eigen::MatrixXd>& eigen_pairs , const std::vector<double>& timeSteps)
+std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair<Eigen::VectorXd, Eigen::MatrixXd>& eigen_pairs , const std::vector<double>& timeSteps
+, int time_step_no)
 {
 	int nPoints = m->vertices.size();
 	int nTimeSteps = timeSteps.size();
-	std::vector<std::vector<double>> hks(nPoints, std::vector<double>(nTimeSteps, 0.0));
+	Eigen::MatrixXd hks = Eigen::MatrixXd::Zero(nPoints, nTimeSteps);
 	double biggest = -1;
+
+	eigen_pairs.first = eigen_pairs.first / eigen_pairs.first.maxCoeff();
 
 	for (int t = 0; t < nTimeSteps; ++t) {
 		double time = timeSteps[t];
@@ -144,27 +147,44 @@ std::vector<std::vector<double>> HKS_compute_kernel(TrilateralMesh* m, std::pair
 			double hksValue = 0.0;
 			for (int k = 0; k < eigen_pairs.first.size(); ++k) {
 				double eigenValue = eigen_pairs.first(eigen_pairs.first.size() - k - 1);
+				//std::cout << " 1 - " << eigenValue << std::endl;
 				double expTerm = exp(-eigenValue * time);
+				//std::cout << " 2 - " << expTerm << std::endl;
 				hksValue += expTerm * pow(eigen_pairs.second(i, eigen_pairs.first.size() - k - 1), 2);
+				//std::cout << " 3 - " << hksValue << std::endl;
+
 			}
-			hks[i][t] = hksValue;
-			if (hks[i][t] > biggest)
+			hks(i,t) = hksValue;
+			//std::cout << " 4 - " << hks(i, t) << std::endl;
+			if (hks(i,t) > biggest)
 			{
-				biggest = hks[i][t];
+				biggest = hks(i,t);
+
 			}
 		}
 	}
+	if (hks.array().isNaN().any())
+	{
+		hks(0, 0) = 1;
 
-	// color
+		return std::vector<std::vector<double>>();
+	}
+	for (size_t i = 0; i < hks.cols(); i++)
+	{
+		hks.col(i) = (hks.col(i).array() - hks.col(i).minCoeff()) / (hks.col(i).maxCoeff()- hks.col(i).minCoeff());
+
+	}
+	//std::cout << hks.col(timeSteps.size() - 1);
 	for (size_t i = 0; i < nPoints; i++)
 	{
-		m->raylib_mesh.colors[i * 4] =  (unsigned char) (hks[i][0] / biggest  * 255);
+		m->raylib_mesh.colors[i * 4] = hks(i, time_step_no) * 255;
 		m->raylib_mesh.colors[i * 4 + 1] = 0;
 		m->raylib_mesh.colors[i * 4 + 2] = 0;
-		m->raylib_mesh.colors[i*4 + 3] = 255;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+
 	}
 	m->update_raylib_mesh();
-	return hks;
+	return std::vector<std::vector<double>>();
 }
 
 

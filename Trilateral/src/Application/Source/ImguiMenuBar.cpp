@@ -285,6 +285,7 @@ static void KIDS_dataset(TrilateralMesh* m)
    
 }
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
+int time_step = 0;
 static void laplace_beltrami_operations(TrilateralMesh* m)
 {
     if (ImGui::MenuItem(" Generate Laplace beltrami "))
@@ -295,10 +296,11 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
     {
         eigen_pairs = laplace_beltrami_eigendecompose(L,10);
     }
+    ImGui::InputInt("time step == ", &time_step);
     if (ImGui::MenuItem(" Heat kernel signature "))
     {
-        std::vector<double> time_cons = { 0.1 ,0.2 , 0.3 , 0.4 , 1.0 , 2.0 };
-        HKS_compute_kernel(m, eigen_pairs , time_cons);
+        std::vector<double> time_cons = { 0.1 ,0.2 , 0.3 , 0.4 , 1.0 , 2.0 , 3.0 , 4.0, 5.0 , 6.0,7.0,8.0, 9.0,10.0,15.0,20.0 ,200.0};
+        HKS_compute_kernel(m, eigen_pairs , time_cons , time_step);
     }
     if (ImGui::MenuItem(" Heat kernel signature on a descriptor "))
     {
