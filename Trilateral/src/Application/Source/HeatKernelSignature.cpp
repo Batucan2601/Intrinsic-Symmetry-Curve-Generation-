@@ -126,7 +126,21 @@ void HKS_read_kernel_signature(TrilateralMesh* m)
 		}
 		line_count += 1;
 	}
-
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		if (m->normalized_heat_kernel_signature[i]< 1e-10)
+		{
+			m->normalized_heat_kernel_signature[i] += 1e-3; // dont make them 0 
+		}
+	}
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = (unsigned char ) (m->normalized_heat_kernel_signature[i] * 255); 
+		m->raylib_mesh.colors[i * 4 + 1] = 0; 
+		m->raylib_mesh.colors[i * 4 + 2] = 0; 
+		m->raylib_mesh.colors[i * 4 + 3] = 255; 
+	}
+	m->update_raylib_mesh();
 	file.close();  // Close the file after reading
 	return;
 }

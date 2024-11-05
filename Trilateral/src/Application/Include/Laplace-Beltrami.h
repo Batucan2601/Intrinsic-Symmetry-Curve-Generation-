@@ -25,3 +25,4 @@ Eigen::SparseMatrix<double> normalize_laplacian(const Eigen::SparseMatrix<double
 Eigen::SparseMatrix<double> regularize_matrix(const Eigen::SparseMatrix<double>& L, double epsilon);
 
 double laplace_beltrami_voronoi_area(const TrilateralMesh& mesh, int vertex);
+

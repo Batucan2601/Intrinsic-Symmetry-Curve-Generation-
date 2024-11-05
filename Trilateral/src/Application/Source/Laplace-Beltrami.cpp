@@ -63,9 +63,9 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 		glm::vec3 vj = mesh.vertices[j];
 		glm::vec3 vk = mesh.vertices[k];
 
-		double cot_alpha = cotangent(vj - vi, vk - vi) /2.0;
-		double cot_beta = cotangent(vi - vj, vk - vj)  / 2.0;
-		double cot_gamma = cotangent(vi - vk, vj - vk) / 2.0;
+		double cot_alpha = cotangent(vj - vi,vk - vi ) /2.0;
+		double cot_beta = cotangent( vi - vj,vk - vj )  / 2.0;
+		double cot_gamma = cotangent(vi - vk,vj - vk ) / 2.0;
 
 		// Symmetrically add off-diagonal entries
 		triplets.emplace_back(i, j, cot_gamma  );
@@ -113,10 +113,10 @@ Eigen::SparseMatrix<double> cotangent_laplacian(const TrilateralMesh& mesh)
 	{
 		for (Eigen::SparseMatrix<double>::InnerIterator it(L, k); it; ++it)
 		{
-			it.valueRef() = (it.valueRef() - minCoeff)/(maxCoeff - minCoeff);
+			//it.valueRef() = (it.valueRef() - minCoeff)/(maxCoeff - minCoeff);
 		}
 	}
-	//L.makeCompressed();
+	L.makeCompressed();
 	return L;
 }
 
@@ -193,7 +193,7 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 	}
 	//Eigen::SparseMatrix<double> L = -1.0 * A.asDiagonal().inverse() * M * A.asDiagonal().inverse();// +Eigen::MatrixXd::Identity(A.rows(), A.cols()) * 1e-6;
 	Eigen::SparseMatrix<double> L = M;
-	/*for (int k = 0; k < M.outerSize(); ++k)
+	for (int k = 0; k < M.outerSize(); ++k)
 	{
 		for (Eigen::SparseMatrix<double>::InnerIterator it(M, k); it; ++it)
 		{
@@ -203,9 +203,9 @@ Eigen::SparseMatrix<double>  laplace_beltrami(TrilateralMesh* mesh)
 			//it.index(); // inner index, here it is equal to it.row()
 			int i = it.row();
 			int j = it.col();
-			it.valueRef() = it.valueRef() * 1.0 / (A(i) *  A(j));
+			//it.valueRef() = it.valueRef() * 1.0 / (A(i) *  A(j));
 		}
-	}*/
+	}
 	//Eigen::SparseMatrix<double> L = -1.0 * (A.asDiagonal().inverse() *  M);
 	if (!M.isApprox(M.transpose(), 1e-10)) {
 		std::cerr << "M Matrix is not symmetric!" << std::endl;
@@ -436,7 +436,4 @@ Eigen::MatrixXd generate_A(TrilateralMesh* mesh)
 	}
 	return A; 
 }
-
-
-
 

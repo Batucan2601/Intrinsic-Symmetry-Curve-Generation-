@@ -299,13 +299,17 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
     ImGui::InputInt("time step == ", &time_step);
     if (ImGui::MenuItem(" Heat kernel signature "))
     {
-        std::vector<double> time_cons = { 0.1 ,0.2 , 0.3 , 0.4 , 1.0 , 2.0 , 3.0 , 4.0, 5.0 , 6.0,7.0,8.0, 9.0,10.0,15.0,20.0 ,200.0};
+        std::vector<double> time_cons = { 0.1 ,0.2 , 0.3 , 0.4 , 1.0 , 2.0 , 3.0 , 4.0, 5.0 , 6.0,7.0,8.0, 9.0,10.0,15.0,20.0 ,200.0,2000.0};
         HKS_compute_kernel(m, eigen_pairs , time_cons , time_step);
     }
     if (ImGui::MenuItem(" Heat kernel signature on a descriptor "))
     {
         HKS_hks_on_descriptor(m, positive_desc[0]);
 
+    }
+    if (ImGui::MenuItem(" Heat kernel signature read HKS "))
+    {
+        HKS_read_kernel_signature(m);
     }
 
 }

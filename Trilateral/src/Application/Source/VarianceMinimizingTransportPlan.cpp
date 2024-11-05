@@ -40,7 +40,7 @@ static std::vector<float> get_n_ring_areas_divided(TrilateralMesh* m, Trilateral
 			hist_index--;
 		}
 
-		voronoi_areas_divided[hist_index] += n_ring_area;
+		voronoi_areas_divided[hist_index] += n_ring_area * m->normalized_heat_kernel_signature[index];
 	}
 	return voronoi_areas_divided;
 }
@@ -229,8 +229,20 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor& desc1, Trilate
 		desc2.weight = desc2.weight  / desc2.weight.sum();
 	}
 	Eigen::MatrixXd cost_matrix =  generate_cost_function(m, desc1.weight, desc2.weight);
-	Eigen::MatrixXd transport_plan =  sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 5*1e-3, 1000, 10);
+	Eigen::MatrixXd transport_plan =  sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-4);
 	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
+	
+	std::cout << "====================================================================" << std::endl;
+	std::cout <<  "transport plan " << transport_plan << std::endl;
+	std::cout <<  "====================================================================" << std::endl;
+	std::cout << " cost matrix " << cost_matrix << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "weight 1 " << desc1.weight << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "weight 2 " << desc2.weight << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "total cost" << totalCost  << std::endl;
+	std::cout << "====================================================================" << std::endl;
 	return totalCost;
 }
 
@@ -282,7 +294,7 @@ Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix,
 			double diff = std::abs(kl_cur - kl_prev);
 			std::cout << "divergence " << kl_cur <<  " difference in divergence " <<  diff << std::endl;
 			
-			if (diff < 1e-6)
+			if (diff < tolerance)
 			{
 				break;
 			}
@@ -353,8 +365,9 @@ bool is_normalize, int division_no ,int N_ring_no )
 	for (size_t i = 0; i < desc_pos.size(); i++)
 	{
 		std::vector<float> comparison_i; 
-		for (size_t j = 0; j < desc_neg.size(); j++)
+ 		for (size_t j = 0; j < desc_neg.size(); j++)
 		{
+			std::cout << " source = " << i << " target == " << desc_pos.size() + j << std::endl; 
 			float res = VarianceMin_compare(m, desc_pos[i], desc_neg[j], is_normalize , division_no, N_ring_no);
 			comparison_i.push_back(res);
 		}
