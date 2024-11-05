@@ -31,7 +31,7 @@ float gaussian_curvature(TrilateralMesh* mesh , int index )
 		}
 
 	}
-	gaussian_curvature = 1.0 / A_i * (2 * M_PI - phi);
+	gaussian_curvature = 1.0 / A_i * (2 * M_PI - phi/2.0);
 	return gaussian_curvature;
 }
 std::vector<DvorakPairs> dvorak_extraction_of_significant_points(TrilateralMesh* m, int P)
@@ -108,7 +108,7 @@ Plane dvorak_generate_plane(MeshFactory& mesh_fac, int selected_index , int P , 
 bool dvorak_curvature_similarity_criterion(std::vector<DvorakPairs>& best_pairs, float S, int index1, int index2)
 {
 	float gaussian_comparison = best_pairs[index1].gaussian_curv / best_pairs[index2].gaussian_curv;
-	if( S <= gaussian_comparison && gaussian_comparison <= 1.0f/gaussian_comparison)
+	if( S <= gaussian_comparison && gaussian_comparison <= 1.0f/S)
 	{ 
 		return true;
 	}
@@ -156,7 +156,7 @@ std::vector<std::pair<int, int>> dvorak_chose_criterion(TrilateralMesh* m , std:
 			}
 			std::pair<int, int> temp_pair;
 			temp_pair.first = significant_points[i].p_index;
-			temp_pair.first = significant_points[j].p_index;
+			temp_pair.second = significant_points[j].p_index;
 			criter_pairs.push_back(temp_pair);
 			
 		}

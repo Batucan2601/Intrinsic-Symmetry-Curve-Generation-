@@ -2480,6 +2480,10 @@ void simple_sample(MeshFactory& mesh_fac, int mesh_index1, int mesh_index2, int 
 	 float area = 0;
 	 std::vector<unsigned int> indices;
 	 std::vector<bool> is_vertex_on_ring(m->vertices.size() , false);
+	 if (N == 1)
+	 {
+		 return m->areas[point_index];
+	 }
 	 for (size_t i = 0; i < N+1; i++)
 	 {
 		 if (i == 0) // one ring 
@@ -4163,7 +4167,7 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 	desc_right = get_trilateral_points_using_closest_pairs(m, left_skeleton_indices);
 
 
-	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 20 , 1);
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 5 , 1);
 	//std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all(m, desc_right, desc_left ,true , 20 , 3) ;
 	std::vector<std::pair<unsigned int, unsigned int >> resemblance_pairs;
 	for (size_t i = 0; i < desc_left.size(); i++)
@@ -4172,10 +4176,30 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 		int index = -1;
 		for (size_t j = 0; j < desc_right.size(); j++)
 		{
+			int dvoak_index_i;
+			int dvoak_index_j;
+			for (size_t k = 0; k < dvorak_pairs.size(); k++)
+			{
+				if (dvorak_pairs[k].p_index == desc_left[i].p1)
+				{
+					dvoak_index_i = k;
+				}
+				if (dvorak_pairs[k].p_index == desc_right[j].p1)
+				{
+					dvoak_index_j = k;
+				}
+			}
 			if (optimal_transforms_pos_neg[i][j] < smallest)
 			{
-				smallest = optimal_transforms_pos_neg[i][j];
-				index = j;
+				bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, 0.5, dvoak_index_i, dvoak_index_j);
+				std::cout << " curv " << is_curv << std::endl;
+				bool is_norm = dvorak_normal_angle_criterion(m,dvorak_pairs,  dvoak_index_i, dvoak_index_j,0.985 );
+				std::cout << " normal " << is_norm << std::endl;
+				if (is_curv && is_norm)
+				{
+					smallest = optimal_transforms_pos_neg[i][j];
+					index = j;
+				}
 			}
 		}
 		std::pair<unsigned int, unsigned int> pair;

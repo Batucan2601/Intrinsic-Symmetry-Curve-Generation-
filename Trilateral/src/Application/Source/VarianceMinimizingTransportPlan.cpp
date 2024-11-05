@@ -42,6 +42,7 @@ static std::vector<float> get_n_ring_areas_divided(TrilateralMesh* m, Trilateral
 
 		voronoi_areas_divided[hist_index] += n_ring_area * m->normalized_heat_kernel_signature[index];
 	}
+
 	return voronoi_areas_divided;
 }
 static std::vector<float> get_voronoi_areas_divided(TrilateralMesh* m, TrilateralDescriptor& desc1, int division_no)
@@ -220,7 +221,7 @@ static Eigen::MatrixXd generate_cost_function_w_PDF_CDF(TrilateralMesh* m, Trila
 	return cost;
 }
 // for now include only the INSIDE of descriptors 
-float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor& desc1, TrilateralDescriptor& desc2, bool is_normalize, int division_no ,int N_ring_no )
+float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor desc1, TrilateralDescriptor desc2, bool is_normalize, int division_no ,int N_ring_no )
 {
 	
 	if (is_normalize)
@@ -233,8 +234,8 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor& desc1, Trilate
 	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
 	
 	std::cout << "====================================================================" << std::endl;
-	std::cout <<  "transport plan " << transport_plan << std::endl;
-	std::cout <<  "====================================================================" << std::endl;
+	std::cout << "transport plan " << transport_plan << std::endl;
+	std::cout << "====================================================================" << std::endl;
 	std::cout << " cost matrix " << cost_matrix << std::endl;
 	std::cout << "====================================================================" << std::endl;
 	std::cout << "weight 1 " << desc1.weight << std::endl;
@@ -247,6 +248,7 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor& desc1, Trilate
 }
 
 double logSumExp(const Eigen::VectorXd& vec) {
+
 	double maxVal = vec.maxCoeff();
 	return maxVal + std::log((vec.array() - maxVal).exp().sum());
 }

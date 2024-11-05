@@ -586,8 +586,8 @@ static void  display_descriptor(TrilateralMesh* m )
         m->raylib_mesh.colors[index * 4 + 2] = 0;
         m->raylib_mesh.colors[index * 4 + 3] = 255;
     }
-    m->raylib_mesh.colors[desc.p1 * 4] = 0;
-    m->raylib_mesh.colors[desc.p1 * 4 + 1] = 0;
+    m->raylib_mesh.colors[desc.p1 * 4] = 255;
+    m->raylib_mesh.colors[desc.p1 * 4 + 1] = 255;
     m->raylib_mesh.colors[desc.p1 * 4 + 2] = 255;
     m->raylib_mesh.colors[desc.p1 * 4 + 3] = 255;
     m->update_raylib_mesh();
