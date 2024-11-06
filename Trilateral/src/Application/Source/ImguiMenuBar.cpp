@@ -243,6 +243,11 @@ static void trilateral_functions(TrilateralMesh* m)
         trilateral_point_matching_with_dvorak_endpoints(m, positive_desc, negative_desc, plane , dvorak_no_of_significant_points , convergence_ratio);
         is_draw_plane = true;
     }
+    if (ImGui::MenuItem("End point matching with  skeelton endpoint poins Optimal transform"))
+    {
+        trilateral_point_matching_with_skeleton_endpoints_and_OT(m,skeleton, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
+        is_draw_plane = true;
+    }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform"))
     {
         trilateral_point_matching_with_gaussian_endpoints_and_OT(m, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);

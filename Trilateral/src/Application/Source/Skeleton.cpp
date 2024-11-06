@@ -799,7 +799,12 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 	
 	//lastly get midpoint and get the closest vertex
 	glm::vec3 mid_point(0.0f, 0.0f, 0.0f);
-	mid_point =  mesh_generate_weighted_mid_point(m);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		mid_point += m->vertices[i];
+	}
+	mid_point /= m->vertices.size();
+
 
 	//check the closest vertex in skeleton
 	float minimum_dist = INFINITY;
@@ -827,6 +832,7 @@ Skeleton skeleton_read_swc_file(TrilateralMesh* m , std::string file_name)
 		}
 		skeletonPoints[i].color = c; 
 	}
+	skeletonPoints[minimum_index].color = WHITE;
 
 	skeleton.skeletonFormat = skeletonPoints;
 	skeleton.adjacencies = adjacencies;

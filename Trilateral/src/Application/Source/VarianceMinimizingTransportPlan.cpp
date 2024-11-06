@@ -3,7 +3,7 @@
 #include "../Include/HistogramFunctions.h"
 #include "../Include/TrilateralMap.h"
 
-static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, Eigen::VectorXd& desc1, Eigen::VectorXd& desc2);
+static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, TrilateralDescriptor& desc1, TrilateralDescriptor& desc2);
 static std::vector<float> get_voronoi_areas(TrilateralMesh* m, TrilateralDescriptor& desc1);
 Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix, const Eigen::VectorXd& sourceWeights, const Eigen::VectorXd& targetWeights, double epsilon, int maxIter, double tolerance);
 float VarianceMin_compare_w_CDF(TrilateralMesh* m, TrilateralDescriptor& desc1, TrilateralDescriptor& desc2, Histogram& cdf_desc1, Histogram& cdf_desc2);
@@ -28,21 +28,85 @@ static std::vector<float> get_n_ring_areas_divided(TrilateralMesh* m, Trilateral
 			longest = dist;
 		}
 	}
+	for (size_t i = 0; i < desc1.path_1_2.size(); i++)
+	{
+		float dist = distances_p1[desc1.path_1_2[i]];
+		if (dist > longest)
+		{
+			longest = dist;
+		}
+	}
+	for (size_t i = 0; i < desc1.path_1_3.size(); i++)
+	{
+		float dist = distances_p1[desc1.path_1_3[i]];
+		if (dist > longest)
+		{
+			longest = dist;
+		}
+	}
+	for (size_t i = 0; i < desc1.path_2_3.size(); i++)
+	{
+		float dist = distances_p1[desc1.path_2_3[i]];
+		if (dist > longest)
+		{
+			longest = dist;
+		}
+	}
+
 	float step = longest / division_no;
 	for (size_t i = 0; i < desc1.visited_indices.size(); i++)
 	{
 		int index = desc1.visited_indices[i];
 		float dist = distances_p1[index];
 		int hist_index = dist / step;
-		float n_ring_area= get_N_ring_area(m, index, N_ring) /3.0f;
+		float n_ring_area= get_N_ring_area(m, index, N_ring) ;
 		if (hist_index == division_no)
 		{
 			hist_index--;
 		}
 
-		voronoi_areas_divided[hist_index] += n_ring_area * m->normalized_heat_kernel_signature[index];
+		voronoi_areas_divided[hist_index] += n_ring_area;// *m->normalized_heat_kernel_signature[index];
 	}
 
+	//get paths point areas
+	for (size_t i = 0; i < desc1.path_1_2.size(); i++)
+	{
+		int index = desc1.path_1_2[i];
+		float dist = distances_p1[index];
+		int hist_index = dist / step;
+		float area = m->areas[index];
+		if (hist_index == division_no)
+		{
+			hist_index--;
+		}
+		voronoi_areas_divided[hist_index] += area / 3.0;
+	}
+	//get paths point areas
+	for (size_t i = 0; i < desc1.path_1_3.size(); i++)
+	{
+		int index = desc1.path_1_3[i];
+		float dist = distances_p1[index];
+		int hist_index = dist / step;
+		float area = m->areas[index];
+		if (hist_index == division_no)
+		{
+			hist_index--;
+		}
+		voronoi_areas_divided[hist_index] += area / 3.0;// *m->normalized_heat_kernel_signature[index];
+	}
+	//get paths point areas
+	for (size_t i = 0; i < desc1.path_2_3.size(); i++)
+	{
+		int index = desc1.path_2_3[i];
+		float dist = distances_p1[index];
+		int hist_index = dist / step;
+		float area = m->areas[index];
+		if (hist_index == division_no)
+		{
+			hist_index--;
+		}
+		voronoi_areas_divided[hist_index] += area / 3.0;// *m->normalized_heat_kernel_signature[index];
+	}
 	return voronoi_areas_divided;
 }
 static std::vector<float> get_voronoi_areas_divided(TrilateralMesh* m, TrilateralDescriptor& desc1, int division_no)
@@ -135,14 +199,18 @@ static std::vector<float> get_voronoi_areas_w_paths(TrilateralMesh* m, Trilatera
 	return weights;
 }
 
-static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, Eigen::VectorXd& desc1_weights, Eigen::VectorXd& desc2_weights)
+static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, TrilateralDescriptor&desc1, TrilateralDescriptor& desc2)
 {
 	//std::vector<float> desc1_weights = get_voronoi_areas_w_paths(m, desc1);
 	//std::vector<float> desc2_weights = get_voronoi_areas_w_paths(m, desc2);
+	Eigen::VectorXd desc1_weights = desc1.weight;
+	Eigen::VectorXd desc2_weights = desc2.weight;
 
 	int size_X = desc1_weights.size();
 	int size_Y = desc2_weights.size();
 
+	float desc1_hks = m->normalized_heat_kernel_signature[desc1.p1];
+	float desc2_hks = m->normalized_heat_kernel_signature[desc2.p1];
 	//generate |X| x |Y| matri
 	Eigen::MatrixXd cost(size_X, size_Y);
 	for (size_t i = 0; i < size_X; i++)
@@ -229,8 +297,8 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor desc1, Trilater
 		desc1.weight = desc1.weight  / desc1.weight.sum();
 		desc2.weight = desc2.weight  / desc2.weight.sum();
 	}
-	Eigen::MatrixXd cost_matrix =  generate_cost_function(m, desc1.weight, desc2.weight);
-	Eigen::MatrixXd transport_plan =  sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-4);
+	Eigen::MatrixXd cost_matrix =  generate_cost_function(m, desc1, desc2);
+	Eigen::MatrixXd transport_plan =  sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-8);
 	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
 	
 	std::cout << "====================================================================" << std::endl;

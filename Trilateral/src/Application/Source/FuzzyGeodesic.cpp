@@ -33,7 +33,6 @@ FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(TrilateralMesh* m, int st
 		total_geodesic_dist += dist; 
 		distances[i] += dist + distances[i-1];
 	}
-
 	for (size_t i = 0; i < path.size(); i++)
 	{
 		FuzzyGeodesic f_geo;

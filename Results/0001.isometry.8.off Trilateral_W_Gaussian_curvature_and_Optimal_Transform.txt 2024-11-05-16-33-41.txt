@@ -1,0 +1,4 @@
+Normalize geodesic cost === 0.424717
+correspondance rate === 0.000000
+ gaussian point size == 1000
+ gaussian sweep distance == 3.000000
