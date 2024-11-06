@@ -51,6 +51,17 @@ typedef struct
 	unsigned int point_in_backbone;
 }NodeAffinityParams;
 
+struct SkeletonTreeNode
+{
+	int skeleton_index;
+	int depth;
+	SkeletonTreeNode* parent;
+	std::vector<SkeletonTreeNode> child;
+};
+typedef struct
+{
+	SkeletonTreeNode head; // mid point
+}SkeletonTree;
 //buffer
 void skeleton_generate_buffer( MeshFactory& mesh_fac);
 void skeleton_buffer(const MeshFactory& mesh_fac);
@@ -78,6 +89,10 @@ void skeleton_get_N_Lateral_points(MeshFactory& m_factory, Skeleton& skeleton, u
 void skeleton_get_dijkstra_endpoints(Skeleton& skeleton, int index1, std::vector<int>& vertex_list, std::vector<float>& dijkstra_distances);
 
 float skeleton_get_backbone_length(TrilateralMesh* m,BackBone* backBone);
+
+SkeletonTree skeleton_generate_skeleton_tree(TrilateralMesh* m, Skeleton& skeleton);
+SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton, SkeletonTree& skelTree, int skeletonIndex);
+
 
 void skeleton_left_right_test_for_endpoint(std::vector<int>& right , std::vector<int>& left );
 

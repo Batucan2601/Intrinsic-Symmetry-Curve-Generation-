@@ -7,6 +7,7 @@
 #include <fstream>
 #include <GL/glew.h>
 #include <unordered_set>
+#include <stack>
 #include <eigen/Eigen/Dense>
 
 #pragma region VIDEO-TO-POSE 3D repo functions legacy for now
@@ -1927,4 +1928,64 @@ void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& s
 		skeleton_corresponding_endpoints.push_back(skeleton_end_points[index]);
 	}
 
+}
+
+SkeletonTree skeleton_generate_skeleton_tree(TrilateralMesh* m, Skeleton& skeleton)
+{
+	SkeletonTree skelTree;
+	SkeletonTreeNode midpoint;
+	midpoint.depth = 0; 
+	midpoint.skeleton_index = skeleton.mid_point_index;
+	midpoint.parent = NULL;
+	skelTree.head = midpoint;
+	std::stack<SkeletonTreeNode> stack;
+	stack.push(midpoint);
+	while (!stack.empty())
+	{
+		//top
+		SkeletonTreeNode current = stack.top();
+		//pop
+		stack.pop();
+		int childSize = skeleton.adjacencies[current.skeleton_index].size();
+		for (size_t i = 0; i < childSize; i++)
+		{
+			SkeletonTreeNode child;
+			child.parent = &current;
+			child.depth = current.depth + 1 ;
+			child.skeleton_index = skeleton.adjacencies[current.skeleton_index][i];
+
+			current.child.push_back(child);
+		}
+
+	}
+	return skelTree;
+}
+
+SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton , SkeletonTree& skelTree ,int skeletonIndex )
+{
+	SkeletonTreeNode node = skelTree.head;
+	
+	std::stack<SkeletonTreeNode> stack;
+	stack.push(node);
+	while (!stack.empty())
+	{
+		//top
+		SkeletonTreeNode current = stack.top();
+		if (current.skeleton_index == skeletonIndex)
+		{
+			return current;
+		}
+		//pop
+		stack.pop();
+		int childSize = current.child.size();
+		for (size_t i = 0; i < childSize; i++)
+		{
+			SkeletonTreeNode child = current.child[i];
+			if (child.skeleton_index == skeletonIndex)
+			{
+				return child; 
+			}
+			stack.push(child);
+		}
+	}
 }

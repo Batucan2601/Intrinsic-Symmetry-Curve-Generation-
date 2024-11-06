@@ -4169,7 +4169,11 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 
 	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, desc_left, desc_right ,true , 20 , 2);
 	//std::vector<std::vector<float>> optimal_transforms_neg_pos = VarianceMin_compare_all(m, desc_right, desc_left ,true , 20 , 3) ;
-	std::vector<std::pair<unsigned int, unsigned int >> resemblance_pairs;
+	std::vector<std::pair<float,std::pair<unsigned int, unsigned int> >> compare_results;
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+
+	
+
 	for (size_t i = 0; i < desc_left.size(); i++)
 	{
 		float smallest = INFINITY;
@@ -4189,27 +4193,33 @@ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m,
 					dvoak_index_j = k;
 				}
 			}
-			if (optimal_transforms_pos_neg[i][j] < smallest)
+			float hks_dif = std::abs(m->normalized_heat_kernel_signature[desc_left[i].p1] - m->normalized_heat_kernel_signature[desc_right[j].p1]);
+			bool is_hks = hks_dif < 0.2; 
+			bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, 0.3, dvoak_index_i, dvoak_index_j);
+			std::cout << " curv " << is_curv << std::endl;
+			bool is_norm = dvorak_normal_angle_criterion(m,dvorak_pairs,  dvoak_index_i, dvoak_index_j,0.90 );
+			std::cout << " normal " << is_norm << std::endl;
+			if (is_curv && is_norm && is_hks )
 			{
-				float hks_dif = std::abs(m->normalized_heat_kernel_signature[desc_left[i].p1] - m->normalized_heat_kernel_signature[desc_right[j].p1]);
-				bool is_hks = hks_dif < 0.1; 
-				bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, 0.5, dvoak_index_i, dvoak_index_j);
-				std::cout << " curv " << is_curv << std::endl;
-				bool is_norm = dvorak_normal_angle_criterion(m,dvorak_pairs,  dvoak_index_i, dvoak_index_j,0.985 );
-				std::cout << " normal " << is_norm << std::endl;
-				if (is_curv && is_norm && is_hks )
-				{
-					smallest = optimal_transforms_pos_neg[i][j];
-					index = j;
-				}
+				std::pair<float, std::pair<unsigned int, unsigned int>> res;
+				res.first = optimal_transforms_pos_neg[i][j];
+				res.second = std::make_pair(i, j);
+				compare_results.push_back(res);
 			}
 		}
-		std::pair<unsigned int, unsigned int> pair;
-		pair.first = desc_left[i].p1;
-		pair.second = desc_right[index].p1;
-		resemblance_pairs.push_back(pair);
-		std::cout << " left == " << i << " right == " << desc_left.size() + index << " " << optimal_transforms_pos_neg[i][index] <<  std::endl;
 	}
+	std::vector<bool> used(N, false);
+	std::sort(compare_results.begin(), compare_results.end());
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compare_results) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			resemblance_pairs.push_back({ desc_left[i].p1 , desc_right[j].p1 });
+			used[i] = used[j] = true;  // Mark these objects as used
+		}
+	}
+
 	/*for (size_t i = 0; i < desc_right.size(); i++)
 	{
 		float smallest = INFINITY;

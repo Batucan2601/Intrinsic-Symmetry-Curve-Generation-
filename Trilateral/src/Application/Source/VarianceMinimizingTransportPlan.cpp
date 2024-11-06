@@ -208,9 +208,6 @@ static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, TrilateralDescr
 
 	int size_X = desc1_weights.size();
 	int size_Y = desc2_weights.size();
-
-	float desc1_hks = m->normalized_heat_kernel_signature[desc1.p1];
-	float desc2_hks = m->normalized_heat_kernel_signature[desc2.p1];
 	//generate |X| x |Y| matri
 	Eigen::MatrixXd cost(size_X, size_Y);
 	for (size_t i = 0; i < size_X; i++)
