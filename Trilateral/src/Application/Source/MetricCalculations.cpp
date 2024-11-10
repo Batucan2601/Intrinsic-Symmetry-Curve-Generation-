@@ -4,6 +4,8 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+static int N; 
 //v6'nin ground-truth simetrik noktasi v66 ise ve senin methodun v6->v77'ye gonderdiyse o zaman geodesic(v66, v77) costun olacak;
 float Metric_get_geodesic_cost(TrilateralMesh* m, unsigned int point_index1, unsigned int calculated_index1_correspondence, bool isNormalized)
 {
@@ -176,5 +178,11 @@ void Metric_write_to_file(TrilateralMesh* m, const std::string& file_name)
 	out_file << "correspondance rate === " << std::to_string(Metric_get_correspondance_rate(m)) << std::endl;
 	out_file << " gaussian point size == " << std::to_string(Metric_get_gaussian_point_no(m)) << std::endl;
 	out_file << " gaussian sweep distance == " << std::to_string(Metric_get_gaussian_dist(m)) << std::endl;
+	out_file << " N == " << std::to_string(N) << std::endl;
 	out_file.close();
+}
+
+void Metric_set_N(int n)
+{
+	N = n; 
 }

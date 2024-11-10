@@ -3,9 +3,10 @@
 #include <map>
 #include "TrilateralMesh.h"
 #include "../Include/Skeleton.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 struct NLateralDescriptor
 {
-	int N;
 	std::vector<unsigned int> point_indices;
 	std::vector<std::vector<double>> euclidian_distances;
 	std::vector<std::vector<double>>  geodesic_distances;
@@ -15,6 +16,7 @@ struct NLateralDescriptor
 	std::vector<double> k_ring_areas;
 	TrilateralMesh mesh;
 	NLateralDescriptor(TrilateralMesh& mesh, const std::vector<unsigned int>& point_indices, int N);
+	NLateralDescriptor();
 
 	void get_euclidian_distances();
 	void get_geodesic_distances();
@@ -22,7 +24,13 @@ struct NLateralDescriptor
 	void get_k_ring_areas(int K);
 	void get_ROI();
 
-	
+	// new implementation
+	int N; //this was present
+	std::vector<unsigned int> indices; // fist one is the origin point 
+	std::vector<std::vector<std::vector<int>>> paths;  // from indices[0] to others
+	std::vector<unsigned int> vertices_inside;
+	Eigen::VectorXd weight;
+	float skel_dist_mid;
 };
 
 struct NLateralParameters
@@ -67,3 +75,8 @@ void NLateral_parameters_calculate_maximums(TrilateralMesh* m, NLateralParameter
 
 void start_n_lateral_algorithm_with_skeleton_end_points(TrilateralMesh* m, NLateralParameters& N_LATERAL_PARAMETERS,
 	std::vector<unsigned int>& mesh_left_endpoints, std::vector<unsigned int>& mesh_right_endpoints);
+NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices);
+
+
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N);
+std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);

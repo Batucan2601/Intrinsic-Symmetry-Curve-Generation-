@@ -4,6 +4,7 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/MetricCalculations.h"
 #include "../Include/Geodesic.h"
+#include "../Include/ROI.h"
 
 #pragma region Nlateral struct
 
@@ -13,6 +14,10 @@ NLateralDescriptor::NLateralDescriptor(TrilateralMesh& mesh, const std::vector<u
 	this->N = N;
 	int point_size = point_indices.size();
 	this->mesh = mesh;
+}
+
+NLateralDescriptor::NLateralDescriptor()
+{
 }
 
 void NLateralDescriptor::get_euclidian_distances()
@@ -845,4 +850,208 @@ void  NLateralDescriptor::get_ROI()
 	//trilateral_ROI_area(&this->mesh, roi_indices, total_area);
 
 	this->area = total_area;
+}
+
+
+
+
+
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N)
+
+{
+
+	int depth_similarity = 15;
+	// 1 - go gaussian to skeleton
+	std::vector<unsigned int> skeleton_end_points;
+	skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
+	// get every skeltreeNode
+	std::vector<SkeletonTreeNode> skeleton_end_point_node_list;
+	for (size_t i = 0; i < skeleton_end_points.size(); i++)
+	{
+		SkeletonTreeNode node = skeleton_get_skeleton_node(skel, skelTree, skeleton_end_points[i]);
+		skeleton_end_point_node_list.push_back(node);
+	}
+	std::vector<NLateralDescriptor> nLateralDescVec;
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		//get n-1 of the closest indexed points
+		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, indices[i]);
+		std::vector<std::pair<float, unsigned int >> distances;
+		for (size_t j = 0; j < geodesic_distances.size(); j++)
+		{
+			bool is_in_indices = false;
+			for (size_t k = 0; k < indices.size(); k++)
+			{
+				if (j == indices[k] && j != indices[i])
+				{
+					is_in_indices = true;
+					break;
+				}
+			}
+
+			if (is_in_indices)
+			{
+				float dist = geodesic_distances[j];
+				unsigned int index = j;
+				std::pair<float, unsigned int > pair;
+				pair.first = dist;
+				pair.second = j;
+				distances.push_back(pair);
+			}
+		}
+
+
+
+		//get n-1 closest
+		std::vector<bool> is_already_selected(m->vertices.size(), false);
+		std::vector<unsigned int> selected_indices;
+		std::vector<unsigned int> indices_for_nlateral_construction;
+		is_already_selected[indices[i]] = true; // itself is selected 
+		selected_indices.push_back(i);
+		indices_for_nlateral_construction.push_back(indices[i]);
+		for (size_t j = 0; j < N - 1; j++)
+		{
+			float maxVal = INFINITY;
+			float maxIndexFirst = -1;
+			for (size_t k = 0; k < distances.size(); k++)
+			{
+				if (maxVal > distances[k].first && !is_already_selected[distances[k].second])
+				{
+					maxIndexFirst = distances[k].second;
+					maxVal = distances[k].first;
+				}
+			}
+			is_already_selected[(int)maxIndexFirst] = true;
+			indices_for_nlateral_construction.push_back(maxIndexFirst);
+			//check which index corresponds to maxIndexFirst
+			for (size_t k = 0; k <indices.size() ; k++)
+			{
+				if (indices[k] == maxIndexFirst)
+				{
+					selected_indices.push_back(k);
+				}
+			}
+		}
+		
+		
+		
+		//now here is the catch
+		bool is_depth_different = false; 
+		for (size_t j = 0; j < selected_indices.size()-1; j++)
+		{
+			if (std::abs(skeleton_end_point_node_list[selected_indices[j]].depth - skeleton_end_point_node_list[selected_indices[j+1]].depth) > depth_similarity)
+			{
+				is_depth_different = true;
+				break; 
+			}
+		}
+		if (is_depth_different)
+		{
+			continue; 
+		}
+
+		NLateralDescriptor desc;
+		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
+		nLateralDescVec.push_back(desc);
+	}
+	return nLateralDescVec;
+}
+
+
+NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices )
+{
+	NLateralDescriptor desc;
+	int N = mesh_indices.size();
+
+	//generate paths
+	for (size_t i = 0; i < N; i++)
+	{
+		std::vector<std::vector<int>> paths(N);
+		desc.paths.push_back(paths);
+		for (size_t j = i; j < N; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			std::vector<int> path_i_j = Geodesic_between_two_points(*m, mesh_indices[i], mesh_indices[j]);
+			desc.paths[i][j] = path_i_j;
+		}
+	}
+
+	//check visited vertices
+	desc.vertices_inside =  Nlateral_check_vertices_visited(m, desc);
+	desc.indices = mesh_indices; 
+
+	return desc;
+}
+
+
+std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor &desc )
+{
+
+	std::vector<int> is_visited(m->vertices.size(), OUTSIDE);
+
+
+	std::vector<int> edge_vertices;
+	for (size_t i = 0; i < desc.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc.paths[i][j].size(); k++)
+			{
+				edge_vertices.push_back(desc.paths[i][j][k]);
+				is_visited[desc.paths[i][j][k]] = EDGE; 
+			}
+		}
+	}
+
+
+	std::vector<int> edge_vertices_neighbours;
+
+	//check if colinear 2D
+	std::vector<std::vector<unsigned int>> visited_vertices_list;
+
+
+
+	// get the neighbours
+	for (size_t i = 0; i < edge_vertices.size(); i++)
+	{
+		for (size_t j = 0; j < 1; j++) //only check 1 neighbour this should emirically work ?
+		{
+			int point_index = m->adjacenies[edge_vertices[i]][j].first;
+			if (is_visited[point_index] != EDGE)
+			{
+				edge_vertices_neighbours.push_back(point_index);
+				std::vector<unsigned int> visited_points = breadth_first_search(m, point_index, is_visited);
+				visited_vertices_list.push_back(visited_points);
+			}
+		}
+
+	}
+
+	std::vector<unsigned int> vertices_inside_n_lateral; 
+	//the minimum sized batch is our inside 
+	for (size_t i = 0; i < visited_vertices_list.size(); i++)
+	{
+		if (visited_vertices_list[i].size() < 90.0 / 100.0 * m->vertices.size())
+		{
+			for (size_t j = 0; j < visited_vertices_list[i].size(); j++)
+			{
+				vertices_inside_n_lateral.push_back(visited_vertices_list[i][j]);
+			}
+		}
+	}
+
+	// Sort the vector to bring duplicates together
+	std::sort(vertices_inside_n_lateral.begin(), vertices_inside_n_lateral.end());
+
+	// Remove duplicates using std::unique, which moves unique elements to the front
+	auto last = std::unique(vertices_inside_n_lateral.begin(), vertices_inside_n_lateral.end());
+
+	// Erase the "leftover" elements after the unique elements
+	vertices_inside_n_lateral.erase(last, vertices_inside_n_lateral.end());
+
+	// if every index has same length they are colinear
+	return vertices_inside_n_lateral;
 }

@@ -14,6 +14,7 @@
 #include "../Include/SpinImage.h"
 #include "../Include/KIDS.h"
 #include "../Include/Laplace-Beltrami.h"
+#include "../Include/NLateralDescriptor.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
@@ -27,6 +28,7 @@ static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
 static void laplace_beltrami_operations(TrilateralMesh* m);
+static void Nlateral_functions(TrilateralMesh* m);
 static void mesh_drawing();
 static void drawFileDialog(std::string& file_path, std::string& file_path_name, std::string file_type, bool& is_open);
 static void display_file_dialogs(TrilateralMesh* m);
@@ -54,6 +56,9 @@ std::vector<TrilateralDescriptor> positive_desc;
 std::vector<TrilateralDescriptor> negative_desc; 
 std::vector<unsigned int> distributed_indices;
 static Eigen::SparseMatrix<double> L; //laplacian 
+static int N = 0;
+std::vector<NLateralDescriptor> nlateral_descriptors;
+
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -129,11 +134,15 @@ void imgui_menu_bar(TrilateralMesh* m)
                 mesh_drawing();
                 ImGui::EndMenu();
             }
+            if(ImGui::BeginMenu("NLateral"))
+            {
+                Nlateral_functions(m);
+                ImGui::EndMenu();
+            }
             if (ImGui::BeginMenu("dataset"))
             {
                 KIDS_dataset(m);
                 ImGui::EndMenu();
-
             }
             ImGui::EndMenu();
         }
@@ -250,7 +259,7 @@ static void trilateral_functions(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform"))
     {
-        trilateral_point_matching_with_gaussian_endpoints_and_OT(m, positive_desc, negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
+        trilateral_point_matching_with_gaussian_endpoints_and_OT(m, skeleton,positive_desc,negative_desc, plane, dvorak_no_of_significant_points, convergence_ratio);
         is_draw_plane = true;
     }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform w CDF"))
@@ -263,7 +272,14 @@ static void trilateral_functions(TrilateralMesh* m)
         trilateral_display_trilateral_from_skeleton_endpoints(m, positive_desc , negative_desc , skeleton , plane );
     }
 }
-
+static void Nlateral_functions(TrilateralMesh* m)
+{
+    ImGui::InputInt("N == ", &N);
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform"))
+    {
+        nlateral_descriptors =  NlateralMap_point_matching_with_skeleton_endpoints_and_OT(m, skeleton, plane, dvorak_no_of_significant_points, dvorak_geodesic_dist_param,N);
+    }
+}
 static void KIDS_dataset(TrilateralMesh* m)
 {
     if (ImGui::MenuItem("read KIDS"))

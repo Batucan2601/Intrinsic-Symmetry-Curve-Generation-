@@ -14,6 +14,7 @@
 #include "FuzzyGeodesic.h"
 #include "../Include/Skeleton.h"
 #include "../Include/TrilateralDescriptor.h"
+#include "../Include/NLateralDescriptor.h"
 
 
 // 1 - use area error
@@ -403,7 +404,7 @@ float get_N_ring_area(TrilateralMesh* m, float point_index , int N );
  void trilateral_point_matching_with_dvorak_endpoints(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
 	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no , float convergence_ratio );
 
- void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_left,
+ void trilateral_point_matching_with_gaussian_endpoints_and_OT(TrilateralMesh* m, Skeleton& skel,std::vector<TrilateralDescriptor>& desc_left,
 	 std::vector<TrilateralDescriptor>& desc_right, Plane& plane, int dvorak_enpoint_no, float convergence_ratio);
 
  void trilateral_point_matching_with_skeleton_endpoints_and_OT(TrilateralMesh* m, Skeleton& skeleton, std::vector<TrilateralDescriptor>& desc_left,
@@ -428,3 +429,6 @@ std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& 
  
  void  trilateral_sampled_point_matching_with_descriptors(TrilateralMesh* m, std::vector<TrilateralDescriptor>& positive_desc
 	 , std::vector<TrilateralDescriptor>& negative_desc, Plane& plane, std::vector<unsigned int>& fps_points, float sweep_distance);
+
+ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT(TrilateralMesh* m, Skeleton& skel,
+Plane& plane, int dvorak_enpoint_no, float convergence_ratio, int N );

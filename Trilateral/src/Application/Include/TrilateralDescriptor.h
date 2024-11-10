@@ -1,6 +1,7 @@
 #pragma once 
 #include <vector>
 #include "Histogram.h"
+#include "Skeleton.h"
 
 enum PointStatus
 {
@@ -58,3 +59,5 @@ TrilateralDescriptor  TrilateralDescriptor_create(TrilateralMesh* m, int point_i
 void TrilateralDescriptor_write(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);
 void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescriptor>& positive_desc, std::vector<TrilateralDescriptor>& negative_desc);
 Histogram TrilateralDescriptor_generate_cdf_of_areas(TrilateralMesh* m, TrilateralDescriptor& desc1, int division_no);
+void  TrilateralDescriptor_get_trilateral_with_closest_points(TrilateralMesh* m , Skeleton& skel, std::vector<unsigned int>& mesh_indices,SkeletonTree& skelTree,
+std::vector<TrilateralDescriptor>& descriptors);

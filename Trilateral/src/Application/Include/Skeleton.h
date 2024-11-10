@@ -56,11 +56,11 @@ struct SkeletonTreeNode
 	int skeleton_index;
 	int depth;
 	SkeletonTreeNode* parent;
-	std::vector<SkeletonTreeNode> child;
+	std::vector<SkeletonTreeNode*> child;
 };
 typedef struct
 {
-	SkeletonTreeNode head; // mid point
+	SkeletonTreeNode* head; // mid point
 }SkeletonTree;
 //buffer
 void skeleton_generate_buffer( MeshFactory& mesh_fac);
@@ -92,10 +92,13 @@ float skeleton_get_backbone_length(TrilateralMesh* m,BackBone* backBone);
 
 SkeletonTree skeleton_generate_skeleton_tree(TrilateralMesh* m, Skeleton& skeleton);
 SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton, SkeletonTree& skelTree, int skeletonIndex);
-
+void skeleton_get_closest_skeleton_endpoints(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points, 
+std::vector<unsigned int >& skeleton_end_points);
 
 void skeleton_left_right_test_for_endpoint(std::vector<int>& right , std::vector<int>& left );
 
 void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& skeleton,BackBone& b, std::vector<DvorakPairs>& dvorakPairs  );
 //TODO
 void skeleton_generate_backbone_with_dominant_sym(MeshFactory& meshFactory , int selected_mesh , Skeleton& skeleton);
+
+std::vector<float> skeleton_distance_to_midpoint(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int> indices );

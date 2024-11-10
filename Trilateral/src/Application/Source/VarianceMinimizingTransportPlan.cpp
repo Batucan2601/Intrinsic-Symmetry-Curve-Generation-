@@ -2,6 +2,7 @@
 #include "../Include/Geodesic.h"
 #include "../Include/HistogramFunctions.h"
 #include "../Include/TrilateralMap.h"
+#include "../Include/NLateralDescriptor.h"
 
 static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, TrilateralDescriptor& desc1, TrilateralDescriptor& desc2);
 static std::vector<float> get_voronoi_areas(TrilateralMesh* m, TrilateralDescriptor& desc1);
@@ -109,6 +110,72 @@ static std::vector<float> get_n_ring_areas_divided(TrilateralMesh* m, Trilateral
 	}
 	return voronoi_areas_divided;
 }
+
+static std::vector<float> get_n_ring_areas_divided(TrilateralMesh* m, NLateralDescriptor& desc1, int division_no, int N_ring)
+{
+	std::vector<float>  distances_p1 = Geodesic_dijkstra(*m, desc1.indices[0]);
+	std::vector<float> voronoi_areas_divided(division_no, 0);
+	float longest = -INFINITY;
+	for (size_t i = 0; i < desc1.vertices_inside.size(); i++)
+	{
+		float dist = distances_p1[desc1.vertices_inside[i]];
+		if (dist > longest)
+		{
+			longest = dist;
+		}
+	}
+	for (size_t i = 0; i < desc1.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc1.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc1.paths[i][j].size(); k++)
+			{
+				float dist = distances_p1[desc1.paths[i][j][k]];
+				if (dist > longest)
+				{
+					longest = dist;
+				}
+			}
+		}
+	}
+
+	float step = longest / division_no;
+	for (size_t i = 0; i < desc1.vertices_inside.size(); i++)
+	{
+		int index = desc1.vertices_inside[i];
+		float dist = distances_p1[index];
+		int hist_index = dist / step;
+		float n_ring_area = get_N_ring_area(m, index, N_ring);
+		if (hist_index == division_no)
+		{
+			hist_index--;
+		}
+
+		voronoi_areas_divided[hist_index] += n_ring_area;// *m->normalized_heat_kernel_signature[index];
+	}
+
+	for (size_t i = 0; i < desc1.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc1.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc1.paths[i][j].size(); k++)
+			{
+				int index = desc1.paths[i][j][k];
+				float dist = distances_p1[index];
+				int hist_index = dist / step;
+				float area = m->areas[index];
+				if (hist_index == division_no)
+				{
+					hist_index--;
+				}
+				voronoi_areas_divided[hist_index] += area / 10.0;
+			}
+		}
+	}
+	return voronoi_areas_divided;
+}
+
+
 static std::vector<float> get_voronoi_areas_divided(TrilateralMesh* m, TrilateralDescriptor& desc1, int division_no)
 {
 	std::vector<float>  distances_p1 = Geodesic_dijkstra(*m, desc1.p1);
@@ -219,7 +286,26 @@ static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, TrilateralDescr
 	}
 	return cost;
 }
+static Eigen::MatrixXd generate_cost_function(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2)
+{
+	//std::vector<float> desc1_weights = get_voronoi_areas_w_paths(m, desc1);
+	//std::vector<float> desc2_weights = get_voronoi_areas_w_paths(m, desc2);
+	Eigen::VectorXd desc1_weights = desc1.weight;
+	Eigen::VectorXd desc2_weights = desc2.weight;
 
+	int size_X = desc1_weights.size();
+	int size_Y = desc2_weights.size();
+	//generate |X| x |Y| matri
+	Eigen::MatrixXd cost(size_X, size_Y);
+	for (size_t i = 0; i < size_X; i++)
+	{
+		for (size_t j = 0; j < size_Y; j++)
+		{
+			cost(i, j) = std::fabs(desc1_weights[i] - desc2_weights[j]);
+		}
+	}
+	return cost;
+}
 static Eigen::MatrixXd generate_cost_function_w_PDF_CDF(TrilateralMesh* m, TrilateralDescriptor& desc1, TrilateralDescriptor& desc2,
 	Histogram& h1, Histogram& h2)
 {
@@ -311,7 +397,31 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor desc1, Trilater
 	std::cout << "====================================================================" << std::endl;
 	return totalCost;
 }
+float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2, bool is_normalize, int division_no, int N_ring_no)
+{
 
+	if (is_normalize)
+	{
+		desc1.weight = desc1.weight / desc1.weight.sum();
+		desc2.weight = desc2.weight / desc2.weight.sum();
+	}
+	Eigen::MatrixXd cost_matrix = generate_cost_function(m, desc1, desc2);
+	Eigen::MatrixXd transport_plan = sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-8);
+	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
+
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "transport plan " << transport_plan << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << " cost matrix " << cost_matrix << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "weight 1 " << desc1.weight << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "weight 2 " << desc2.weight << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	std::cout << "total cost" << totalCost << std::endl;
+	std::cout << "====================================================================" << std::endl;
+	return totalCost;
+}
 double logSumExp(const Eigen::VectorXd& vec) {
 
 	double maxVal = vec.maxCoeff();
@@ -443,6 +553,38 @@ bool is_normalize, int division_no ,int N_ring_no )
 
 	return comparisons;
 }
+
+std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::vector<NLateralDescriptor>& desc_pos, std::vector<NLateralDescriptor>& desc_neg,
+	bool is_normalize, int division_no, int N_ring_no)
+{
+	std::vector<std::vector<float>> comparisons;
+	for (size_t i = 0; i < desc_pos.size(); i++)
+	{
+		Eigen::VectorXd desc1_weights = stdVectorToEigenVectorXd(get_n_ring_areas_divided(m, desc_pos[i], division_no, N_ring_no));
+		desc_pos[i].weight = desc1_weights;
+	}
+	for (size_t i = 0; i < desc_neg.size(); i++)
+	{
+		Eigen::VectorXd desc1_weights = stdVectorToEigenVectorXd(get_n_ring_areas_divided(m, desc_neg[i], division_no, N_ring_no));
+		desc_neg[i].weight = desc1_weights;
+	}
+	for (size_t i = 0; i < desc_pos.size(); i++)
+	{
+		std::vector<float> comparison_i;
+		for (size_t j = 0; j < desc_neg.size(); j++)
+		{
+			std::cout << " source = " << i << " target == " << desc_pos.size() + j << std::endl;
+			float res = VarianceMin_compare(m, desc_pos[i], desc_neg[j], is_normalize, division_no, N_ring_no);
+			comparison_i.push_back(res);
+		}
+		comparisons.push_back(comparison_i);
+	}
+
+	return comparisons;
+}
+
+
+
 std::vector<std::vector<float>> VarianceMin_compare_all_w_CDF(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg
 , int hist_div_no)
 {

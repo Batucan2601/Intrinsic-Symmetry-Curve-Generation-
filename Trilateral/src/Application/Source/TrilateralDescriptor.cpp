@@ -437,3 +437,68 @@ Histogram TrilateralDescriptor_generate_cdf_of_areas(TrilateralMesh* m, Trilater
     }
     return cdf;
 }
+
+void TrilateralDescriptor_get_trilateral_with_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& mesh_indices, SkeletonTree& skelTree,
+    std::vector<TrilateralDescriptor>& descriptors)
+{
+    int depth_similarity = 12;
+    // 1 - go gaussian to skeleton
+    std::vector<unsigned int> skeleton_end_points; 
+    skeleton_get_closest_skeleton_endpoints(m, skel, mesh_indices,
+        skeleton_end_points);
+
+    // get every skeltreeNode
+    std::vector<SkeletonTreeNode> skeleton_end_point_node_list;
+    for (size_t i = 0; i < skeleton_end_points.size(); i++)
+    {
+        SkeletonTreeNode node = skeleton_get_skeleton_node(skel, skelTree, skeleton_end_points[i]);
+        skeleton_end_point_node_list.push_back(node);
+        std::cout << node.depth << std::endl; 
+    }
+
+
+    for (size_t i = 0; i < mesh_indices.size(); i++)
+    {
+        int closest_index = -1;
+        float closest = INFINITY;
+        std::vector<float> distances_i = Geodesic_dijkstra(*m, mesh_indices[i]);
+        //get closest 2 
+        for (size_t j = 0; j < mesh_indices.size(); j++)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            if (distances_i[mesh_indices[j]] < closest)
+            {
+                closest_index = j;
+                closest = distances_i[mesh_indices[j]];
+            }
+        }
+        int closest_index_second = -1;
+        closest = INFINITY;
+        for (size_t j = 0; j < mesh_indices.size(); j++)
+        {
+            if (i == j || closest_index == j )
+            {
+                continue;
+            }
+            if (distances_i[mesh_indices[j]] < closest)
+            {
+                closest_index_second = j;
+                closest = distances_i[mesh_indices[j]];
+            }
+        }
+
+        //now here is the catch
+        if (std::abs(skeleton_end_point_node_list[i].depth - skeleton_end_point_node_list[closest_index].depth) > depth_similarity ||
+            std::abs(skeleton_end_point_node_list[i].depth - skeleton_end_point_node_list[closest_index_second].depth) > depth_similarity ||
+            std::abs(skeleton_end_point_node_list[closest_index_second].depth - skeleton_end_point_node_list[closest_index].depth) > depth_similarity)
+        {
+            continue; 
+        }
+        TrilateralDescriptor desc = TrilateralDescriptor_create(m, mesh_indices[i], mesh_indices[closest_index], mesh_indices[closest_index_second], true);
+        descriptors.push_back(desc);
+    }
+
+}

@@ -1933,59 +1933,111 @@ void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& s
 SkeletonTree skeleton_generate_skeleton_tree(TrilateralMesh* m, Skeleton& skeleton)
 {
 	SkeletonTree skelTree;
-	SkeletonTreeNode midpoint;
-	midpoint.depth = 0; 
-	midpoint.skeleton_index = skeleton.mid_point_index;
-	midpoint.parent = NULL;
+	SkeletonTreeNode* midpoint = new SkeletonTreeNode();
+	midpoint->depth = 0; 
+	midpoint->skeleton_index = skeleton.mid_point_index;
+	midpoint->parent = NULL;
 	skelTree.head = midpoint;
-	std::stack<SkeletonTreeNode> stack;
+	std::stack<SkeletonTreeNode*> stack;
+	std::vector<unsigned int> is_already_visited(skeleton.skeletonFormat.size(), 0);
 	stack.push(midpoint);
+	is_already_visited[skeleton.mid_point_index] = 1;
 	while (!stack.empty())
 	{
 		//top
-		SkeletonTreeNode current = stack.top();
+		SkeletonTreeNode* current = stack.top();
 		//pop
 		stack.pop();
-		int childSize = skeleton.adjacencies[current.skeleton_index].size();
+		int childSize = skeleton.adjacencies[current->skeleton_index].size();
 		for (size_t i = 0; i < childSize; i++)
 		{
-			SkeletonTreeNode child;
-			child.parent = &current;
-			child.depth = current.depth + 1 ;
-			child.skeleton_index = skeleton.adjacencies[current.skeleton_index][i];
-
-			current.child.push_back(child);
+			SkeletonTreeNode* child = new SkeletonTreeNode;
+			child->parent = current;
+			child->depth = current->depth + 1 ;
+			child->skeleton_index = skeleton.adjacencies[current->skeleton_index][i];
+			if (is_already_visited[child->skeleton_index] != 1)
+			{
+				current->child.push_back(child);
+				stack.push(child);
+				is_already_visited[child->skeleton_index] = 1; 
+			}
 		}
-
 	}
 	return skelTree;
 }
 
 SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton , SkeletonTree& skelTree ,int skeletonIndex )
 {
-	SkeletonTreeNode node = skelTree.head;
+	SkeletonTreeNode* node = skelTree.head;
 	
-	std::stack<SkeletonTreeNode> stack;
+	std::stack<SkeletonTreeNode*> stack;
 	stack.push(node);
 	while (!stack.empty())
 	{
 		//top
-		SkeletonTreeNode current = stack.top();
-		if (current.skeleton_index == skeletonIndex)
+		SkeletonTreeNode* current = stack.top();
+		if (current->skeleton_index == skeletonIndex)
 		{
-			return current;
+			return *current;
 		}
 		//pop
 		stack.pop();
-		int childSize = current.child.size();
+		int childSize = current->child.size();
 		for (size_t i = 0; i < childSize; i++)
 		{
-			SkeletonTreeNode child = current.child[i];
-			if (child.skeleton_index == skeletonIndex)
+			SkeletonTreeNode* child = current->child[i];
+			if (child->skeleton_index == skeletonIndex)
 			{
-				return child; 
+				return *child; 
 			}
 			stack.push(child);
 		}
 	}
+
+	assert("stack is empty !!! ");
+}
+
+
+void skeleton_get_closest_skeleton_endpoints(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points,
+	std::vector<unsigned int >& skeleton_end_points)
+{
+	for (size_t i = 0; i < mesh_points.size(); i++)
+	{
+		int closest_index = -1;
+		float closest = INFINITY;
+		glm::vec3 mesh_p = m->vertices[mesh_points[i]];
+		for (size_t j = 0; j < skeleton.skeletonFormat.size(); j++)
+		{
+			if (skeleton.skeletonFormat[j].label == END)
+			{
+				glm::vec3 skel_p = skeleton.skeletonFormat[j].point;
+				float dist = glm::distance(skel_p, mesh_p);
+				if (dist < closest)
+				{
+					closest = dist;
+					closest_index = j;
+				}
+			}
+		}
+		skeleton_end_points.push_back(closest_index);
+	}
+}
+
+
+std::vector<float> skeleton_distance_to_midpoint(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int> mesh_indices)
+{
+	int skel_mid_index = skeleton.mid_point_index;
+	std::vector<float> distances;
+	std::vector<int> temp_list; 
+	skeleton_calculate_dijkstra(skeleton, skel_mid_index, temp_list, distances);
+
+	std::vector<unsigned int> skel_endpoints;
+	std::vector<float> return_distances; 
+	skeleton_get_closest_skeleton_endpoints(m, skeleton, mesh_indices, skel_endpoints);
+	for (size_t i = 0; i < mesh_indices.size(); i++)
+	{
+		return_distances.push_back(distances[skel_endpoints[i]]);
+		//std::cout << return_distances[i] << std::endl; 
+	}
+	return return_distances;
 }

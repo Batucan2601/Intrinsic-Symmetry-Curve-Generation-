@@ -2,7 +2,6 @@
 #include "../Include/Geodesic.h"
 
 static std::vector<unsigned int> check_vertices_visited(TrilateralMesh* m, std::vector<int>& path_1_2, std::vector<int>& path_1_3, std::vector<int>& path_2_3);
-static std::vector<unsigned int> breadth_first_search(TrilateralMesh* m, int point_index, std::vector<int> is_visited);
 
 void ROI_trilateral(TrilateralMesh* m,TrilateralDescriptor& desc, int division_no, bool is_color)
 {
@@ -142,7 +141,7 @@ static std::vector<unsigned int> check_vertices_visited(TrilateralMesh* m, std::
 }
 
 //given edges and point do breadth first search on an area 
-static std::vector<unsigned int> breadth_first_search(TrilateralMesh* m, int point_index, std::vector<int> is_visited)
+std::vector<unsigned int> breadth_first_search(TrilateralMesh* m, int point_index, std::vector<int> is_visited)
 {
 	std::vector<unsigned int> visited_vertices;
 	//push our point to stack
