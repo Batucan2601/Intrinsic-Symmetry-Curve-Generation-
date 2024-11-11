@@ -6,6 +6,8 @@
 #include "../Include/TrilateralMesh.h"
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/MeshFactory.h"
+#include "../Include/NLateralDescriptor.h"
+#include "../Include/SkeletonTypes.h"
 
 std::vector<float> generate_bounding_box(std::string file_name);
 std::map<std::string, glm::vec3 > generate_skeleton_keypoints(std::string file_name);
@@ -13,55 +15,7 @@ void match_skeleton_keypoints( MeshFactory& meshFactory, TrilateralMesh* m, std:
 void match_skeleton_lines(MeshFactory& meshFactory, TrilateralMesh* m, std::vector<float>& skeleton_bounding_box, std::vector<float> skeleton_lines);
 std::vector<float> generate_skeleton_lines(std::string file_name);
 
-//for cohen or 
-enum POINT_LABEL{ 
-	UNDEFINED = 0,
-	SOMA = 1,
-	FORK = 2, 
-	END =6,
-};
-typedef struct
-{
-	int parent;
-	POINT_LABEL label;
-	glm::vec3 point;
-	Color color;
-}SkeletonFormat;
-typedef struct
-{
-	unsigned int index;
-}SkeletonEndPoint;
-typedef struct
-{
-	std::vector<SkeletonFormat> skeletonFormat;
-	std::vector<SkeletonEndPoint> endPoints;
-	std::vector<std::vector<unsigned int>> adjacencies;
-	glm::vec3 skeleton_mid_point;
-	int mid_point_index; // index of skeleton point's who is closest to the mid point
-}Skeleton;
-typedef struct
-{
-	std::vector<int> vertex_list; 
-	unsigned int start_index;
-	unsigned int end_index;
-}BackBone;
-typedef struct
-{
-	float distance_to_backbone;
-	unsigned int point_in_backbone;
-}NodeAffinityParams;
 
-struct SkeletonTreeNode
-{
-	int skeleton_index;
-	int depth;
-	SkeletonTreeNode* parent;
-	std::vector<SkeletonTreeNode*> child;
-};
-typedef struct
-{
-	SkeletonTreeNode* head; // mid point
-}SkeletonTree;
 //buffer
 void skeleton_generate_buffer( MeshFactory& mesh_fac);
 void skeleton_buffer(const MeshFactory& mesh_fac);
@@ -102,3 +56,6 @@ void skeleton_generate_backbone_with_dvorak_pairs(TrilateralMesh* m, Skeleton& s
 void skeleton_generate_backbone_with_dominant_sym(MeshFactory& meshFactory , int selected_mesh , Skeleton& skeleton);
 
 std::vector<float> skeleton_distance_to_midpoint(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int> indices );
+
+void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skeleton, BackBone& best_backbone,
+	std::vector<unsigned int>& best_right_points, std::vector<unsigned int>& best_left_points, const std::vector<NLateralDescriptor>& descriptors);

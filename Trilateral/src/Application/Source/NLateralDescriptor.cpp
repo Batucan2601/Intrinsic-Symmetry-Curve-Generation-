@@ -1055,3 +1055,149 @@ std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLa
 	// if every index has same length they are colinear
 	return vertices_inside_n_lateral;
 }
+
+void NLateralDescriptor_write(std::string filename, std::vector<NLateralDescriptor>& desc)
+{
+	std::ofstream file;                // Create an ofstream object for file output
+	// Open the file in write mode
+	file.open(filename);
+	// Check if the file was opened successfully
+	if (!file) {
+		std::cerr << "Error opening file: " << filename << std::endl;
+		return;
+	}
+	
+	// Write some data to the file
+	//desc format 1 - 
+	for (size_t i = 0; i < desc.size(); i++)
+	{
+		file << " NEW DESC ";
+
+		file << " N == " << desc[0].N << std::endl;
+
+		file << " indices ";
+		for (size_t j = 0; j < desc[i].indices.size(); j++)
+		{
+			file << desc[i].indices[j] << " ";
+		}
+		std::cout << std::endl;
+		file << " vertices inside ";
+		for (size_t j = 0; j < desc[i].vertices_inside.size(); j++)
+		{
+			file << desc[i].vertices_inside[j] << " ";
+		}
+		file << std::endl;
+		file << " path size " << desc[i].paths.size();
+		for (size_t j = 0; j < desc[i].paths.size(); j++)
+		{
+			for (size_t k = 0; k < desc[i].paths[j].size(); k++)
+			{
+				file << " path i size " << j << " " << desc[i].paths[j].size();
+				file << k << " " << desc[i].paths[j][k].size();
+
+				for (size_t t = 0; t < desc[i].paths[j][k].size(); t++)
+				{
+					file << desc[i].paths[j][k][t] << " ";
+				}
+				file << std::endl;
+			}
+		}
+		file << std::endl;
+	}
+	
+	// Close the file
+	file.close();
+
+}
+
+void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescriptor>& desc)
+{
+	std::ifstream file(filename);                // Create an ofstream object for file output
+
+	// Check if the file was opened successfully
+	if (!file) {
+		std::cerr << "Error opening file: " << filename << std::endl;
+		return;
+	}
+
+	// Write some data to the file
+	//desc format 1 - 
+	int negative_start_index = -1;
+	bool is_new_desc = false;
+	std::string line;
+	NLateralDescriptor new_desc;
+	while (std::getline(file, line))
+	{
+		if (line.find(" NEW DESC ") != std::string::npos)
+		{
+			is_new_desc = true;
+		}
+		if (line.find(" N == ") != std::string::npos)
+		{
+			line = line.substr(5);
+			std::stringstream ss(line);
+			std::vector<int> nums;
+			int num;
+			while (ss >> num)
+			{
+				nums.push_back(num);
+			}
+			new_desc.N = nums[0];
+		}
+		if (line.find("indices") != std::string::npos)
+		{
+			line = line.substr(7);
+			std::stringstream ss(line);
+			std::vector<unsigned int> nums;
+			int num;
+			while (ss >> num)
+			{
+				nums.push_back(num);
+			}
+			new_desc.indices = nums;
+		}
+		if (line.find("vertices inside") != std::string::npos)
+		{
+			line = line.substr(16);
+			std::stringstream ss(line);
+			std::vector<unsigned int> visited;
+			unsigned int num;
+			while (ss >> num)
+			{
+				visited.push_back(num);
+			}
+			new_desc.vertices_inside = visited;
+		}
+		if (line.find("path size") != std::string::npos)
+		{
+			line = line.substr(9);
+			std::stringstream ss(line);
+			std::vector<int> vectors;
+			int num;
+			while (ss >> num)
+			{
+				vectors.push_back(num);
+			}
+			new_desc.paths = std::vector<std::vector<std::vector<int>>>(vectors[0]);
+		}
+		if (line.find("path i size") != std::string::npos )
+		{
+			line = line.substr(11);
+			std::stringstream ss(line);
+			std::vector<int> vectors;
+			int num;
+			while (ss >> num)
+			{
+				vectors.push_back(num);
+			}
+			new_desc.paths[vectors[0]] = std::vector<std::vector<int>>(vectors[1]);
+			for (size_t i = 2; i < vectors.size(); i++)
+			{
+ 			}
+		}
+	}
+	// Close the file
+	file.close();
+
+	return;
+}

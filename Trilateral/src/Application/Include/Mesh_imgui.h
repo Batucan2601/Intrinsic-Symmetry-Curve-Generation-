@@ -549,7 +549,7 @@ void imgui_N_Lateral_Parameters(const int& selected_mesh, MeshFactory& m_factory
         TrilateralMesh* m = &m_factory.mesh_vec[selected_mesh];
 
 
-        start_n_lateral_algorithm(m_factory , selected_mesh, N_LATERAL_PARAMETERS);
+        //start_n_lateral_algorithm(m_factory , selected_mesh, N_LATERAL_PARAMETERS);
         m_factory.remove_all();
         m_factory.add_all();
     }

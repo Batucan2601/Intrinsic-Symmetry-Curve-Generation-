@@ -4955,18 +4955,21 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices,skelTree, N  );
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
+		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
+		std::vector<unsigned int> skel_corresponding_point;
+		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
+		descriptors[i].skel_dist_mid = dist_mid[0];
+		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
+		descriptors[i].skeleton_index = skel_corresponding_point[0];
+	}
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
 		if (get_point_status_from_plane(&plane, &m->vertices[descriptors[i].indices[0]]) > 0)
 		{
-			std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
-			std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-			descriptors[i].skel_dist_mid = dist_mid[0]; 
 			desc_pos.push_back(descriptors[i]);
 		}
 		else
 		{
-			std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
-			std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-			descriptors[i].skel_dist_mid = dist_mid[0];
 			desc_neg.push_back(descriptors[i]);
 		}
 	}

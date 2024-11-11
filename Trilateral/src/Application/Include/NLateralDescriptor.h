@@ -2,9 +2,11 @@
 #include "glm/glm.hpp"
 #include <map>
 #include "TrilateralMesh.h"
-#include "../Include/Skeleton.h"
+#include "../Include/SkeletonTypes.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include "eigen/Eigen/dense"
+#include "eigen/Eigen/sparse"
 struct NLateralDescriptor
 {
 	std::vector<unsigned int> point_indices;
@@ -31,6 +33,7 @@ struct NLateralDescriptor
 	std::vector<unsigned int> vertices_inside;
 	Eigen::VectorXd weight;
 	float skel_dist_mid;
+	unsigned int skeleton_index; 
 };
 
 struct NLateralParameters
@@ -68,8 +71,8 @@ std::vector<NLateralDescriptor> get_N_lateral_descriptor_using_closest_pairs(Tri
 std::vector <std::pair<unsigned int, unsigned int>> point_match_n_lateral_descriptors( TrilateralMesh* m ,const std::vector<NLateralDescriptor>& nlateral_vec_left, const std::vector<NLateralDescriptor>& n_lateral_vec_right
 , NLateralParameters N_LATERAL_PARAMETERS);
 
-void start_n_lateral_algorithm(MeshFactory& mesh_fac, int selected_mesh, NLateralParameters N_LATERAL_PARAMETERS);
-void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& mesh, NLateralParameters N_LATERAL_PARAMETERS);
+//void start_n_lateral_algorithm(MeshFactory& mesh_fac, int selected_mesh, NLateralParameters N_LATERAL_PARAMETERS);
+//void start_n_lateral_algorithm_for_mesh(std::vector<SkeletonFormat>& mesh, NLateralParameters N_LATERAL_PARAMETERS);
 
 void NLateral_parameters_calculate_maximums(TrilateralMesh* m, NLateralParameters& N_LATERAL_PARAMETERS , std::vector<unsigned int>&left , std::vector<unsigned int>&  right);
 

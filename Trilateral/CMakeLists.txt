@@ -40,6 +40,7 @@ set(Header_Files
     "src/Application/Include/TrilateralDescriptor.h"
     "src/Application/Include/VarianceMinimizingTransportPlan.h"
     "src/Application/Include/KIDS.h"
+    "src/Application/Include/SkeletonTypes.h"
 
 
     

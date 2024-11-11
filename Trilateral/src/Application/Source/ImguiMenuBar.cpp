@@ -41,6 +41,8 @@ static bool is_writing_dsc = false;
 static bool is_reading_dsc = false; 
 static bool is_writing_pln = false;
 static bool is_reading_pln = false;
+static bool is_writing_ndsc = false;
+static bool is_reading_ndsc = false;
 static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
@@ -48,6 +50,7 @@ static bool is_draw_mesh = true;
 static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
+static BackBone backbone;
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
@@ -279,6 +282,34 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         nlateral_descriptors =  NlateralMap_point_matching_with_skeleton_endpoints_and_OT(m, skeleton, plane, dvorak_no_of_significant_points, dvorak_geodesic_dist_param,N);
     }
+    if (ImGui::BeginMenu("NLateral Descriptor"))
+    {
+        if (ImGui::MenuItem("Save nlateral descriptors"))
+        {
+            is_writing_ndsc = true;
+        }
+        if (ImGui::MenuItem("Load nlateral descriptors"))
+        {
+            is_reading_ndsc = true;
+        }
+        if (ImGui::InputInt("descriptor no ", &descriptor_no));
+        if (ImGui::MenuItem("Display descriptor"))
+        {
+            display_descriptor(m);
+        }
+        if (ImGui::MenuItem("Display descriptor all"))
+        {
+            display_descriptor_all(m);
+        }
+        ImGui::EndMenu();
+
+    }
+    if (ImGui::MenuItem("Backbone generation with Nlaterla descriptors"))
+    {
+        std::vector<unsigned int > best_left;
+        std::vector<unsigned int > best_right;
+        skeleton_generate_backbone_w_NLateral(m, skeleton,backbone,best_left,best_right, nlateral_descriptors);
+    }
 }
 static void KIDS_dataset(TrilateralMesh* m)
 {
@@ -459,6 +490,12 @@ static void display_file_dialogs(TrilateralMesh* m )
     {
         dom_sym_read_plane(m, plane, file_path_name);
         is_draw_plane = true;
+        file_path_name = "";
+    }
+    drawFileDialog(file_path, file_path_name, ".dsc", is_writing_ndsc);
+    if (file_path_name != "")
+    {
+        TrilateralDescriptor_write(file_path_name, positive_desc, negative_desc);
         file_path_name = "";
     }
 }
