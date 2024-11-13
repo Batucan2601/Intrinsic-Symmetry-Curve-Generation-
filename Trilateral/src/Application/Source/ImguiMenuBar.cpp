@@ -14,7 +14,6 @@
 #include "../Include/SpinImage.h"
 #include "../Include/KIDS.h"
 #include "../Include/Laplace-Beltrami.h"
-#include "../Include/NLateralDescriptor.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
@@ -61,7 +60,7 @@ std::vector<unsigned int> distributed_indices;
 static Eigen::SparseMatrix<double> L; //laplacian 
 static int N = 0;
 std::vector<NLateralDescriptor> nlateral_descriptors;
-
+std::vector<NodeAffinityParams> skeleton_params;
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -295,11 +294,15 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::InputInt("descriptor no ", &descriptor_no));
         if (ImGui::MenuItem("Display descriptor"))
         {
-            display_descriptor(m);
+            Nlateral_display_desc(m, nlateral_descriptors,skeleton, skeleton_params,descriptor_no);
         }
         if (ImGui::MenuItem("Display descriptor all"))
         {
             display_descriptor_all(m);
+        }
+        if (ImGui::MenuItem("Descriptor to backbone generation"))
+        {
+          skeleton_color_path_to_backbone(m, skeleton, backbone, nlateral_descriptors[descriptor_no].skeleton_index);
         }
         ImGui::EndMenu();
 
@@ -308,8 +311,9 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         std::vector<unsigned int > best_left;
         std::vector<unsigned int > best_right;
-        skeleton_generate_backbone_w_NLateral(m, skeleton,backbone,best_left,best_right, nlateral_descriptors);
+        skeleton_params = skeleton_generate_backbone_w_NLateral(m, skeleton,backbone,best_left,best_right, nlateral_descriptors);
     }
+  
 }
 static void KIDS_dataset(TrilateralMesh* m)
 {

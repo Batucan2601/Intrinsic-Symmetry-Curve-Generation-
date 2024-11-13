@@ -897,7 +897,7 @@ void skeleton_calculate_dijkstra(Skeleton skeleton, int index1,
 		//change the weights
 		for (size_t i = 0; i < skeleton.adjacencies[minimum_distance_index].size(); i++)
 		{
-			//if (is_vertex_discovered[skeleton.adjacencies[minimum_distance_index][i]])
+			if (is_vertex_discovered[skeleton.adjacencies[minimum_distance_index][i]])
 			{
 				glm::vec3 p_index1 = skeleton.skeletonFormat[minimum_distance_index].point;
 				glm::vec3 p = skeleton.skeletonFormat[skeleton.adjacencies[minimum_distance_index][i]].point;
@@ -2043,8 +2043,11 @@ std::vector<float> skeleton_distance_to_midpoint(TrilateralMesh* m, Skeleton& sk
 }
 
 
-
-void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skeleton, BackBone& best_backbone,
+static float g(float r, float h)
+{
+	return std::exp((-2 * r * r) / (h * h));
+}
+std::vector<NodeAffinityParams> skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skeleton, BackBone& best_backbone,
 	std::vector<unsigned int>& best_right_points, std::vector<unsigned int>& best_left_points ,const std::vector<NLateralDescriptor>& descriptors)
 {
 	int N = skeleton.skeletonFormat.size();
@@ -2060,12 +2063,15 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 	std::vector<std::vector<int>> predecessor_list_for_end_points(N_end_points);
 	std::vector<std::vector<float>> distance_matrix(N_end_points);
 
+	std::vector<unsigned int> descriptor_points;
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		descriptor_points.push_back(descriptors[i].indices[0]);
+	}
 
-	//before generating please calculate  the sdf
-	std::vector<unsigned int>mesh_index_vertices;
+	//before generating please calculate  the sdf for, descriptors 
 	std::vector<float> shape_diameter_values;
-	skeleton_calculate_closest_mesh_points(skeleton, mesh, mesh_index_vertices);
-	ShapeDiameter_calculate(mesh, mesh_index_vertices, shape_diameter_values);
+	ShapeDiameter_calculate(mesh, descriptor_points, shape_diameter_values);
 	// brute force generating backbone
 	std::vector<BackBone> candidate_backbones;
 	for (size_t i = 0; i < N_end_points; i++)
@@ -2094,7 +2100,12 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 				backbone.start_index = index1;
 				backbone.end_index = index2;
 				backbone.vertex_list = vertex_list_index1_index2;
-
+				backbone.length = 0;
+				//backbone length
+				for (size_t i = 0; i < backbone.vertex_list.size()-1; i++)
+				{
+					backbone.length += glm::distance(skeleton.skeletonFormat[backbone.vertex_list[i]].point , skeleton.skeletonFormat[backbone.vertex_list[i+1]].point);
+				}
 				//check if midpoint present
 				for (size_t k = 0; k < backbone.vertex_list.size(); k++)
 				{
@@ -2112,10 +2123,25 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 
 		}
 	}
+
+	std::vector<std::vector<int>> skel_vertex_list;
+	std::vector<std::vector<float>> skel_distances_list;
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		std::vector<int> skel_ver_list_i;
+		std::vector<float> skel_distances_list_i;
+		skeleton_calculate_dijkstra(skeleton, descriptors[i].skeleton_index, skel_ver_list_i, skel_distances_list_i);
+
+		skel_vertex_list.push_back(skel_ver_list_i);
+		skel_distances_list.push_back(skel_distances_list_i);
+	}
+
 	std::vector<float> backbone_affinity_diffs;
 	std::vector<std::vector<std::pair<unsigned int, unsigned int>>> backbone_pairs_vec;
 	std::vector<std::vector<unsigned int>> backbone_right_points;
 	std::vector<std::vector<unsigned int>> backbone_left_points;
+	std::vector<std::vector<NodeAffinityParams>> backbone_right_params;
+	std::vector<std::vector<NodeAffinityParams>> backbone_left_params;
 	//with each different backbone separate the endpoints into two
 	for (size_t i = 0; i < candidate_backbones.size(); i++)
 	{
@@ -2124,48 +2150,75 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 		std::vector<NodeAffinityParams> right_points_node_params;
 		std::vector<NodeAffinityParams> left_points_node_params;
 
-
 		//get the middle point of backbone
 		for (size_t j = 0; j < descriptors.size(); j++)
 		{
-			//if not consisting in backbone 
-			if (descriptors[j].skeleton_index != candidate_backbones[i].start_index && descriptors[j].skeleton_index != candidate_backbones[i].end_index)
+			//if not in backbone
+			bool is_descriptor_in_backbone = false;
+			for (size_t k = 0; k < candidate_backbones[i].vertex_list.size(); k++)
 			{
-				int hitIndex = -1;
-				float dist = -1.0f;
-				std::vector<int> indices;
-				skeleton_point_to_backbone(skeleton, candidate_backbones[i], descriptors[j].skeleton_index, hitIndex, dist, indices, distance_matrix[j],
-					predecessor_list_for_end_points[j]);
-
-				//lets cross these vectors 
-				// vector1 -> vector of hitIndex and it's parent on backbone chain
-				// vector2 -> the n-2'th index on indices vectpr subtracted by n-1'th
-
-				glm::vec3 hitIndexPoint(skeleton.skeletonFormat[hitIndex].point);
-				glm::vec3 hitIndexBackBonePredecessor;
-
-				// get the predecessor
-
-				NodeAffinityParams param;
-				param.distance_to_backbone = dist;
-				param.point_in_backbone = hitIndex;
-#pragma region WRONG
-				//https://math.stackexchange.com/questions/214187/point-on-the-left-or-right-side-of-a-plane-in-3d-space#:~:text=How%20do%20you%20define%20right%2Fleft%3F&text=To%20distinguish%20the%20two%20sides,%E2%80%93%20J.%20J.
-
-
-				if (candidate_backbones.size() <= 2)
+				if (descriptors[j].skeleton_index == candidate_backbones[i].vertex_list[k])
 				{
-					continue;
+					is_descriptor_in_backbone = true; 
+					break;
 				}
+			}
+			if (descriptors[j].skeleton_index == candidate_backbones[i].start_index || descriptors[j].skeleton_index == candidate_backbones[i].end_index)
+			{
+				is_descriptor_in_backbone = true;
+			}
+			if (is_descriptor_in_backbone)
+			{
+				continue;
+			}
+			int hitIndex = -1;
+			float dist = -1.0f;
+			std::vector<int> indices;
+			skeleton_point_to_backbone(skeleton, candidate_backbones[i], descriptors[j].skeleton_index, hitIndex, dist, indices, skel_distances_list[j],
+				skel_vertex_list[j]);
 
-				int right_count = 0;
-				int left_count = 0;
-				for (size_t k = 1; k < candidate_backbones[i].vertex_list.size() - 1; k++)
+
+			//lets cross these vectors 
+			// vector1 -> vector of hitIndex and it's parent on backbone chain
+			// vector2 -> the n-2'th index on indices vectpr subtracted by n-1'th
+
+			glm::vec3 hitIndexPoint(skeleton.skeletonFormat[hitIndex].point);
+			glm::vec3 hitIndexBackBonePredecessor;
+			if (indices.size() > 1)
+			{
+				hitIndexBackBonePredecessor = skeleton.skeletonFormat[indices[1]].point;
+			}
+			else
+			{
+				hitIndexBackBonePredecessor = skeleton.skeletonFormat[indices[0]].point;
+			}
+
+			// get the predecessor
+
+			NodeAffinityParams param;
+			param.distance_to_backbone = dist;
+			param.point_in_backbone = hitIndex;
+			param.sdf = shape_diameter_values[j];
+			param.index = j;
+#pragma region WRONG
+			//https://math.stackexchange.com/questions/214187/point-on-the-left-or-right-side-of-a-plane-in-3d-space#:~:text=How%20do%20you%20define%20right%2Fleft%3F&text=To%20distinguish%20the%20two%20sides,%E2%80%93%20J.%20J.
+
+
+			if (candidate_backbones.size() <= 2)
+			{
+				continue;
+			}
+
+			int right_count = 0;
+			int left_count = 0;
+			for (size_t k = 1; k < candidate_backbones[i].vertex_list.size() - 1; k++)
+			{
+				if (candidate_backbones[i].vertex_list[k] == param.point_in_backbone)
 				{
 					glm::vec3 A = skeleton.skeletonFormat[candidate_backbones[i].vertex_list[k - 1]].point;
 					glm::vec3 B = skeleton.skeletonFormat[candidate_backbones[i].vertex_list[k]].point;
 					glm::vec3 C = skeleton.skeletonFormat[candidate_backbones[i].vertex_list[k + 1]].point;
-					glm::vec3 X = mesh->vertices[end_point_indices[j]];
+					glm::vec3 X = hitIndexBackBonePredecessor;// mesh->vertices[end_point_indices[j]];
 
 					glm::vec3 A_ = A - B;
 					glm::vec3 C_ = C - B;
@@ -2179,42 +2232,22 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 
 					if (det >= 0)
 					{
-						right_count++;
+						right_points.push_back(descriptors[j].indices[0]);
+						right_points_node_params.push_back(param);
 					}
 					else
 					{
-						left_count++;
+						left_points.push_back(descriptors[j].indices[0]);
+						left_points_node_params.push_back(param);
 					}
+					break; 
 				}
-
-
-
-				if (right_count >= left_count)
-				{
-					right_points.push_back(mesh_index_vertices[j]);
-					right_points_node_params.push_back(param);
-				}
-				else
-				{
-					left_points.push_back(mesh_index_vertices[j]);
-					left_points_node_params.push_back(param);
-				}
-				//if (glm::dot(vec1, glm::normalize(skeleton.skeletonFormat[0].point - skeleton.skeletonFormat[1].point)) > 0)
-				//{
-				//	right_points.push_back(mesh_index_vertices[j]);
-				//	right_points_node_params.push_back(param);
-				//}
-				//else
-				//{
-				//	left_points.push_back(mesh_index_vertices[j]);
-				//	left_points_node_params.push_back(param);
-				//}
+					
+			}
 #pragma endregion WRONG 
 
 
-			}
 		}
-
 		if (right_points.size() == 0 || left_points.size() == 0)
 		{
 			continue;
@@ -2251,74 +2284,105 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 				distance_matrix_end_index = t;
 			}
 		}
+
+		//check the points on each side
+
+		float S = 2;
+		if (S < (float)right_points_node_params.size() / (float)left_points_node_params.size() 
+		|| (1.0 / S) >((float)right_points_node_params.size() / (float)left_points_node_params.size()
+		))
+		{
+			continue;
+		}
+
 		float total_dif_on_backbone = 0;
+		std::vector<std::pair<float, std::pair<int, int>>> comparisons;
+		//node affinity
 		for (size_t j = 0; j < right_points_node_params.size(); j++)
 		{
-			float dl_j = right_points_node_params[j].distance_to_backbone;
-			glm::vec3 backbone_point_j(skeleton.skeletonFormat[right_points_node_params[j].point_in_backbone].point);
+			float db_j = right_points_node_params[j].distance_to_backbone;
 
-			int mimimum_index = -1;
-			float minimum_node_affinity_diff = INFINITY;
+			int maximum_index = -1;
+			float maximum_node_affinity_diff = -INFINITY;
 
 			for (size_t k = 0; k < left_points_node_params.size(); k++)
 			{
-				float dl_k = left_points_node_params[k].distance_to_backbone;
-				glm::vec3 backbone_point_k(skeleton.skeletonFormat[left_points_node_params[k].point_in_backbone].point);
+				float db_k = left_points_node_params[k].distance_to_backbone;
 
-				float db = glm::distance(backbone_point_j, backbone_point_k) /
-					distance_matrix[distance_matrix_start_index][left_points_node_params[k].point_in_backbone]; //difference between length in backbone hitpoints
-				float dl = std::fabs(dl_j - dl_k) / (dl_j + dl_k); //difference between branch lengths
-
-				int right_index = -1;
-				int left_index = -1;
-				//inefficient
-				for (size_t t = 0; t < mesh_index_vertices.size(); t++)
+				float dl = skel_distances_list[right_points_node_params[j].index][left_points_node_params[k].index] / candidate_backbones[i].length; //normalized
+				float db = std::fabs(db_j - db_k)  / (db_j + db_k); 
+				
+				
+				float dsdf = std::fabs(right_points_node_params[j].sdf - left_points_node_params[k].sdf);
+				float diff = 0;;
+				float cb = g(db, 0.04);
+				float cl = g(dl, 0.3);
+				float csdf = dsdf;
+				if (db < 0.04 *2 && dl < 2 *0.3)
 				{
-					if (mesh_index_vertices[t] == right_points[j])
-					{
-						right_index = t;
-						break;
-					}
-				}//inefficient
-				for (size_t t = 0; t < mesh_index_vertices.size(); t++)
-				{
-					if (mesh_index_vertices[t] == left_points[k])
-					{
-						left_index = t;
-						break;
-					}
+					diff = cb + cl + csdf;
 				}
-				float d_sdf = std::fabs(shape_diameter_values[right_index] - shape_diameter_values[left_index]);
-
-
-				//lets try vectors instead
-				glm::vec3 minimum_node_affinity_right(dl_j / (dl_j + dl_k), shape_diameter_values[right_index], db);
-				glm::vec3 minimum_node_affinity_left(dl_k / (dl_j + dl_k), shape_diameter_values[left_index], db);
-
-				float diff = glm::distance(minimum_node_affinity_right, minimum_node_affinity_left);
-				if (diff < minimum_node_affinity_diff)
+				if (diff > maximum_node_affinity_diff)
 				{
-					minimum_node_affinity_diff = diff;
-					mimimum_index = k;
+					maximum_node_affinity_diff = diff;
+					maximum_index = k;
 				}
-				/*float diff = dl + db + d_sdf;
-				if (diff < minimum_node_affinity_diff)
-				{
-					minimum_node_affinity_diff = diff;
-					mimimum_index = k;
-				}*/
+				std::pair<float, std::pair<int, int>> pair;
+				pair.first = diff;
+				pair.second.first = j;
+				pair.second.second = k;
+				comparisons.push_back(pair);
 			}
-			std::pair<unsigned int, unsigned int> point_index_pair;
-			point_index_pair.first = right_points[j];
-			point_index_pair.second = left_points[mimimum_index];
-			backbone_pairs.push_back(point_index_pair);
-			total_dif_on_backbone += minimum_node_affinity_diff;
+			
 		}
-		total_dif_on_backbone /= right_points_node_params.size();
+		//edge affinity
+		/*for (size_t j = 0; j < right_points_node_params.size(); j++)
+		{
+			int desc_index_i = right_points_node_params[j].index;
+			const NLateralDescriptor* desc_i = &descriptors[desc_index_i];
+			int index_i = desc_i->indices[0];
+			for (size_t k = 0; k < left_points_node_params.size(); k++)
+			{
+				int desc_index_j = left_points_node_params[k].index;
+				const NLateralDescriptor* desc_j = &descriptors[desc_index_j];
+				int index_j = desc_j->indices[0];
+				float dist_i_j = skel_distances_list[index_i][index_j];
+				for (size_t t = 1; t < desc_i->indices.size(); t++)
+				{
+					int index_i_ = desc_i->indices[t];
+					float dist_i_i_ = desc_i->distances[t];
+					for (size_t l = 1; l < desc_j->indices.size(); l++)
+					{
+						int index_j_ = desc_j->indices[l];
+					}
+				}
+			}
+		}*/
+		std::vector<bool> used(right_points_node_params.size() + left_points_node_params.size(), false);
+		std::sort(comparisons.begin(), comparisons.end());
+		// Greedily select pairs with smallest compare() result
+		for (const auto& entry : comparisons) {
+			int i = entry.second.first;
+			int j = entry.second.second;
+			if (!used[i] && !used[j]) {
+
+				std::pair<unsigned int, unsigned int> point_index_pair;
+				point_index_pair.first = right_points[i];
+				point_index_pair.second = left_points[j];
+				backbone_pairs.push_back(point_index_pair);
+				total_dif_on_backbone += entry.first;
+
+				used[i] = true;  // Mark these objects as used
+				used[j] = true;  // Mark these objects as used
+			}
+		}
+		total_dif_on_backbone /= left_points_node_params.size();
 		backbone_affinity_diffs.push_back(total_dif_on_backbone);
 		backbone_pairs_vec.push_back(backbone_pairs);
 		backbone_right_points.push_back(right_points);
 		backbone_left_points.push_back(left_points);
+		backbone_right_params.push_back(right_points_node_params);
+		backbone_left_params.push_back(left_points_node_params);
 
 	}
 
@@ -2336,11 +2400,39 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 
 	// now we decided that the best backbone is minimum_affinity_diff_index
 	best_backbone = candidate_backbones[minimum_affinity_diff_index];
+
+
 	best_right_points = backbone_right_points[minimum_affinity_diff_index];
 	best_left_points = backbone_left_points[minimum_affinity_diff_index];
-	//best_backbone_pairs = backbone_pairs_vec[minimum_affinity_diff_index];
-	//paint the backbone to blue
-	//meshFac.mesh_skeleton_vec.skeleton_points.clear();
+	
+	std::vector<NodeAffinityParams> best_right_params = backbone_right_params[minimum_affinity_diff_index];
+	std::vector<NodeAffinityParams> best_left_params = backbone_left_params[minimum_affinity_diff_index];
+	
+
+	for (size_t i = 0; i < best_backbone.vertex_list.size(); i++)
+	{
+		skeleton.skeletonFormat[best_backbone.vertex_list[i]].color.r = 0;
+		skeleton.skeletonFormat[best_backbone.vertex_list[i]].color.g = 255;
+		skeleton.skeletonFormat[best_backbone.vertex_list[i]].color.b = 255;
+		skeleton.skeletonFormat[best_backbone.vertex_list[i]].color.a = 255;
+	}
+
+	for (size_t i = 0; i < best_right_points.size(); i++)
+	{
+		mesh->raylib_mesh.colors[best_right_points[i] * 4] = 255;
+		mesh->raylib_mesh.colors[best_right_points[i] * 4 + 1] = 255;
+		mesh->raylib_mesh.colors[best_right_points[i] * 4 + 2] = 0;
+		mesh->raylib_mesh.colors[best_right_points[i] * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < best_left_points.size(); i++)
+	{
+		mesh->raylib_mesh.colors[best_left_points[i] * 4] = 255;
+		mesh->raylib_mesh.colors[best_left_points[i] * 4 + 1] = 255;
+		mesh->raylib_mesh.colors[best_left_points[i] * 4 + 2] = 255;
+		mesh->raylib_mesh.colors[best_left_points[i] * 4 + 3] = 255;
+	}
+
 	for (size_t i = 0; i < best_backbone.vertex_list.size(); i++)
 	{
 		skeleton.skeletonFormat[best_backbone.vertex_list[i]].color.r = 0;
@@ -2357,5 +2449,47 @@ void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skele
 	skeleton.skeletonFormat[best_backbone.end_index].color.g = 255;
 	skeleton.skeletonFormat[best_backbone.end_index].color.b = 255;
 	skeleton.skeletonFormat[best_backbone.end_index].color.a = 255;
+
+
+	for (size_t i = 0; i < best_right_params.size(); i++)
+	{
+		glm::vec3 p = skeleton.skeletonFormat[best_right_params[i].point_in_backbone].point;
+		std::cout << " j == " << best_right_params[i].index << " hit index " << p.x << " " << p.y << " " << p.z;
+		skeleton.skeletonFormat[best_right_params[i].point_in_backbone].color.r = 255;
+		skeleton.skeletonFormat[best_right_params[i].point_in_backbone].color.g = 255;
+		skeleton.skeletonFormat[best_right_params[i].point_in_backbone].color.b = 0;
+		skeleton.skeletonFormat[best_right_params[i].point_in_backbone].color.a = 255;
+	}
+	for (size_t i = 0; i < best_left_params.size(); i++)
+	{
+		glm::vec3 p = skeleton.skeletonFormat[best_left_params[i].point_in_backbone].point;
+		std::cout << " j == " << best_left_params[i].index << " hit index " << p.x << " " << p.y << " " << p.z;
+		skeleton.skeletonFormat[best_left_params[i].point_in_backbone].color.r = 255;
+		skeleton.skeletonFormat[best_left_params[i].point_in_backbone].color.g = 255;
+		skeleton.skeletonFormat[best_left_params[i].point_in_backbone].color.b = 0;
+		skeleton.skeletonFormat[best_left_params[i].point_in_backbone].color.a = 255;
+	}
 	mesh->update_raylib_mesh();
+	std::vector<NodeAffinityParams> param;
+	param.insert(param.begin(), best_right_params.begin(), best_right_params.end());
+	param.insert(param.end(), best_left_params.begin(), best_left_params.end());
+	return param;
+}
+
+void skeleton_color_path_to_backbone(TrilateralMesh* m, Skeleton& skeleton, BackBone& back_bone, int skel_index)
+{
+	int hit_index;
+	float dist; 
+	std::vector<int> indices;
+	std::vector<float> dijkstra;
+	std::vector<int> predecessor_list;
+	skeleton_calculate_dijkstra(skeleton, skel_index, predecessor_list, dijkstra);
+	skeleton_point_to_backbone( skeleton,back_bone,skel_index,hit_index,dist,indices, dijkstra,predecessor_list);
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		skeleton.skeletonFormat[indices[i]].color.r = 255;
+		skeleton.skeletonFormat[indices[i]].color.g = 255;
+		skeleton.skeletonFormat[indices[i]].color.b = 0;
+		skeleton.skeletonFormat[indices[i]].color.a = 255;
+	}
 }

@@ -8,7 +8,7 @@
 enum POINT_LABEL {
 	UNDEFINED = 0,
 	SOMA = 1,
-	FORK = 2,
+	FORK = 5,
 	END = 6,
 };
 typedef struct
@@ -35,11 +35,15 @@ typedef struct
 	std::vector<int> vertex_list;
 	unsigned int start_index;
 	unsigned int end_index;
+	float length; 
 }BackBone;
 typedef struct
 {
 	float distance_to_backbone;
 	unsigned int point_in_backbone;
+	float sdf;
+	int index;
+	std::vector<float> distances; // to other skeleton points
 }NodeAffinityParams;
 
 struct SkeletonTreeNode

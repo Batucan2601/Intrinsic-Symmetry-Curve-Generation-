@@ -976,6 +976,12 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 			}
 			std::vector<int> path_i_j = Geodesic_between_two_points(*m, mesh_indices[i], mesh_indices[j]);
 			desc.paths[i][j] = path_i_j;
+			float dist = 0; 
+			for (size_t k = 0; k < path_i_j.size()-1; k++)
+			{
+				dist += glm::distance( m->vertices[path_i_j[i]] , m->vertices[path_i_j[i+1]]);
+			}
+			desc.distances.push_back(dist);
 		}
 	}
 
@@ -1200,4 +1206,64 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 	file.close();
 
 	return;
+}
+
+
+void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
+Skeleton& skeleton,std::vector<NodeAffinityParams> node_affinity, int index)
+{
+	NLateralDescriptor* desc = &descs[index];
+
+	//make all black
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = 0;
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < desc->paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc->paths[i][j].size(); k++)
+			{
+				int index = desc->paths[i][j][k];
+				m->raylib_mesh.colors[index * 4] = 255;
+				m->raylib_mesh.colors[index * 4 + 1] = 0;
+				m->raylib_mesh.colors[index * 4 + 2] = 0;
+				m->raylib_mesh.colors[index * 4 + 3]= 255;
+			}
+		}
+	}
+	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
+	{
+		int index = desc->vertices_inside[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 255;
+		m->raylib_mesh.colors[index * 4 + 2] = 0;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	{
+		skeleton.skeletonFormat[i].color.r = 0;
+		skeleton.skeletonFormat[i].color.g = 0;
+		skeleton.skeletonFormat[i].color.b = 0;
+		skeleton.skeletonFormat[i].color.a = 255;
+	}
+
+
+	for (size_t i = 0; i < node_affinity.size(); i++)
+	{
+		if (node_affinity[i].index == index)
+		{
+			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.r= 255;
+			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.g= 0;
+			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.b= 0;
+			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.a= 255;
+		}
+	}
+	m->update_raylib_mesh();
 }

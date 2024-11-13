@@ -30,6 +30,7 @@ struct NLateralDescriptor
 	int N; //this was present
 	std::vector<unsigned int> indices; // fist one is the origin point 
 	std::vector<std::vector<std::vector<int>>> paths;  // from indices[0] to others
+	std::vector<float> distances;  // distances to others
 	std::vector<unsigned int> vertices_inside;
 	Eigen::VectorXd weight;
 	float skel_dist_mid;
@@ -83,3 +84,6 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 
 std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N);
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
+
+void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
+	Skeleton& skeleton, std::vector<NodeAffinityParams> node_affinity, int index);

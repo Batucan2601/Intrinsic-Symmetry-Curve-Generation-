@@ -25,6 +25,8 @@
 #include "Include/Shader.h"
 #include "Include/TrilateralMap.h"
 
+
+static void imgui_display_camera(Camera3D& camera);
 int main(void) 
 {
     InitWindow(1024, 768, " Trialteral");
@@ -64,6 +66,7 @@ int main(void)
         imgui_N_Lateral_Parameters(selected_mesh, mesh_fac);
         imgui_debug_layer(selected_mesh, mesh_fac, cameraPos, cameraFront, cameraUp); */
         imgui_menu_bar(&m1);
+        imgui_display_camera(camera);
         // end ImGui Content
         rlImGuiEnd();
 
@@ -75,4 +78,20 @@ int main(void)
     CloseWindow_();
     return 0;
 }
-
+static Camera3D temp;
+static void imgui_display_camera(Camera3D& camera)
+{
+    ImGui::Begin("Camera");
+    ImGui::Text(" camera position X = %.6f", camera.position.x);
+    ImGui::Text(" camera position Y = %.6f", camera.position.y);
+    ImGui::Text(" camera position Z = %.6f", camera.position.z);
+    ImGui::Text(" Teleport");
+    ImGui::InputFloat("X : %f", &temp.position.x);
+    ImGui::InputFloat("Y : %f", &temp.position.y);
+    ImGui::InputFloat("Z : %f", &temp.position.z);
+    if (ImGui::Button("teleport button"))
+    {
+        camera.position = temp.position;
+    }
+    ImGui::End();
+}

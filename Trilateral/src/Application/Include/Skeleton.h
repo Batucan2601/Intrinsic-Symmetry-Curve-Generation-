@@ -57,5 +57,7 @@ void skeleton_generate_backbone_with_dominant_sym(MeshFactory& meshFactory , int
 
 std::vector<float> skeleton_distance_to_midpoint(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int> indices );
 
-void skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skeleton, BackBone& best_backbone,
+std::vector<NodeAffinityParams> skeleton_generate_backbone_w_NLateral(TrilateralMesh* mesh, Skeleton& skeleton, BackBone& best_backbone,
 	std::vector<unsigned int>& best_right_points, std::vector<unsigned int>& best_left_points, const std::vector<NLateralDescriptor>& descriptors);
+
+void skeleton_color_path_to_backbone(TrilateralMesh* m, Skeleton& skel, BackBone& backBone, int skel_point);
