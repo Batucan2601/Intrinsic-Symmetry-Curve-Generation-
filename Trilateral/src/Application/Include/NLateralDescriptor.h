@@ -87,3 +87,6 @@ std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLa
 
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
 	Skeleton& skeleton, std::vector<NodeAffinityParams> node_affinity, int index);
+
+void NLateralDescriptor_write(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
+void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);

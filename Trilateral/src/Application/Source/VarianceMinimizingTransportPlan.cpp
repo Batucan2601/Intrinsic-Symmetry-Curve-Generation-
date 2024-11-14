@@ -582,7 +582,35 @@ std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::
 
 	return comparisons;
 }
-
+std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::vector<NLateralDescriptor>& descriptors,
+	bool is_normalize, int division_no, int N_ring_no)
+{
+	std::vector<std::vector<float>> comparisons;
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		Eigen::VectorXd desc1_weights = stdVectorToEigenVectorXd(get_n_ring_areas_divided(m, descriptors[i], division_no, N_ring_no));
+		descriptors[i].weight = desc1_weights;
+	}
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		std::vector<float> comparison_i;
+		for (size_t j = 0; j < descriptors.size(); j++)
+		{
+			float res;
+			if (i >= j)
+			{
+				res = INFINITY; 
+			}
+			else
+			{
+				res = VarianceMin_compare(m, descriptors[i], descriptors[j], is_normalize, division_no, N_ring_no);
+			}
+			comparison_i.push_back(res);
+		}
+		comparisons.push_back(comparison_i);
+	}
+	return comparisons;
+}
 
 
 std::vector<std::vector<float>> VarianceMin_compare_all_w_CDF(TrilateralMesh* m, std::vector<TrilateralDescriptor>& desc_pos, std::vector<TrilateralDescriptor>& desc_neg

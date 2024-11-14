@@ -281,6 +281,10 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         nlateral_descriptors =  NlateralMap_point_matching_with_skeleton_endpoints_and_OT(m, skeleton, plane, dvorak_no_of_significant_points, dvorak_geodesic_dist_param,N);
     }
+    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
+    {
+        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points, dvorak_geodesic_dist_param, N);
+    }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
         if (ImGui::MenuItem("Save nlateral descriptors"))
@@ -499,7 +503,13 @@ static void display_file_dialogs(TrilateralMesh* m )
     drawFileDialog(file_path, file_path_name, ".dsc", is_writing_ndsc);
     if (file_path_name != "")
     {
-        TrilateralDescriptor_write(file_path_name, positive_desc, negative_desc);
+        NLateralDescriptor_write(file_path_name, m, nlateral_descriptors);
+        file_path_name = "";
+    }
+    drawFileDialog(file_path, file_path_name, ".dsc", is_reading_ndsc);
+    if (file_path_name != "")
+    {
+        NLateralDescriptor_read(file_path_name, m , nlateral_descriptors);
         file_path_name = "";
     }
 }

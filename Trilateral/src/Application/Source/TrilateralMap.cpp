@@ -5153,3 +5153,186 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 	
 	return descriptors;
 }
+//check if two descriptros include each other in indices, 
+//if so return false 
+static bool is_descriptors_comparable(NLateralDescriptor& desc1 , NLateralDescriptor& desc2)
+{
+	bool is_comparable = true; 
+	for (size_t i = 0; i < desc1.indices.size(); i++)
+	{
+		int index_i = desc1.indices[i];
+		for (size_t j = 0; j < desc2.indices.size(); j++)
+		{
+			int index_j = desc2.indices[j];
+			if (index_i == index_j)
+			{
+				is_comparable = false;
+				break;
+			}
+		}
+	}
+	return is_comparable;
+}
+std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(TrilateralMesh* m, Skeleton& skeleton,
+int dvorak_enpoint_no, float convergence_ratio, int N)
+{
+	int size = m->vertices.size();
+	int mesh_mid_point_index = -1;
+	std::vector<NLateralDescriptor> desc_neg;
+	std::vector<NLateralDescriptor> desc_pos;
+	glm::vec3 mesh_mid_point;
+	// 1 - get dvork significant points
+	std::vector<DvorakPairs> dvorak_pairs = dvorak_extraction_of_significant_points(m, dvorak_enpoint_no);
+	//sweep 
+	dvorak_pairs = dvorak_distance_sweep(m, dvorak_pairs, 3.0f);
+	Metric_set_gaussian(m, dvorak_enpoint_no, 3.0f);
+	Metric_set_N(N);
+
+	std::vector<unsigned int > skel_mid_point_indices;
+	for (size_t i = 0; i < dvorak_pairs.size(); i++)
+	{
+		skel_mid_point_indices.push_back(dvorak_pairs[i].p_index);
+	}
+	skeleton_distance_to_midpoint(m, skeleton, skel_mid_point_indices);
+
+	std::vector<unsigned int > mesh_vertices;
+	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
+	for (size_t i = 0; i < dvorak_pairs.size(); i++)
+	{
+		mesh_vertices.push_back(dvorak_pairs[i].p_index);
+	}
+	std::vector<NLateralDescriptor> descriptors;
+	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices, skelTree, N);
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
+		std::vector<unsigned int> skel_corresponding_point;
+		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
+		descriptors[i].skel_dist_mid = dist_mid[0];
+		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
+		descriptors[i].skeleton_index = skel_corresponding_point[0];
+	}
+
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, descriptors, true, 20, 2);
+	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		float smallest = INFINITY;
+		int index = -1;
+		for (size_t j = 0; j < descriptors.size(); j++)
+		{
+			if (i >= j)
+			{
+				continue; 
+			}
+			int dvoak_index_i;
+			int dvoak_index_j;
+			for (size_t k = 0; k < dvorak_pairs.size(); k++)
+			{
+				if (dvorak_pairs[k].p_index == descriptors[i].indices[0])
+				{
+					dvoak_index_i = k;
+				}
+				if (dvorak_pairs[k].p_index == descriptors[j].indices[0])
+				{
+					dvoak_index_j = k;
+				}
+			}
+			//float hks_dif = std::abs(m->normalized_heat_kernel_signature[descriptors[i].indices[0]] - m->normalized_heat_kernel_signature[descriptors[j].indices[0]]);
+			//bool is_hks = hks_dif < 0.3;
+			bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, 0.5, dvoak_index_i, dvoak_index_j);
+			std::cout << " curv " << is_curv << std::endl;
+			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, dvoak_index_i, dvoak_index_j, 0.985);
+			std::cout << " normal " << is_norm << std::endl;
+			bool is_skel_dist_far = std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid) < 10;
+			bool is_descs_comp = is_descriptors_comparable( descriptors[i] , descriptors[j]);
+			if (is_curv && is_norm && is_skel_dist_far && is_descs_comp)
+			{
+				std::pair<float, std::pair<unsigned int, unsigned int>> res;
+				res.first = optimal_transforms_pos_neg[i][j];
+				res.second = std::make_pair(i, j);
+				compare_results.push_back(res);
+			}
+		}
+	}
+
+	std::vector<bool> used(descriptors.size(), false);
+	std::sort(compare_results.begin(), compare_results.end());
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compare_results) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			resemblance_pairs.push_back({ descriptors[i].indices[0], descriptors[j].indices[0] });
+			used[i] = true;  // Mark these objects as used
+			used[j] = true;  // Mark these objects as used
+		}
+	}
+
+
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+
+	// color left red
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 255;
+		m->colors[resemblance_pairs[i].second].b = 0;
+	}
+
+
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		for (size_t j = 0; j < descriptors[i].vertices_inside.size(); j++)
+		{
+			int index = descriptors[i].vertices_inside[j];
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+	}
+
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		for (size_t j = 0; j < descriptors[i].paths.size(); j++)
+		{
+			for (size_t k = 0; k < descriptors[i].paths[j].size(); k++)
+			{
+				for (size_t t = 0; t < descriptors[i].paths[j][k].size(); t++)
+				{
+					int index = descriptors[i].paths[j][k][t];
+					m->raylib_mesh.colors[index * 4] = 255;
+					m->raylib_mesh.colors[index * 4 + 1] = 0;
+					m->raylib_mesh.colors[index * 4 + 2] = 0;
+					m->raylib_mesh.colors[index * 4 + 3] = 255;
+				}
+			}
+		}
+
+	}
+	m->calculated_symmetry_pairs = resemblance_pairs;
+	m->update_raylib_mesh();
+
+
+	std::string path = "../../Results/";
+	path = path + m->file_name + " NLateral_W_Gaussian_curvature_and_Optimal_Transform.txt ";
+	Metric_write_to_file(m, path);
+
+	return descriptors;
+}

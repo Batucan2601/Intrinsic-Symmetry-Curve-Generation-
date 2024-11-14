@@ -860,7 +860,7 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 
 {
 
-	int depth_similarity = 15;
+	int depth_similarity = 7;
 	// 1 - go gaussian to skeleton
 	std::vector<unsigned int> skeleton_end_points;
 	skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
@@ -963,12 +963,12 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 	NLateralDescriptor desc;
 	int N = mesh_indices.size();
 
+	std::vector<std::vector<std::vector<int>>> paths(N,std::vector<std::vector<int>>(N));
+	desc.paths = paths;
 	//generate paths
 	for (size_t i = 0; i < N; i++)
 	{
-		std::vector<std::vector<int>> paths(N);
-		desc.paths.push_back(paths);
-		for (size_t j = i; j < N; j++)
+		for (size_t j = 0; j < N; j++)
 		{
 			if (i == j)
 			{
@@ -981,14 +981,13 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 			{
 				dist += glm::distance( m->vertices[path_i_j[i]] , m->vertices[path_i_j[i+1]]);
 			}
-			desc.distances.push_back(dist);
 		}
 	}
 
 	//check visited vertices
 	desc.vertices_inside =  Nlateral_check_vertices_visited(m, desc);
 	desc.indices = mesh_indices; 
-
+	desc.N = N; 
 	return desc;
 }
 
@@ -1062,7 +1061,7 @@ std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLa
 	return vertices_inside_n_lateral;
 }
 
-void NLateralDescriptor_write(std::string filename, std::vector<NLateralDescriptor>& desc)
+void NLateralDescriptor_write(std::string filename,TrilateralMesh* m , std::vector<NLateralDescriptor>& desc)
 {
 	std::ofstream file;                // Create an ofstream object for file output
 	// Open the file in write mode
@@ -1077,7 +1076,7 @@ void NLateralDescriptor_write(std::string filename, std::vector<NLateralDescript
 	//desc format 1 - 
 	for (size_t i = 0; i < desc.size(); i++)
 	{
-		file << " NEW DESC ";
+		file << " NEW DESC " << std::endl;
 
 		file << " N == " << desc[0].N << std::endl;
 
@@ -1086,21 +1085,22 @@ void NLateralDescriptor_write(std::string filename, std::vector<NLateralDescript
 		{
 			file << desc[i].indices[j] << " ";
 		}
-		std::cout << std::endl;
+		file << std::endl;
 		file << " vertices inside ";
 		for (size_t j = 0; j < desc[i].vertices_inside.size(); j++)
 		{
 			file << desc[i].vertices_inside[j] << " ";
 		}
 		file << std::endl;
-		file << " path size " << desc[i].paths.size();
 		for (size_t j = 0; j < desc[i].paths.size(); j++)
 		{
+			file << " new path " << desc[i].paths.size();
+			file << std::endl; 
 			for (size_t k = 0; k < desc[i].paths[j].size(); k++)
 			{
-				file << " path i size " << j << " " << desc[i].paths[j].size();
-				file << k << " " << desc[i].paths[j][k].size();
-
+				file << " path of path ";
+				file << std::endl;
+				file << "path of points ";
 				for (size_t t = 0; t < desc[i].paths[j][k].size(); t++)
 				{
 					file << desc[i].paths[j][k][t] << " ";
@@ -1109,14 +1109,23 @@ void NLateralDescriptor_write(std::string filename, std::vector<NLateralDescript
 			}
 		}
 		file << std::endl;
+		file << " descriptor end " << std::endl;
 	}
-	
+	file << " resemblance pairs ";
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		std::pair<unsigned int, unsigned int> pairs;
+		pairs.first = m->calculated_symmetry_pairs[i].first;
+		pairs.second = m->calculated_symmetry_pairs[i].second;
+		file << pairs.first << " " << pairs.second <<  " ";
+	}
+
 	// Close the file
 	file.close();
 
 }
 
-void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescriptor>& desc)
+void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc)
 {
 	std::ifstream file(filename);                // Create an ofstream object for file output
 
@@ -1125,11 +1134,11 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 		std::cerr << "Error opening file: " << filename << std::endl;
 		return;
 	}
-
 	// Write some data to the file
 	//desc format 1 - 
 	int negative_start_index = -1;
 	bool is_new_desc = false;
+	bool is_new_path = false;
 	std::string line;
 	NLateralDescriptor new_desc;
 	while (std::getline(file, line))
@@ -1137,6 +1146,7 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 		if (line.find(" NEW DESC ") != std::string::npos)
 		{
 			is_new_desc = true;
+			new_desc = NLateralDescriptor();
 		}
 		if (line.find(" N == ") != std::string::npos)
 		{
@@ -1152,7 +1162,7 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 		}
 		if (line.find("indices") != std::string::npos)
 		{
-			line = line.substr(7);
+			line = line.substr(8);
 			std::stringstream ss(line);
 			std::vector<unsigned int> nums;
 			int num;
@@ -1174,21 +1184,23 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 			}
 			new_desc.vertices_inside = visited;
 		}
-		if (line.find("path size") != std::string::npos)
+		if (line.find("new path") != std::string::npos)
 		{
-			line = line.substr(9);
+			line = line.substr(8);
 			std::stringstream ss(line);
-			std::vector<int> vectors;
-			int num;
-			while (ss >> num)
-			{
-				vectors.push_back(num);
-			}
-			new_desc.paths = std::vector<std::vector<std::vector<int>>>(vectors[0]);
+			is_new_path = true; 
+			std::vector<std::vector<int>> path;
+			new_desc.paths.push_back(path);
 		}
-		if (line.find("path i size") != std::string::npos )
+		if (line.find("path of path") != std::string::npos )
 		{
-			line = line.substr(11);
+			line = line.substr(12);
+			std::vector<int> path;
+			new_desc.paths[new_desc.paths.size()-1].push_back(path);
+		}
+		if (line.find("path of points") != std::string::npos)
+		{
+			line = line.substr(14);
 			std::stringstream ss(line);
 			std::vector<int> vectors;
 			int num;
@@ -1196,15 +1208,66 @@ void NLateralDescriptor_read(std::string filename, std::vector<NLateralDescripto
 			{
 				vectors.push_back(num);
 			}
-			new_desc.paths[vectors[0]] = std::vector<std::vector<int>>(vectors[1]);
-			for (size_t i = 2; i < vectors.size(); i++)
+			std::vector<int> path;
+			int index_i = new_desc.paths.size() - 1;
+			int index_j = new_desc.paths[index_i].size() - 1;
+			for (size_t i = 0; i < vectors.size(); i++)
 			{
- 			}
+				new_desc.paths[index_i][index_j].push_back(vectors[i]);
+			}
+		}
+		if (line.find(" descriptor end ") != std::string::npos)
+		{
+			desc.push_back(new_desc);
+		}
+		if (line.find("resemblance pairs") != std::string::npos)
+		{
+			line = line.substr(18);
+			std::stringstream ss(line);
+			std::vector<int> vectors;
+			int num;
+			while (ss >> num)
+			{
+				vectors.push_back(num);
+			}
+			for (size_t i = 0; i < vectors.size(); i+=2)
+			{
+				std::pair<unsigned int, unsigned int> pairs;
+				pairs.first = vectors[i];
+				pairs.second = vectors[i + 1];
+				m->calculated_symmetry_pairs.push_back(pairs);
+			}
 		}
 	}
 	// Close the file
 	file.close();
+	for (size_t i = 0; i < desc.size(); i++)
+	{
+		for (size_t j = 0; j < desc[i].paths.size(); j++)
+		{
+			for (size_t k = 0; k < desc[i].paths[j].size(); k++)
+			{
+				for (size_t t = 0; t < desc[i].paths[j][k].size(); t++)
+				{
+					int index = desc[i].paths[j][k][t];
+					m->raylib_mesh.colors[index * 4] = 255;
+					m->raylib_mesh.colors[index * 4 + 1] = 0;
+					m->raylib_mesh.colors[index * 4 + 2] = 0;
+					m->raylib_mesh.colors[index * 4 + 3] = 255;
+				}
+			}
+		}
+		for (size_t j = 0; j < desc[i].vertices_inside.size(); j++)
+		{
+			int index = desc[i].vertices_inside[j];
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+	}
 
+	m->update_raylib_mesh();
 	return;
 }
 
