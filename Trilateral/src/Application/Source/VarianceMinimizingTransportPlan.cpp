@@ -409,7 +409,7 @@ float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralD
 	Eigen::MatrixXd transport_plan = sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-8);
 	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
 
-	std::cout << "====================================================================" << std::endl;
+	/*std::cout << "====================================================================" << std::endl;
 	std::cout << "transport plan " << transport_plan << std::endl;
 	std::cout << "====================================================================" << std::endl;
 	std::cout << " cost matrix " << cost_matrix << std::endl;
@@ -419,7 +419,7 @@ float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralD
 	std::cout << "weight 2 " << desc2.weight << std::endl;
 	std::cout << "====================================================================" << std::endl;
 	std::cout << "total cost" << totalCost << std::endl;
-	std::cout << "====================================================================" << std::endl;
+	std::cout << "====================================================================" << std::endl;*/
 	return totalCost;
 }
 double logSumExp(const Eigen::VectorXd& vec) {
@@ -600,6 +600,7 @@ std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::
 			if (i >= j)
 			{
 				res = INFINITY; 
+				//continue;
 			}
 			else
 			{

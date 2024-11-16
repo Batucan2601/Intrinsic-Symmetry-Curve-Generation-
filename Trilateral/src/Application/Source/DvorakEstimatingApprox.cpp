@@ -196,6 +196,9 @@ void dvorak_show_signifcant_points(TrilateralMesh* m , int P )
 std::vector<DvorakPairs> dvorak_distance_sweep(TrilateralMesh* m, std::vector<DvorakPairs>& dvorak_pairs, float dist )
 {
 	std::vector<DvorakPairs> extracted_dvorak_pairs;
+	std::sort(dvorak_pairs.begin(), dvorak_pairs.end(), [](const DvorakPairs a, DvorakPairs& b) {
+		return a.gaussian_curv > b.gaussian_curv;
+	});
 	while (dvorak_pairs.size() > 0 )
 	{
 		DvorakPairs p = dvorak_pairs[0];

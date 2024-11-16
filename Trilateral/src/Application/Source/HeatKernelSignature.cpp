@@ -4,6 +4,7 @@
 #include <Spectra/MatOp/SparseSymMatProd.h>
 #include <numeric>
 #include <fstream>
+#include "../Include/Geodesic.h"
 
 int no_of_samples = 10 ;
 int no_of_eigen_val = 3;
@@ -252,4 +253,106 @@ void HKS_hks_on_descriptor(TrilateralMesh* m, TrilateralDescriptor& desc)
 		m->raylib_mesh.colors[desc.m_inside.mesh_to_desc_map[i] * 4 + 3] = 255;
 	}
 	m->update_raylib_mesh();
+}
+
+std::vector<std::pair<int, float>> HKS_sweep_distance(TrilateralMesh* m ,std::vector<std::pair<int,float>> pair  ,float distance)
+{
+
+	std::vector<std::pair<int, float>> extracted_pairs;
+	while (pair.size() > 0)
+	{
+		std::pair<int, float> p = pair[0];
+		extracted_pairs.push_back(p);
+		pair.erase(pair.begin(), pair.begin() + 1);
+		int index = p.first;
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		std::vector<unsigned int> close_vertices;
+		for (size_t i = 0; i < pair.size(); i++)
+		{
+			if (distances[pair[i].first] < distance)
+			{
+				close_vertices.push_back(i);
+			}
+		}
+
+		std::sort(close_vertices.begin(), close_vertices.end(), std::greater<unsigned int>());
+
+		// Remove elements from the vector starting from the highest index
+		for (int index : close_vertices) {
+			if (index >= 0 && index < pair.size()) {
+				pair.erase(pair.begin() + index);
+			}
+			else {
+				std::cerr << "Invalid index: " << index << std::endl;
+			}
+		}
+
+	}
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = 0;
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+	for (size_t i = 0; i < extracted_pairs.size(); i++)
+	{
+		int index = extracted_pairs[i].first;
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+
+	return extracted_pairs;
+}
+std::vector<std::pair<int, float>> HKS_extraction_significant_points(TrilateralMesh* m, int P)
+{
+	int N = m->vertices.size();
+	std::vector<std::pair<int, float>> indexedArr;
+
+	for (int i = 0; i < N; ++i) {
+		indexedArr.emplace_back(i, m->normalized_heat_kernel_signature[i]);
+	}
+	// Sort the vector by the second element (value)
+	std::sort(indexedArr.begin(), indexedArr.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
+		return a.second > b.second;
+		});
+
+	std::vector<std::pair<int, float>> arr;
+	for (size_t i = 0; i < P; i++)
+	{
+		arr.push_back(indexedArr[i]);
+	}
+
+	for (size_t i = 0; i < P; i++)
+	{
+		int index = arr[i].first;
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+
+	return arr;
+}
+
+
+std::vector<DvorakPairs> HKS_to_dvorak_pairs(TrilateralMesh* m,std::vector<std::pair<int, float>>& pairs)
+{
+	std::vector<DvorakPairs> dvorak_pairs; 
+	for (size_t i = 0; i < pairs.size(); i++)
+	{
+		DvorakPairs dvorak;
+		int index = pairs[i].first;
+		dvorak.p_index = index ;
+		float gaussian = gaussian_curvature(m, index);
+		
+		dvorak.gaussian_curv = gaussian;
+		dvorak.p_index = index;
+		dvorak_pairs.push_back(dvorak);
+	}
+	return dvorak_pairs;
 }

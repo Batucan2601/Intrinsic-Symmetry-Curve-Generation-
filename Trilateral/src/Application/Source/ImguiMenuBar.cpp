@@ -342,10 +342,16 @@ static void KIDS_dataset(TrilateralMesh* m)
     {
         KIDS_endpoint_matching_w_gaussian(dvorak_no_of_significant_points, convergence_ratio);
     }
+    if (ImGui::MenuItem("NLATERAL use gaussian for endpoint matching  with OT "))
+    {
+        KIDS_endpoint_matching_w_NLateral(dvorak_no_of_significant_points, dvorak_geodesic_dist_param, N);
+    }
+
    
 }
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
 int time_step = 0;
+static std::vector<std::pair<int, float>> hks_pair; 
 static void laplace_beltrami_operations(TrilateralMesh* m)
 {
     if (ImGui::MenuItem(" Generate Laplace beltrami "))
@@ -371,7 +377,14 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
     {
         HKS_read_kernel_signature(m);
     }
-
+    if (ImGui::MenuItem(" HKS significant points"))
+    {
+        hks_pair = HKS_extraction_significant_points(m , dvorak_no_of_significant_points);
+    }
+    if (ImGui::MenuItem(" HKS sweep distances"))
+    {
+        HKS_sweep_distance(m, hks_pair, dvorak_geodesic_dist_param);
+    }
 }
 
 

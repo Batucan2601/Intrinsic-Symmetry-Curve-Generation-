@@ -1,2 +1,0 @@
-Normalize geodesic cost === 0.558308
-correspondance rate === 0.100000

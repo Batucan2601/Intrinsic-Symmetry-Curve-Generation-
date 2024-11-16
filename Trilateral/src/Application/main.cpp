@@ -34,7 +34,7 @@ int main(void)
     // build and compile our shader program
 
 
-    TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.1.off");
+    TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0002.isometry.15.off");
 
 
     Camera camera;

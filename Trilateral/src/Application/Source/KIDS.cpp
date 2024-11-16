@@ -2,7 +2,9 @@
 #include "../Include/DominantSymmetry.h"
 #include "../Include/DvorakEstimatingApprox.h"
 #include "../Include/TrilateralMap.h"
-
+#include "../Include/NLateralDescriptor.h"
+#include "../Include/TrilateralMap.h"
+#include "../Include/HeatKernelSignature.h"
 std::vector<TrilateralMesh> Kids_dataset;
 std::vector<std::vector<TrilateralDescriptor>> Kids_dataset_desc_pos;
 std::vector<std::vector<TrilateralDescriptor>> Kids_dataset_desc_neg;
@@ -108,4 +110,22 @@ void KIDS_save_descriptors(int index, float convergence_ratio)
 	std::string path("../../Trilateral/Mesh/off/Descriptor/");
 	path = path + name; 
 	TrilateralDescriptor_write(path, Kids_dataset_desc_pos[index], Kids_dataset_desc_neg[index]);
+}
+
+
+void KIDS_endpoint_matching_w_NLateral(int gaussian_end_point_no, float sweep_distance, int N)
+{
+	for (size_t i = 0; i < Kids_dataset.size(); i++)
+	{
+		TrilateralMesh* m = &Kids_dataset[i];
+		std::string file_name = "";
+		// 1- get the skeleton
+		std::string skel_path("../../Trilateral/Mesh/off/KIDS_skeleton/");
+		std::string skel_file_name = m->file_name.substr(0, m->file_name.size() - 3) + "swc";
+		Skeleton skeleton = skeleton_read_swc_file(m, skel_path + skel_file_name);
+		HKS_read_kernel_signature(m);
+		std::vector<NLateralDescriptor> descs=  NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton,gaussian_end_point_no, 0, N);
+		std::string desc_path("../../Trilateral/Mesh/off/Descriptor/");
+		NLateralDescriptor_write(desc_path + m->file_name, m, descs);
+	}
 }
