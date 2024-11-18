@@ -1,0 +1,24 @@
+0: left ear inner junction with head (assume the bear is facing me)
+1: right ear inner junction with head
+2: left ear outer junction with head
+3: right ear outer junction with head
+4: left side junction between head and body
+5: right side junction between head and body
+6: outer junction of left arm to body
+7: tip of left arm to body
+8: outer junction of right arm to body
+9: tip of right arm to body
+10:outer junction of left leg to body
+11:outer junction of right leg to body
+12:tip of left leg to body
+13:tip of right leg to body
+14:between two legs
+15:center of body (front)
+16:center of body (back)
+17:inner junction of left leg to body
+18:inner junction of right leg to body
+19:inner junction of left arm to body
+20:inner junction of right arm to body
+21:center of head (front)
+22:tip of left ear
+23:tip of right ear

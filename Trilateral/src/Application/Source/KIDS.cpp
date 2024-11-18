@@ -23,6 +23,8 @@ void KIDS_read_meshes()
         TrilateralMesh m((char*)path.c_str());
         //read the symmetry format
         read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
+		std::string hks_path = "../../Trilateral/Mesh/off/HKS/";
+		HKS_read_kernel_signature(&m, hks_path);
         Kids_dataset.push_back(m);
     }
 }
@@ -123,9 +125,10 @@ void KIDS_endpoint_matching_w_NLateral(int gaussian_end_point_no, float sweep_di
 		std::string skel_path("../../Trilateral/Mesh/off/KIDS_skeleton/");
 		std::string skel_file_name = m->file_name.substr(0, m->file_name.size() - 3) + "swc";
 		Skeleton skeleton = skeleton_read_swc_file(m, skel_path + skel_file_name);
-		HKS_read_kernel_signature(m);
-		std::vector<NLateralDescriptor> descs=  NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton,gaussian_end_point_no, 0, N);
-		std::string desc_path("../../Trilateral/Mesh/off/Descriptor/");
-		NLateralDescriptor_write(desc_path + m->file_name, m, descs);
+		std::string hks_path = "../../Trilateral/Mesh/off/HKS/";
+		HKS_read_kernel_signature(m , hks_path);
+		//std::vector<NLateralDescriptor> descs=  NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton,gaussian_end_point_no, 0, N);
+		//std::string desc_path("../../Trilateral/Mesh/off/Descriptor/");
+		//NLateralDescriptor_write(desc_path + m->file_name, m, descs);
 	}
 }

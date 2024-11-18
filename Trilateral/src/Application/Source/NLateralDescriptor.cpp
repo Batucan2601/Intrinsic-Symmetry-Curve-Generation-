@@ -856,11 +856,10 @@ void  NLateralDescriptor::get_ROI()
 
 
 
-std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N)
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N
+, int depth_similarity)
 
 {
-
-	int depth_similarity = 7;
 	// 1 - go gaussian to skeleton
 	std::vector<unsigned int> skeleton_end_points;
 	skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
@@ -934,7 +933,10 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		}
 		
 		
-		
+		for (size_t j = 0; j < selected_indices.size(); j++)
+		{
+			std::cout << "depth" <<  skeleton_end_point_node_list[selected_indices[j]].depth << std::endl;
+		}
 		//now here is the catch
 		bool is_depth_different = false; 
 		for (size_t j = 0; j < selected_indices.size()-1; j++)
@@ -976,11 +978,6 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 			}
 			std::vector<int> path_i_j = Geodesic_between_two_points(*m, mesh_indices[i], mesh_indices[j]);
 			desc.paths[i][j] = path_i_j;
-			float dist = 0; 
-			for (size_t k = 0; k < path_i_j.size()-1; k++)
-			{
-				dist += glm::distance( m->vertices[path_i_j[i]] , m->vertices[path_i_j[i+1]]);
-			}
 		}
 	}
 

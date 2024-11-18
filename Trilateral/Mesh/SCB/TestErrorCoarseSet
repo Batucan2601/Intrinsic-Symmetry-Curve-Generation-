@@ -1,0 +1,181 @@
+#!/bin/bash
+
+
+visualize="true"	# renders maps as images to jpeg files
+
+############# You should not modify anything below this line ###########
+
+	# read file names as arguments - or use default
+if [ $# -ge 11 ]; then
+	mesh1=$1
+	mesh2=$2
+	inputMap=$3
+	workDir=$4
+	algName=$5
+	camera1=$6
+	lineID1=$7
+	camera2=$8
+	lineID2=$9
+	symmetryVts1=${10}
+	symmetryVts2=${11}
+	symmetryCorrs=none
+else
+	echo =============================
+	echo ============ USAGE: =========
+	echo "    ./TestErroAllVertices mesh1.off mesh2.off mymap.cor/map outDir algName ..."
+	echo "	                 [camera1.txt lineID1 camera2.txt lineID2] ..."
+	echo "                    truth1.vts/pid truth2.vts/pid [truth.sym.info]"
+	echo
+	echo ============ PARAMS: =========
+	echo "     mesh1.off mesh2.off - input meshes"
+	echo "     mymap.map/cor - predicted dense/coarse correspondence file, GMDS is used to extrapolate mymap.cor"
+	echo "          if mymap.map is provided, algorithm checks if mymap.cor exists to render coarse corrs. "
+	echo "     outDir algName - results will be printed to $outDir/BenchResult_$algName_$mesh1_to_$mesh2.txt"
+	echo "     camera1/2.txt lineID1/2 - camera file and lineID (both can be set to none)"
+	echo "     truth1/2.vts  - set to coarse ground truth files."
+	echo "     truth.sym.info - set to ground truth symmetry file to  "
+	echo "                          test against bilaterally reflected solution as well"
+	echo " -----"
+	echo " See http://www.cs.princeton.edu/~vk/CorrsCode/Benchmark/doc_bench.html for more details"
+	echo =============================	
+	exit
+fi
+
+if [ $# -ge 12 ]; then
+	symmetryCorrs=${12}
+fi
+
+if [ ! -d $workDir ]; then
+	mkdir $workDir
+fi
+
+if [ ! -d $workDir ]; then
+	echo Could not find/create work directory: $workDir
+	exit
+fi
+
+
+	# separate file name and extension - to create workspace directory
+if [ ! -f $mesh1 ]; then
+	echo File $mesh1 does not exist!
+fi;
+
+if [ ! -f $mesh2 ]; then
+	echo File $mesh2 does not exist!
+fi;
+
+fileonly1=`basename $mesh1`
+fileonly2=`basename $mesh2`
+ext="."`echo "$fileonly1" | cut -d'.' -f2`
+mesh1name=`echo "$fileonly1" | cut -d'.' -f1`
+mesh2name=`echo "$fileonly2" | cut -d'.' -f1`
+	
+	# create workspace directory, copy files
+if [ ! -d $workDir/$mesh1name ]; then
+	mkdir $workDir/$mesh1name
+fi
+
+if [ ! -f $workDir/$mesh1name/$mesh1name$ext ]; then
+	cp $mesh1 $workDir/$mesh1name
+fi
+
+if [ ! -d $workDir/$mesh2name ]; then
+	mkdir $workDir/$mesh2name/
+fi
+
+if [ ! -f $workDir/$mesh2name/$mesh2name$ext ]; then
+	cp $mesh2 $workDir/$mesh2name/
+fi
+
+allowSymm=false;
+if [ $symmetryVts1 != "none" ]; then
+if [ $symmetryVts2 != "none" ]; then
+if [ $symmetryCorrs != "none" ]; then
+	allowSymm=true
+fi
+fi
+fi
+
+if [ $allowSymm == "true" ]; then			# loading symmetric benchmark (to accept ground truth with flips)
+	fileonlyVTS1=`basename $symmetryVts1`
+	dironlyVTS1=`dirname $symmetryVts1`/
+	
+	fileonlyVTS2=`basename $symmetryVts2`
+	dironlyVTS2=`dirname $symmetryVts2`/
+	
+	fileonlySymmCorrs=`basename $symmetryCorrs`
+	dironlySymmCorrs=`dirname $symmetryCorrs`/
+
+
+	if [ ! -f $symmetryVts1 ]; then
+		echo [ERROR] Could not find symmetry vts/pid file $symmetryVts1
+		exit
+	fi
+
+	if [ ! -f $symmetryVts2 ]; then
+		echo [ERROR] Could not find symmetry vts/pid file $symmetryVts2
+		exit
+	fi
+
+	if [ ! -f $symmetryCorrs ]; then
+		echo [ERROR] Could not find symmetry vts/pid file $symmetryCorrs
+		exit
+	fi
+
+	if [ "$dironlyVTS1" != "$dironlySymmCorrs" ]; then
+		echo [ERROR] Files $symmetryVts1 and $symmetryCorrs must be in the same directory.
+		exit
+	fi
+fi
+
+# Loading map
+mapFileOnly=`basename $inputMap`
+mapExt="."`echo "$mapFileOnly" | cut -d'.' -f2`
+
+
+	# NOTE: arguments to SurfaceVis below OVERWRITE settings.txt file
+	# I included them here for simplicity - so that one would not have to modify settings.txt
+	
+	# Set input files (copied to their work directories)
+params="-ConfSurfaces MeshName [$mesh1name $mesh2name] MeshExt $ext"
+	# Set whether to open visualization
+params="$params -Pipeline Visualize $visualize"
+	# Set workDir
+params="$params -Pipeline WorkFolder $workDir"
+	# Set camera
+params="$params -ConfSurfaces CameraFile [$camera1 $camera2] CameraLine [$lineID1 $lineID2]"
+	# Set benchmark files and directories
+params="$params -MapConfidence_Truth MapType CoarseMap_FeaturePointsCorrespondence"
+
+params="$params -ConfSurfaces Samples [BenchmarkQuery]"
+params="$params -GeodesicSubsets SetsFrom [BenchmarkQuery]"
+params="$params -MapConfidence_Truth AtSamplesRange	BenchmarkQuery"
+
+	# benchmark if symmetry flipping is allowed
+if [ $allowSymm == "true" ]; then
+	params="$params -MapConfidence_TruthWithSymmetry Path [$dironlyVTS1 $dironlyVTS2]"
+	params="$params -MapConfidence_TruthWithSymmetry FileVertexIDs [$fileonlyVTS1 $fileonlyVTS2]"
+	params="$params -MapConfidence_TruthWithSymmetry FileFeaturesMap $fileonlySymmCorrs"
+
+	params="$params -MapConfidence_Truth Path [$dironlyVTS1 $dironlyVTS2]"
+	params="$params -MapConfidence_Truth FileVertexIDs [$fileonlyVTS1 $fileonlyVTS2]"
+else
+	params="$params -Pipeline SecondBenchmark none"
+	params="$params -AlgCorrConfmaps LoadConfidences MapConfidence_Truth"
+fi
+	# Algorithm name
+params="$params -AlgCorrConfmaps OutputName $algName"
+	# Input map file
+if [ $mapExt == ".cor" ]; then
+	params="$params -Pipeline LoadExternalResult FunkCoarse FinalExternalMap $inputMap -AlgCorrConfmaps ExtrapolationMethod GMDS"
+elif [ $mapExt == ".map" ]; then
+	params="$params -Pipeline LoadExternalResult FunkMap FinalExternalMap $inputMap -AlgCorrConfmaps ExtrapolationMethod none"
+else
+	echo "[ERROR] unknown map format: $mapExt (file $inputMap)"
+fi
+
+./`uname`_`uname -m`_SurfaceVis ./BenchmarkSettings.txt $params
+result=$workDir/BenchResult_"$algName"_"$mesh1name"_to_"$mesh2name".txt
+echo "Finished benchmark. See the result in:"
+echo "     $result"
+

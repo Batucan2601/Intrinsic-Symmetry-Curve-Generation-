@@ -1,0 +1,36 @@
+0: toe in right leg ("right" is to the human himself, not to the viewer)
+1: toe in left leg
+2: heel in right leg
+3: heel in left leg
+4: knee in right leg
+5: knee in left leg
+6: knee (inside) in right leg
+7: knee (inside) in left leg
+8: waist right side
+9: waist left side
+10:between two legs
+11:middle finger right hand
+12:middle finger left hand
+13:elbow (outside) right arm
+14:elbow (outside) left arm
+15:elbow (inside) right arm
+16:elbow (inside) left arm
+17:shoulder (upper) right side
+18:shoulder (upper) left side
+19:shoulder (bottom) right side
+20:shoulder (bottom) left side
+21:tit, right
+22:tit, left
+23:cornea 
+24:cornea (on the back, similar position)
+25:neck (front)
+26:neck (back)
+27:eye, right
+28:eye, left
+29:tip of nose
+30:mouse (middle)
+31:ear, right
+32:ear, left
+33:top of head
+34:hip, right
+35:hip, left

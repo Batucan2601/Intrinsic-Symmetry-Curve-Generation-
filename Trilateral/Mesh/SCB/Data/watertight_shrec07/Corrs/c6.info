@@ -1,0 +1,17 @@
+0: corner 0 of the seat plane (facing the chair, number legs from further left to further right CCW)
+1: corner 1 of the seat plane
+2: corner 2 of the seat plane
+3: corner 3 of the seat plane
+4: center of the seat plane
+5: right corner of the back plane
+6: left corner of the back plane
+7: middle between two corners of the back plane
+8: tip of leg 0
+9: junction of leg 0 to the seat plane
+10:tip of leg 1
+11:junction of leg 1 to the seat plane
+12:tip of leg 2
+13:junction of leg 2 to the seat plane
+14:tip of leg 3
+15:junction of leg 3 to the seat plane
+16:center of the seat plane (from the bottom side)

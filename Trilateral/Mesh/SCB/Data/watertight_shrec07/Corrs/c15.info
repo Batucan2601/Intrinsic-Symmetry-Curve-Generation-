@@ -1,0 +1,28 @@
+0: junction of left ear to head (closer to head center, assume it is facing me)
+1: junction of right ear to head (closer to head center)
+2: junction of left ear to head (further away from head center)
+3: junction of right ear to head (further away from head center)
+4: junction of left arm to body (outer)
+5: junction of right arm to body (outer)
+6: inner elbow of left arm
+7: inner elbow of right arm
+8: inner junction of left hand to arm
+9: inner junction of right hand to arm
+10:junction of left leg to body
+11:junction of right leg to body
+12:left knee
+13:right knee
+14:junction of left foot to leg
+15:junction of right foot to leg
+16:tip of mouth
+17:between pectorales
+18:junction of tail to body (lower end)
+19:the tip of "V" on the back armor
+20:left eye
+21:right eye
+22:middle toe of left foot
+23:heel of left foot
+24:middle toe of right foot
+25:heel of right foot
+26:second finger on the left hand (from thumb)
+27:second finger on the right hand (from thumb)

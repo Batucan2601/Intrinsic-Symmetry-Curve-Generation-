@@ -1,0 +1,46 @@
+0: tip of head/mouth
+1: top of head
+2: junction of head and neck (left side, assume the centaur is facing me)
+3: junction of head and nect (right side)
+4: outer junction of front left leg to body
+5: tip of front left leg
+6: outer junction of back left leg to body
+7: tip of back left leg
+8: outer junction of back right leg to body
+9: tip of back right leg
+10:outer junction of front right leg to body
+11:tip of front right leg
+12:center of body (upper side)
+13:junction between tail and body (bottom side)
+14:center of body (bottom side)
+15:left eye
+16:right eye
+17:inner junction of front left leg to body
+18:inner junction of front right leg to body
+19:inner junction of back left leg to body
+20:inner junction of back right leg to body
+21:left tit
+22:right tit
+23:center of human body (front)
+24:center of human body (back)
+25:shoulder(left, outer)
+26:shoulder(right, outer)
+27:shoulder(left, inner)
+28:shoulder(right, inner)
+29:elbow(left, outer)
+30:elbow(right, outer)
+31:elbow(left, inner)
+32:elbow(right, outer)
+33:middle finger(left)
+34:middle finger(right)
+35:tip of nose
+36:ear(left)
+37:ear(right)
+38:human neck(front)
+39:human neck(back)
+40:junction of human body to horse body(back)
+41:junction of human body to horse body(front)
+42:horse knee(left front)
+43:horse knee(right front)
+44:horse knee(left back)
+45:horse knee(right back)

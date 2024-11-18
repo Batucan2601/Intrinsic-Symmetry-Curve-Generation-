@@ -32,13 +32,12 @@ int main(void)
     InitWindow(1024, 768, " Trialteral");
 
     // build and compile our shader program
-
-
-    TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0002.isometry.15.off");
+    //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0002.isometry.1.off");
+    TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off");
 
 
     Camera camera;
-    camera.position = { 0,0,-40 };
+    camera.position = { 0,0,-1 };
     camera.projection= CAMERA_PERSPECTIVE;
     camera.target = {0,0,0};
     camera.fovy = 90;

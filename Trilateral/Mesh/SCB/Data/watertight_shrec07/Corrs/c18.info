@@ -1,0 +1,8 @@
+0: first point in the smaller end (CCW)
+1: second point in the smaller end
+2: third point in the smaller end
+3: fourth point in the smaller end
+4: first point in the bigger end (corresponding to point 0)
+5: second point in the bigger end
+6: third point in the bigger end
+7: fourth point in the bigger end

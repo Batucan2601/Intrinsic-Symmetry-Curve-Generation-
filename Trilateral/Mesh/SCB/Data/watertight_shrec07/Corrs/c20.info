@@ -1,0 +1,21 @@
+0: tip of head/mouth
+1: top of head
+2: junction of head and neck (left side, assume the animal is facing me)
+3: junction of head and nect (right side)
+4: outer junction of front left leg to body
+5: tip of front left leg
+6: outer junction of back left leg to body
+7: tip of back left leg
+8: outer junction of back right leg to body
+9: tip of back right leg
+10:outer junction of front right leg to body
+11:tip of front right leg
+12:center of body (upper side)
+13:junction between tail and body (bottom side)
+14:center of body (bottom side)
+15:left eye
+16:right eye
+17:inner junction of front left leg to body
+18:inner junction of front right leg to body
+19:inner junction of back left leg to body
+20:inner junction of back right leg to body

@@ -1,0 +1,126 @@
+#!/bin/bash
+
+
+visualize="true"	# renders maps as images to jpeg files
+
+############# You should not modify anything below this line ###########
+
+	# default pat h
+srcLibTOSCA="./Data/TOSCA/Meshes/"
+srcBenchTOSCA="./Data/TOSCA/Corrs/"
+
+srcLibSCAPE="./Data/SCAPE/Meshes/"
+srcBenchSCAPE="./Data/SCAPE/Corrs/"
+
+srcLibSHREC="./Data/watertight_shrec07/Meshes/"
+srcBenchSHREC="./Data/watertight_shrec07/Corrs/"
+
+	# read file names as arguments - or use default
+if [ $# -ge 9 ]; then
+	dataset1=$1
+	classID1=$2
+	modelID1=$3
+	dataset2=$4
+	classID2=$5
+	modelID2=$6
+	inputMap=$7
+	outDir=$8
+	algName=$9
+else
+	echo =============================
+	echo ============ USAGE: =========
+	echo "    ./TestErrorAuto dataset1 class1ID mesh1ID dataset2 class2ID mesh2ID inputMap outDir algID"
+	echo
+	echo ============ PARAMS: =========
+	echo "     dataset1/2: [SCAPE, SHREC, TOSCA]"
+	echo "     classID1/2: SCAPE=[1], "
+	echo "                 SHREC=[1..20]"
+	echo "                 TOSCA=[cat, centaur, david, dog, gorilla, horse, michael, victoria, wolf]"
+	echo "     meshID1/2: SCAPE=[0..71], SHREC=[1..20], TOSCA=integer (different per class)"
+	echo "     inputMap: map file"
+	echo " -----"
+	echo " See http://www.cs.princeton.edu/~vk/CorrsCode/Benchmark/doc_bench.html for more details"
+	echo =============================	
+	exit
+fi
+
+symm=false		# set to true if same model
+if [ "$dataset1" == "$dataset2" ]; then
+if [ "$classID1" == "$classID2" ]; then
+if [ "$modelID1" == "$modelID2" ]; then
+	symm=true
+fi
+fi
+fi
+
+cameraLn1=0	
+cameraLn2=0	
+
+if [ "$dataset1" == "TOSCA" ]; then
+	benchmark1="$srcBenchTOSCA/$classID1.pid"
+	symmCorr="$srcBenchTOSCA/$classID1.sym.info"
+	mesh1=$srcLibTOSCA/$classID1$modelID1".off"
+	camera1=$srcLibTOSCA/$classID1".txt"
+elif [ "$dataset1" == "SCAPE" ]; then
+	benchmark1="$srcBenchSCAPE/1.pid"
+	symmCorr="$srcBenchSCAPE/1.sym.info"
+	if [ "$modelID1" -le 9 ] ; then
+		mesh1=$srcLibSCAPE/"mesh00"$modelID1".off"
+	else
+		mesh1=$srcLibSCAPE/"mesh0"$modelID1".off"
+	fi
+	camera1=$srcLibSCAPE/camera.txt
+elif [ "$dataset1" == "SHREC" ]; then
+	symmCorr=$srcBenchSHREC/"$classID1.sym.info"
+	let mesh1=(classID1-1)*20+modelID1
+	let cameraLn1=($mesh1-1)
+	benchmark1=$srcBenchSHREC/"$mesh1".vts
+	mesh1=$srcLibSHREC/$mesh1.off
+	camera1=$srcLibSHREC/camera.txt
+else
+	echo [ERROR] unknown dataset $dataset1
+	exit
+fi
+
+if [ "$dataset2" == "TOSCA" ]; then
+	benchmark2="$srcBenchTOSCA/$classID2.pid"
+	mesh2=$srcLibTOSCA/$classID1$modelID2".off"
+	camera2=$srcLibTOSCA/$classID2".txt"
+elif [ "$dataset2" == "SCAPE" ]; then
+	benchmark2="$srcBenchSCAPE/1.pid"
+	if [ "$modelID2" -le 9 ] ; then
+		mesh2=$srcLibSCAPE/"mesh00"$modelID2".off"
+	else
+		mesh2=$srcLibSCAPE/"mesh0"$modelID2".off"
+	fi
+	camera2=$srcLibSCAPE/camera.txt
+elif [ "$dataset2" == "SHREC" ]; then
+	let mesh2=($classID2-1)*20+modelID2
+	let cameraLn2=($mesh2-1)
+	benchmark2=$srcBenchSHREC/"$mesh2".vts
+	mesh2=$srcLibSHREC/$mesh2.off
+	camera2=$srcLibSHREC/camera.txt
+else
+	echo [ERROR] unknown dataset $dataset2
+	exit
+fi
+
+# TODO BELOW
+if [ $symm == "true" ]; then
+		# symmetry benchmark
+	./TestErrorSymmetry $mesh1 $inputMap $outDir $algName $camera1 $cameraLn1 $benchmark1 $symmCorr
+elif [ $dataset1 == $dataset2 ] && [ $dataset1 != "SHREC" ] && [ $classID1 == $classID2 ]; then
+		# vertex-to-vertex: NRW or Scape + same class + not symmetry
+	params="$mesh1 $mesh2 $inputMap $outDir $algName"
+	params="$params $camera1 $cameraLn1 $camera2 $cameraLn2"
+	params="$params $benchmark1 $benchmark2 $symmCorr"
+	./TestErrorAllVertices $params
+else
+		# general correspondence between feature points
+	params="$mesh1 $mesh2 $inputMap $outDir $algName"
+	params="$params $camera1 $cameraLn1 $camera2 $cameraLn2"
+	params="$params $benchmark1 $benchmark2 $symmCorr"
+	./TestErrorCoarseSet $params
+fi
+
+

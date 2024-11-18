@@ -40,6 +40,8 @@ set(Header_Files
     "src/Application/Include/TrilateralDescriptor.h"
     "src/Application/Include/VarianceMinimizingTransportPlan.h"
     "src/Application/Include/KIDS.h"
+    "src/Application/Include/SCBDataset.h"
+
     "src/Application/Include/SkeletonTypes.h"
 
 
@@ -97,6 +99,7 @@ set(Source_Files
     "src/Application/Source/TrilateralDescriptor.cpp"
     "src/Application/Source/VarianceMinimizingTransportPlan.cpp"
     "src/Application/Source/KIDS.cpp"
+    "src/Application/Source/SCBDataset.cpp"
 
 
 
@@ -133,7 +136,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES
 target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/spectra)
 target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/eigen)
 
-target_link_directories(${PROJECT_NAME} PUBLIC   "${CMAKE_SOURCE_DIR}/Dependencies")
+target_link_directories(${PROJECT_NAME} PUBLIC   "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLEW_STATIC)
 

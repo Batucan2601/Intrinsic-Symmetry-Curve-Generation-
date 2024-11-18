@@ -1,0 +1,868 @@
+<html>
+<head>
+</head>
+<body>
+<a href="#summaryErrors"> Summary Errors</a><br><a href="#perModelErrors"> Per Model Errors</a><br><a href="#crashes"> Unexpected Crashes </a><br>
+<h1>Algorithms: 7</h1>
+
+<a name="summaryErrors"><h2>Summary Tables</h2></a>
+
+<h4>Total</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0573097</td>
+	<td>0.13831</td>
+	<td>0.116578</td>
+	<td>0.3445</td>
+	<td>0.281199</td>
+	<td>0.26532</td>
+	<td>0.234603</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.188632</td>
+	<td>0.581892</td>
+	<td>0.57101</td>
+	<td>0.886754</td>
+	<td>1.19797</td>
+	<td>1.07303</td>
+	<td>0.892359</td>
+</tr>
+</table>
+<h4>Scape_1</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0505477</td>
+	<td>0.170648</td>
+	<td>0.110893</td>
+	<td>0.330582</td>
+	<td>0.285128</td>
+	<td>0.262108</td>
+	<td>0.301264</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.131774</td>
+	<td>0.642494</td>
+	<td>0.580758</td>
+	<td>0.942407</td>
+	<td>1.30108</td>
+	<td>1.08136</td>
+	<td>0.987812</td>
+</tr>
+</table>
+<h4>NRW_cat</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0600369</td>
+	<td>0.118451</td>
+	<td>0.0984193</td>
+	<td>0.361627</td>
+	<td>0.229285</td>
+	<td>0.260076</td>
+	<td>0.160611</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.179963</td>
+	<td>0.724471</td>
+	<td>0.428178</td>
+	<td>0.750692</td>
+	<td>0.867366</td>
+	<td>0.968073</td>
+	<td>0.717774</td>
+</tr>
+</table>
+<h4>NRW_centaur</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0881187</td>
+	<td>0.0301913</td>
+	<td>0.0661144</td>
+	<td>0.0399024</td>
+	<td>0.123181</td>
+	<td>0.11211</td>
+	<td>0.176599</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.911857</td>
+	<td>0.162134</td>
+	<td>0.416678</td>
+	<td>0.167548</td>
+	<td>0.864636</td>
+	<td>1.03114</td>
+	<td>0.907654</td>
+</tr>
+</table>
+<h4>NRW_horse</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.064724</td>
+	<td>0.158807</td>
+	<td>0.141267</td>
+	<td>0.190753</td>
+	<td>0.264398</td>
+	<td>0.241203</td>
+	<td>0.205201</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.143598</td>
+	<td>0.556819</td>
+	<td>0.682002</td>
+	<td>0.633355</td>
+	<td>1.34514</td>
+	<td>1.25151</td>
+	<td>0.877666</td>
+</tr>
+</table>
+<h4>NRW_dog</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0635158</td>
+	<td>0.105646</td>
+	<td>0.127571</td>
+	<td>0.543864</td>
+	<td>0.387112</td>
+	<td>0.395543</td>
+	<td>0.234578</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.14596</td>
+	<td>0.482478</td>
+	<td>0.535391</td>
+	<td>1.08556</td>
+	<td>1.14211</td>
+	<td>1.12287</td>
+	<td>1.01908</td>
+</tr>
+</table>
+<h4>NRW_wolf</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.076602</td>
+	<td>0.131228</td>
+	<td>0.135833</td>
+	<td>0.695097</td>
+	<td>0.277846</td>
+	<td>0.316784</td>
+	<td>0.0862432</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.161278</td>
+	<td>0.958349</td>
+	<td>0.547887</td>
+	<td>1.26828</td>
+	<td>0.93555</td>
+	<td>0.93555</td>
+	<td>0.224044</td>
+</tr>
+</table>
+<h4>Fourleg</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0838149</td>
+	<td>0.21734</td>
+	<td>0.140944</td>
+	<td>0.386756</td>
+	<td>0.313157</td>
+	<td>0.331781</td>
+	<td>0.0999866</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.166055</td>
+	<td>1.06802</td>
+	<td>0.566193</td>
+	<td>0.709032</td>
+	<td>1.12742</td>
+	<td>1.12742</td>
+	<td>0.280137</td>
+</tr>
+</table>
+<h4>NRW_michael</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0425602</td>
+	<td>0.0726083</td>
+	<td>0.151713</td>
+	<td>0.468255</td>
+	<td>0.272119</td>
+	<td>0.131006</td>
+	<td>0.302668</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.088788</td>
+	<td>0.173285</td>
+	<td>0.651772</td>
+	<td>1.47554</td>
+	<td>1.35844</td>
+	<td>0.852323</td>
+	<td>1.51583</td>
+</tr>
+</table>
+<h4>NRW_david</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0591559</td>
+	<td>0.221351</td>
+	<td>0.119238</td>
+	<td>0.215392</td>
+	<td>0.385595</td>
+	<td>0.36393</td>
+	<td>0.483591</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.131605</td>
+	<td>0.674557</td>
+	<td>0.621784</td>
+	<td>0.854551</td>
+	<td>1.44896</td>
+	<td>1.44896</td>
+	<td>1.39708</td>
+</tr>
+</table>
+<h4>NRW_victoria</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0425602</td>
+	<td>0.0726083</td>
+	<td>0.151713</td>
+	<td>0.468255</td>
+	<td>0.272119</td>
+	<td>0.131006</td>
+	<td>0.302668</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.088788</td>
+	<td>0.173285</td>
+	<td>0.651772</td>
+	<td>1.47554</td>
+	<td>1.35844</td>
+	<td>0.852323</td>
+	<td>1.51583</td>
+</tr>
+</table>
+<a name="perModelErrors"><h2>Per Experiment Values</h2></a>
+Values in each cell: average geodesic error, maximal geodesic error, images<br>
+<table border=1>
+<tr><td></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+	<td><b>Deform. Driven</b></td>
+</tr>
+<tr>
+	<td>mesh059_to_mesh052</td>
+	<td>Ave=0.0446913<br>Max=0.138522<br><a href="./mesh059/BlendedMap_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.119665<br>Max=0.886114<br><a href="./mesh059/LipmanGMDS_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/LipmanGMDS_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.128115<br>Max=0.614296<br><a href="./mesh059/BestConf_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.481081<br>Max=1.33487<br><a href="./mesh059/BronsteinGMDS_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/BronsteinGMDS_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.369679<br>Max=1.31814<br><a href="./mesh059/Ovsjanikov1_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/Ovsjanikov1_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.32524<br>Max=1.31814<br><a href="./mesh059/Ovsjanikov2_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/Ovsjanikov2_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.356745<br>Max=1.33482<br><a href="./mesh059/ZhangDefDrivGMDS_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/ZhangDefDrivGMDS_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh015_to_mesh054</td>
+	<td>Ave=0.048609<br>Max=0.135507<br><a href="./mesh015/BlendedMap_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.075065<br>Max=0.576847<br><a href="./mesh015/LipmanGMDS_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/LipmanGMDS_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0841971<br>Max=0.456078<br><a href="./mesh015/BestConf_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0616341<br>Max=0.214882<br><a href="./mesh015/BronsteinGMDS_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/BronsteinGMDS_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.177082<br>Max=1.37299<br><a href="./mesh015/Ovsjanikov1_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/Ovsjanikov1_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.103392<br>Max=0.558217<br><a href="./mesh015/Ovsjanikov2_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/Ovsjanikov2_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0853492<br>Max=0.483403<br><a href="./mesh015/ZhangDefDrivGMDS_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/ZhangDefDrivGMDS_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh019_to_mesh035</td>
+	<td>Ave=0.033521<br>Max=0.119815<br><a href="./mesh019/BlendedMap_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.053549<br>Max=0.214706<br><a href="./mesh019/LipmanGMDS_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/LipmanGMDS_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.145052<br>Max=0.682166<br><a href="./mesh019/BestConf_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.115682<br>Max=0.360398<br><a href="./mesh019/BronsteinGMDS_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/BronsteinGMDS_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.18284<br>Max=1.15973<br><a href="./mesh019/Ovsjanikov1_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/Ovsjanikov1_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0888242<br>Max=0.436415<br><a href="./mesh019/Ovsjanikov2_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/Ovsjanikov2_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0823105<br>Max=0.244695<br><a href="./mesh019/ZhangDefDrivGMDS_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/ZhangDefDrivGMDS_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh054_to_mesh031</td>
+	<td>Ave=0.0604929<br>Max=0.12815<br><a href="./mesh054/BlendedMap_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.066676<br>Max=0.224938<br><a href="./mesh054/LipmanGMDS_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/LipmanGMDS_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0977108<br>Max=0.597927<br><a href="./mesh054/BestConf_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.791176<br>Max=1.7056<br><a href="./mesh054/BronsteinGMDS_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/BronsteinGMDS_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.161304<br>Max=1.10289<br><a href="./mesh054/Ovsjanikov1_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/Ovsjanikov1_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.146374<br>Max=1.10289<br><a href="./mesh054/Ovsjanikov2_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/Ovsjanikov2_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.175939<br>Max=0.785603<br><a href="./mesh054/ZhangDefDrivGMDS_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/ZhangDefDrivGMDS_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh023_to_mesh071</td>
+	<td>Ave=0.0482081<br>Max=0.137216<br><a href="./mesh023/BlendedMap_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.436881<br>Max=1.24574<br><a href="./mesh023/LipmanGMDS_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/LipmanGMDS_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0827017<br>Max=0.471269<br><a href="./mesh023/BestConf_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.433721<br>Max=1.272<br><a href="./mesh023/BronsteinGMDS_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/BronsteinGMDS_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.333801<br>Max=1.25591<br><a href="./mesh023/Ovsjanikov1_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/Ovsjanikov1_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.443062<br>Max=1.25591<br><a href="./mesh023/Ovsjanikov2_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/Ovsjanikov2_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.441322<br>Max=1.272<br><a href="./mesh023/ZhangDefDrivGMDS_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/ZhangDefDrivGMDS_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>cat5_to_cat4</td>
+	<td>Ave=0.0410288<br>Max=0.211654<br><a href="./cat5/BlendedMap_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.112301<br>Max=0.698762<br><a href="./cat5/LipmanGMDS_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<a href="./cat5/LipmanGMDS_cat5_to_cat4_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0780366<br>Max=0.442848<br><a href="./cat5/BestConf_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0646213<br>Max=0.321743<br><a href="./cat5/BronsteinGMDS_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<a href="./cat5/BronsteinGMDS_cat5_to_cat4_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.152212<br>Max=0.774895<br><a href="./cat5/Ovsjanikov1_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<a href="./cat5/Ovsjanikov1_cat5_to_cat4_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.188559<br>Max=0.976309<br><a href="./cat5/Ovsjanikov2_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<a href="./cat5/Ovsjanikov2_cat5_to_cat4_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0847884<br>Max=0.401388<br><a href="./cat5/ZhangDefDrivGMDS_cat5_to_cat4_FinalColors.jpg">Dense</a><br>
+<a href="./cat5/ZhangDefDrivGMDS_cat5_to_cat4_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>centaur2_to_centaur0</td>
+	<td>Ave=0.0881187<br>Max=0.911857<br><a href="./centaur2/BlendedMap_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0301913<br>Max=0.162134<br><a href="./centaur2/LipmanGMDS_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<a href="./centaur2/LipmanGMDS_centaur2_to_centaur0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0661144<br>Max=0.416678<br><a href="./centaur2/BestConf_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0399024<br>Max=0.167548<br><a href="./centaur2/BronsteinGMDS_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<a href="./centaur2/BronsteinGMDS_centaur2_to_centaur0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.123181<br>Max=0.864636<br><a href="./centaur2/Ovsjanikov1_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<a href="./centaur2/Ovsjanikov1_centaur2_to_centaur0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.11211<br>Max=1.03114<br><a href="./centaur2/Ovsjanikov2_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<a href="./centaur2/Ovsjanikov2_centaur2_to_centaur0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.176599<br>Max=0.907654<br><a href="./centaur2/ZhangDefDrivGMDS_centaur2_to_centaur0_FinalColors.jpg">Dense</a><br>
+<a href="./centaur2/ZhangDefDrivGMDS_centaur2_to_centaur0_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>horse7_to_horse15</td>
+	<td>Ave=0.0332361<br>Max=0.113399<br><a href="./horse7/BlendedMap_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0517029<br>Max=0.195148<br><a href="./horse7/LipmanGMDS_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./horse7/LipmanGMDS_horse7_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.128531<br>Max=0.820997<br><a href="./horse7/BestConf_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.220048<br>Max=0.951636<br><a href="./horse7/BronsteinGMDS_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./horse7/BronsteinGMDS_horse7_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.168133<br>Max=1.38086<br><a href="./horse7/Ovsjanikov1_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./horse7/Ovsjanikov1_horse7_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.128501<br>Max=1.11576<br><a href="./horse7/Ovsjanikov2_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./horse7/Ovsjanikov2_horse7_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.177042<br>Max=0.920686<br><a href="./horse7/ZhangDefDrivGMDS_horse7_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./horse7/ZhangDefDrivGMDS_horse7_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>dog6_to_dog1</td>
+	<td>Ave=0.0415944<br>Max=0.143045<br><a href="./dog6/BlendedMap_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.071071<br>Max=0.399645<br><a href="./dog6/LipmanGMDS_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./dog6/LipmanGMDS_dog6_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.114695<br>Max=0.552157<br><a href="./dog6/BestConf_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.699162<br>Max=1.27839<br><a href="./dog6/BronsteinGMDS_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./dog6/BronsteinGMDS_dog6_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.578387<br>Max=1.13122<br><a href="./dog6/Ovsjanikov1_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./dog6/Ovsjanikov1_dog6_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.606707<br>Max=1.0893<br><a href="./dog6/Ovsjanikov2_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./dog6/Ovsjanikov2_dog6_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.14247<br>Max=0.646989<br><a href="./dog6/ZhangDefDrivGMDS_dog6_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./dog6/ZhangDefDrivGMDS_dog6_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>wolf1_to_wolf2<br><b>(Excluded)</b></td>
+	<td>Ave=0.0090194<br>Max=0.117985<br><a href="./wolf1/BlendedMap_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0172345<br>Max=0.184186<br><a href="./wolf1/LipmanGMDS_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<a href="./wolf1/LipmanGMDS_wolf1_to_wolf2_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0444595<br>Max=0.347069<br><a href="./wolf1/BestConf_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.23022<br>Max=0.808214<br><a href="./wolf1/BronsteinGMDS_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<a href="./wolf1/BronsteinGMDS_wolf1_to_wolf2_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.199332<br>Max=0.969005<br><a href="./wolf1/Ovsjanikov1_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<a href="./wolf1/Ovsjanikov1_wolf1_to_wolf2_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.195465<br>Max=0.969005<br><a href="./wolf1/Ovsjanikov2_wolf1_to_wolf2_FinalColors.jpg">Dense</a><br>
+<a href="./wolf1/Ovsjanikov2_wolf1_to_wolf2_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>XXX</td>
+</tr>
+<tr>
+	<td>horse10_to_393</td>
+	<td>Ave=0.0910279<br>Max=0.170832<br><a href="./horse10/BlendedMap_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.303451<br>Max=1.1777<br><a href="./horse10/LipmanGMDS_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<a href="./horse10/LipmanGMDS_horse10_to_393_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.146055<br>Max=0.584499<br><a href="./horse10/BestConf_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0784146<br>Max=0.149784<br><a href="./horse10/BronsteinGMDS_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<a href="./horse10/BronsteinGMDS_horse10_to_393_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.348469<br>Max=1.31928<br><a href="./horse10/Ovsjanikov1_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<a href="./horse10/Ovsjanikov1_horse10_to_393_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.346778<br>Max=1.31928<br><a href="./horse10/Ovsjanikov2_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<a href="./horse10/Ovsjanikov2_horse10_to_393_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.11373<br>Max=0.336231<br><a href="./horse10/ZhangDefDrivGMDS_horse10_to_393_FinalColors.jpg">Dense</a><br>
+<a href="./horse10/ZhangDefDrivGMDS_horse10_to_393_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>390_to_dog6<br><b>(Excluded)</b></td>
+	<td>Ave=0.0995078<br>Max=0.311063<br><a href="./390/BlendedMap_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.306097<br>Max=1.1814<br><a href="./390/LipmanGMDS_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<a href="./390/LipmanGMDS_390_to_dog6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.763194<br>Max=1.41119<br><a href="./390/BestConf_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.723161<br>Max=1.41283<br><a href="./390/BronsteinGMDS_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<a href="./390/BronsteinGMDS_390_to_dog6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.44962<br>Max=1.35542<br><a href="./390/Ovsjanikov1_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<a href="./390/Ovsjanikov1_390_to_dog6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.311042<br>Max=1.35542<br><a href="./390/Ovsjanikov2_390_to_dog6_FinalColors.jpg">Dense</a><br>
+<a href="./390/Ovsjanikov2_390_to_dog6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>XXX</td>
+</tr>
+<tr>
+	<td>wolf2_to_394</td>
+	<td>Ave=0.076602<br>Max=0.161278<br><a href="./wolf2/BlendedMap_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.131228<br>Max=0.958349<br><a href="./wolf2/LipmanGMDS_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<a href="./wolf2/LipmanGMDS_wolf2_to_394_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.135833<br>Max=0.547887<br><a href="./wolf2/BestConf_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.695097<br>Max=1.26828<br><a href="./wolf2/BronsteinGMDS_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<a href="./wolf2/BronsteinGMDS_wolf2_to_394_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.277846<br>Max=0.93555<br><a href="./wolf2/Ovsjanikov1_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<a href="./wolf2/Ovsjanikov1_wolf2_to_394_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.316784<br>Max=0.93555<br><a href="./wolf2/Ovsjanikov2_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<a href="./wolf2/Ovsjanikov2_wolf2_to_394_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0862432<br>Max=0.224044<br><a href="./wolf2/ZhangDefDrivGMDS_wolf2_to_394_FinalColors.jpg">Dense</a><br>
+<a href="./wolf2/ZhangDefDrivGMDS_wolf2_to_394_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>dog1_to_horse15</td>
+	<td>Ave=0.069908<br>Max=0.146562<br><a href="./dog1/BlendedMap_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.121267<br>Max=0.29761<br><a href="./dog1/LipmanGMDS_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./dog1/LipmanGMDS_dog1_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.149216<br>Max=0.640509<br><a href="./dog1/BestConf_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.273797<br>Max=0.798644<br><a href="./dog1/BronsteinGMDS_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./dog1/BronsteinGMDS_dog1_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.276593<br>Max=1.33528<br><a href="./dog1/Ovsjanikov1_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./dog1/Ovsjanikov1_dog1_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.248329<br>Max=1.31948<br><a href="./dog1/Ovsjanikov2_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./dog1/Ovsjanikov2_dog1_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.324831<br>Max=1.37608<br><a href="./dog1/ZhangDefDrivGMDS_dog1_to_horse15_FinalColors.jpg">Dense</a><br>
+<a href="./dog1/ZhangDefDrivGMDS_dog1_to_horse15_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>cat8_to_dog1</td>
+	<td>Ave=0.0790449<br>Max=0.148273<br><a href="./cat8/BlendedMap_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.124601<br>Max=0.75018<br><a href="./cat8/LipmanGMDS_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./cat8/LipmanGMDS_cat8_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.118802<br>Max=0.413508<br><a href="./cat8/BestConf_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.658632<br>Max=1.17964<br><a href="./cat8/BronsteinGMDS_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./cat8/BronsteinGMDS_cat8_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.306357<br>Max=0.959836<br><a href="./cat8/Ovsjanikov1_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./cat8/Ovsjanikov1_cat8_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.331594<br>Max=0.959836<br><a href="./cat8/Ovsjanikov2_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./cat8/Ovsjanikov2_cat8_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.236433<br>Max=1.03416<br><a href="./cat8/ZhangDefDrivGMDS_cat8_to_dog1_FinalColors.jpg">Dense</a><br>
+<a href="./cat8/ZhangDefDrivGMDS_cat8_to_dog1_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh032_to_gorilla8<br><b>(Excluded)</b></td>
+	<td>Ave=0.0759735<br>Max=0.164031<br><a href="./mesh032/BlendedMap_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.469984<br>Max=1.27268<br><a href="./mesh032/LipmanGMDS_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/LipmanGMDS_mesh032_to_gorilla8_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.169726<br>Max=0.704079<br><a href="./mesh032/BestConf_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.284784<br>Max=1.2479<br><a href="./mesh032/BronsteinGMDS_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/BronsteinGMDS_mesh032_to_gorilla8_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.682394<br>Max=1.3895<br><a href="./mesh032/Ovsjanikov1_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/Ovsjanikov1_mesh032_to_gorilla8_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.709497<br>Max=1.39468<br><a href="./mesh032/Ovsjanikov2_mesh032_to_gorilla8_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/Ovsjanikov2_mesh032_to_gorilla8_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>XXX</td>
+</tr>
+<tr>
+	<td>mesh036_to_david10</td>
+	<td>Ave=0.0598786<br>Max=0.117699<br><a href="./mesh036/BlendedMap_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0671791<br>Max=0.247183<br><a href="./mesh036/LipmanGMDS_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/LipmanGMDS_mesh036_to_david10_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.125132<br>Max=0.614195<br><a href="./mesh036/BestConf_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.351134<br>Max=1.51924<br><a href="./mesh036/BronsteinGMDS_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/BronsteinGMDS_mesh036_to_david10_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.398818<br>Max=1.41947<br><a href="./mesh036/Ovsjanikov1_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/Ovsjanikov1_mesh036_to_david10_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.391885<br>Max=1.41947<br><a href="./mesh036/Ovsjanikov2_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/Ovsjanikov2_mesh036_to_david10_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.799236<br>Max=1.63609<br><a href="./mesh036/ZhangDefDrivGMDS_mesh036_to_david10_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/ZhangDefDrivGMDS_mesh036_to_david10_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>michael13_to_victoria0</td>
+	<td>Ave=0.0425602<br>Max=0.088788<br><a href="./michael13/BlendedMap_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0726083<br>Max=0.173285<br><a href="./michael13/LipmanGMDS_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<a href="./michael13/LipmanGMDS_michael13_to_victoria0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.151713<br>Max=0.651772<br><a href="./michael13/BestConf_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.468255<br>Max=1.47554<br><a href="./michael13/BronsteinGMDS_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<a href="./michael13/BronsteinGMDS_michael13_to_victoria0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.272119<br>Max=1.35844<br><a href="./michael13/Ovsjanikov1_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<a href="./michael13/Ovsjanikov1_michael13_to_victoria0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.131006<br>Max=0.852323<br><a href="./michael13/Ovsjanikov2_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<a href="./michael13/Ovsjanikov2_michael13_to_victoria0_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.302668<br>Max=1.51583<br><a href="./michael13/ZhangDefDrivGMDS_michael13_to_victoria0_FinalColors.jpg">Dense</a><br>
+<a href="./michael13/ZhangDefDrivGMDS_michael13_to_victoria0_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>michael5_to_9<br><b>(Excluded)</b></td>
+	<td>Ave=0.0570346<br>Max=0.152548<br><a href="./michael5/BlendedMap_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.600276<br>Max=1.49913<br><a href="./michael5/LipmanGMDS_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<a href="./michael5/LipmanGMDS_michael5_to_9_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.495051<br>Max=1.66555<br><a href="./michael5/BestConf_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.133005<br>Max=0.265212<br><a href="./michael5/BronsteinGMDS_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<a href="./michael5/BronsteinGMDS_michael5_to_9_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.424859<br>Max=1.54784<br><a href="./michael5/Ovsjanikov1_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<a href="./michael5/Ovsjanikov1_michael5_to_9_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.334144<br>Max=1.55909<br><a href="./michael5/Ovsjanikov2_michael5_to_9_FinalColors.jpg">Dense</a><br>
+<a href="./michael5/Ovsjanikov2_michael5_to_9_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>XXX</td>
+</tr>
+<tr>
+	<td>mesh003_to_david6</td>
+	<td>Ave=0.0584333<br>Max=0.14551<br><a href="./mesh003/BlendedMap_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.375523<br>Max=1.10193<br><a href="./mesh003/LipmanGMDS_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/LipmanGMDS_mesh003_to_david6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.113345<br>Max=0.629374<br><a href="./mesh003/BestConf_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0796494<br>Max=0.189862<br><a href="./mesh003/BronsteinGMDS_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/BronsteinGMDS_mesh003_to_david6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.372371<br>Max=1.47845<br><a href="./mesh003/Ovsjanikov1_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/Ovsjanikov1_mesh003_to_david6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.335976<br>Max=1.47845<br><a href="./mesh003/Ovsjanikov2_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/Ovsjanikov2_mesh003_to_david6_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.167946<br>Max=1.15807<br><a href="./mesh003/ZhangDefDrivGMDS_mesh003_to_david6_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/ZhangDefDrivGMDS_mesh003_to_david6_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+</table>
+<a name="crashes"><h2>Excluded Due to Crashes</h2></a>
+<table border=1>
+<tr>
+	<td>390_to_dog6 (1) </td>
+	<td>mesh032_to_gorilla8 (1) </td>
+	<td>michael5_to_9 (1) </td>
+	<td>wolf1_to_wolf2 (1) </td>
+</tr>
+</table>
+</body>
+</html>

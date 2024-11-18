@@ -1,0 +1,1573 @@
+<html>
+<head>
+</head>
+<body>
+<a href="#summaryErrors"> Summary Errors</a><br><a href="#perModelErrors"> Per Model Errors</a><br><a href="#crashes"> Unexpected Crashes </a><br>
+<h1>Algorithms: 6</h1>
+
+<a name="summaryErrors"><h2>Summary Tables</h2></a>
+
+<h4>Total</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0810185</td>
+	<td>0.16168</td>
+	<td>0.113236</td>
+	<td>0.276339</td>
+	<td>0.27198</td>
+	<td>0.255582</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.251621</td>
+	<td>0.642831</td>
+	<td>0.600654</td>
+	<td>0.862045</td>
+	<td>1.29284</td>
+	<td>1.06846</td>
+</tr>
+</table>
+<h4>Scape_1</h4>
+<table border=1>
+<tr>
+	<td<b>Algorithm<br>--------<br>Value</b></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+</tr>
+<tr>
+	<td><b>Average Error</b></td>
+	<td>0.0810185</td>
+	<td>0.16168</td>
+	<td>0.113236</td>
+	<td>0.276339</td>
+	<td>0.27198</td>
+	<td>0.255582</td>
+</tr>
+<tr>
+	<td><b>Maximal Error</b></td>
+	<td>0.251621</td>
+	<td>0.642831</td>
+	<td>0.600654</td>
+	<td>0.862045</td>
+	<td>1.29284</td>
+	<td>1.06846</td>
+</tr>
+</table>
+<a name="perModelErrors"><h2>Per Experiment Values</h2></a>
+Values in each cell: average geodesic error, maximal geodesic error, images<br>
+<table border=1>
+<tr><td></td>
+	<td><b>Blended</b></td>
+	<td><b>Mobius Voting</b></td>
+	<td><b>Best Conformal</b></td>
+	<td><b>GMDS</b></td>
+	<td><b>HKM 1 corr</b></td>
+	<td><b>HKM 2 corrs</b></td>
+</tr>
+<tr>
+	<td>mesh000_to_mesh037</td>
+	<td>Ave=0.0390989<br>Max=0.122149<br><a href="./mesh000/BlendedMap_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0383648<br>Max=0.160816<br><a href="./mesh000/LipmanGMDS_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh000/LipmanGMDS_mesh000_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0679452<br>Max=0.537019<br><a href="./mesh000/BestConf_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0614055<br>Max=0.137227<br><a href="./mesh000/BronsteinGMDS_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh000/BronsteinGMDS_mesh000_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.374036<br>Max=1.3739<br><a href="./mesh000/Ovsjanikov1_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh000/Ovsjanikov1_mesh000_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.44562<br>Max=1.3739<br><a href="./mesh000/Ovsjanikov2_mesh000_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh000/Ovsjanikov2_mesh000_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh001_to_mesh002</td>
+	<td>Ave=0.0326967<br>Max=0.0874366<br><a href="./mesh001/BlendedMap_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0307305<br>Max=0.189218<br><a href="./mesh001/LipmanGMDS_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh001/LipmanGMDS_mesh001_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.057749<br>Max=0.465563<br><a href="./mesh001/BestConf_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.481707<br>Max=1.36824<br><a href="./mesh001/BronsteinGMDS_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh001/BronsteinGMDS_mesh001_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.134755<br>Max=1.17417<br><a href="./mesh001/Ovsjanikov1_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh001/Ovsjanikov1_mesh001_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0656615<br>Max=0.606368<br><a href="./mesh001/Ovsjanikov2_mesh001_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh001/Ovsjanikov2_mesh001_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh002_to_mesh055</td>
+	<td>Ave=0.0407602<br>Max=0.123427<br><a href="./mesh002/BlendedMap_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0709247<br>Max=0.422559<br><a href="./mesh002/LipmanGMDS_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh002/LipmanGMDS_mesh002_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0991395<br>Max=0.596341<br><a href="./mesh002/BestConf_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0860111<br>Max=0.358946<br><a href="./mesh002/BronsteinGMDS_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh002/BronsteinGMDS_mesh002_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.396593<br>Max=1.39331<br><a href="./mesh002/Ovsjanikov1_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh002/Ovsjanikov1_mesh002_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.455069<br>Max=1.39331<br><a href="./mesh002/Ovsjanikov2_mesh002_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh002/Ovsjanikov2_mesh002_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh003_to_mesh050</td>
+	<td>Ave=0.0401645<br>Max=0.11339<br><a href="./mesh003/BlendedMap_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0576245<br>Max=0.191937<br><a href="./mesh003/LipmanGMDS_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/LipmanGMDS_mesh003_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0789682<br>Max=0.524336<br><a href="./mesh003/BestConf_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0623489<br>Max=0.203305<br><a href="./mesh003/BronsteinGMDS_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/BronsteinGMDS_mesh003_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.089961<br>Max=1.08821<br><a href="./mesh003/Ovsjanikov1_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/Ovsjanikov1_mesh003_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0640364<br>Max=0.682068<br><a href="./mesh003/Ovsjanikov2_mesh003_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh003/Ovsjanikov2_mesh003_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh004_to_mesh041</td>
+	<td>Ave=0.0327417<br>Max=0.0934807<br><a href="./mesh004/BlendedMap_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0629636<br>Max=0.223629<br><a href="./mesh004/LipmanGMDS_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<a href="./mesh004/LipmanGMDS_mesh004_to_mesh041_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.104226<br>Max=0.658665<br><a href="./mesh004/BestConf_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.44584<br>Max=1.41188<br><a href="./mesh004/BronsteinGMDS_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<a href="./mesh004/BronsteinGMDS_mesh004_to_mesh041_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.1823<br>Max=1.3208<br><a href="./mesh004/Ovsjanikov1_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<a href="./mesh004/Ovsjanikov1_mesh004_to_mesh041_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0764298<br>Max=1.3208<br><a href="./mesh004/Ovsjanikov2_mesh004_to_mesh041_FinalColors.jpg">Dense</a><br>
+<a href="./mesh004/Ovsjanikov2_mesh004_to_mesh041_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh005_to_mesh059</td>
+	<td>Ave=0.0358546<br>Max=0.106677<br><a href="./mesh005/BlendedMap_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0490295<br>Max=0.20825<br><a href="./mesh005/LipmanGMDS_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<a href="./mesh005/LipmanGMDS_mesh005_to_mesh059_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.118613<br>Max=0.622737<br><a href="./mesh005/BestConf_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.211862<br>Max=1.01308<br><a href="./mesh005/BronsteinGMDS_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<a href="./mesh005/BronsteinGMDS_mesh005_to_mesh059_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.146728<br>Max=1.22769<br><a href="./mesh005/Ovsjanikov1_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<a href="./mesh005/Ovsjanikov1_mesh005_to_mesh059_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0850189<br>Max=1.22769<br><a href="./mesh005/Ovsjanikov2_mesh005_to_mesh059_FinalColors.jpg">Dense</a><br>
+<a href="./mesh005/Ovsjanikov2_mesh005_to_mesh059_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh006_to_mesh057</td>
+	<td>Ave=0.0391971<br>Max=0.125869<br><a href="./mesh006/BlendedMap_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0407544<br>Max=0.185713<br><a href="./mesh006/LipmanGMDS_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<a href="./mesh006/LipmanGMDS_mesh006_to_mesh057_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0707487<br>Max=0.466851<br><a href="./mesh006/BestConf_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0553452<br>Max=0.222971<br><a href="./mesh006/BronsteinGMDS_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<a href="./mesh006/BronsteinGMDS_mesh006_to_mesh057_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.354715<br>Max=1.30383<br><a href="./mesh006/Ovsjanikov1_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<a href="./mesh006/Ovsjanikov1_mesh006_to_mesh057_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.455251<br>Max=1.30383<br><a href="./mesh006/Ovsjanikov2_mesh006_to_mesh057_FinalColors.jpg">Dense</a><br>
+<a href="./mesh006/Ovsjanikov2_mesh006_to_mesh057_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh007_to_mesh019</td>
+	<td>Ave=0.0502959<br>Max=0.140503<br><a href="./mesh007/BlendedMap_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0954135<br>Max=0.607202<br><a href="./mesh007/LipmanGMDS_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<a href="./mesh007/LipmanGMDS_mesh007_to_mesh019_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.101538<br>Max=0.655881<br><a href="./mesh007/BestConf_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.455596<br>Max=1.22101<br><a href="./mesh007/BronsteinGMDS_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<a href="./mesh007/BronsteinGMDS_mesh007_to_mesh019_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.368767<br>Max=1.40001<br><a href="./mesh007/Ovsjanikov1_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<a href="./mesh007/Ovsjanikov1_mesh007_to_mesh019_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.435322<br>Max=1.41085<br><a href="./mesh007/Ovsjanikov2_mesh007_to_mesh019_FinalColors.jpg">Dense</a><br>
+<a href="./mesh007/Ovsjanikov2_mesh007_to_mesh019_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh008_to_mesh068</td>
+	<td>Ave=0.0350729<br>Max=0.112333<br><a href="./mesh008/BlendedMap_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.487119<br>Max=1.26486<br><a href="./mesh008/LipmanGMDS_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh008/LipmanGMDS_mesh008_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0778876<br>Max=0.494144<br><a href="./mesh008/BestConf_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.450642<br>Max=1.26455<br><a href="./mesh008/BronsteinGMDS_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh008/BronsteinGMDS_mesh008_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.154951<br>Max=1.13073<br><a href="./mesh008/Ovsjanikov1_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh008/Ovsjanikov1_mesh008_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.093719<br>Max=0.85664<br><a href="./mesh008/Ovsjanikov2_mesh008_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh008/Ovsjanikov2_mesh008_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh009_to_mesh070</td>
+	<td>Ave=0.0432904<br>Max=0.168131<br><a href="./mesh009/BlendedMap_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.178143<br>Max=1.08487<br><a href="./mesh009/LipmanGMDS_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<a href="./mesh009/LipmanGMDS_mesh009_to_mesh070_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.129997<br>Max=0.571832<br><a href="./mesh009/BestConf_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0856238<br>Max=0.362002<br><a href="./mesh009/BronsteinGMDS_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<a href="./mesh009/BronsteinGMDS_mesh009_to_mesh070_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.382555<br>Max=1.22138<br><a href="./mesh009/Ovsjanikov1_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<a href="./mesh009/Ovsjanikov1_mesh009_to_mesh070_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.460302<br>Max=1.22138<br><a href="./mesh009/Ovsjanikov2_mesh009_to_mesh070_FinalColors.jpg">Dense</a><br>
+<a href="./mesh009/Ovsjanikov2_mesh009_to_mesh070_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh010_to_mesh064</td>
+	<td>Ave=0.0393876<br>Max=0.120977<br><a href="./mesh010/BlendedMap_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0648585<br>Max=0.242709<br><a href="./mesh010/LipmanGMDS_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh010/LipmanGMDS_mesh010_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0756589<br>Max=0.460247<br><a href="./mesh010/BestConf_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.500937<br>Max=1.37587<br><a href="./mesh010/BronsteinGMDS_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh010/BronsteinGMDS_mesh010_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.145433<br>Max=0.986777<br><a href="./mesh010/Ovsjanikov1_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh010/Ovsjanikov1_mesh010_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0717821<br>Max=0.614821<br><a href="./mesh010/Ovsjanikov2_mesh010_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh010/Ovsjanikov2_mesh010_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh011_to_mesh021</td>
+	<td>Ave=0.0394293<br>Max=0.149567<br><a href="./mesh011/BlendedMap_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0498924<br>Max=0.352567<br><a href="./mesh011/LipmanGMDS_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<a href="./mesh011/LipmanGMDS_mesh011_to_mesh021_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0568036<br>Max=0.415079<br><a href="./mesh011/BestConf_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.295425<br>Max=1.38313<br><a href="./mesh011/BronsteinGMDS_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<a href="./mesh011/BronsteinGMDS_mesh011_to_mesh021_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.321293<br>Max=1.39146<br><a href="./mesh011/Ovsjanikov1_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<a href="./mesh011/Ovsjanikov1_mesh011_to_mesh021_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.45603<br>Max=1.39614<br><a href="./mesh011/Ovsjanikov2_mesh011_to_mesh021_FinalColors.jpg">Dense</a><br>
+<a href="./mesh011/Ovsjanikov2_mesh011_to_mesh021_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh012_to_mesh060</td>
+	<td>Ave=0.0405108<br>Max=0.106534<br><a href="./mesh012/BlendedMap_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.109176<br>Max=1.0788<br><a href="./mesh012/LipmanGMDS_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh012/LipmanGMDS_mesh012_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.104751<br>Max=0.542152<br><a href="./mesh012/BestConf_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.424084<br>Max=1.29906<br><a href="./mesh012/BronsteinGMDS_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh012/BronsteinGMDS_mesh012_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.388387<br>Max=1.28867<br><a href="./mesh012/Ovsjanikov1_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh012/Ovsjanikov1_mesh012_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.452652<br>Max=1.28867<br><a href="./mesh012/Ovsjanikov2_mesh012_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh012/Ovsjanikov2_mesh012_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh013_to_mesh038</td>
+	<td>Ave=0.0447767<br>Max=0.115558<br><a href="./mesh013/BlendedMap_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.472206<br>Max=1.41347<br><a href="./mesh013/LipmanGMDS_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh013/LipmanGMDS_mesh013_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.122815<br>Max=0.604619<br><a href="./mesh013/BestConf_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.498235<br>Max=1.41208<br><a href="./mesh013/BronsteinGMDS_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh013/BronsteinGMDS_mesh013_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.233474<br>Max=1.3453<br><a href="./mesh013/Ovsjanikov1_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh013/Ovsjanikov1_mesh013_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.148205<br>Max=1.09405<br><a href="./mesh013/Ovsjanikov2_mesh013_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh013/Ovsjanikov2_mesh013_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh014_to_mesh068</td>
+	<td>Ave=0.23626<br>Max=1.16956<br><a href="./mesh014/BlendedMap_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.243296<br>Max=1.15302<br><a href="./mesh014/LipmanGMDS_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh014/LipmanGMDS_mesh014_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.124597<br>Max=0.609798<br><a href="./mesh014/BestConf_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.11394<br>Max=0.370549<br><a href="./mesh014/BronsteinGMDS_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh014/BronsteinGMDS_mesh014_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.158358<br>Max=0.946717<br><a href="./mesh014/Ovsjanikov1_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh014/Ovsjanikov1_mesh014_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0868536<br>Max=0.366187<br><a href="./mesh014/Ovsjanikov2_mesh014_to_mesh068_FinalColors.jpg">Dense</a><br>
+<a href="./mesh014/Ovsjanikov2_mesh014_to_mesh068_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh015_to_mesh054</td>
+	<td>Ave=0.0487349<br>Max=0.134822<br><a href="./mesh015/BlendedMap_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.075065<br>Max=0.576847<br><a href="./mesh015/LipmanGMDS_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/LipmanGMDS_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0860232<br>Max=0.45537<br><a href="./mesh015/BestConf_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0616341<br>Max=0.214882<br><a href="./mesh015/BronsteinGMDS_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/BronsteinGMDS_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.177082<br>Max=1.37299<br><a href="./mesh015/Ovsjanikov1_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/Ovsjanikov1_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.103392<br>Max=0.558217<br><a href="./mesh015/Ovsjanikov2_mesh015_to_mesh054_FinalColors.jpg">Dense</a><br>
+<a href="./mesh015/Ovsjanikov2_mesh015_to_mesh054_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh016_to_mesh067</td>
+	<td>Ave=0.0378133<br>Max=0.129723<br><a href="./mesh016/BlendedMap_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0746466<br>Max=0.467611<br><a href="./mesh016/LipmanGMDS_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<a href="./mesh016/LipmanGMDS_mesh016_to_mesh067_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0876807<br>Max=0.43625<br><a href="./mesh016/BestConf_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.119289<br>Max=0.367785<br><a href="./mesh016/BronsteinGMDS_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<a href="./mesh016/BronsteinGMDS_mesh016_to_mesh067_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.158554<br>Max=1.56257<br><a href="./mesh016/Ovsjanikov1_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<a href="./mesh016/Ovsjanikov1_mesh016_to_mesh067_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0777639<br>Max=0.640773<br><a href="./mesh016/Ovsjanikov2_mesh016_to_mesh067_FinalColors.jpg">Dense</a><br>
+<a href="./mesh016/Ovsjanikov2_mesh016_to_mesh067_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh017_to_mesh015</td>
+	<td>Ave=0.0513782<br>Max=0.121927<br><a href="./mesh017/BlendedMap_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.462272<br>Max=1.34821<br><a href="./mesh017/LipmanGMDS_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh017/LipmanGMDS_mesh017_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.119969<br>Max=0.611776<br><a href="./mesh017/BestConf_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.427009<br>Max=1.34526<br><a href="./mesh017/BronsteinGMDS_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh017/BronsteinGMDS_mesh017_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.381822<br>Max=1.34438<br><a href="./mesh017/Ovsjanikov1_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh017/Ovsjanikov1_mesh017_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.39308<br>Max=1.35468<br><a href="./mesh017/Ovsjanikov2_mesh017_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh017/Ovsjanikov2_mesh017_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh018_to_mesh006</td>
+	<td>Ave=0.0426445<br>Max=0.129268<br><a href="./mesh018/BlendedMap_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.423772<br>Max=1.27885<br><a href="./mesh018/LipmanGMDS_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<a href="./mesh018/LipmanGMDS_mesh018_to_mesh006_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.117613<br>Max=0.676096<br><a href="./mesh018/BestConf_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.430789<br>Max=1.28586<br><a href="./mesh018/BronsteinGMDS_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<a href="./mesh018/BronsteinGMDS_mesh018_to_mesh006_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.348418<br>Max=1.24836<br><a href="./mesh018/Ovsjanikov1_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<a href="./mesh018/Ovsjanikov1_mesh018_to_mesh006_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.430849<br>Max=1.24836<br><a href="./mesh018/Ovsjanikov2_mesh018_to_mesh006_FinalColors.jpg">Dense</a><br>
+<a href="./mesh018/Ovsjanikov2_mesh018_to_mesh006_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh019_to_mesh035</td>
+	<td>Ave=0.033521<br>Max=0.119815<br><a href="./mesh019/BlendedMap_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.053549<br>Max=0.214706<br><a href="./mesh019/LipmanGMDS_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/LipmanGMDS_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.145052<br>Max=0.682166<br><a href="./mesh019/BestConf_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.115682<br>Max=0.360398<br><a href="./mesh019/BronsteinGMDS_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/BronsteinGMDS_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.18284<br>Max=1.15973<br><a href="./mesh019/Ovsjanikov1_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/Ovsjanikov1_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0888242<br>Max=0.436415<br><a href="./mesh019/Ovsjanikov2_mesh019_to_mesh035_FinalColors.jpg">Dense</a><br>
+<a href="./mesh019/Ovsjanikov2_mesh019_to_mesh035_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh020_to_mesh010</td>
+	<td>Ave=0.0224127<br>Max=0.0730169<br><a href="./mesh020/BlendedMap_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0311387<br>Max=0.174643<br><a href="./mesh020/LipmanGMDS_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<a href="./mesh020/LipmanGMDS_mesh020_to_mesh010_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0774064<br>Max=0.493006<br><a href="./mesh020/BestConf_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.107646<br>Max=0.365889<br><a href="./mesh020/BronsteinGMDS_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<a href="./mesh020/BronsteinGMDS_mesh020_to_mesh010_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.372941<br>Max=1.38555<br><a href="./mesh020/Ovsjanikov1_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<a href="./mesh020/Ovsjanikov1_mesh020_to_mesh010_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.446858<br>Max=1.38555<br><a href="./mesh020/Ovsjanikov2_mesh020_to_mesh010_FinalColors.jpg">Dense</a><br>
+<a href="./mesh020/Ovsjanikov2_mesh020_to_mesh010_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh021_to_mesh045</td>
+	<td>Ave=0.0620067<br>Max=0.156497<br><a href="./mesh021/BlendedMap_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.476205<br>Max=1.38989<br><a href="./mesh021/LipmanGMDS_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh021/LipmanGMDS_mesh021_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0828818<br>Max=0.470593<br><a href="./mesh021/BestConf_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.3169<br>Max=1.38764<br><a href="./mesh021/BronsteinGMDS_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh021/BronsteinGMDS_mesh021_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.196337<br>Max=1.59912<br><a href="./mesh021/Ovsjanikov1_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh021/Ovsjanikov1_mesh021_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.162775<br>Max=1.1031<br><a href="./mesh021/Ovsjanikov2_mesh021_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh021/Ovsjanikov2_mesh021_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh022_to_mesh027</td>
+	<td>Ave=0.0284132<br>Max=0.0905209<br><a href="./mesh022/BlendedMap_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0362306<br>Max=0.207692<br><a href="./mesh022/LipmanGMDS_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh022/LipmanGMDS_mesh022_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0621831<br>Max=0.471622<br><a href="./mesh022/BestConf_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.460417<br>Max=1.39548<br><a href="./mesh022/BronsteinGMDS_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh022/BronsteinGMDS_mesh022_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.137737<br>Max=1.09645<br><a href="./mesh022/Ovsjanikov1_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh022/Ovsjanikov1_mesh022_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0617164<br>Max=0.867132<br><a href="./mesh022/Ovsjanikov2_mesh022_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh022/Ovsjanikov2_mesh022_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh023_to_mesh071</td>
+	<td>Ave=0.0482081<br>Max=0.137216<br><a href="./mesh023/BlendedMap_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.436881<br>Max=1.24574<br><a href="./mesh023/LipmanGMDS_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/LipmanGMDS_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0827017<br>Max=0.471269<br><a href="./mesh023/BestConf_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.433721<br>Max=1.272<br><a href="./mesh023/BronsteinGMDS_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/BronsteinGMDS_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.333801<br>Max=1.25591<br><a href="./mesh023/Ovsjanikov1_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/Ovsjanikov1_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.443062<br>Max=1.25591<br><a href="./mesh023/Ovsjanikov2_mesh023_to_mesh071_FinalColors.jpg">Dense</a><br>
+<a href="./mesh023/Ovsjanikov2_mesh023_to_mesh071_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh024_to_mesh048</td>
+	<td>Ave=0.533785<br>Max=1.45633<br><a href="./mesh024/BlendedMap_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.162346<br>Max=1.10879<br><a href="./mesh024/LipmanGMDS_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<a href="./mesh024/LipmanGMDS_mesh024_to_mesh048_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.50401<br>Max=1.45633<br><a href="./mesh024/BestConf_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0737321<br>Max=0.379615<br><a href="./mesh024/BronsteinGMDS_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<a href="./mesh024/BronsteinGMDS_mesh024_to_mesh048_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.190551<br>Max=1.37363<br><a href="./mesh024/Ovsjanikov1_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<a href="./mesh024/Ovsjanikov1_mesh024_to_mesh048_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0946765<br>Max=1.37363<br><a href="./mesh024/Ovsjanikov2_mesh024_to_mesh048_FinalColors.jpg">Dense</a><br>
+<a href="./mesh024/Ovsjanikov2_mesh024_to_mesh048_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh025_to_mesh058</td>
+	<td>Ave=0.511058<br>Max=1.40198<br><a href="./mesh025/BlendedMap_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.506449<br>Max=1.37932<br><a href="./mesh025/LipmanGMDS_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<a href="./mesh025/LipmanGMDS_mesh025_to_mesh058_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0777411<br>Max=0.487747<br><a href="./mesh025/BestConf_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0658778<br>Max=0.222181<br><a href="./mesh025/BronsteinGMDS_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<a href="./mesh025/BronsteinGMDS_mesh025_to_mesh058_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.417616<br>Max=1.38056<br><a href="./mesh025/Ovsjanikov1_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<a href="./mesh025/Ovsjanikov1_mesh025_to_mesh058_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.400762<br>Max=1.38056<br><a href="./mesh025/Ovsjanikov2_mesh025_to_mesh058_FinalColors.jpg">Dense</a><br>
+<a href="./mesh025/Ovsjanikov2_mesh025_to_mesh058_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh026_to_mesh008</td>
+	<td>Ave=0.495123<br>Max=1.47082<br><a href="./mesh026/BlendedMap_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.492209<br>Max=1.42874<br><a href="./mesh026/LipmanGMDS_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh026/LipmanGMDS_mesh026_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0919573<br>Max=0.587921<br><a href="./mesh026/BestConf_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.482217<br>Max=1.45368<br><a href="./mesh026/BronsteinGMDS_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh026/BronsteinGMDS_mesh026_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.157047<br>Max=1.5029<br><a href="./mesh026/Ovsjanikov1_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh026/Ovsjanikov1_mesh026_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0847768<br>Max=0.542762<br><a href="./mesh026/Ovsjanikov2_mesh026_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh026/Ovsjanikov2_mesh026_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh027_to_mesh005</td>
+	<td>Ave=0.0234708<br>Max=0.121605<br><a href="./mesh027/BlendedMap_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0302258<br>Max=0.177634<br><a href="./mesh027/LipmanGMDS_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<a href="./mesh027/LipmanGMDS_mesh027_to_mesh005_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0495656<br>Max=0.457338<br><a href="./mesh027/BestConf_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.458504<br>Max=1.44087<br><a href="./mesh027/BronsteinGMDS_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<a href="./mesh027/BronsteinGMDS_mesh027_to_mesh005_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.417178<br>Max=1.45609<br><a href="./mesh027/Ovsjanikov1_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<a href="./mesh027/Ovsjanikov1_mesh027_to_mesh005_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.483503<br>Max=1.45609<br><a href="./mesh027/Ovsjanikov2_mesh027_to_mesh005_FinalColors.jpg">Dense</a><br>
+<a href="./mesh027/Ovsjanikov2_mesh027_to_mesh005_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh028_to_mesh018</td>
+	<td>Ave=0.0436837<br>Max=0.16198<br><a href="./mesh028/BlendedMap_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0874358<br>Max=0.370179<br><a href="./mesh028/LipmanGMDS_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh028/LipmanGMDS_mesh028_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.119992<br>Max=0.726777<br><a href="./mesh028/BestConf_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.415497<br>Max=1.24805<br><a href="./mesh028/BronsteinGMDS_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh028/BronsteinGMDS_mesh028_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.372231<br>Max=1.24197<br><a href="./mesh028/Ovsjanikov1_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh028/Ovsjanikov1_mesh028_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.446063<br>Max=1.24267<br><a href="./mesh028/Ovsjanikov2_mesh028_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh028/Ovsjanikov2_mesh028_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh029_to_mesh043</td>
+	<td>Ave=0.0420972<br>Max=0.117972<br><a href="./mesh029/BlendedMap_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.427933<br>Max=1.40918<br><a href="./mesh029/LipmanGMDS_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<a href="./mesh029/LipmanGMDS_mesh029_to_mesh043_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.109969<br>Max=0.608152<br><a href="./mesh029/BestConf_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0596649<br>Max=0.218981<br><a href="./mesh029/BronsteinGMDS_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<a href="./mesh029/BronsteinGMDS_mesh029_to_mesh043_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.44797<br>Max=1.41986<br><a href="./mesh029/Ovsjanikov1_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<a href="./mesh029/Ovsjanikov1_mesh029_to_mesh043_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.470697<br>Max=1.41986<br><a href="./mesh029/Ovsjanikov2_mesh029_to_mesh043_FinalColors.jpg">Dense</a><br>
+<a href="./mesh029/Ovsjanikov2_mesh029_to_mesh043_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh030_to_mesh049</td>
+	<td>Ave=0.0393314<br>Max=0.120058<br><a href="./mesh030/BlendedMap_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0723151<br>Max=0.467795<br><a href="./mesh030/LipmanGMDS_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<a href="./mesh030/LipmanGMDS_mesh030_to_mesh049_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0933461<br>Max=0.607567<br><a href="./mesh030/BestConf_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0721799<br>Max=0.192087<br><a href="./mesh030/BronsteinGMDS_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<a href="./mesh030/BronsteinGMDS_mesh030_to_mesh049_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.138034<br>Max=1.71684<br><a href="./mesh030/Ovsjanikov1_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<a href="./mesh030/Ovsjanikov1_mesh030_to_mesh049_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0852423<br>Max=0.509723<br><a href="./mesh030/Ovsjanikov2_mesh030_to_mesh049_FinalColors.jpg">Dense</a><br>
+<a href="./mesh030/Ovsjanikov2_mesh030_to_mesh049_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh031_to_mesh015</td>
+	<td>Ave=0.0272758<br>Max=0.0896924<br><a href="./mesh031/BlendedMap_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0375121<br>Max=0.354787<br><a href="./mesh031/LipmanGMDS_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh031/LipmanGMDS_mesh031_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0608128<br>Max=0.514854<br><a href="./mesh031/BestConf_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0387681<br>Max=0.155123<br><a href="./mesh031/BronsteinGMDS_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh031/BronsteinGMDS_mesh031_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.127322<br>Max=1.02713<br><a href="./mesh031/Ovsjanikov1_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh031/Ovsjanikov1_mesh031_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0637954<br>Max=0.619018<br><a href="./mesh031/Ovsjanikov2_mesh031_to_mesh015_FinalColors.jpg">Dense</a><br>
+<a href="./mesh031/Ovsjanikov2_mesh031_to_mesh015_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh032_to_mesh046</td>
+	<td>Ave=0.501359<br>Max=1.40342<br><a href="./mesh032/BlendedMap_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0537516<br>Max=0.535442<br><a href="./mesh032/LipmanGMDS_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/LipmanGMDS_mesh032_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.48714<br>Max=1.40342<br><a href="./mesh032/BestConf_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.484349<br>Max=1.40201<br><a href="./mesh032/BronsteinGMDS_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/BronsteinGMDS_mesh032_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.180842<br>Max=1.10224<br><a href="./mesh032/Ovsjanikov1_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/Ovsjanikov1_mesh032_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0893085<br>Max=0.92868<br><a href="./mesh032/Ovsjanikov2_mesh032_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh032/Ovsjanikov2_mesh032_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh033_to_mesh064</td>
+	<td>Ave=0.0493557<br>Max=0.12837<br><a href="./mesh033/BlendedMap_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.307482<br>Max=1.38778<br><a href="./mesh033/LipmanGMDS_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh033/LipmanGMDS_mesh033_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.177127<br>Max=1.00965<br><a href="./mesh033/BestConf_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.480682<br>Max=1.37589<br><a href="./mesh033/BronsteinGMDS_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh033/BronsteinGMDS_mesh033_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.169408<br>Max=1.28432<br><a href="./mesh033/Ovsjanikov1_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh033/Ovsjanikov1_mesh033_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.155261<br>Max=0.997046<br><a href="./mesh033/Ovsjanikov2_mesh033_to_mesh064_FinalColors.jpg">Dense</a><br>
+<a href="./mesh033/Ovsjanikov2_mesh033_to_mesh064_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh034_to_mesh025</td>
+	<td>Ave=0.0308259<br>Max=0.0989337<br><a href="./mesh034/BlendedMap_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0447108<br>Max=0.214402<br><a href="./mesh034/LipmanGMDS_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<a href="./mesh034/LipmanGMDS_mesh034_to_mesh025_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0916912<br>Max=0.596985<br><a href="./mesh034/BestConf_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.060298<br>Max=0.210164<br><a href="./mesh034/BronsteinGMDS_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<a href="./mesh034/BronsteinGMDS_mesh034_to_mesh025_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.138072<br>Max=1.0382<br><a href="./mesh034/Ovsjanikov1_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<a href="./mesh034/Ovsjanikov1_mesh034_to_mesh025_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0787229<br>Max=0.634753<br><a href="./mesh034/Ovsjanikov2_mesh034_to_mesh025_FinalColors.jpg">Dense</a><br>
+<a href="./mesh034/Ovsjanikov2_mesh034_to_mesh025_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh035_to_mesh047</td>
+	<td>Ave=0.0332939<br>Max=0.0988483<br><a href="./mesh035/BlendedMap_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0359701<br>Max=0.222335<br><a href="./mesh035/LipmanGMDS_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<a href="./mesh035/LipmanGMDS_mesh035_to_mesh047_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.113327<br>Max=0.600624<br><a href="./mesh035/BestConf_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0579558<br>Max=0.217881<br><a href="./mesh035/BronsteinGMDS_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<a href="./mesh035/BronsteinGMDS_mesh035_to_mesh047_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.142569<br>Max=1.01777<br><a href="./mesh035/Ovsjanikov1_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<a href="./mesh035/Ovsjanikov1_mesh035_to_mesh047_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0784067<br>Max=0.838749<br><a href="./mesh035/Ovsjanikov2_mesh035_to_mesh047_FinalColors.jpg">Dense</a><br>
+<a href="./mesh035/Ovsjanikov2_mesh035_to_mesh047_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh036_to_mesh050</td>
+	<td>Ave=0.0350926<br>Max=0.108984<br><a href="./mesh036/BlendedMap_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0453112<br>Max=0.246744<br><a href="./mesh036/LipmanGMDS_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/LipmanGMDS_mesh036_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0765164<br>Max=0.546724<br><a href="./mesh036/BestConf_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0480245<br>Max=0.167613<br><a href="./mesh036/BronsteinGMDS_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/BronsteinGMDS_mesh036_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.375979<br>Max=1.34575<br><a href="./mesh036/Ovsjanikov1_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/Ovsjanikov1_mesh036_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.440607<br>Max=1.34575<br><a href="./mesh036/Ovsjanikov2_mesh036_to_mesh050_FinalColors.jpg">Dense</a><br>
+<a href="./mesh036/Ovsjanikov2_mesh036_to_mesh050_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh037_to_mesh011</td>
+	<td>Ave=0.0359462<br>Max=0.129087<br><a href="./mesh037/BlendedMap_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0593295<br>Max=0.647158<br><a href="./mesh037/LipmanGMDS_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh037/LipmanGMDS_mesh037_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0672645<br>Max=0.59731<br><a href="./mesh037/BestConf_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0567236<br>Max=0.196296<br><a href="./mesh037/BronsteinGMDS_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh037/BronsteinGMDS_mesh037_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.132976<br>Max=1.21552<br><a href="./mesh037/Ovsjanikov1_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh037/Ovsjanikov1_mesh037_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0745614<br>Max=0.89041<br><a href="./mesh037/Ovsjanikov2_mesh037_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh037/Ovsjanikov2_mesh037_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh038_to_mesh026</td>
+	<td>Ave=0.0498524<br>Max=0.115367<br><a href="./mesh038/BlendedMap_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0584145<br>Max=0.196021<br><a href="./mesh038/LipmanGMDS_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh038/LipmanGMDS_mesh038_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0742411<br>Max=0.465757<br><a href="./mesh038/BestConf_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0568002<br>Max=0.175911<br><a href="./mesh038/BronsteinGMDS_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh038/BronsteinGMDS_mesh038_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.398936<br>Max=1.34964<br><a href="./mesh038/Ovsjanikov1_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh038/Ovsjanikov1_mesh038_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.455084<br>Max=1.34964<br><a href="./mesh038/Ovsjanikov2_mesh038_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh038/Ovsjanikov2_mesh038_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh039_to_mesh046</td>
+	<td>Ave=0.0382686<br>Max=0.189431<br><a href="./mesh039/BlendedMap_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0489376<br>Max=0.218589<br><a href="./mesh039/LipmanGMDS_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh039/LipmanGMDS_mesh039_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0781102<br>Max=0.511776<br><a href="./mesh039/BestConf_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0686463<br>Max=0.3735<br><a href="./mesh039/BronsteinGMDS_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh039/BronsteinGMDS_mesh039_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.40966<br>Max=1.38435<br><a href="./mesh039/Ovsjanikov1_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh039/Ovsjanikov1_mesh039_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.47033<br>Max=1.38435<br><a href="./mesh039/Ovsjanikov2_mesh039_to_mesh046_FinalColors.jpg">Dense</a><br>
+<a href="./mesh039/Ovsjanikov2_mesh039_to_mesh046_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh040_to_mesh018</td>
+	<td>Ave=0.0483551<br>Max=0.114352<br><a href="./mesh040/BlendedMap_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0797964<br>Max=0.513748<br><a href="./mesh040/LipmanGMDS_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh040/LipmanGMDS_mesh040_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0956868<br>Max=0.582117<br><a href="./mesh040/BestConf_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.425569<br>Max=1.25834<br><a href="./mesh040/BronsteinGMDS_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh040/BronsteinGMDS_mesh040_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.164172<br>Max=1.13295<br><a href="./mesh040/Ovsjanikov1_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh040/Ovsjanikov1_mesh040_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.09161<br>Max=0.543085<br><a href="./mesh040/Ovsjanikov2_mesh040_to_mesh018_FinalColors.jpg">Dense</a><br>
+<a href="./mesh040/Ovsjanikov2_mesh040_to_mesh018_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh041_to_mesh027</td>
+	<td>Ave=0.0272312<br>Max=0.163388<br><a href="./mesh041/BlendedMap_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0402537<br>Max=0.187711<br><a href="./mesh041/LipmanGMDS_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh041/LipmanGMDS_mesh041_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0700712<br>Max=0.469382<br><a href="./mesh041/BestConf_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.460447<br>Max=1.3903<br><a href="./mesh041/BronsteinGMDS_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh041/BronsteinGMDS_mesh041_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.419128<br>Max=1.39188<br><a href="./mesh041/Ovsjanikov1_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh041/Ovsjanikov1_mesh041_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.482495<br>Max=1.39188<br><a href="./mesh041/Ovsjanikov2_mesh041_to_mesh027_FinalColors.jpg">Dense</a><br>
+<a href="./mesh041/Ovsjanikov2_mesh041_to_mesh027_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh042_to_mesh028</td>
+	<td>Ave=0.0485644<br>Max=0.11555<br><a href="./mesh042/BlendedMap_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.505901<br>Max=1.32689<br><a href="./mesh042/LipmanGMDS_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<a href="./mesh042/LipmanGMDS_mesh042_to_mesh028_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.474849<br>Max=1.32689<br><a href="./mesh042/BestConf_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.48195<br>Max=1.32689<br><a href="./mesh042/BronsteinGMDS_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<a href="./mesh042/BronsteinGMDS_mesh042_to_mesh028_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.197048<br>Max=1.10587<br><a href="./mesh042/Ovsjanikov1_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<a href="./mesh042/Ovsjanikov1_mesh042_to_mesh028_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0951068<br>Max=0.501863<br><a href="./mesh042/Ovsjanikov2_mesh042_to_mesh028_FinalColors.jpg">Dense</a><br>
+<a href="./mesh042/Ovsjanikov2_mesh042_to_mesh028_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh043_to_mesh016</td>
+	<td>Ave=0.0409194<br>Max=0.116546<br><a href="./mesh043/BlendedMap_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0485322<br>Max=0.374245<br><a href="./mesh043/LipmanGMDS_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<a href="./mesh043/LipmanGMDS_mesh043_to_mesh016_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0620648<br>Max=0.471882<br><a href="./mesh043/BestConf_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.44859<br>Max=1.35412<br><a href="./mesh043/BronsteinGMDS_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<a href="./mesh043/BronsteinGMDS_mesh043_to_mesh016_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.424108<br>Max=1.33675<br><a href="./mesh043/Ovsjanikov1_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<a href="./mesh043/Ovsjanikov1_mesh043_to_mesh016_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.458055<br>Max=1.35199<br><a href="./mesh043/Ovsjanikov2_mesh043_to_mesh016_FinalColors.jpg">Dense</a><br>
+<a href="./mesh043/Ovsjanikov2_mesh043_to_mesh016_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh044_to_mesh056</td>
+	<td>Ave=0.0432906<br>Max=0.148139<br><a href="./mesh044/BlendedMap_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0613863<br>Max=0.455383<br><a href="./mesh044/LipmanGMDS_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<a href="./mesh044/LipmanGMDS_mesh044_to_mesh056_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0986837<br>Max=0.581206<br><a href="./mesh044/BestConf_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.348833<br>Max=1.29579<br><a href="./mesh044/BronsteinGMDS_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<a href="./mesh044/BronsteinGMDS_mesh044_to_mesh056_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.41979<br>Max=1.28073<br><a href="./mesh044/Ovsjanikov1_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<a href="./mesh044/Ovsjanikov1_mesh044_to_mesh056_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.321593<br>Max=1.28073<br><a href="./mesh044/Ovsjanikov2_mesh044_to_mesh056_FinalColors.jpg">Dense</a><br>
+<a href="./mesh044/Ovsjanikov2_mesh044_to_mesh056_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh045_to_mesh042</td>
+	<td>Ave=0.0513069<br>Max=0.129164<br><a href="./mesh045/BlendedMap_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0545193<br>Max=0.312459<br><a href="./mesh045/LipmanGMDS_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<a href="./mesh045/LipmanGMDS_mesh045_to_mesh042_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0907519<br>Max=0.498612<br><a href="./mesh045/BestConf_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.451755<br>Max=1.29136<br><a href="./mesh045/BronsteinGMDS_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<a href="./mesh045/BronsteinGMDS_mesh045_to_mesh042_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.166098<br>Max=1.05017<br><a href="./mesh045/Ovsjanikov1_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<a href="./mesh045/Ovsjanikov1_mesh045_to_mesh042_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.102115<br>Max=1.34075<br><a href="./mesh045/Ovsjanikov2_mesh045_to_mesh042_FinalColors.jpg">Dense</a><br>
+<a href="./mesh045/Ovsjanikov2_mesh045_to_mesh042_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh046_to_mesh011</td>
+	<td>Ave=0.0421335<br>Max=0.12771<br><a href="./mesh046/BlendedMap_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.494316<br>Max=1.34588<br><a href="./mesh046/LipmanGMDS_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh046/LipmanGMDS_mesh046_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.067705<br>Max=0.487152<br><a href="./mesh046/BestConf_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.11193<br>Max=0.375938<br><a href="./mesh046/BronsteinGMDS_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh046/BronsteinGMDS_mesh046_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.376905<br>Max=1.33939<br><a href="./mesh046/Ovsjanikov1_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh046/Ovsjanikov1_mesh046_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.462173<br>Max=1.33939<br><a href="./mesh046/Ovsjanikov2_mesh046_to_mesh011_FinalColors.jpg">Dense</a><br>
+<a href="./mesh046/Ovsjanikov2_mesh046_to_mesh011_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh047_to_mesh030</td>
+	<td>Ave=0.0305554<br>Max=0.106676<br><a href="./mesh047/BlendedMap_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0345427<br>Max=0.160485<br><a href="./mesh047/LipmanGMDS_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh047/LipmanGMDS_mesh047_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0603053<br>Max=0.436191<br><a href="./mesh047/BestConf_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0389101<br>Max=0.128357<br><a href="./mesh047/BronsteinGMDS_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh047/BronsteinGMDS_mesh047_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.272172<br>Max=1.37706<br><a href="./mesh047/Ovsjanikov1_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh047/Ovsjanikov1_mesh047_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.148171<br>Max=1.43159<br><a href="./mesh047/Ovsjanikov2_mesh047_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh047/Ovsjanikov2_mesh047_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh048_to_mesh007</td>
+	<td>Ave=0.0498295<br>Max=0.519622<br><a href="./mesh048/BlendedMap_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0783795<br>Max=0.414024<br><a href="./mesh048/LipmanGMDS_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<a href="./mesh048/LipmanGMDS_mesh048_to_mesh007_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.110341<br>Max=0.630349<br><a href="./mesh048/BestConf_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.432628<br>Max=1.18686<br><a href="./mesh048/BronsteinGMDS_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<a href="./mesh048/BronsteinGMDS_mesh048_to_mesh007_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.312294<br>Max=1.44541<br><a href="./mesh048/Ovsjanikov1_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<a href="./mesh048/Ovsjanikov1_mesh048_to_mesh007_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.111353<br>Max=0.536341<br><a href="./mesh048/Ovsjanikov2_mesh048_to_mesh007_FinalColors.jpg">Dense</a><br>
+<a href="./mesh048/Ovsjanikov2_mesh048_to_mesh007_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh049_to_mesh040</td>
+	<td>Ave=0.0382866<br>Max=0.108715<br><a href="./mesh049/BlendedMap_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0379216<br>Max=0.172209<br><a href="./mesh049/LipmanGMDS_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh049/LipmanGMDS_mesh049_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0740337<br>Max=0.595836<br><a href="./mesh049/BestConf_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.307771<br>Max=1.3306<br><a href="./mesh049/BronsteinGMDS_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh049/BronsteinGMDS_mesh049_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.16409<br>Max=1.0842<br><a href="./mesh049/Ovsjanikov1_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh049/Ovsjanikov1_mesh049_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0765008<br>Max=0.907719<br><a href="./mesh049/Ovsjanikov2_mesh049_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh049/Ovsjanikov2_mesh049_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh050_to_mesh055</td>
+	<td>Ave=0.0443507<br>Max=0.118194<br><a href="./mesh050/BlendedMap_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0763988<br>Max=0.551524<br><a href="./mesh050/LipmanGMDS_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh050/LipmanGMDS_mesh050_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0859266<br>Max=0.580614<br><a href="./mesh050/BestConf_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.486728<br>Max=1.40287<br><a href="./mesh050/BronsteinGMDS_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh050/BronsteinGMDS_mesh050_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.396201<br>Max=1.39828<br><a href="./mesh050/Ovsjanikov1_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh050/Ovsjanikov1_mesh050_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.453096<br>Max=1.39828<br><a href="./mesh050/Ovsjanikov2_mesh050_to_mesh055_FinalColors.jpg">Dense</a><br>
+<a href="./mesh050/Ovsjanikov2_mesh050_to_mesh055_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh052_to_mesh034</td>
+	<td>Ave=0.0373788<br>Max=0.122876<br><a href="./mesh052/BlendedMap_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0534947<br>Max=0.631775<br><a href="./mesh052/LipmanGMDS_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<a href="./mesh052/LipmanGMDS_mesh052_to_mesh034_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.100739<br>Max=0.498021<br><a href="./mesh052/BestConf_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0739683<br>Max=0.216571<br><a href="./mesh052/BronsteinGMDS_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<a href="./mesh052/BronsteinGMDS_mesh052_to_mesh034_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.381702<br>Max=1.27832<br><a href="./mesh052/Ovsjanikov1_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<a href="./mesh052/Ovsjanikov1_mesh052_to_mesh034_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.442582<br>Max=1.27832<br><a href="./mesh052/Ovsjanikov2_mesh052_to_mesh034_FinalColors.jpg">Dense</a><br>
+<a href="./mesh052/Ovsjanikov2_mesh052_to_mesh034_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh053_to_mesh040</td>
+	<td>Ave=0.0268053<br>Max=0.139167<br><a href="./mesh053/BlendedMap_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0361948<br>Max=0.196404<br><a href="./mesh053/LipmanGMDS_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh053/LipmanGMDS_mesh053_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0601347<br>Max=0.454508<br><a href="./mesh053/BestConf_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.427045<br>Max=1.32617<br><a href="./mesh053/BronsteinGMDS_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh053/BronsteinGMDS_mesh053_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.38274<br>Max=1.30862<br><a href="./mesh053/Ovsjanikov1_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh053/Ovsjanikov1_mesh053_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.397559<br>Max=1.30862<br><a href="./mesh053/Ovsjanikov2_mesh053_to_mesh040_FinalColors.jpg">Dense</a><br>
+<a href="./mesh053/Ovsjanikov2_mesh053_to_mesh040_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh054_to_mesh031</td>
+	<td>Ave=0.0604891<br>Max=0.129922<br><a href="./mesh054/BlendedMap_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.066676<br>Max=0.224938<br><a href="./mesh054/LipmanGMDS_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/LipmanGMDS_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0964546<br>Max=0.597927<br><a href="./mesh054/BestConf_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.791176<br>Max=1.7056<br><a href="./mesh054/BronsteinGMDS_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/BronsteinGMDS_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.161304<br>Max=1.10289<br><a href="./mesh054/Ovsjanikov1_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/Ovsjanikov1_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.146374<br>Max=1.10289<br><a href="./mesh054/Ovsjanikov2_mesh054_to_mesh031_FinalColors.jpg">Dense</a><br>
+<a href="./mesh054/Ovsjanikov2_mesh054_to_mesh031_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh055_to_mesh052</td>
+	<td>Ave=0.0404701<br>Max=0.110327<br><a href="./mesh055/BlendedMap_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.483654<br>Max=1.3374<br><a href="./mesh055/LipmanGMDS_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh055/LipmanGMDS_mesh055_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.058978<br>Max=0.391098<br><a href="./mesh055/BestConf_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.436612<br>Max=1.33572<br><a href="./mesh055/BronsteinGMDS_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh055/BronsteinGMDS_mesh055_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.418926<br>Max=1.32715<br><a href="./mesh055/Ovsjanikov1_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh055/Ovsjanikov1_mesh055_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.45824<br>Max=1.32715<br><a href="./mesh055/Ovsjanikov2_mesh055_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh055/Ovsjanikov2_mesh055_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh056_to_mesh008</td>
+	<td>Ave=0.0340302<br>Max=0.1223<br><a href="./mesh056/BlendedMap_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0490175<br>Max=0.228578<br><a href="./mesh056/LipmanGMDS_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh056/LipmanGMDS_mesh056_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0749065<br>Max=0.508623<br><a href="./mesh056/BestConf_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.109944<br>Max=0.374382<br><a href="./mesh056/BronsteinGMDS_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh056/BronsteinGMDS_mesh056_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.152092<br>Max=1.5155<br><a href="./mesh056/Ovsjanikov1_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh056/Ovsjanikov1_mesh056_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0824003<br>Max=0.469779<br><a href="./mesh056/Ovsjanikov2_mesh056_to_mesh008_FinalColors.jpg">Dense</a><br>
+<a href="./mesh056/Ovsjanikov2_mesh056_to_mesh008_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh057_to_mesh036</td>
+	<td>Ave=0.0326648<br>Max=0.110031<br><a href="./mesh057/BlendedMap_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0355734<br>Max=0.171751<br><a href="./mesh057/LipmanGMDS_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<a href="./mesh057/LipmanGMDS_mesh057_to_mesh036_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0529864<br>Max=0.424313<br><a href="./mesh057/BestConf_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.213782<br>Max=1.06646<br><a href="./mesh057/BronsteinGMDS_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<a href="./mesh057/BronsteinGMDS_mesh057_to_mesh036_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.121836<br>Max=1.11426<br><a href="./mesh057/Ovsjanikov1_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<a href="./mesh057/Ovsjanikov1_mesh057_to_mesh036_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0713878<br>Max=0.356155<br><a href="./mesh057/Ovsjanikov2_mesh057_to_mesh036_FinalColors.jpg">Dense</a><br>
+<a href="./mesh057/Ovsjanikov2_mesh057_to_mesh036_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh058_to_mesh029</td>
+	<td>Ave=0.480115<br>Max=1.35961<br><a href="./mesh058/BlendedMap_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0718138<br>Max=0.267185<br><a href="./mesh058/LipmanGMDS_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<a href="./mesh058/LipmanGMDS_mesh058_to_mesh029_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.108814<br>Max=0.674571<br><a href="./mesh058/BestConf_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.480069<br>Max=1.35093<br><a href="./mesh058/BronsteinGMDS_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<a href="./mesh058/BronsteinGMDS_mesh058_to_mesh029_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.145758<br>Max=1.34666<br><a href="./mesh058/Ovsjanikov1_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<a href="./mesh058/Ovsjanikov1_mesh058_to_mesh029_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0855693<br>Max=0.99723<br><a href="./mesh058/Ovsjanikov2_mesh058_to_mesh029_FinalColors.jpg">Dense</a><br>
+<a href="./mesh058/Ovsjanikov2_mesh058_to_mesh029_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh059_to_mesh052</td>
+	<td>Ave=0.0446913<br>Max=0.138522<br><a href="./mesh059/BlendedMap_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.119665<br>Max=0.886114<br><a href="./mesh059/LipmanGMDS_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/LipmanGMDS_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.128115<br>Max=0.614296<br><a href="./mesh059/BestConf_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.481081<br>Max=1.33487<br><a href="./mesh059/BronsteinGMDS_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/BronsteinGMDS_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.369679<br>Max=1.31814<br><a href="./mesh059/Ovsjanikov1_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/Ovsjanikov1_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.32534<br>Max=1.31814<br><a href="./mesh059/Ovsjanikov2_mesh059_to_mesh052_FinalColors.jpg">Dense</a><br>
+<a href="./mesh059/Ovsjanikov2_mesh059_to_mesh052_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh060_to_mesh014</td>
+	<td>Ave=0.0321165<br>Max=0.0856052<br><a href="./mesh060/BlendedMap_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.441067<br>Max=1.41304<br><a href="./mesh060/LipmanGMDS_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<a href="./mesh060/LipmanGMDS_mesh060_to_mesh014_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0889855<br>Max=0.627452<br><a href="./mesh060/BestConf_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0421925<br>Max=0.213805<br><a href="./mesh060/BronsteinGMDS_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<a href="./mesh060/BronsteinGMDS_mesh060_to_mesh014_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.332333<br>Max=1.39737<br><a href="./mesh060/Ovsjanikov1_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<a href="./mesh060/Ovsjanikov1_mesh060_to_mesh014_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.315784<br>Max=1.39737<br><a href="./mesh060/Ovsjanikov2_mesh060_to_mesh014_FinalColors.jpg">Dense</a><br>
+<a href="./mesh060/Ovsjanikov2_mesh060_to_mesh014_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh061_to_mesh045</td>
+	<td>Ave=0.0443021<br>Max=0.12319<br><a href="./mesh061/BlendedMap_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0444082<br>Max=0.188592<br><a href="./mesh061/LipmanGMDS_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh061/LipmanGMDS_mesh061_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0681817<br>Max=0.550625<br><a href="./mesh061/BestConf_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.777236<br>Max=1.66843<br><a href="./mesh061/BronsteinGMDS_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh061/BronsteinGMDS_mesh061_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.13684<br>Max=1.10905<br><a href="./mesh061/Ovsjanikov1_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh061/Ovsjanikov1_mesh061_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0725661<br>Max=1.06215<br><a href="./mesh061/Ovsjanikov2_mesh061_to_mesh045_FinalColors.jpg">Dense</a><br>
+<a href="./mesh061/Ovsjanikov2_mesh061_to_mesh045_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh062_to_mesh026</td>
+	<td>Ave=0.0279352<br>Max=0.115755<br><a href="./mesh062/BlendedMap_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0386889<br>Max=0.241897<br><a href="./mesh062/LipmanGMDS_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh062/LipmanGMDS_mesh062_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0720822<br>Max=0.503805<br><a href="./mesh062/BestConf_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.110808<br>Max=0.368148<br><a href="./mesh062/BronsteinGMDS_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh062/BronsteinGMDS_mesh062_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.41516<br>Max=1.3491<br><a href="./mesh062/Ovsjanikov1_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh062/Ovsjanikov1_mesh062_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.472589<br>Max=1.3491<br><a href="./mesh062/Ovsjanikov2_mesh062_to_mesh026_FinalColors.jpg">Dense</a><br>
+<a href="./mesh062/Ovsjanikov2_mesh062_to_mesh026_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh063_to_mesh038</td>
+	<td>Ave=0.027342<br>Max=0.123444<br><a href="./mesh063/BlendedMap_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0408719<br>Max=0.201479<br><a href="./mesh063/LipmanGMDS_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh063/LipmanGMDS_mesh063_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.489502<br>Max=1.41839<br><a href="./mesh063/BestConf_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0328572<br>Max=0.165451<br><a href="./mesh063/BronsteinGMDS_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh063/BronsteinGMDS_mesh063_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.408486<br>Max=1.39263<br><a href="./mesh063/Ovsjanikov1_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh063/Ovsjanikov1_mesh063_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.416467<br>Max=1.39263<br><a href="./mesh063/Ovsjanikov2_mesh063_to_mesh038_FinalColors.jpg">Dense</a><br>
+<a href="./mesh063/Ovsjanikov2_mesh063_to_mesh038_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh064_to_mesh030</td>
+	<td>Ave=0.0356943<br>Max=0.092823<br><a href="./mesh064/BlendedMap_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0999773<br>Max=0.804822<br><a href="./mesh064/LipmanGMDS_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh064/LipmanGMDS_mesh064_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.065464<br>Max=0.428846<br><a href="./mesh064/BestConf_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.465484<br>Max=1.40434<br><a href="./mesh064/BronsteinGMDS_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh064/BronsteinGMDS_mesh064_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.136455<br>Max=1.11212<br><a href="./mesh064/Ovsjanikov1_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh064/Ovsjanikov1_mesh064_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.079769<br>Max=0.364984<br><a href="./mesh064/Ovsjanikov2_mesh064_to_mesh030_FinalColors.jpg">Dense</a><br>
+<a href="./mesh064/Ovsjanikov2_mesh064_to_mesh030_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh065_to_mesh033</td>
+	<td>Ave=0.0340769<br>Max=0.12886<br><a href="./mesh065/BlendedMap_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0741167<br>Max=0.258851<br><a href="./mesh065/LipmanGMDS_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<a href="./mesh065/LipmanGMDS_mesh065_to_mesh033_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.11838<br>Max=0.700905<br><a href="./mesh065/BestConf_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.22192<br>Max=1.19667<br><a href="./mesh065/BronsteinGMDS_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<a href="./mesh065/BronsteinGMDS_mesh065_to_mesh033_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.391304<br>Max=1.36387<br><a href="./mesh065/Ovsjanikov1_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<a href="./mesh065/Ovsjanikov1_mesh065_to_mesh033_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.462887<br>Max=1.36387<br><a href="./mesh065/Ovsjanikov2_mesh065_to_mesh033_FinalColors.jpg">Dense</a><br>
+<a href="./mesh065/Ovsjanikov2_mesh065_to_mesh033_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh066_to_mesh017</td>
+	<td>Ave=0.0300534<br>Max=0.114172<br><a href="./mesh066/BlendedMap_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0524382<br>Max=0.676064<br><a href="./mesh066/LipmanGMDS_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<a href="./mesh066/LipmanGMDS_mesh066_to_mesh017_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0963349<br>Max=0.574286<br><a href="./mesh066/BestConf_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.166333<br>Max=0.852596<br><a href="./mesh066/BronsteinGMDS_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<a href="./mesh066/BronsteinGMDS_mesh066_to_mesh017_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.408525<br>Max=1.32923<br><a href="./mesh066/Ovsjanikov1_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<a href="./mesh066/Ovsjanikov1_mesh066_to_mesh017_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.459025<br>Max=1.32923<br><a href="./mesh066/Ovsjanikov2_mesh066_to_mesh017_FinalColors.jpg">Dense</a><br>
+<a href="./mesh066/Ovsjanikov2_mesh066_to_mesh017_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh067_to_mesh001</td>
+	<td>Ave=0.0360757<br>Max=0.114022<br><a href="./mesh067/BlendedMap_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0723666<br>Max=0.811583<br><a href="./mesh067/LipmanGMDS_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<a href="./mesh067/LipmanGMDS_mesh067_to_mesh001_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0702475<br>Max=0.523313<br><a href="./mesh067/BestConf_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.119801<br>Max=0.373913<br><a href="./mesh067/BronsteinGMDS_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<a href="./mesh067/BronsteinGMDS_mesh067_to_mesh001_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.185488<br>Max=1.37315<br><a href="./mesh067/Ovsjanikov1_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<a href="./mesh067/Ovsjanikov1_mesh067_to_mesh001_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0807159<br>Max=0.518332<br><a href="./mesh067/Ovsjanikov2_mesh067_to_mesh001_FinalColors.jpg">Dense</a><br>
+<a href="./mesh067/Ovsjanikov2_mesh067_to_mesh001_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh068_to_mesh060</td>
+	<td>Ave=0.0369784<br>Max=0.121712<br><a href="./mesh068/BlendedMap_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.260108<br>Max=1.25341<br><a href="./mesh068/LipmanGMDS_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh068/LipmanGMDS_mesh068_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.110393<br>Max=0.556908<br><a href="./mesh068/BestConf_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0556207<br>Max=0.204756<br><a href="./mesh068/BronsteinGMDS_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh068/BronsteinGMDS_mesh068_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.364566<br>Max=1.29506<br><a href="./mesh068/Ovsjanikov1_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh068/Ovsjanikov1_mesh068_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.444135<br>Max=1.29506<br><a href="./mesh068/Ovsjanikov2_mesh068_to_mesh060_FinalColors.jpg">Dense</a><br>
+<a href="./mesh068/Ovsjanikov2_mesh068_to_mesh060_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh069_to_mesh024</td>
+	<td>Ave=0.487513<br>Max=1.4167<br><a href="./mesh069/BlendedMap_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.475132<br>Max=1.34908<br><a href="./mesh069/LipmanGMDS_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<a href="./mesh069/LipmanGMDS_mesh069_to_mesh024_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.104548<br>Max=0.568815<br><a href="./mesh069/BestConf_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.0632384<br>Max=0.217031<br><a href="./mesh069/BronsteinGMDS_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<a href="./mesh069/BronsteinGMDS_mesh069_to_mesh024_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.17057<br>Max=1.424<br><a href="./mesh069/Ovsjanikov1_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<a href="./mesh069/Ovsjanikov1_mesh069_to_mesh024_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0960572<br>Max=0.992312<br><a href="./mesh069/Ovsjanikov2_mesh069_to_mesh024_FinalColors.jpg">Dense</a><br>
+<a href="./mesh069/Ovsjanikov2_mesh069_to_mesh024_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh070_to_mesh002</td>
+	<td>Ave=0.0404769<br>Max=0.134249<br><a href="./mesh070/BlendedMap_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.394467<br>Max=1.31799<br><a href="./mesh070/LipmanGMDS_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh070/LipmanGMDS_mesh070_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.145634<br>Max=0.603248<br><a href="./mesh070/BestConf_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.463836<br>Max=1.35867<br><a href="./mesh070/BronsteinGMDS_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh070/BronsteinGMDS_mesh070_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.366353<br>Max=1.34191<br><a href="./mesh070/Ovsjanikov1_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh070/Ovsjanikov1_mesh070_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.309274<br>Max=1.37041<br><a href="./mesh070/Ovsjanikov2_mesh070_to_mesh002_FinalColors.jpg">Dense</a><br>
+<a href="./mesh070/Ovsjanikov2_mesh070_to_mesh002_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+<tr>
+	<td>mesh071_to_mesh037</td>
+	<td>Ave=0.0437899<br>Max=0.132505<br><a href="./mesh071/BlendedMap_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.467001<br>Max=1.31676<br><a href="./mesh071/LipmanGMDS_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh071/LipmanGMDS_mesh071_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.112711<br>Max=0.593921<br><a href="./mesh071/BestConf_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<br>
+</td>
+	<td>Ave=0.409961<br>Max=1.30028<br><a href="./mesh071/BronsteinGMDS_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh071/BronsteinGMDS_mesh071_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.210211<br>Max=1.57497<br><a href="./mesh071/Ovsjanikov1_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh071/Ovsjanikov1_mesh071_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+	<td>Ave=0.0932781<br>Max=1.3231<br><a href="./mesh071/Ovsjanikov2_mesh071_to_mesh037_FinalColors.jpg">Dense</a><br>
+<a href="./mesh071/Ovsjanikov2_mesh071_to_mesh037_BestConformal.jpg">Sparse</a><br>
+</td>
+</tr>
+</table></body>
+</html>

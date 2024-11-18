@@ -1,0 +1,26 @@
+#!/bin/bash
+# !/bin/sh
+
+EXE="SurfaceVis"
+EXE1="SurfCorrBenchmark"
+NewName=`uname`_`uname -m`_SurfaceVis
+NewName1=`uname`_`uname -m`_SurfCorrBenchmark
+
+  # Remove executable (to trigger re-linking)
+ARCH=$(uname -m)
+rm ../$ARCH/$EXE
+rm ../$ARCH/$EXE1
+
+  # Re-compile & re-link
+currDir=`pwd`
+cd ../../
+make
+
+  # get back 
+cd $currDir
+rm $NewName
+rm $NewName1
+cp ../$ARCH/$EXE ./$NewName
+cp ../$ARCH/$EXE1 ./$NewName1
+
+

@@ -13,7 +13,7 @@
 #include "../Include/HeatKernelSignature.h"
 #include "../Include/SpinImage.h"
 #include "../Include/KIDS.h"
-#include "../Include/Laplace-Beltrami.h"
+#include "../Include/SCBDataset.h"
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
@@ -26,6 +26,7 @@ static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
+static void SCAPE_dataset(TrilateralMesh* m);
 static void laplace_beltrami_operations(TrilateralMesh* m);
 static void Nlateral_functions(TrilateralMesh* m);
 static void mesh_drawing();
@@ -61,6 +62,10 @@ static Eigen::SparseMatrix<double> L; //laplacian
 static int N = 0;
 std::vector<NLateralDescriptor> nlateral_descriptors;
 std::vector<NodeAffinityParams> skeleton_params;
+float hks_dif_param = 0.1;
+float curv_param = 0.5;
+float norm_angle_param = 0.985;
+float skel_dist_param = 0.2;
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -144,6 +149,7 @@ void imgui_menu_bar(TrilateralMesh* m)
             if (ImGui::BeginMenu("dataset"))
             {
                 KIDS_dataset(m);
+                SCAPE_dataset(m);
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -222,7 +228,7 @@ static void trilateral_functions(TrilateralMesh* m)
         read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", m);
         std::cout << "reading symmetries DONE " << std::endl;
         std::cout << "reading respective heat kernel signature" << std::endl;
-        HKS_read_kernel_signature(m);
+        //HKS_read_kernel_signature(m );
         std::cout << "reading respective heat kernel signature DONE " << std::endl;
         std::cout << "select skeleton " << std::endl;
         is_searching_swc = true;
@@ -277,13 +283,20 @@ static void trilateral_functions(TrilateralMesh* m)
 static void Nlateral_functions(TrilateralMesh* m)
 {
     ImGui::InputInt("N == ", &N);
-    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform"))
+    if (ImGui::BeginMenu("Nlateral params "))
     {
-        nlateral_descriptors =  NlateralMap_point_matching_with_skeleton_endpoints_and_OT(m, skeleton, plane, dvorak_no_of_significant_points, dvorak_geodesic_dist_param,N);
+        ImGui::InputInt("gaussian points ", &dvorak_no_of_significant_points);
+        ImGui::InputFloat("Sweep distance", &dvorak_geodesic_dist_param);
+        ImGui::InputFloat("hks difference ", &hks_dif_param);
+        ImGui::InputFloat("curvature parameter", &curv_param);
+        ImGui::InputFloat("normal angle ", &norm_angle_param);
+        ImGui::InputFloat("skel distance params ", &skel_dist_param);
+        ImGui::EndMenu();
     }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
     {
-        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points, dvorak_geodesic_dist_param, N);
+        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points,
+        dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, N);
     }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
@@ -319,13 +332,24 @@ static void Nlateral_functions(TrilateralMesh* m)
     }
   
 }
+static void SCAPE_dataset(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("read SCAPE"))
+    {
+        SCB_read_SCAPE();
+    }
+    ImGui::InputInt("Mesh Index", &mesh_index);
+    if (ImGui::MenuItem("display mesh "))
+    {
+        SCB_select_mesh(*m, mesh_index, skeleton);
+    }
+}
 static void KIDS_dataset(TrilateralMesh* m)
 {
     if (ImGui::MenuItem("read KIDS"))
     {
         KIDS_read_meshes();
     }
-    ImGui::InputInt("Mesh Index", &mesh_index);
     if (ImGui::MenuItem("display mesh "))
     {
         KIDS_select_mesh(*m , mesh_index);
@@ -375,7 +399,7 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
     }
     if (ImGui::MenuItem(" Heat kernel signature read HKS "))
     {
-        HKS_read_kernel_signature(m);
+        //HKS_read_kernel_signature(m );
     }
     if (ImGui::MenuItem(" HKS significant points"))
     {
