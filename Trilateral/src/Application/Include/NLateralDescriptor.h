@@ -34,7 +34,8 @@ struct NLateralDescriptor
 	std::vector<unsigned int> vertices_inside;
 	Eigen::VectorXd weight;
 	float skel_dist_mid;
-	unsigned int skeleton_index; 
+	unsigned int skeleton_index;
+	int depth; 
 };
 
 struct NLateralParameters
@@ -85,8 +86,8 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 
-void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
-	Skeleton& skeleton, std::vector<NodeAffinityParams> node_affinity, int index);
+void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index);
+
 
 void NLateralDescriptor_write(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
 void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);

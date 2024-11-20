@@ -27,6 +27,7 @@ static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
 static void SCAPE_dataset(TrilateralMesh* m);
+static void TOSCA_dataset(TrilateralMesh* m);
 static void laplace_beltrami_operations(TrilateralMesh* m);
 static void Nlateral_functions(TrilateralMesh* m);
 static void mesh_drawing();
@@ -66,6 +67,8 @@ float hks_dif_param = 0.1;
 float curv_param = 0.5;
 float norm_angle_param = 0.985;
 float skel_dist_param = 0.2;
+float skel_depth_param = 5;
+float proximity_param = 1;
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -150,6 +153,7 @@ void imgui_menu_bar(TrilateralMesh* m)
             {
                 KIDS_dataset(m);
                 SCAPE_dataset(m);
+                TOSCA_dataset(m);
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -291,12 +295,18 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("curvature parameter", &curv_param);
         ImGui::InputFloat("normal angle ", &norm_angle_param);
         ImGui::InputFloat("skel distance params ", &skel_dist_param);
+        ImGui::InputFloat("skel depth  params ", &skel_depth_param);
         ImGui::EndMenu();
     }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points,
-        dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, N);
+        dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param,skel_depth_param, proximity_param,N);
+    }
+    if (ImGui::MenuItem("FPS matching with Dvorak significant poins Optimal transform without plane "))
+    {
+        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(m, skeleton, dvorak_no_of_significant_points,
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, N);
     }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
@@ -311,7 +321,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::InputInt("descriptor no ", &descriptor_no));
         if (ImGui::MenuItem("Display descriptor"))
         {
-            Nlateral_display_desc(m, nlateral_descriptors,skeleton, skeleton_params,descriptor_no);
+            Nlateral_display_desc(m, nlateral_descriptors , descriptor_no);
         }
         if (ImGui::MenuItem("Display descriptor all"))
         {
@@ -342,6 +352,13 @@ static void SCAPE_dataset(TrilateralMesh* m)
     if (ImGui::MenuItem("display mesh "))
     {
         SCB_select_mesh(*m, mesh_index, skeleton);
+    }
+}
+static void TOSCA_dataset(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("read TOSCA"))
+    {
+        SCB_read_TOSCA();
     }
 }
 static void KIDS_dataset(TrilateralMesh* m)

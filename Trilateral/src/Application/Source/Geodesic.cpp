@@ -186,3 +186,9 @@ std::vector<int> Geodesic_between_two_points(TrilateralMesh& m, int p1_index, in
 	consec_indices.insert(consec_indices.end(), p1_index);
 	return consec_indices;
 }
+
+bool Geodesic_proximity(TrilateralMesh& m , NLateralDescriptor& desc1, NLateralDescriptor& desc2, float proximity)
+{
+	std::vector<float> distances = Geodesic_dijkstra(m, desc1.indices[0]);
+	return distances[desc2.indices[0]] < proximity;
+}

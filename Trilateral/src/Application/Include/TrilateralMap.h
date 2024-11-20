@@ -434,5 +434,10 @@ std::vector<TrilateralDescriptor>& desc_left,std::vector<TrilateralDescriptor>& 
 Plane& plane, int dvorak_enpoint_no, float convergence_ratio, int N );
 
  std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(TrilateralMesh* m, Skeleton& skeleton,
+	 int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float , int skel_depth_param,
+	 float proximity,  int N);
+
+
+ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(TrilateralMesh* m, Skeleton& skeleton,
 	 int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param
 	 , int N);

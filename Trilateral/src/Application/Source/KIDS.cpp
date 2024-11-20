@@ -71,6 +71,11 @@ void KIDS_generate_gaussians(int no_of_gaussian , float sweep_distance )
 
 void KIDS_select_mesh(TrilateralMesh& m, int meshNo)
 {
+	std::string skel_path("../../Trilateral/Mesh/off/KIDS_skeleton/");
+	std::string skel_file_name = m.file_name.substr(0, m.file_name.size() - 3) + "swc";
+	Skeleton skeleton = skeleton_read_swc_file(&m, skel_path + skel_file_name);
+	std::string hks_path = "../../Trilateral/Mesh/off/HKS/";
+	HKS_read_kernel_signature(&m, hks_path);
 	m = Kids_dataset[meshNo];
 }
 

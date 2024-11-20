@@ -954,6 +954,7 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 
 		NLateralDescriptor desc;
 		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
+		desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
 		nLateralDescVec.push_back(desc);
 	}
 	return nLateralDescVec;
@@ -1269,8 +1270,7 @@ void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vecto
 }
 
 
-void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
-Skeleton& skeleton,std::vector<NodeAffinityParams> node_affinity, int index)
+void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index)
 {
 	NLateralDescriptor* desc = &descs[index];
 
@@ -1306,24 +1306,9 @@ Skeleton& skeleton,std::vector<NodeAffinityParams> node_affinity, int index)
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
 
-	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
-	{
-		skeleton.skeletonFormat[i].color.r = 0;
-		skeleton.skeletonFormat[i].color.g = 0;
-		skeleton.skeletonFormat[i].color.b = 0;
-		skeleton.skeletonFormat[i].color.a = 255;
-	}
-
-
-	for (size_t i = 0; i < node_affinity.size(); i++)
-	{
-		if (node_affinity[i].index == index)
-		{
-			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.r= 255;
-			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.g= 0;
-			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.b= 0;
-			skeleton.skeletonFormat[node_affinity[i].point_in_backbone].color.a= 255;
-		}
-	}
+	m->raylib_mesh.colors[desc->indices[0] * 4] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 1] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 2] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 3] = 255;
 	m->update_raylib_mesh();
 }
