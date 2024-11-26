@@ -4953,7 +4953,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		mesh_vertices.push_back(dvorak_pairs[i].p_index);
 	}
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices,skelTree, N ,10 );
+	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices,skelTree, N ,10, 10 );
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
@@ -5174,6 +5174,192 @@ static bool is_descriptors_comparable(NLateralDescriptor& desc1 , NLateralDescri
 	}
 	return is_comparable;
 }
+
+std::vector<NLateralDescriptor> NlateralMap_point_matching_with_FPS_and_endpoints(TrilateralMesh* m, Skeleton& skeleton,
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, int skel_depth_param
+	, float proximity, int N)
+{
+	std::vector<NLateralDescriptor> nlateral_descs; 
+	std::vector<std::pair<int, float>> hks_pairs;
+	std::vector<DvorakPairs> dvorak_pairs;
+	hks_pairs = HKS_extraction_significant_points(m, dvorak_enpoint_no);
+	hks_pairs = HKS_sweep_distance(m, hks_pairs, sweep_distance);
+	std::sort(hks_pairs.begin(), hks_pairs.end(), [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+		return a.second < b.second; // Compare by second element
+		});
+	dvorak_pairs = HKS_to_dvorak_pairs(m, hks_pairs);
+	
+
+	std::vector<unsigned int> fps_points = furthest_point_sampling(m, 50, true);
+	for (size_t i = 0; i < fps_points.size(); i++)
+	{
+		int index = fps_points[i];
+		//find closest two
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		
+		//get smallest two
+		float smallest = INFINITY;
+		float second_smallest = INFINITY;
+		int smallest_index = -1; 
+		int second_smallest_index = -1;
+		for (size_t j = 0; j < hks_pairs.size(); j++)
+		{
+			if (hks_pairs[j].second < smallest)
+			{
+				smallest = hks_pairs[j].second;
+				smallest_index = hks_pairs[j].first;
+			}
+		}
+		for (size_t j = 0; j < hks_pairs.size(); j++)
+		{
+			if (hks_pairs[j].second < second_smallest && smallest_index != hks_pairs[j].first)
+			{
+				second_smallest = hks_pairs[j].second;
+				second_smallest_index = hks_pairs[j].first;
+			}
+		}
+		std::vector<unsigned int> points = { fps_points[i] , (unsigned int)smallest_index ,(unsigned int)second_smallest_index };
+
+		NLateralDescriptor desc = NLateral_generate_descriptor(m, points);
+		std::vector<unsigned int> skel_dist_vec = { desc.indices[0] };
+		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
+		desc.skel_dist_mid = dist_mid[0];
+		std::vector<unsigned int> skel_corresponding_point;
+		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
+		desc.skeleton_index = skel_corresponding_point[0];
+		nlateral_descs.push_back(desc);
+	}
+
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, nlateral_descs, true, 5, 1);
+	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+
+	for (size_t i = 0; i < nlateral_descs.size(); i++)
+	{
+		float smallest = INFINITY;
+		int index = -1;
+		for (size_t j = 0; j < nlateral_descs.size(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			int hks_index_i;
+			int hks_index_j;
+			for (size_t k = 0; k < hks_pairs.size(); k++)
+			{
+				if (hks_pairs[k].first == nlateral_descs[i].indices[0])
+				{
+					hks_index_i = k;
+				}
+				if (hks_pairs[k].first == nlateral_descs[j].indices[0])
+				{
+					hks_index_j = k;
+				}
+			}
+			std::cout << i << "  " << j << std::endl;
+			float hks_dif = std::abs(m->normalized_heat_kernel_signature[nlateral_descs[i].indices[0]] - m->normalized_heat_kernel_signature[nlateral_descs[j].indices[0]]);
+			std::cout << " hks diff " << hks_dif << std::endl;
+			bool is_hks = hks_dif < hks_dif_param;
+			std::cout << " is_hks " << is_hks << std::endl;
+			//bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, curv_param, hks_index_i, hks_index_j);
+			//std::cout << " curv " << is_curv << std::endl;
+			//bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, hks_index_i, hks_index_j, norm_angle_param);
+			//std::cout << " normal " << is_norm << std::endl;
+			float skel_dist = std::abs(nlateral_descs[i].skel_dist_mid - nlateral_descs[j].skel_dist_mid);
+			bool is_skel_dist_far = skel_dist < skel_dist_param;
+			std::cout << " skeld dist " << skel_dist << std::endl;
+			std::cout << " is skeld dist " << is_skel_dist_far << std::endl;
+			int skel_depth = std::abs(nlateral_descs[i].depth - nlateral_descs[j].depth);
+			std::cout << " skeld depth " << skel_depth << std::endl;
+			bool is_skel_depth = skel_depth < skel_depth_param;
+			std::cout << " is skel depth " << is_skel_depth << std::endl;
+			bool is_descs_comp = is_descriptors_comparable(nlateral_descs[i], nlateral_descs[j]);
+			bool is_proximity = Geodesic_proximity(*m, nlateral_descs[i], nlateral_descs[j], proximity);
+
+			std::cout << " comparable  " << is_descs_comp << std::endl;
+			if (/*is_curv && is_norm && */ is_skel_dist_far && is_descs_comp && is_hks && is_skel_depth && !is_proximity)
+			{
+				std::pair<float, std::pair<unsigned int, unsigned int>> res;
+				res.first = optimal_transforms_pos_neg[i][j];
+				res.second = std::make_pair(i, j);
+				compare_results.push_back(res);
+			}
+		}
+	}
+
+	std::vector<bool> used(nlateral_descs.size(), false);
+	std::sort(compare_results.begin(), compare_results.end());
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compare_results) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			resemblance_pairs.push_back({ nlateral_descs[i].indices[0], nlateral_descs[j].indices[0] });
+			used[i] = true;  // Mark these objects as used
+			used[j] = true;  // Mark these objects as used
+		}
+	}
+
+
+	//forge it into two list
+	std::vector<unsigned int> left_correspondences;
+	std::vector<unsigned int> right_correspondences;
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		left_correspondences.push_back(resemblance_pairs[i].first);
+		right_correspondences.push_back(resemblance_pairs[i].second);
+	}
+	//float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
+
+	// color left red
+	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
+	for (size_t i = 0; i < resemblance_pairs.size(); i++)
+	{
+		m->colors[resemblance_pairs[i].first].r = 255;
+		m->colors[resemblance_pairs[i].first].g = 0;
+		m->colors[resemblance_pairs[i].first].b = 0;
+
+		m->colors[resemblance_pairs[i].second].r = 0;
+		m->colors[resemblance_pairs[i].second].g = 255;
+		m->colors[resemblance_pairs[i].second].b = 0;
+	}
+
+
+	for (size_t i = 0; i < nlateral_descs.size(); i++)
+	{
+		for (size_t j = 0; j < nlateral_descs[i].vertices_inside.size(); j++)
+		{
+			int index = nlateral_descs[i].vertices_inside[j];
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+	}
+
+	for (size_t i = 0; i < nlateral_descs.size(); i++)
+	{
+		for (size_t j = 0; j < nlateral_descs[i].paths.size(); j++)
+		{
+			for (size_t k = 0; k < nlateral_descs[i].paths[j].size(); k++)
+			{
+				for (size_t t = 0; t < nlateral_descs[i].paths[j][k].size(); t++)
+				{
+					int index = nlateral_descs[i].paths[j][k][t];
+					m->raylib_mesh.colors[index * 4] = 255;
+					m->raylib_mesh.colors[index * 4 + 1] = 0;
+					m->raylib_mesh.colors[index * 4 + 2] = 0;
+					m->raylib_mesh.colors[index * 4 + 3] = 255;
+				}
+			}
+		}
+	}
+	m->calculated_symmetry_pairs = resemblance_pairs;
+	m->update_raylib_mesh();
+
+	return nlateral_descs;
+}
 std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(TrilateralMesh* m, Skeleton& skeleton,
 int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_param , float norm_angle_param, float skel_dist_param , int skel_depth_param
 ,float proximity,  int N)
@@ -5225,7 +5411,7 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 		mesh_vertices.push_back(hks_pairs[i].first);
 	}
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices, skelTree, N,5);
+	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices, skelTree, N,5 , 10);
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
@@ -5300,10 +5486,10 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 	for (const auto& entry : compare_results) {
 		int i = entry.second.first;
 		int j = entry.second.second;
-		if (!used[i] /* && !used[j]*/) {
+		if (!used[i] && !used[j]) {
 			resemblance_pairs.push_back({ descriptors[i].indices[0], descriptors[j].indices[0] });
 			used[i] = true;  // Mark these objects as used
-			//used[j] = true;  // Mark these objects as used
+			used[j] = true;  // Mark these objects as used
 		}
 	}
 
@@ -5375,8 +5561,8 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(TrilateralMesh* m, Skeleton& skeleton,
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param
-	, int N)
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float n_ring_param,
+	float area_dif_param, int N)
 {
 
 	int size = m->vertices.size();
@@ -5431,7 +5617,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
 
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, fps_indices, skelTree, N, 3);
+	descriptors = NLateral_generate_closest_points(m, skeleton, fps_indices, skelTree, N, 500,10); //last param becoems unimportant
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
@@ -5441,11 +5627,59 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
 		descriptors[i].skeleton_index = skel_corresponding_point[0];
 	}
+// maximum n ring 
+	float maximum_n_ring = -INFINITY;
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		for (size_t j = 0; j < descriptors.size(); j++)
+		{
+			float dif = std::fabs(descriptors[i].n_ring_area - descriptors[j].n_ring_area);
+			if (maximum_n_ring < dif)
+			{
+				maximum_n_ring = dif ;
+			}
+		}
+	}
+//maximum skel distance
+	float maximum_skel_dist = -INFINITY;
+	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
+	{
+		std::vector<int> vertex_list; 
+		std::vector<float> vertex_dist; 
+		skeleton_calculate_dijkstra(skeleton, i, vertex_list, vertex_dist);
+		for (size_t j = 0; j < vertex_dist.size(); j++)
+		{
+			if (maximum_skel_dist < vertex_dist[j])
+			{
+				maximum_skel_dist = vertex_dist[j];
+			}
+		}
+	}
+//maximum area dif
+	float maximum_area_dif = -INFINITY;
+	for (size_t i = 0; i < descriptors.size(); i++)
+	{
+		float area_i = descriptors[i].area;
+		for (size_t j = i; j < descriptors.size(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			float area_j = descriptors[j].area;
+			float dif = std::abs(area_i - area_j);
+			if (dif > maximum_area_dif)
+			{
+				maximum_area_dif = dif; 
+			}
 
-	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, descriptors, true, 10, 1);
+		}
+	}
+	std::vector<std::vector<float>> optimal_transforms_pos_neg = VarianceMin_compare_all(m, descriptors, true, 20, 1);
 	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-
+	std::ofstream file;
+	file.open("../../Results/desc.txt");
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		float smallest = INFINITY;
@@ -5469,22 +5703,28 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 					fps_index_j = k;
 				}
 			}
-			std::cout << i << "  " << j << std::endl;
+			file << i << "  " << j << std::endl;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descriptors[i].indices[0]] - m->normalized_heat_kernel_signature[descriptors[j].indices[0]]);
-			std::cout << " hks diff " << hks_dif << std::endl;
+			file << " hks diff " << hks_dif << std::endl;
 			bool is_hks = hks_dif < hks_dif_param;
-			std::cout << " is_hks " << is_hks << std::endl;
+			file  << " is_hks " << is_hks << std::endl;
 			bool is_curv = dvorak_curvature_similarity_criterion(dvorak_pairs, curv_param, fps_index_i, fps_index_j);
-			std::cout << " curv " << is_curv << std::endl;
+			file << " curv " << is_curv << std::endl;
 			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, fps_index_i, fps_index_j, norm_angle_param);
-			std::cout << " normal " << is_norm << std::endl;
+			file << " normal " << is_norm << std::endl;
 			float skel_dist = std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid);
-			bool is_skel_dist_far = skel_dist < skel_dist_param;
-			std::cout << " skeld dist " << skel_dist << std::endl;
-			std::cout << " is skeld dist " << is_skel_dist_far << std::endl;
+			bool is_skel_dist_far = ( skel_dist / maximum_skel_dist ) < skel_dist_param;
+			file << " skeld dist " << skel_dist << std::endl;
+			file << " is skeld dist " << is_skel_dist_far << std::endl;
 			bool is_descs_comp = is_descriptors_comparable(descriptors[i], descriptors[j]);
-			std::cout << " comparable  " << is_descs_comp << std::endl;
-			if (is_curv && is_norm && is_skel_dist_far && is_descs_comp && is_hks)
+			file << " comparable  " << is_descs_comp << std::endl;
+			float n_ring = std::abs(descriptors[i].n_ring_area - descriptors[j].n_ring_area);
+			file << " n ring " << n_ring << std::endl;
+			bool is_n_ring_close = (n_ring / maximum_n_ring ) < n_ring_param; 
+			float area_dif = std::abs(descriptors[i].area- descriptors[j].area);
+			bool is_area_dif = area_dif / maximum_area_dif < area_dif_param;
+			
+			if (/*is_curv && is_norm && */ is_skel_dist_far /* && is_descs_comp */ && is_hks && is_n_ring_close && is_area_dif)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = optimal_transforms_pos_neg[i][j];
@@ -5502,7 +5742,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		int j = entry.second.second;
 		if (!used[i] /* && !used[j]*/) {
 			resemblance_pairs.push_back({ descriptors[i].indices[0], descriptors[j].indices[0] });
-			//used[i] = true;  // Mark these objects as used
+			used[i] = true;  // Mark these objects as used
 			//used[j] = true;  // Mark these objects as used
 		}
 	}

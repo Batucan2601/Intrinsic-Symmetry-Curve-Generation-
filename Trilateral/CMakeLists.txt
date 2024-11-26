@@ -41,6 +41,7 @@ set(Header_Files
     "src/Application/Include/VarianceMinimizingTransportPlan.h"
     "src/Application/Include/KIDS.h"
     "src/Application/Include/SCBDataset.h"
+    "src/Application/Include/NLateralMapping.h"
 
     "src/Application/Include/SkeletonTypes.h"
 
@@ -100,6 +101,7 @@ set(Source_Files
     "src/Application/Source/VarianceMinimizingTransportPlan.cpp"
     "src/Application/Source/KIDS.cpp"
     "src/Application/Source/SCBDataset.cpp"
+    "src/Application/Source/NLateralMapping.cpp"
 
 
 

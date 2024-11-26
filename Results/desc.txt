@@ -1,0 +1,8910 @@
+0  1
+ hks diff 0.043138
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.0871005
+ is skeld dist 1
+ comparable  1
+ n ring 0.00872863
+0  2
+ hks diff 0.235294
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0925504
+ is skeld dist 1
+ comparable  1
+ n ring 0.00933034
+0  3
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0120382
+ is skeld dist 1
+ comparable  1
+ n ring 0.0100981
+0  4
+ hks diff 0.45098
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.318144
+ is skeld dist 1
+ comparable  1
+ n ring 0.00223668
+0  5
+ hks diff 0.568627
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.05646
+ is skeld dist 0
+ comparable  1
+ n ring 0.00384919
+0  6
+ hks diff 0.588235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.872667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00319453
+0  7
+ hks diff 0.447058
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.542781
+ is skeld dist 0
+ comparable  1
+ n ring 0.00753686
+0  8
+ hks diff 0.439215
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.270054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00442509
+0  9
+ hks diff 0.4
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.579016
+ is skeld dist 0
+ comparable  1
+ n ring 0.00258735
+0  10
+ hks diff 0.392156
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.342683
+ is skeld dist 1
+ comparable  1
+ n ring 0.00464224
+0  11
+ hks diff 0.603921
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.546912
+ is skeld dist 0
+ comparable  1
+ n ring 0.000785193
+0  12
+ hks diff 0.552941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0346355
+ is skeld dist 1
+ comparable  1
+ n ring 0.00704082
+0  13
+ hks diff 0.572549
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.705613
+ is skeld dist 0
+ comparable  1
+ n ring 0.000770637
+0  14
+ hks diff 0.607843
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.649526
+ is skeld dist 0
+ comparable  1
+ n ring 0.00834749
+0  15
+ hks diff 0.403921
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.00688601
+ is skeld dist 1
+ comparable  0
+ n ring 0.00158807
+0  16
+ hks diff 0.388235
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.270054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00068222
+0  17
+ hks diff 0.580392
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.05646
+ is skeld dist 0
+ comparable  1
+ n ring 0.00532959
+0  18
+ hks diff 0.533333
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.516283
+ is skeld dist 1
+ comparable  1
+ n ring 0.00761693
+0  19
+ hks diff 0.592156
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.542781
+ is skeld dist 0
+ comparable  1
+ n ring 1.49654e-05
+0  20
+ hks diff 0.556862
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.705613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00105219
+0  21
+ hks diff 0.580392
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.546912
+ is skeld dist 0
+ comparable  1
+ n ring 0.00558073
+0  22
+ hks diff 0.294117
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0871005
+ is skeld dist 1
+ comparable  1
+ n ring 0.00434069
+0  23
+ hks diff 0.580392
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.872667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00465237
+0  24
+ hks diff 0.321568
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.268195
+ is skeld dist 1
+ comparable  1
+ n ring 0.00667375
+0  25
+ hks diff 0.556862
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.05646
+ is skeld dist 0
+ comparable  1
+ n ring 0.00743133
+0  26
+ hks diff 0.6
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.546912
+ is skeld dist 0
+ comparable  1
+ n ring 0.00717901
+0  27
+ hks diff 0.537255
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.542781
+ is skeld dist 0
+ comparable  1
+ n ring 0.0030345
+0  28
+ hks diff 0.552941
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0346355
+ is skeld dist 1
+ comparable  1
+ n ring 0.00360496
+0  29
+ hks diff 0.380392
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.270054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00488389
+0  30
+ hks diff 0.568627
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.385933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00461932
+0  31
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.00688601
+ is skeld dist 1
+ comparable  0
+ n ring 0.0031536
+0  32
+ hks diff 0.419607
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.373295
+ is skeld dist 1
+ comparable  1
+ n ring 0.0100194
+0  33
+ hks diff 0.627451
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.664469
+ is skeld dist 0
+ comparable  1
+ n ring 0.00315324
+0  34
+ hks diff 0.517647
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.705613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00117198
+0  35
+ hks diff 0.580392
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.705613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00330103
+0  36
+ hks diff 0.419607
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.542781
+ is skeld dist 0
+ comparable  0
+ n ring 0.00370795
+0  37
+ hks diff 0.588235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.05646
+ is skeld dist 0
+ comparable  1
+ n ring 0.00205146
+0  38
+ hks diff 0.643137
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.705613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00565725
+0  39
+ hks diff 0.639215
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.516283
+ is skeld dist 1
+ comparable  1
+ n ring 0.00399129
+0  40
+ hks diff 0.262745
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0109669
+ is skeld dist 1
+ comparable  1
+ n ring 0.0020353
+0  41
+ hks diff 0.498039
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.373295
+ is skeld dist 1
+ comparable  1
+ n ring 0.00439553
+0  42
+ hks diff 0.521568
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.579016
+ is skeld dist 0
+ comparable  1
+ n ring 0.00331559
+0  43
+ hks diff 0.360784
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.270054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00521104
+0  44
+ hks diff 0.647058
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.516283
+ is skeld dist 1
+ comparable  1
+ n ring 0.000556673
+1  2
+ hks diff 0.192156
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.179651
+ is skeld dist 1
+ comparable  1
+ n ring 0.000601707
+1  3
+ hks diff 0.011764
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0991387
+ is skeld dist 1
+ comparable  1
+ n ring 0.0013695
+1  4
+ hks diff 0.494118
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.231043
+ is skeld dist 1
+ comparable  1
+ n ring 0.00649196
+1  5
+ hks diff 0.611765
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00487945
+1  6
+ hks diff 0.631373
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.785566
+ is skeld dist 0
+ comparable  1
+ n ring 0.0055341
+1  7
+ hks diff 0.490196
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00119178
+1  8
+ hks diff 0.482353
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.00430355
+1  9
+ hks diff 0.443138
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.491915
+ is skeld dist 1
+ comparable  0
+ n ring 0.00614128
+1  10
+ hks diff 0.435294
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.255582
+ is skeld dist 1
+ comparable  1
+ n ring 0.0040864
+1  11
+ hks diff 0.647059
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00794344
+1  12
+ hks diff 0.596079
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.121736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00168781
+1  13
+ hks diff 0.615687
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00949927
+1  14
+ hks diff 0.650981
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.562425
+ is skeld dist 0
+ comparable  1
+ n ring 0.000381147
+1  15
+ hks diff 0.447059
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0939865
+ is skeld dist 1
+ comparable  1
+ n ring 0.00714056
+1  16
+ hks diff 0.431373
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.00804641
+1  17
+ hks diff 0.62353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00339904
+1  18
+ hks diff 0.576471
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.0011117
+1  19
+ hks diff 0.635294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.0087436
+1  20
+ hks diff 0.6
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00978082
+1  21
+ hks diff 0.62353
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00314791
+1  22
+ hks diff 0.337255
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00438795
+1  23
+ hks diff 0.62353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.785566
+ is skeld dist 0
+ comparable  1
+ n ring 0.00407627
+1  24
+ hks diff 0.364706
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.181094
+ is skeld dist 1
+ comparable  1
+ n ring 0.00205489
+1  25
+ hks diff 0.6
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00129731
+1  26
+ hks diff 0.643138
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00154963
+1  27
+ hks diff 0.580393
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00569413
+1  28
+ hks diff 0.596079
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.121736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00512367
+1  29
+ hks diff 0.42353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.00384475
+1  30
+ hks diff 0.611765
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.298832
+ is skeld dist 1
+ comparable  1
+ n ring 0.00410931
+1  31
+ hks diff 0.207844
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0939865
+ is skeld dist 1
+ comparable  1
+ n ring 0.00557503
+1  32
+ hks diff 0.462745
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.286195
+ is skeld dist 1
+ comparable  1
+ n ring 0.00129072
+1  33
+ hks diff 0.670589
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.577369
+ is skeld dist 0
+ comparable  1
+ n ring 0.0118819
+1  34
+ hks diff 0.560785
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00755665
+1  35
+ hks diff 0.62353
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.0054276
+1  36
+ hks diff 0.462745
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00502069
+1  37
+ hks diff 0.631373
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00667717
+1  38
+ hks diff 0.686275
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00307138
+1  39
+ hks diff 0.682353
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.0127199
+1  40
+ hks diff 0.305883
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0980674
+ is skeld dist 1
+ comparable  1
+ n ring 0.00669333
+1  41
+ hks diff 0.541177
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.286195
+ is skeld dist 1
+ comparable  1
+ n ring 0.0043331
+1  42
+ hks diff 0.564706
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.491915
+ is skeld dist 1
+ comparable  1
+ n ring 0.00541305
+1  43
+ hks diff 0.403922
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.00351759
+1  44
+ hks diff 0.690197
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.00928531
+2  3
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0805122
+ is skeld dist 1
+ comparable  1
+ n ring 0.000767794
+2  4
+ hks diff 0.686274
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.410694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00709367
+2  5
+ hks diff 0.803921
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 1.14901
+ is skeld dist 0
+ comparable  1
+ n ring 0.00548115
+2  6
+ hks diff 0.823529
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.965217
+ is skeld dist 0
+ comparable  1
+ n ring 0.00613581
+2  7
+ hks diff 0.682352
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.635332
+ is skeld dist 0
+ comparable  1
+ n ring 0.00179349
+2  8
+ hks diff 0.674509
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.362604
+ is skeld dist 1
+ comparable  1
+ n ring 0.00490525
+2  9
+ hks diff 0.635294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.671566
+ is skeld dist 0
+ comparable  1
+ n ring 0.00674299
+2  10
+ hks diff 0.62745
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.435233
+ is skeld dist 1
+ comparable  1
+ n ring 0.00468811
+2  11
+ hks diff 0.839215
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.639463
+ is skeld dist 0
+ comparable  1
+ n ring 0.00854515
+2  12
+ hks diff 0.788235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0579149
+ is skeld dist 1
+ comparable  1
+ n ring 0.00228952
+2  13
+ hks diff 0.807843
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.798163
+ is skeld dist 0
+ comparable  1
+ n ring 0.010101
+2  14
+ hks diff 0.843137
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.742076
+ is skeld dist 0
+ comparable  1
+ n ring 0.000982855
+2  15
+ hks diff 0.639215
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0856644
+ is skeld dist 1
+ comparable  1
+ n ring 0.00774227
+2  16
+ hks diff 0.623529
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.362604
+ is skeld dist 1
+ comparable  0
+ n ring 0.00864812
+2  17
+ hks diff 0.815686
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 1.14901
+ is skeld dist 0
+ comparable  1
+ n ring 0.00400075
+2  18
+ hks diff 0.768627
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.608834
+ is skeld dist 0
+ comparable  1
+ n ring 0.00171341
+2  19
+ hks diff 0.827451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.635332
+ is skeld dist 0
+ comparable  1
+ n ring 0.00934531
+2  20
+ hks diff 0.792156
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.798163
+ is skeld dist 0
+ comparable  1
+ n ring 0.0103825
+2  21
+ hks diff 0.815686
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.639463
+ is skeld dist 0
+ comparable  1
+ n ring 0.00374962
+2  22
+ hks diff 0.529411
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.179651
+ is skeld dist 1
+ comparable  1
+ n ring 0.00498966
+2  23
+ hks diff 0.815686
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.965217
+ is skeld dist 0
+ comparable  1
+ n ring 0.00467797
+2  24
+ hks diff 0.556862
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.360745
+ is skeld dist 1
+ comparable  1
+ n ring 0.0026566
+2  25
+ hks diff 0.792156
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.14901
+ is skeld dist 0
+ comparable  1
+ n ring 0.00189902
+2  26
+ hks diff 0.835294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.639463
+ is skeld dist 0
+ comparable  1
+ n ring 0.00215134
+2  27
+ hks diff 0.772549
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.635332
+ is skeld dist 0
+ comparable  1
+ n ring 0.00629584
+2  28
+ hks diff 0.788235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0579149
+ is skeld dist 1
+ comparable  1
+ n ring 0.00572538
+2  29
+ hks diff 0.615686
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.362604
+ is skeld dist 1
+ comparable  1
+ n ring 0.00444645
+2  30
+ hks diff 0.803921
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.478483
+ is skeld dist 1
+ comparable  1
+ n ring 0.00471102
+2  31
+ hks diff 0.4
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0856644
+ is skeld dist 1
+ comparable  1
+ n ring 0.00617674
+2  32
+ hks diff 0.654901
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.465845
+ is skeld dist 1
+ comparable  1
+ n ring 0.000689015
+2  33
+ hks diff 0.862745
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.75702
+ is skeld dist 0
+ comparable  1
+ n ring 0.0124836
+2  34
+ hks diff 0.752941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.798163
+ is skeld dist 0
+ comparable  1
+ n ring 0.00815836
+2  35
+ hks diff 0.815686
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.798163
+ is skeld dist 0
+ comparable  1
+ n ring 0.00602931
+2  36
+ hks diff 0.654901
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.635332
+ is skeld dist 0
+ comparable  1
+ n ring 0.00562239
+2  37
+ hks diff 0.823529
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.14901
+ is skeld dist 0
+ comparable  1
+ n ring 0.00727888
+2  38
+ hks diff 0.878431
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.798163
+ is skeld dist 0
+ comparable  1
+ n ring 0.00367309
+2  39
+ hks diff 0.874509
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.608834
+ is skeld dist 0
+ comparable  1
+ n ring 0.0133216
+2  40
+ hks diff 0.498039
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0815835
+ is skeld dist 1
+ comparable  0
+ n ring 0.00729504
+2  41
+ hks diff 0.733333
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.465845
+ is skeld dist 1
+ comparable  1
+ n ring 0.00493481
+2  42
+ hks diff 0.756862
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.671566
+ is skeld dist 0
+ comparable  1
+ n ring 0.00601476
+2  43
+ hks diff 0.596078
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.362604
+ is skeld dist 1
+ comparable  0
+ n ring 0.0041193
+2  44
+ hks diff 0.882353
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.608834
+ is skeld dist 0
+ comparable  1
+ n ring 0.00988702
+3  4
+ hks diff 0.505882
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.330182
+ is skeld dist 1
+ comparable  1
+ n ring 0.00786146
+3  5
+ hks diff 0.623529
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 1.06849
+ is skeld dist 0
+ comparable  1
+ n ring 0.00624895
+3  6
+ hks diff 0.643137
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.884705
+ is skeld dist 0
+ comparable  1
+ n ring 0.0069036
+3  7
+ hks diff 0.50196
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.554819
+ is skeld dist 0
+ comparable  1
+ n ring 0.00256128
+3  8
+ hks diff 0.494117
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.282092
+ is skeld dist 1
+ comparable  1
+ n ring 0.00567305
+3  9
+ hks diff 0.454902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.591054
+ is skeld dist 0
+ comparable  1
+ n ring 0.00751078
+3  10
+ hks diff 0.447058
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.354721
+ is skeld dist 1
+ comparable  0
+ n ring 0.0054559
+3  11
+ hks diff 0.658823
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.558951
+ is skeld dist 0
+ comparable  1
+ n ring 0.00931294
+3  12
+ hks diff 0.607843
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0225973
+ is skeld dist 1
+ comparable  1
+ n ring 0.00305731
+3  13
+ hks diff 0.627451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.717651
+ is skeld dist 0
+ comparable  1
+ n ring 0.0108688
+3  14
+ hks diff 0.662745
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.661564
+ is skeld dist 0
+ comparable  1
+ n ring 0.00175065
+3  15
+ hks diff 0.458823
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00515223
+ is skeld dist 1
+ comparable  1
+ n ring 0.00851006
+3  16
+ hks diff 0.443137
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.282092
+ is skeld dist 1
+ comparable  1
+ n ring 0.00941592
+3  17
+ hks diff 0.635294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06849
+ is skeld dist 0
+ comparable  1
+ n ring 0.00476854
+3  18
+ hks diff 0.588235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.528321
+ is skeld dist 1
+ comparable  1
+ n ring 0.0024812
+3  19
+ hks diff 0.647058
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.554819
+ is skeld dist 0
+ comparable  1
+ n ring 0.0101131
+3  20
+ hks diff 0.611764
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.717651
+ is skeld dist 0
+ comparable  1
+ n ring 0.0111503
+3  21
+ hks diff 0.635294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.558951
+ is skeld dist 0
+ comparable  1
+ n ring 0.00451741
+3  22
+ hks diff 0.349019
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0991387
+ is skeld dist 1
+ comparable  1
+ n ring 0.00575745
+3  23
+ hks diff 0.635294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.884705
+ is skeld dist 0
+ comparable  1
+ n ring 0.00544577
+3  24
+ hks diff 0.37647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.280233
+ is skeld dist 1
+ comparable  0
+ n ring 0.00342439
+3  25
+ hks diff 0.611764
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 1.06849
+ is skeld dist 0
+ comparable  1
+ n ring 0.00266681
+3  26
+ hks diff 0.654902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.558951
+ is skeld dist 0
+ comparable  1
+ n ring 0.00291913
+3  27
+ hks diff 0.592157
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.554819
+ is skeld dist 0
+ comparable  1
+ n ring 0.00706363
+3  28
+ hks diff 0.607843
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0225973
+ is skeld dist 1
+ comparable  1
+ n ring 0.00649317
+3  29
+ hks diff 0.435294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.282092
+ is skeld dist 1
+ comparable  1
+ n ring 0.00521425
+3  30
+ hks diff 0.623529
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.397971
+ is skeld dist 1
+ comparable  1
+ n ring 0.00547881
+3  31
+ hks diff 0.219608
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00515223
+ is skeld dist 1
+ comparable  1
+ n ring 0.00694453
+3  32
+ hks diff 0.474509
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.385333
+ is skeld dist 1
+ comparable  1
+ n ring 7.87782e-05
+3  33
+ hks diff 0.682353
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.676508
+ is skeld dist 0
+ comparable  1
+ n ring 0.0132514
+3  34
+ hks diff 0.572549
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.717651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00892615
+3  35
+ hks diff 0.635294
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.717651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00679711
+3  36
+ hks diff 0.474509
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.554819
+ is skeld dist 0
+ comparable  1
+ n ring 0.00639019
+3  37
+ hks diff 0.643137
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06849
+ is skeld dist 0
+ comparable  1
+ n ring 0.00804668
+3  38
+ hks diff 0.698039
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.717651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00444088
+3  39
+ hks diff 0.694117
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.528321
+ is skeld dist 1
+ comparable  1
+ n ring 0.0140894
+3  40
+ hks diff 0.317647
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00107133
+ is skeld dist 1
+ comparable  1
+ n ring 0.00806283
+3  41
+ hks diff 0.552941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.385333
+ is skeld dist 1
+ comparable  1
+ n ring 0.00570261
+3  42
+ hks diff 0.57647
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.591054
+ is skeld dist 0
+ comparable  1
+ n ring 0.00678255
+3  43
+ hks diff 0.415686
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.282092
+ is skeld dist 1
+ comparable  1
+ n ring 0.00488709
+3  44
+ hks diff 0.701961
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.528321
+ is skeld dist 1
+ comparable  1
+ n ring 0.0106548
+4  5
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.738312
+ is skeld dist 0
+ comparable  1
+ n ring 0.00161251
+4  6
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.554523
+ is skeld dist 0
+ comparable  1
+ n ring 0.000957857
+4  7
+ hks diff 0.003922
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.224637
+ is skeld dist 1
+ comparable  1
+ n ring 0.00530018
+4  8
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0480903
+ is skeld dist 1
+ comparable  1
+ n ring 0.00218841
+4  9
+ hks diff 0.05098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.260872
+ is skeld dist 1
+ comparable  1
+ n ring 0.000350677
+4  10
+ hks diff 0.058824
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0245389
+ is skeld dist 1
+ comparable  1
+ n ring 0.00240556
+4  11
+ hks diff 0.152941
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.228768
+ is skeld dist 1
+ comparable  1
+ n ring 0.00145148
+4  12
+ hks diff 0.101961
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.352779
+ is skeld dist 1
+ comparable  1
+ n ring 0.00480415
+4  13
+ hks diff 0.121569
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.387469
+ is skeld dist 1
+ comparable  1
+ n ring 0.00300731
+4  14
+ hks diff 0.156863
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.331382
+ is skeld dist 1
+ comparable  0
+ n ring 0.00611081
+4  15
+ hks diff 0.047059
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.32503
+ is skeld dist 1
+ comparable  1
+ n ring 0.000648603
+4  16
+ hks diff 0.062745
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0480903
+ is skeld dist 1
+ comparable  1
+ n ring 0.00155446
+4  17
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.738312
+ is skeld dist 0
+ comparable  1
+ n ring 0.00309291
+4  18
+ hks diff 0.082353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.198139
+ is skeld dist 1
+ comparable  1
+ n ring 0.00538025
+4  19
+ hks diff 0.141176
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.224637
+ is skeld dist 1
+ comparable  1
+ n ring 0.00225164
+4  20
+ hks diff 0.105882
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.387469
+ is skeld dist 1
+ comparable  1
+ n ring 0.00328887
+4  21
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.228768
+ is skeld dist 1
+ comparable  1
+ n ring 0.00334405
+4  22
+ hks diff 0.156863
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.231043
+ is skeld dist 1
+ comparable  1
+ n ring 0.00210401
+4  23
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.554523
+ is skeld dist 0
+ comparable  1
+ n ring 0.00241569
+4  24
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0499489
+ is skeld dist 1
+ comparable  1
+ n ring 0.00443707
+4  25
+ hks diff 0.105882
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.738312
+ is skeld dist 0
+ comparable  1
+ n ring 0.00519465
+4  26
+ hks diff 0.14902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.228768
+ is skeld dist 1
+ comparable  1
+ n ring 0.00494233
+4  27
+ hks diff 0.086275
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.224637
+ is skeld dist 1
+ comparable  1
+ n ring 0.000797827
+4  28
+ hks diff 0.101961
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.352779
+ is skeld dist 1
+ comparable  1
+ n ring 0.00136828
+4  29
+ hks diff 0.070588
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0480903
+ is skeld dist 1
+ comparable  1
+ n ring 0.00264721
+4  30
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.067789
+ is skeld dist 1
+ comparable  0
+ n ring 0.00238265
+4  31
+ hks diff 0.286274
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.32503
+ is skeld dist 1
+ comparable  1
+ n ring 0.000916925
+4  32
+ hks diff 0.031373
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0551512
+ is skeld dist 1
+ comparable  0
+ n ring 0.00778268
+4  33
+ hks diff 0.176471
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.346326
+ is skeld dist 1
+ comparable  1
+ n ring 0.00538991
+4  34
+ hks diff 0.066667
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.387469
+ is skeld dist 1
+ comparable  1
+ n ring 0.00106469
+4  35
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.387469
+ is skeld dist 1
+ comparable  1
+ n ring 0.00106435
+4  36
+ hks diff 0.031373
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.224637
+ is skeld dist 1
+ comparable  1
+ n ring 0.00147127
+4  37
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.738312
+ is skeld dist 0
+ comparable  1
+ n ring 0.000185217
+4  38
+ hks diff 0.192157
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.387469
+ is skeld dist 1
+ comparable  1
+ n ring 0.00342058
+4  39
+ hks diff 0.188235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.198139
+ is skeld dist 1
+ comparable  1
+ n ring 0.00622797
+4  40
+ hks diff 0.188235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.329111
+ is skeld dist 1
+ comparable  1
+ n ring 0.000201373
+4  41
+ hks diff 0.047059
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0551512
+ is skeld dist 1
+ comparable  0
+ n ring 0.00215885
+4  42
+ hks diff 0.070588
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.260872
+ is skeld dist 1
+ comparable  1
+ n ring 0.00107891
+4  43
+ hks diff 0.090196
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0480903
+ is skeld dist 1
+ comparable  1
+ n ring 0.00297437
+4  44
+ hks diff 0.196078
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.198139
+ is skeld dist 1
+ comparable  1
+ n ring 0.00279335
+5  6
+ hks diff 0.0196079
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.000654654
+5  7
+ hks diff 0.121569
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00368767
+5  8
+ hks diff 0.129412
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.000575902
+5  9
+ hks diff 0.168627
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.00126183
+5  10
+ hks diff 0.176471
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.713774
+ is skeld dist 0
+ comparable  1
+ n ring 0.000793049
+5  11
+ hks diff 0.0352942
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00306399
+5  12
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  1
+ n ring 0.00319164
+5  13
+ hks diff 0.003922
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00461982
+5  14
+ hks diff 0.0392158
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.406931
+ is skeld dist 1
+ comparable  1
+ n ring 0.0044983
+5  15
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00226111
+5  16
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00316697
+5  17
+ hks diff 0.0117648
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.0014804
+5  18
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00376774
+5  19
+ hks diff 0.0235295
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  0
+ n ring 0.00386415
+5  20
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00490138
+5  21
+ hks diff 0.0117648
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00173154
+5  22
+ hks diff 0.27451
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.000491499
+5  23
+ hks diff 0.0117648
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.000803181
+5  24
+ hks diff 0.247059
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.788261
+ is skeld dist 0
+ comparable  1
+ n ring 0.00282456
+5  25
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00358214
+5  26
+ hks diff 0.0313726
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00332982
+5  27
+ hks diff 0.031372
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.000814684
+5  28
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  0
+ n ring 0.000244226
+5  29
+ hks diff 0.188235
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.0010347
+5  30
+ hks diff 0
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.670523
+ is skeld dist 0
+ comparable  1
+ n ring 0.000770135
+5  31
+ hks diff 0.403921
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.000695585
+5  32
+ hks diff 0.14902
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00617017
+5  33
+ hks diff 0.0588236
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.391987
+ is skeld dist 1
+ comparable  1
+ n ring 0.00700243
+5  34
+ hks diff 0.05098
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.0026772
+5  35
+ hks diff 0.0117648
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.000548157
+5  36
+ hks diff 0.14902
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.000141238
+5  37
+ hks diff 0.0196079
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00179773
+5  38
+ hks diff 0.0745099
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00180806
+5  39
+ hks diff 0.0705883
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00784048
+5  40
+ hks diff 0.305882
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.06742
+ is skeld dist 0
+ comparable  1
+ n ring 0.00181388
+5  41
+ hks diff 0.070588
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.000546343
+5  42
+ hks diff 0.047059
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.000533601
+5  43
+ hks diff 0.207843
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00136186
+5  44
+ hks diff 0.0784315
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00440586
+6  7
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.00434232
+6  8
+ hks diff 0.14902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00123056
+6  9
+ hks diff 0.188235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.293651
+ is skeld dist 1
+ comparable  1
+ n ring 0.000607179
+6  10
+ hks diff 0.196079
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.529984
+ is skeld dist 1
+ comparable  0
+ n ring 0.0014477
+6  11
+ hks diff 0.0156863
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  1
+ n ring 0.00240934
+6  12
+ hks diff 0.0352939
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.907302
+ is skeld dist 0
+ comparable  1
+ n ring 0.00384629
+6  13
+ hks diff 0.0156859
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00396517
+6  14
+ hks diff 0.0196079
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.223141
+ is skeld dist 1
+ comparable  1
+ n ring 0.00515295
+6  15
+ hks diff 0.184314
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.879553
+ is skeld dist 0
+ comparable  1
+ n ring 0.00160646
+6  16
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00251231
+6  17
+ hks diff 0.0078431
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.00213506
+6  18
+ hks diff 0.0549019
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  0
+ n ring 0.0044224
+6  19
+ hks diff 0.00392161
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.0032095
+6  20
+ hks diff 0.0313729
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00424672
+6  21
+ hks diff 0.0078431
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  1
+ n ring 0.00238619
+6  22
+ hks diff 0.294118
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.785566
+ is skeld dist 0
+ comparable  1
+ n ring 0.00114615
+6  23
+ hks diff 0.0078431
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00145783
+6  24
+ hks diff 0.266667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.604472
+ is skeld dist 0
+ comparable  1
+ n ring 0.00347921
+6  25
+ hks diff 0.0313729
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.00423679
+6  26
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  0
+ n ring 0.00398447
+6  27
+ hks diff 0.0509799
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.00016003
+6  28
+ hks diff 0.0352939
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.907302
+ is skeld dist 0
+ comparable  1
+ n ring 0.000410427
+6  29
+ hks diff 0.207843
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00168935
+6  30
+ hks diff 0.0196079
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.486734
+ is skeld dist 1
+ comparable  1
+ n ring 0.00142479
+6  31
+ hks diff 0.423529
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.879553
+ is skeld dist 0
+ comparable  1
+ n ring 4.09316e-05
+6  32
+ hks diff 0.168628
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.499372
+ is skeld dist 1
+ comparable  1
+ n ring 0.00682482
+6  33
+ hks diff 0.0392157
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.208198
+ is skeld dist 1
+ comparable  1
+ n ring 0.00634777
+6  34
+ hks diff 0.0705879
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00202255
+6  35
+ hks diff 0.0078431
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.000106497
+6  36
+ hks diff 0.168628
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.000513416
+6  37
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.00114307
+6  38
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00246272
+6  39
+ hks diff 0.0509804
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  0
+ n ring 0.00718582
+6  40
+ hks diff 0.32549
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.883634
+ is skeld dist 0
+ comparable  1
+ n ring 0.00115923
+6  41
+ hks diff 0.0901959
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.499372
+ is skeld dist 1
+ comparable  1
+ n ring 0.001201
+6  42
+ hks diff 0.0666669
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.293651
+ is skeld dist 1
+ comparable  1
+ n ring 0.000121052
+6  43
+ hks diff 0.227451
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00201651
+6  44
+ hks diff 0.0588236
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  1
+ n ring 0.00375121
+7  8
+ hks diff 0.007843
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00311177
+7  9
+ hks diff 0.047058
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.0049495
+7  10
+ hks diff 0.054902
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.200099
+ is skeld dist 1
+ comparable  1
+ n ring 0.00289462
+7  11
+ hks diff 0.156863
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00675166
+7  12
+ hks diff 0.105883
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  0
+ n ring 0.000496032
+7  13
+ hks diff 0.125491
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00830749
+7  14
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.106744
+ is skeld dist 1
+ comparable  1
+ n ring 0.000810631
+7  15
+ hks diff 0.043137
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  0
+ n ring 0.00594878
+7  16
+ hks diff 0.058823
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00685464
+7  17
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00220727
+7  18
+ hks diff 0.086275
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 8.00746e-05
+7  19
+ hks diff 0.145099
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00755182
+7  20
+ hks diff 0.109804
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00858905
+7  21
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00195613
+7  22
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00319617
+7  23
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.00288449
+7  24
+ hks diff 0.12549
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.274586
+ is skeld dist 1
+ comparable  1
+ n ring 0.000863111
+7  25
+ hks diff 0.109804
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.000105531
+7  26
+ hks diff 0.152942
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.000357851
+7  27
+ hks diff 0.090197
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00450235
+7  28
+ hks diff 0.105883
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  1
+ n ring 0.00393189
+7  29
+ hks diff 0.066666
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00265297
+7  30
+ hks diff 0.121569
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.156848
+ is skeld dist 1
+ comparable  1
+ n ring 0.00291753
+7  31
+ hks diff 0.282352
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00438325
+7  32
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.0024825
+7  33
+ hks diff 0.180393
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.121688
+ is skeld dist 1
+ comparable  1
+ n ring 0.0106901
+7  34
+ hks diff 0.070589
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00636487
+7  35
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00423583
+7  36
+ hks diff 0.027451
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00382891
+7  37
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.0054854
+7  38
+ hks diff 0.196079
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.0018796
+7  39
+ hks diff 0.192157
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.0115281
+7  40
+ hks diff 0.184313
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.553748
+ is skeld dist 0
+ comparable  1
+ n ring 0.00550155
+7  41
+ hks diff 0.050981
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.00314133
+7  42
+ hks diff 0.07451
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.00422127
+7  43
+ hks diff 0.086274
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00232581
+7  44
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00809353
+8  9
+ hks diff 0.039215
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00183774
+8  10
+ hks diff 0.047059
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0726292
+ is skeld dist 1
+ comparable  1
+ n ring 0.000217147
+8  11
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.0036399
+8  12
+ hks diff 0.113726
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00261573
+8  13
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  0
+ n ring 0.00519573
+8  14
+ hks diff 0.168628
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.379472
+ is skeld dist 1
+ comparable  1
+ n ring 0.0039224
+8  15
+ hks diff 0.035294
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00283702
+8  16
+ hks diff 0.05098
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00374287
+8  17
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.000904501
+8  18
+ hks diff 0.094118
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00319184
+8  19
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00444006
+8  20
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  0
+ n ring 0.00547728
+8  21
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00115564
+8  22
+ hks diff 0.145098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 8.4403e-05
+8  23
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.000227279
+8  24
+ hks diff 0.117647
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00185859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00224866
+8  25
+ hks diff 0.117647
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00300624
+8  26
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00275392
+8  27
+ hks diff 0.09804
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00139059
+8  28
+ hks diff 0.113726
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.000820128
+8  29
+ hks diff 0.058823
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.000458799
+8  30
+ hks diff 0.129412
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.115879
+ is skeld dist 1
+ comparable  1
+ n ring 0.000194233
+8  31
+ hks diff 0.274509
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00127149
+8  32
+ hks diff 0.019608
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00559427
+8  33
+ hks diff 0.188236
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.394416
+ is skeld dist 1
+ comparable  1
+ n ring 0.00757833
+8  34
+ hks diff 0.078432
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  0
+ n ring 0.00325311
+8  35
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00112406
+8  36
+ hks diff 0.019608
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00071714
+8  37
+ hks diff 0.14902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00237363
+8  38
+ hks diff 0.203922
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  0
+ n ring 0.00123216
+8  39
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00841638
+8  40
+ hks diff 0.17647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.28102
+ is skeld dist 1
+ comparable  1
+ n ring 0.00238979
+8  41
+ hks diff 0.058824
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 2.95592e-05
+8  42
+ hks diff 0.082353
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.0011095
+8  43
+ hks diff 0.078431
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.000785953
+8  44
+ hks diff 0.207843
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00498176
+9  10
+ hks diff 0.007844
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.236333
+ is skeld dist 1
+ comparable  1
+ n ring 0.00205488
+9  11
+ hks diff 0.203921
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00180216
+9  12
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.613651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00445347
+9  13
+ hks diff 0.172549
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00335799
+9  14
+ hks diff 0.207843
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0705099
+ is skeld dist 1
+ comparable  0
+ n ring 0.00576013
+9  15
+ hks diff 0.003921
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.585902
+ is skeld dist 0
+ comparable  1
+ n ring 0.00099928
+9  16
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00190513
+9  17
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.00274224
+9  18
+ hks diff 0.133333
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00502958
+9  19
+ hks diff 0.192156
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.00260232
+9  20
+ hks diff 0.156862
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00363954
+9  21
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00299337
+9  22
+ hks diff 0.105883
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.491915
+ is skeld dist 1
+ comparable  0
+ n ring 0.00175333
+9  23
+ hks diff 0.180392
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.293651
+ is skeld dist 1
+ comparable  0
+ n ring 0.00206501
+9  24
+ hks diff 0.078432
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.310821
+ is skeld dist 1
+ comparable  1
+ n ring 0.00408639
+9  25
+ hks diff 0.156862
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.00484397
+9  26
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00459165
+9  27
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.000447149
+9  28
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.613651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00101761
+9  29
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00229653
+9  30
+ hks diff 0.168627
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.193083
+ is skeld dist 1
+ comparable  1
+ n ring 0.00203197
+9  31
+ hks diff 0.235294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.585902
+ is skeld dist 0
+ comparable  1
+ n ring 0.000566248
+9  32
+ hks diff 0.019607
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.205721
+ is skeld dist 1
+ comparable  1
+ n ring 0.007432
+9  33
+ hks diff 0.227451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0854536
+ is skeld dist 1
+ comparable  1
+ n ring 0.00574059
+9  34
+ hks diff 0.117647
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00141537
+9  35
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.000713676
+9  36
+ hks diff 0.019607
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.0011206
+9  37
+ hks diff 0.188235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.000535894
+9  38
+ hks diff 0.243137
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.0030699
+9  39
+ hks diff 0.239215
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00657864
+9  40
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.589983
+ is skeld dist 0
+ comparable  1
+ n ring 0.000552051
+9  41
+ hks diff 0.098039
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.205721
+ is skeld dist 1
+ comparable  1
+ n ring 0.00180818
+9  42
+ hks diff 0.121568
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.000728232
+9  43
+ hks diff 0.039216
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00262369
+9  44
+ hks diff 0.247058
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00314403
+10  11
+ hks diff 0.211765
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.20423
+ is skeld dist 1
+ comparable  1
+ n ring 0.00385704
+10  12
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.377318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00239859
+10  13
+ hks diff 0.180393
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.36293
+ is skeld dist 1
+ comparable  1
+ n ring 0.00541287
+10  14
+ hks diff 0.215687
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.306843
+ is skeld dist 1
+ comparable  1
+ n ring 0.00370525
+10  15
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.349569
+ is skeld dist 1
+ comparable  1
+ n ring 0.00305416
+10  16
+ hks diff 0.003921
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0726292
+ is skeld dist 1
+ comparable  1
+ n ring 0.00396002
+10  17
+ hks diff 0.188236
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.713774
+ is skeld dist 0
+ comparable  1
+ n ring 0.000687354
+10  18
+ hks diff 0.141177
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.1736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00297469
+10  19
+ hks diff 0.2
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.200099
+ is skeld dist 1
+ comparable  1
+ n ring 0.0046572
+10  20
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.36293
+ is skeld dist 1
+ comparable  1
+ n ring 0.00569443
+10  21
+ hks diff 0.188236
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.20423
+ is skeld dist 1
+ comparable  1
+ n ring 0.000938489
+10  22
+ hks diff 0.098039
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.255582
+ is skeld dist 1
+ comparable  1
+ n ring 0.00030155
+10  23
+ hks diff 0.188236
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.529984
+ is skeld dist 1
+ comparable  1
+ n ring 1.01319e-05
+10  24
+ hks diff 0.070588
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0744878
+ is skeld dist 1
+ comparable  0
+ n ring 0.00203151
+10  25
+ hks diff 0.164706
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.713774
+ is skeld dist 0
+ comparable  1
+ n ring 0.00278909
+10  26
+ hks diff 0.207844
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.20423
+ is skeld dist 1
+ comparable  0
+ n ring 0.00253677
+10  27
+ hks diff 0.145099
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.200099
+ is skeld dist 1
+ comparable  1
+ n ring 0.00160773
+10  28
+ hks diff 0.160785
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.377318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00103728
+10  29
+ hks diff 0.011764
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0726292
+ is skeld dist 1
+ comparable  1
+ n ring 0.000241652
+10  30
+ hks diff 0.176471
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0432501
+ is skeld dist 1
+ comparable  1
+ n ring 2.29143e-05
+10  31
+ hks diff 0.22745
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.349569
+ is skeld dist 1
+ comparable  1
+ n ring 0.00148863
+10  32
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.0306123
+ is skeld dist 1
+ comparable  1
+ n ring 0.00537712
+10  33
+ hks diff 0.235295
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.321787
+ is skeld dist 1
+ comparable  1
+ n ring 0.00779547
+10  34
+ hks diff 0.125491
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.36293
+ is skeld dist 1
+ comparable  1
+ n ring 0.00347025
+10  35
+ hks diff 0.188236
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.36293
+ is skeld dist 1
+ comparable  1
+ n ring 0.00134121
+10  36
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.200099
+ is skeld dist 1
+ comparable  1
+ n ring 0.000934287
+10  37
+ hks diff 0.196079
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.713774
+ is skeld dist 0
+ comparable  1
+ n ring 0.00259078
+10  38
+ hks diff 0.250981
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.36293
+ is skeld dist 1
+ comparable  1
+ n ring 0.00101502
+10  39
+ hks diff 0.247059
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.1736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00863353
+10  40
+ hks diff 0.129411
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.35365
+ is skeld dist 1
+ comparable  1
+ n ring 0.00260693
+10  41
+ hks diff 0.105883
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0306123
+ is skeld dist 1
+ comparable  1
+ n ring 0.000246706
+10  42
+ hks diff 0.129412
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.236333
+ is skeld dist 1
+ comparable  1
+ n ring 0.00132665
+10  43
+ hks diff 0.031372
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0726292
+ is skeld dist 1
+ comparable  1
+ n ring 0.000568806
+10  44
+ hks diff 0.254903
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.1736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00519891
+11  12
+ hks diff 0.0509802
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  1
+ n ring 0.00625563
+11  13
+ hks diff 0.0313722
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00155583
+11  14
+ hks diff 0.0039216
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.102613
+ is skeld dist 1
+ comparable  1
+ n ring 0.00756229
+11  15
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.000802881
+11  16
+ hks diff 0.215686
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.000102974
+11  17
+ hks diff 0.0235294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.0045444
+11  18
+ hks diff 0.0705882
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  0
+ n ring 0.00683174
+11  19
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.000800159
+11  20
+ hks diff 0.0470592
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00183738
+11  21
+ hks diff 0.0235294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00479553
+11  22
+ hks diff 0.309804
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00355549
+11  23
+ hks diff 0.0235294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  0
+ n ring 0.00386718
+11  24
+ hks diff 0.282353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.278717
+ is skeld dist 1
+ comparable  1
+ n ring 0.00588855
+11  25
+ hks diff 0.0470592
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00664613
+11  26
+ hks diff 0.0039216
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00639381
+11  27
+ hks diff 0.0666662
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00224931
+11  28
+ hks diff 0.0509802
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  1
+ n ring 0.00281977
+11  29
+ hks diff 0.223529
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.0040987
+11  30
+ hks diff 0.0352942
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.160979
+ is skeld dist 1
+ comparable  1
+ n ring 0.00383413
+11  31
+ hks diff 0.439215
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.00236841
+11  32
+ hks diff 0.184314
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.00923416
+11  33
+ hks diff 0.0235294
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.117557
+ is skeld dist 1
+ comparable  0
+ n ring 0.00393843
+11  34
+ hks diff 0.0862742
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00038679
+11  35
+ hks diff 0.0235294
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00251584
+11  36
+ hks diff 0.184314
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00292276
+11  37
+ hks diff 0.0156863
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00126627
+11  38
+ hks diff 0.0392157
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00487206
+11  39
+ hks diff 0.0352941
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  1
+ n ring 0.00477648
+11  40
+ hks diff 0.341176
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.557879
+ is skeld dist 0
+ comparable  1
+ n ring 0.00125011
+11  41
+ hks diff 0.105882
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.00361034
+11  42
+ hks diff 0.0823532
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00253039
+11  43
+ hks diff 0.243137
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00442585
+11  44
+ hks diff 0.0431373
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  0
+ n ring 0.00134187
+12  13
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00781146
+12  14
+ hks diff 0.0549018
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.684161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00130666
+12  15
+ hks diff 0.14902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0277495
+ is skeld dist 1
+ comparable  1
+ n ring 0.00545275
+12  16
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.0063586
+12  17
+ hks diff 0.0274508
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  1
+ n ring 0.00171123
+12  18
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.000576107
+12  19
+ hks diff 0.0392155
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  0
+ n ring 0.00705579
+12  20
+ hks diff 0.00392099
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00809301
+12  21
+ hks diff 0.0274508
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  0
+ n ring 0.0014601
+12  22
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.121736
+ is skeld dist 1
+ comparable  1
+ n ring 0.00270014
+12  23
+ hks diff 0.0274508
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.907302
+ is skeld dist 0
+ comparable  1
+ n ring 0.00238846
+12  24
+ hks diff 0.231373
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.30283
+ is skeld dist 1
+ comparable  1
+ n ring 0.000367079
+12  25
+ hks diff 0.00392099
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  0
+ n ring 0.000390501
+12  26
+ hks diff 0.0470586
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  1
+ n ring 0.000138181
+12  27
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  0
+ n ring 0.00400632
+12  28
+ hks diff 0
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00343586
+12  29
+ hks diff 0.172549
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00215694
+12  30
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.420568
+ is skeld dist 1
+ comparable  1
+ n ring 0.0024215
+12  31
+ hks diff 0.388235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0277495
+ is skeld dist 1
+ comparable  1
+ n ring 0.00388722
+12  32
+ hks diff 0.133334
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.407931
+ is skeld dist 1
+ comparable  1
+ n ring 0.00297853
+12  33
+ hks diff 0.0745096
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.699105
+ is skeld dist 0
+ comparable  1
+ n ring 0.0101941
+12  34
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00586884
+12  35
+ hks diff 0.0274508
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00373979
+12  36
+ hks diff 0.133334
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  1
+ n ring 0.00333287
+12  37
+ hks diff 0.0352939
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  1
+ n ring 0.00498936
+12  38
+ hks diff 0.0901959
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00138357
+12  39
+ hks diff 0.0862743
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.0110321
+12  40
+ hks diff 0.290196
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0236686
+ is skeld dist 1
+ comparable  1
+ n ring 0.00500552
+12  41
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.407931
+ is skeld dist 1
+ comparable  1
+ n ring 0.00264529
+12  42
+ hks diff 0.031373
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.613651
+ is skeld dist 0
+ comparable  1
+ n ring 0.00372524
+12  43
+ hks diff 0.192157
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00182978
+12  44
+ hks diff 0.0941175
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.0075975
+13  14
+ hks diff 0.0352938
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0560871
+ is skeld dist 1
+ comparable  1
+ n ring 0.00911812
+13  15
+ hks diff 0.168628
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00235871
+13  16
+ hks diff 0.184314
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00145286
+13  17
+ hks diff 0.00784279
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00610023
+13  18
+ hks diff 0.039216
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00838757
+13  19
+ hks diff 0.0196075
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  0
+ n ring 0.000755671
+13  20
+ hks diff 0.015687
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.000281553
+13  21
+ hks diff 0.00784279
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00635136
+13  22
+ hks diff 0.278432
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00511132
+13  23
+ hks diff 0.00784279
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00542301
+13  24
+ hks diff 0.250981
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.437418
+ is skeld dist 1
+ comparable  1
+ n ring 0.00744438
+13  25
+ hks diff 0.015687
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00820196
+13  26
+ hks diff 0.0274506
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00794964
+13  27
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00380514
+13  28
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.0043756
+13  29
+ hks diff 0.192157
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00565453
+13  30
+ hks diff 0.003922
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.31968
+ is skeld dist 1
+ comparable  1
+ n ring 0.00538996
+13  31
+ hks diff 0.407843
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00392424
+13  32
+ hks diff 0.152942
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.01079
+13  33
+ hks diff 0.0549016
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0411434
+ is skeld dist 1
+ comparable  1
+ n ring 0.0023826
+13  34
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00194262
+13  35
+ hks diff 0.00784279
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00407167
+13  36
+ hks diff 0.152942
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00447859
+13  37
+ hks diff 0.0156859
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.0028221
+13  38
+ hks diff 0.0705879
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00642789
+13  39
+ hks diff 0.0666663
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00322065
+13  40
+ hks diff 0.309804
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.71658
+ is skeld dist 0
+ comparable  1
+ n ring 0.00280594
+13  41
+ hks diff 0.07451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00516617
+13  42
+ hks diff 0.050981
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00408622
+13  43
+ hks diff 0.211765
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00598168
+13  44
+ hks diff 0.0745095
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.000213964
+14  15
+ hks diff 0.203922
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.656412
+ is skeld dist 0
+ comparable  1
+ n ring 0.00675941
+14  16
+ hks diff 0.219608
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.379472
+ is skeld dist 1
+ comparable  1
+ n ring 0.00766527
+14  17
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.406931
+ is skeld dist 1
+ comparable  1
+ n ring 0.0030179
+14  18
+ hks diff 0.0745098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.133242
+ is skeld dist 1
+ comparable  1
+ n ring 0.000730556
+14  19
+ hks diff 0.0156863
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.106744
+ is skeld dist 1
+ comparable  1
+ n ring 0.00836245
+14  20
+ hks diff 0.0509808
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0560871
+ is skeld dist 1
+ comparable  1
+ n ring 0.00939968
+14  21
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.102613
+ is skeld dist 1
+ comparable  1
+ n ring 0.00276676
+14  22
+ hks diff 0.313726
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.562425
+ is skeld dist 0
+ comparable  1
+ n ring 0.0040068
+14  23
+ hks diff 0.027451
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.223141
+ is skeld dist 1
+ comparable  0
+ n ring 0.00369512
+14  24
+ hks diff 0.286275
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.381331
+ is skeld dist 1
+ comparable  1
+ n ring 0.00167374
+14  25
+ hks diff 0.0509808
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.406931
+ is skeld dist 1
+ comparable  1
+ n ring 0.000916163
+14  26
+ hks diff 0.0078432
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.102613
+ is skeld dist 1
+ comparable  1
+ n ring 0.00116848
+14  27
+ hks diff 0.0705878
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.106744
+ is skeld dist 1
+ comparable  1
+ n ring 0.00531298
+14  28
+ hks diff 0.0549018
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.684161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00474253
+14  29
+ hks diff 0.227451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.379472
+ is skeld dist 1
+ comparable  1
+ n ring 0.0034636
+14  30
+ hks diff 0.0392158
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.263593
+ is skeld dist 1
+ comparable  0
+ n ring 0.00372816
+14  31
+ hks diff 0.443137
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.656412
+ is skeld dist 0
+ comparable  1
+ n ring 0.00519388
+14  32
+ hks diff 0.188236
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.276231
+ is skeld dist 1
+ comparable  0
+ n ring 0.00167187
+14  33
+ hks diff 0.0196078
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0149438
+ is skeld dist 1
+ comparable  0
+ n ring 0.0115007
+14  34
+ hks diff 0.0901958
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0560871
+ is skeld dist 1
+ comparable  1
+ n ring 0.0071755
+14  35
+ hks diff 0.027451
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.0560871
+ is skeld dist 1
+ comparable  1
+ n ring 0.00504646
+14  36
+ hks diff 0.188236
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.106744
+ is skeld dist 1
+ comparable  1
+ n ring 0.00463954
+14  37
+ hks diff 0.0196079
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.406931
+ is skeld dist 1
+ comparable  1
+ n ring 0.00629603
+14  38
+ hks diff 0.0352941
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.0560871
+ is skeld dist 1
+ comparable  1
+ n ring 0.00269023
+14  39
+ hks diff 0.0313725
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.133242
+ is skeld dist 1
+ comparable  1
+ n ring 0.0123388
+14  40
+ hks diff 0.345098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.660492
+ is skeld dist 0
+ comparable  1
+ n ring 0.00631218
+14  41
+ hks diff 0.109804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.276231
+ is skeld dist 1
+ comparable  0
+ n ring 0.00395196
+14  42
+ hks diff 0.0862748
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0705099
+ is skeld dist 1
+ comparable  0
+ n ring 0.0050319
+14  43
+ hks diff 0.247059
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.379472
+ is skeld dist 1
+ comparable  1
+ n ring 0.00313644
+14  44
+ hks diff 0.0392157
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.133242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00890416
+15  16
+ hks diff 0.015686
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.000905855
+15  17
+ hks diff 0.176471
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00374152
+15  18
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00602886
+15  19
+ hks diff 0.188235
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00160304
+15  20
+ hks diff 0.152941
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00264026
+15  21
+ hks diff 0.176471
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.00399265
+15  22
+ hks diff 0.109804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0939865
+ is skeld dist 1
+ comparable  1
+ n ring 0.00275261
+15  23
+ hks diff 0.176471
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.879553
+ is skeld dist 0
+ comparable  1
+ n ring 0.00306429
+15  24
+ hks diff 0.082353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.275081
+ is skeld dist 1
+ comparable  1
+ n ring 0.00508567
+15  25
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00584325
+15  26
+ hks diff 0.196079
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.00559093
+15  27
+ hks diff 0.133334
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00144643
+15  28
+ hks diff 0.14902
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0277495
+ is skeld dist 1
+ comparable  1
+ n ring 0.00201689
+15  29
+ hks diff 0.023529
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00329581
+15  30
+ hks diff 0.164706
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.392819
+ is skeld dist 1
+ comparable  1
+ n ring 0.00303125
+15  31
+ hks diff 0.239215
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00156553
+15  32
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.380181
+ is skeld dist 1
+ comparable  1
+ n ring 0.00843128
+15  33
+ hks diff 0.22353
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.671355
+ is skeld dist 0
+ comparable  1
+ n ring 0.00474131
+15  34
+ hks diff 0.113726
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.000416091
+15  35
+ hks diff 0.176471
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00171296
+15  36
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  0
+ n ring 0.00211988
+15  37
+ hks diff 0.184314
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.000463386
+15  38
+ hks diff 0.239216
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00406918
+15  39
+ hks diff 0.235294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00557936
+15  40
+ hks diff 0.141176
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00408089
+ is skeld dist 1
+ comparable  1
+ n ring 0.000447229
+15  41
+ hks diff 0.094118
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.380181
+ is skeld dist 1
+ comparable  1
+ n ring 0.00280746
+15  42
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.585902
+ is skeld dist 0
+ comparable  1
+ n ring 0.00172751
+15  43
+ hks diff 0.043137
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00362297
+15  44
+ hks diff 0.243137
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00214475
+16  17
+ hks diff 0.192157
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00464737
+16  18
+ hks diff 0.145098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00693471
+16  19
+ hks diff 0.203921
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.000697185
+16  20
+ hks diff 0.168627
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00173441
+16  21
+ hks diff 0.192157
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00489851
+16  22
+ hks diff 0.094118
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.00365847
+16  23
+ hks diff 0.192157
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00397015
+16  24
+ hks diff 0.066667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00185859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00599153
+16  25
+ hks diff 0.168627
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00674911
+16  26
+ hks diff 0.211765
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00649679
+16  27
+ hks diff 0.14902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00235228
+16  28
+ hks diff 0.164706
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00292274
+16  29
+ hks diff 0.00784299
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00420167
+16  30
+ hks diff 0.180392
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.115879
+ is skeld dist 1
+ comparable  1
+ n ring 0.0039371
+16  31
+ hks diff 0.223529
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00247138
+16  32
+ hks diff 0.031372
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00933714
+16  33
+ hks diff 0.239216
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.394416
+ is skeld dist 1
+ comparable  1
+ n ring 0.00383546
+16  34
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.000489764
+16  35
+ hks diff 0.192157
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00261881
+16  36
+ hks diff 0.031372
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00302573
+16  37
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00136924
+16  38
+ hks diff 0.254902
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00497503
+16  39
+ hks diff 0.25098
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00467351
+16  40
+ hks diff 0.12549
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.28102
+ is skeld dist 1
+ comparable  0
+ n ring 0.00135308
+16  41
+ hks diff 0.109804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00371331
+16  42
+ hks diff 0.133333
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00263337
+16  43
+ hks diff 0.027451
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00452882
+16  44
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00123889
+17  18
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00228734
+17  19
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00534456
+17  20
+ hks diff 0.0235298
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00638178
+17  21
+ hks diff 0
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  0
+ n ring 0.000251135
+17  22
+ hks diff 0.286275
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.000988904
+17  23
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.000677222
+17  24
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.788261
+ is skeld dist 0
+ comparable  1
+ n ring 0.00134415
+17  25
+ hks diff 0.0235298
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00210173
+17  26
+ hks diff 0.0196078
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00184941
+17  27
+ hks diff 0.0431368
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00229509
+17  28
+ hks diff 0.0274508
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  1
+ n ring 0.00172463
+17  29
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.000445702
+17  30
+ hks diff 0.0117648
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.670523
+ is skeld dist 0
+ comparable  1
+ n ring 0.000710269
+17  31
+ hks diff 0.415686
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00217599
+17  32
+ hks diff 0.160785
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00468977
+17  33
+ hks diff 0.0470588
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.391987
+ is skeld dist 1
+ comparable  1
+ n ring 0.00848283
+17  34
+ hks diff 0.0627448
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00415761
+17  35
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00202856
+17  36
+ hks diff 0.160785
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00162164
+17  37
+ hks diff 0.0078431
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00327813
+17  38
+ hks diff 0.0627451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.000327662
+17  39
+ hks diff 0.0588235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00932088
+17  40
+ hks diff 0.317647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 1.06742
+ is skeld dist 0
+ comparable  1
+ n ring 0.00329429
+17  41
+ hks diff 0.0823528
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.000934061
+17  42
+ hks diff 0.0588238
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.002014
+17  43
+ hks diff 0.219608
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.000118548
+17  44
+ hks diff 0.0666667
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00588626
+18  19
+ hks diff 0.0588235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.0076319
+18  20
+ hks diff 0.023529
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00866912
+18  21
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  1
+ n ring 0.00203621
+18  22
+ hks diff 0.239216
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.00327624
+18  23
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  1
+ n ring 0.00296456
+18  24
+ hks diff 0.211765
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.248088
+ is skeld dist 1
+ comparable  1
+ n ring 0.000943186
+18  25
+ hks diff 0.023529
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.000185606
+18  26
+ hks diff 0.0666666
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  0
+ n ring 0.000437926
+18  27
+ hks diff 0.003922
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00458243
+18  28
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.00401197
+18  29
+ hks diff 0.152941
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00273304
+18  30
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.13035
+ is skeld dist 1
+ comparable  1
+ n ring 0.00299761
+18  31
+ hks diff 0.368627
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00446333
+18  32
+ hks diff 0.113726
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.00240243
+18  33
+ hks diff 0.0941176
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.148186
+ is skeld dist 1
+ comparable  0
+ n ring 0.0107702
+18  34
+ hks diff 0.015686
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00644495
+18  35
+ hks diff 0.0470588
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.0043159
+18  36
+ hks diff 0.113726
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00390898
+18  37
+ hks diff 0.0549019
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00556547
+18  38
+ hks diff 0.109804
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00195968
+18  39
+ hks diff 0.105882
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.0116082
+18  40
+ hks diff 0.270588
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.52725
+ is skeld dist 1
+ comparable  1
+ n ring 0.00558163
+18  41
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.0032214
+18  42
+ hks diff 0.011765
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00430134
+18  43
+ hks diff 0.172549
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00240589
+18  44
+ hks diff 0.113725
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.0081736
+19  20
+ hks diff 0.0352945
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  0
+ n ring 0.00103722
+19  21
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00559569
+19  22
+ hks diff 0.298039
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00435565
+19  23
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.00466733
+19  24
+ hks diff 0.270588
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.274586
+ is skeld dist 1
+ comparable  1
+ n ring 0.00668871
+19  25
+ hks diff 0.0352945
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00744629
+19  26
+ hks diff 0.0078431
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00719397
+19  27
+ hks diff 0.0549015
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00304947
+19  28
+ hks diff 0.0392155
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  1
+ n ring 0.00361993
+19  29
+ hks diff 0.211764
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00489885
+19  30
+ hks diff 0.0235295
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.156848
+ is skeld dist 1
+ comparable  1
+ n ring 0.00463429
+19  31
+ hks diff 0.42745
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  1
+ n ring 0.00316857
+19  32
+ hks diff 0.172549
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.0100343
+19  33
+ hks diff 0.0352941
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.121688
+ is skeld dist 1
+ comparable  1
+ n ring 0.00313827
+19  34
+ hks diff 0.0745095
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  0
+ n ring 0.00118695
+19  35
+ hks diff 0.0117647
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.003316
+19  36
+ hks diff 0.172549
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00372292
+19  37
+ hks diff 0.00392161
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00206643
+19  38
+ hks diff 0.0509804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  0
+ n ring 0.00567222
+19  39
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00397632
+19  40
+ hks diff 0.329412
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.553748
+ is skeld dist 0
+ comparable  1
+ n ring 0.00205027
+19  41
+ hks diff 0.0941175
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.0044105
+19  42
+ hks diff 0.0705885
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.00333055
+19  43
+ hks diff 0.231373
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00522601
+19  44
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.000541708
+20  21
+ hks diff 0.0235298
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00663292
+20  22
+ hks diff 0.262745
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00539288
+20  23
+ hks diff 0.0235298
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00570456
+20  24
+ hks diff 0.235294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.437418
+ is skeld dist 1
+ comparable  1
+ n ring 0.00772593
+20  25
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00848351
+20  26
+ hks diff 0.0431376
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00823119
+20  27
+ hks diff 0.019607
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00408669
+20  28
+ hks diff 0.00392099
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00465715
+20  29
+ hks diff 0.17647
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00593608
+20  30
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.31968
+ is skeld dist 1
+ comparable  1
+ n ring 0.00567151
+20  31
+ hks diff 0.392156
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00420579
+20  32
+ hks diff 0.137255
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.0110715
+20  33
+ hks diff 0.0705886
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0411434
+ is skeld dist 1
+ comparable  1
+ n ring 0.00210105
+20  34
+ hks diff 0.039215
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00222417
+20  35
+ hks diff 0.0235298
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00435322
+20  36
+ hks diff 0.137255
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00476014
+20  37
+ hks diff 0.0313729
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00310365
+20  38
+ hks diff 0.0862749
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00670944
+20  39
+ hks diff 0.0823533
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.0029391
+20  40
+ hks diff 0.294117
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.71658
+ is skeld dist 0
+ comparable  1
+ n ring 0.00308749
+20  41
+ hks diff 0.058823
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00544772
+20  42
+ hks diff 0.035294
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00436778
+20  43
+ hks diff 0.196078
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00626323
+20  44
+ hks diff 0.0901965
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.000495517
+21  22
+ hks diff 0.286275
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00124004
+21  23
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  1
+ n ring 0.000928357
+21  24
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.278717
+ is skeld dist 1
+ comparable  1
+ n ring 0.00109302
+21  25
+ hks diff 0.0235298
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.0018506
+21  26
+ hks diff 0.0196078
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00159828
+21  27
+ hks diff 0.0431368
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00254622
+21  28
+ hks diff 0.0274508
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  0
+ n ring 0.00197576
+21  29
+ hks diff 0.2
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.000696837
+21  30
+ hks diff 0.0117648
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.160979
+ is skeld dist 1
+ comparable  1
+ n ring 0.000961403
+21  31
+ hks diff 0.415686
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.00242712
+21  32
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.00443863
+21  33
+ hks diff 0.0470588
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.117557
+ is skeld dist 1
+ comparable  1
+ n ring 0.00873396
+21  34
+ hks diff 0.0627448
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00440874
+21  35
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.0022797
+21  36
+ hks diff 0.160785
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00187278
+21  37
+ hks diff 0.0078431
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  0
+ n ring 0.00352927
+21  38
+ hks diff 0.0627451
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 7.65268e-05
+21  39
+ hks diff 0.0588235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  1
+ n ring 0.00957201
+21  40
+ hks diff 0.317647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.557879
+ is skeld dist 0
+ comparable  1
+ n ring 0.00354542
+21  41
+ hks diff 0.0823528
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.0011852
+21  42
+ hks diff 0.0588238
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00226514
+21  43
+ hks diff 0.219608
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.000369683
+21  44
+ hks diff 0.0666667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  1
+ n ring 0.0061374
+22  23
+ hks diff 0.286275
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.785566
+ is skeld dist 0
+ comparable  1
+ n ring 0.000311682
+22  24
+ hks diff 0.027451
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.181094
+ is skeld dist 1
+ comparable  1
+ n ring 0.00233306
+22  25
+ hks diff 0.262745
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00309064
+22  26
+ hks diff 0.305883
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.459812
+ is skeld dist 1
+ comparable  1
+ n ring 0.00283832
+22  27
+ hks diff 0.243138
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.00130618
+22  28
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.121736
+ is skeld dist 1
+ comparable  1
+ n ring 0.000735725
+22  29
+ hks diff 0.086275
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.000543202
+22  30
+ hks diff 0.27451
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.298832
+ is skeld dist 1
+ comparable  1
+ n ring 0.000278636
+22  31
+ hks diff 0.129411
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0939865
+ is skeld dist 1
+ comparable  1
+ n ring 0.00118708
+22  32
+ hks diff 0.12549
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.286195
+ is skeld dist 1
+ comparable  1
+ n ring 0.00567867
+22  33
+ hks diff 0.333334
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.577369
+ is skeld dist 0
+ comparable  1
+ n ring 0.00749392
+22  34
+ hks diff 0.22353
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.0031687
+22  35
+ hks diff 0.286275
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00103966
+22  36
+ hks diff 0.12549
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.455681
+ is skeld dist 1
+ comparable  1
+ n ring 0.000632737
+22  37
+ hks diff 0.294118
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.969356
+ is skeld dist 0
+ comparable  1
+ n ring 0.00228923
+22  38
+ hks diff 0.34902
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.618512
+ is skeld dist 0
+ comparable  1
+ n ring 0.00131657
+22  39
+ hks diff 0.345098
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.00833197
+22  40
+ hks diff 0.031372
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0980674
+ is skeld dist 1
+ comparable  1
+ n ring 0.00230538
+22  41
+ hks diff 0.203922
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.286195
+ is skeld dist 1
+ comparable  1
+ n ring 5.48437e-05
+22  42
+ hks diff 0.227451
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.491915
+ is skeld dist 1
+ comparable  1
+ n ring 0.0010251
+22  43
+ hks diff 0.066667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.182953
+ is skeld dist 1
+ comparable  1
+ n ring 0.000870356
+22  44
+ hks diff 0.352942
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.429183
+ is skeld dist 1
+ comparable  1
+ n ring 0.00489736
+23  24
+ hks diff 0.258824
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.604472
+ is skeld dist 0
+ comparable  1
+ n ring 0.00202138
+23  25
+ hks diff 0.0235298
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.00277896
+23  26
+ hks diff 0.0196078
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.325755
+ is skeld dist 1
+ comparable  1
+ n ring 0.00252664
+23  27
+ hks diff 0.0431368
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.00161786
+23  28
+ hks diff 0.0274508
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.907302
+ is skeld dist 0
+ comparable  1
+ n ring 0.00104741
+23  29
+ hks diff 0.2
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.00023152
+23  30
+ hks diff 0.0117648
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.486734
+ is skeld dist 1
+ comparable  1
+ n ring 3.30461e-05
+23  31
+ hks diff 0.415686
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.879553
+ is skeld dist 0
+ comparable  1
+ n ring 0.00149877
+23  32
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.499372
+ is skeld dist 1
+ comparable  1
+ n ring 0.00536699
+23  33
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.208198
+ is skeld dist 1
+ comparable  0
+ n ring 0.00780561
+23  34
+ hks diff 0.0627448
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00348039
+23  35
+ hks diff 0
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00135134
+23  36
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.329886
+ is skeld dist 1
+ comparable  1
+ n ring 0.000944419
+23  37
+ hks diff 0.0078431
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.183789
+ is skeld dist 1
+ comparable  1
+ n ring 0.00260091
+23  38
+ hks diff 0.0627451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.167054
+ is skeld dist 1
+ comparable  1
+ n ring 0.00100488
+23  39
+ hks diff 0.0588235
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  1
+ n ring 0.00864366
+23  40
+ hks diff 0.317647
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.883634
+ is skeld dist 0
+ comparable  1
+ n ring 0.00261706
+23  41
+ hks diff 0.0823528
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.499372
+ is skeld dist 1
+ comparable  1
+ n ring 0.000256838
+23  42
+ hks diff 0.0588238
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.293651
+ is skeld dist 1
+ comparable  0
+ n ring 0.00133678
+23  43
+ hks diff 0.219608
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.602613
+ is skeld dist 0
+ comparable  1
+ n ring 0.000558674
+23  44
+ hks diff 0.0666667
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.356384
+ is skeld dist 1
+ comparable  0
+ n ring 0.00520904
+24  25
+ hks diff 0.235294
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.788261
+ is skeld dist 0
+ comparable  1
+ n ring 0.00075758
+24  26
+ hks diff 0.278432
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.278717
+ is skeld dist 1
+ comparable  1
+ n ring 0.00050526
+24  27
+ hks diff 0.215687
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.274586
+ is skeld dist 1
+ comparable  1
+ n ring 0.00363924
+24  28
+ hks diff 0.231373
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.30283
+ is skeld dist 1
+ comparable  1
+ n ring 0.00306878
+24  29
+ hks diff 0.058824
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00185859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00178986
+24  30
+ hks diff 0.247059
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.117738
+ is skeld dist 1
+ comparable  1
+ n ring 0.00205442
+24  31
+ hks diff 0.156862
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.275081
+ is skeld dist 1
+ comparable  1
+ n ring 0.00352014
+24  32
+ hks diff 0.098039
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.1051
+ is skeld dist 1
+ comparable  1
+ n ring 0.00334561
+24  33
+ hks diff 0.305883
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.396274
+ is skeld dist 1
+ comparable  1
+ n ring 0.00982698
+24  34
+ hks diff 0.196079
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.437418
+ is skeld dist 1
+ comparable  1
+ n ring 0.00550176
+24  35
+ hks diff 0.258824
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.437418
+ is skeld dist 1
+ comparable  1
+ n ring 0.00337271
+24  36
+ hks diff 0.098039
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.274586
+ is skeld dist 1
+ comparable  1
+ n ring 0.0029658
+24  37
+ hks diff 0.266667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.788261
+ is skeld dist 0
+ comparable  1
+ n ring 0.00462228
+24  38
+ hks diff 0.321569
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.437418
+ is skeld dist 1
+ comparable  1
+ n ring 0.00101649
+24  39
+ hks diff 0.317647
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.248088
+ is skeld dist 1
+ comparable  1
+ n ring 0.010665
+24  40
+ hks diff 0.058823
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.279162
+ is skeld dist 1
+ comparable  1
+ n ring 0.00463844
+24  41
+ hks diff 0.176471
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.1051
+ is skeld dist 1
+ comparable  1
+ n ring 0.00227821
+24  42
+ hks diff 0.2
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.310821
+ is skeld dist 1
+ comparable  1
+ n ring 0.00335816
+24  43
+ hks diff 0.039216
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.00185859
+ is skeld dist 1
+ comparable  1
+ n ring 0.0014627
+24  44
+ hks diff 0.325491
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.248088
+ is skeld dist 1
+ comparable  1
+ n ring 0.00723042
+25  26
+ hks diff 0.0431376
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00025232
+25  27
+ hks diff 0.019607
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  0
+ n ring 0.00439682
+25  28
+ hks diff 0.00392099
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  0
+ n ring 0.00382636
+25  29
+ hks diff 0.17647
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00254744
+25  30
+ hks diff 0.011765
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.670523
+ is skeld dist 0
+ comparable  1
+ n ring 0.002812
+25  31
+ hks diff 0.392156
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00427772
+25  32
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00258803
+25  33
+ hks diff 0.0705886
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.391987
+ is skeld dist 1
+ comparable  1
+ n ring 0.0105846
+25  34
+ hks diff 0.039215
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00625934
+25  35
+ hks diff 0.0235298
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00413029
+25  36
+ hks diff 0.137255
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00372338
+25  37
+ hks diff 0.0313729
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.00537986
+25  38
+ hks diff 0.0862749
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.00177407
+25  39
+ hks diff 0.0823533
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.0114226
+25  40
+ hks diff 0.294117
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06742
+ is skeld dist 0
+ comparable  1
+ n ring 0.00539602
+25  41
+ hks diff 0.058823
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00303579
+25  42
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.00411574
+25  43
+ hks diff 0.196078
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00222028
+25  44
+ hks diff 0.0901965
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.007988
+26  27
+ hks diff 0.0627446
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.0041445
+26  28
+ hks diff 0.0470586
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.581548
+ is skeld dist 0
+ comparable  1
+ n ring 0.00357404
+26  29
+ hks diff 0.219608
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00229512
+26  30
+ hks diff 0.0313726
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.160979
+ is skeld dist 1
+ comparable  1
+ n ring 0.00255968
+26  31
+ hks diff 0.435294
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.553798
+ is skeld dist 0
+ comparable  1
+ n ring 0.0040254
+26  32
+ hks diff 0.180393
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.00284035
+26  33
+ hks diff 0.027451
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.117557
+ is skeld dist 1
+ comparable  1
+ n ring 0.0103322
+26  34
+ hks diff 0.0823526
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00600702
+26  35
+ hks diff 0.0196078
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00387797
+26  36
+ hks diff 0.180393
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.00413108
+ is skeld dist 1
+ comparable  1
+ n ring 0.00347106
+26  37
+ hks diff 0.0117647
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.509544
+ is skeld dist 1
+ comparable  1
+ n ring 0.00512754
+26  38
+ hks diff 0.0431373
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.1587
+ is skeld dist 1
+ comparable  1
+ n ring 0.00152175
+26  39
+ hks diff 0.0392157
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  0
+ n ring 0.0111703
+26  40
+ hks diff 0.337255
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.557879
+ is skeld dist 0
+ comparable  1
+ n ring 0.0051437
+26  41
+ hks diff 0.101961
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.173617
+ is skeld dist 1
+ comparable  1
+ n ring 0.00278347
+26  42
+ hks diff 0.0784316
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.0321034
+ is skeld dist 1
+ comparable  1
+ n ring 0.00386342
+26  43
+ hks diff 0.239216
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.276859
+ is skeld dist 1
+ comparable  1
+ n ring 0.00196796
+26  44
+ hks diff 0.0470589
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.0306291
+ is skeld dist 1
+ comparable  1
+ n ring 0.00773568
+27  28
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  0
+ n ring 0.000570457
+27  29
+ hks diff 0.156863
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00184938
+27  30
+ hks diff 0.031372
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.156848
+ is skeld dist 1
+ comparable  1
+ n ring 0.00158482
+27  31
+ hks diff 0.372549
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  1
+ n ring 0.000119098
+27  32
+ hks diff 0.117648
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.00698485
+27  33
+ hks diff 0.0901956
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.121688
+ is skeld dist 1
+ comparable  1
+ n ring 0.00618774
+27  34
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00186252
+27  35
+ hks diff 0.0431368
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.000266527
+27  36
+ hks diff 0.117648
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  1
+ n ring 0.000673446
+27  37
+ hks diff 0.0509799
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.000983044
+27  38
+ hks diff 0.105882
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00262275
+27  39
+ hks diff 0.10196
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00702579
+27  40
+ hks diff 0.27451
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.553748
+ is skeld dist 0
+ comparable  1
+ n ring 0.0009992
+27  41
+ hks diff 0.039216
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.00136103
+27  42
+ hks diff 0.015687
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.000281082
+27  43
+ hks diff 0.176471
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00217654
+27  44
+ hks diff 0.109803
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00359118
+28  29
+ hks diff 0.172549
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00127893
+28  30
+ hks diff 0.015686
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.420568
+ is skeld dist 1
+ comparable  1
+ n ring 0.00101436
+28  31
+ hks diff 0.388235
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0277495
+ is skeld dist 1
+ comparable  1
+ n ring 0.000451359
+28  32
+ hks diff 0.133334
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.407931
+ is skeld dist 1
+ comparable  1
+ n ring 0.0064144
+28  33
+ hks diff 0.0745096
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.699105
+ is skeld dist 0
+ comparable  1
+ n ring 0.0067582
+28  34
+ hks diff 0.035294
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  1
+ n ring 0.00243298
+28  35
+ hks diff 0.0274508
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  0
+ n ring 0.000303931
+28  36
+ hks diff 0.133334
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.577417
+ is skeld dist 0
+ comparable  1
+ n ring 0.000102988
+28  37
+ hks diff 0.0352939
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 1.09109
+ is skeld dist 0
+ comparable  0
+ n ring 0.0015535
+28  38
+ hks diff 0.0901959
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.740248
+ is skeld dist 0
+ comparable  0
+ n ring 0.00205229
+28  39
+ hks diff 0.0862743
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.00759625
+28  40
+ hks diff 0.290196
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0236686
+ is skeld dist 1
+ comparable  1
+ n ring 0.00156966
+28  41
+ hks diff 0.054902
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.407931
+ is skeld dist 1
+ comparable  1
+ n ring 0.000790569
+28  42
+ hks diff 0.031373
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.613651
+ is skeld dist 0
+ comparable  1
+ n ring 0.000289375
+28  43
+ hks diff 0.192157
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.304689
+ is skeld dist 1
+ comparable  1
+ n ring 0.00160608
+28  44
+ hks diff 0.0941175
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.550919
+ is skeld dist 0
+ comparable  1
+ n ring 0.00416163
+29  30
+ hks diff 0.188235
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.115879
+ is skeld dist 1
+ comparable  1
+ n ring 0.000264566
+29  31
+ hks diff 0.215686
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00173029
+29  32
+ hks diff 0.039215
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00513547
+29  33
+ hks diff 0.247059
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.394416
+ is skeld dist 1
+ comparable  1
+ n ring 0.00803713
+29  34
+ hks diff 0.137255
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00371191
+29  35
+ hks diff 0.2
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00158286
+29  36
+ hks diff 0.039215
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00117594
+29  37
+ hks diff 0.207843
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00283243
+29  38
+ hks diff 0.262745
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.000773364
+29  39
+ hks diff 0.258823
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00887518
+29  40
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.28102
+ is skeld dist 1
+ comparable  1
+ n ring 0.00284859
+29  41
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.000488359
+29  42
+ hks diff 0.141176
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.0015683
+29  43
+ hks diff 0.019608
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.000327154
+29  44
+ hks diff 0.266667
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00544056
+30  31
+ hks diff 0.403921
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.392819
+ is skeld dist 1
+ comparable  1
+ n ring 0.00146572
+30  32
+ hks diff 0.14902
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0126378
+ is skeld dist 1
+ comparable  0
+ n ring 0.00540004
+30  33
+ hks diff 0.0588236
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.278536
+ is skeld dist 1
+ comparable  0
+ n ring 0.00777256
+30  34
+ hks diff 0.05098
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.31968
+ is skeld dist 1
+ comparable  1
+ n ring 0.00344734
+30  35
+ hks diff 0.0117648
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.31968
+ is skeld dist 1
+ comparable  1
+ n ring 0.00131829
+30  36
+ hks diff 0.14902
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.156848
+ is skeld dist 1
+ comparable  1
+ n ring 0.000911373
+30  37
+ hks diff 0.0196079
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.670523
+ is skeld dist 0
+ comparable  1
+ n ring 0.00256786
+30  38
+ hks diff 0.0745099
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.31968
+ is skeld dist 1
+ comparable  1
+ n ring 0.00103793
+30  39
+ hks diff 0.0705883
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.13035
+ is skeld dist 1
+ comparable  1
+ n ring 0.00861061
+30  40
+ hks diff 0.305882
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.3969
+ is skeld dist 1
+ comparable  1
+ n ring 0.00258402
+30  41
+ hks diff 0.070588
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0126378
+ is skeld dist 1
+ comparable  0
+ n ring 0.000223792
+30  42
+ hks diff 0.047059
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.193083
+ is skeld dist 1
+ comparable  0
+ n ring 0.00130374
+30  43
+ hks diff 0.207843
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.115879
+ is skeld dist 1
+ comparable  1
+ n ring 0.00059172
+30  44
+ hks diff 0.0784315
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.13035
+ is skeld dist 1
+ comparable  1
+ n ring 0.005176
+31  32
+ hks diff 0.254901
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.380181
+ is skeld dist 1
+ comparable  1
+ n ring 0.00686576
+31  33
+ hks diff 0.462745
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.671355
+ is skeld dist 0
+ comparable  1
+ n ring 0.00630684
+31  34
+ hks diff 0.352941
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00198162
+31  35
+ hks diff 0.415686
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.000147428
+31  36
+ hks diff 0.254901
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.549667
+ is skeld dist 0
+ comparable  0
+ n ring 0.000554347
+31  37
+ hks diff 0.423529
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06334
+ is skeld dist 0
+ comparable  1
+ n ring 0.00110214
+31  38
+ hks diff 0.478431
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.712499
+ is skeld dist 0
+ comparable  1
+ n ring 0.00250365
+31  39
+ hks diff 0.474509
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00714489
+31  40
+ hks diff 0.098039
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.00408089
+ is skeld dist 1
+ comparable  1
+ n ring 0.0011183
+31  41
+ hks diff 0.333333
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.380181
+ is skeld dist 1
+ comparable  1
+ n ring 0.00124193
+31  42
+ hks diff 0.356862
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.585902
+ is skeld dist 0
+ comparable  1
+ n ring 0.000161984
+31  43
+ hks diff 0.196078
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.27694
+ is skeld dist 1
+ comparable  1
+ n ring 0.00205744
+31  44
+ hks diff 0.482352
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.523169
+ is skeld dist 1
+ comparable  1
+ n ring 0.00371028
+32  33
+ hks diff 0.207844
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.291174
+ is skeld dist 1
+ comparable  1
+ n ring 0.0131726
+32  34
+ hks diff 0.09804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00884737
+32  35
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00671833
+32  36
+ hks diff 0
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.00631141
+32  37
+ hks diff 0.168628
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.0079679
+32  38
+ hks diff 0.22353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.0043621
+32  39
+ hks diff 0.219608
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.0140106
+32  40
+ hks diff 0.156862
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.384262
+ is skeld dist 1
+ comparable  1
+ n ring 0.00798405
+32  41
+ hks diff 0.078432
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00562383
+32  42
+ hks diff 0.101961
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.205721
+ is skeld dist 1
+ comparable  1
+ n ring 0.00670377
+32  43
+ hks diff 0.058823
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.00480831
+32  44
+ hks diff 0.227451
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.010576
+33  34
+ hks diff 0.109804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.0411434
+ is skeld dist 1
+ comparable  1
+ n ring 0.00432522
+33  35
+ hks diff 0.0470588
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.0411434
+ is skeld dist 1
+ comparable  1
+ n ring 0.00645427
+33  36
+ hks diff 0.207844
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.121688
+ is skeld dist 1
+ comparable  1
+ n ring 0.00686119
+33  37
+ hks diff 0.0392157
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.391987
+ is skeld dist 1
+ comparable  1
+ n ring 0.0052047
+33  38
+ hks diff 0.0156863
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.0411434
+ is skeld dist 1
+ comparable  1
+ n ring 0.00881049
+33  39
+ hks diff 0.0117647
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0.148186
+ is skeld dist 1
+ comparable  1
+ n ring 0.000838051
+33  40
+ hks diff 0.364706
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.675436
+ is skeld dist 0
+ comparable  1
+ n ring 0.00518854
+33  41
+ hks diff 0.129412
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.291174
+ is skeld dist 1
+ comparable  1
+ n ring 0.00754877
+33  42
+ hks diff 0.105883
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0854536
+ is skeld dist 1
+ comparable  0
+ n ring 0.00646882
+33  43
+ hks diff 0.266667
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.394416
+ is skeld dist 1
+ comparable  1
+ n ring 0.00836428
+33  44
+ hks diff 0.0196079
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.148186
+ is skeld dist 1
+ comparable  0
+ n ring 0.00259656
+34  35
+ hks diff 0.0627448
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00212905
+34  36
+ hks diff 0.09804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.00253597
+34  37
+ hks diff 0.0705879
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  1
+ n ring 0.000879477
+34  38
+ hks diff 0.12549
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00448527
+34  39
+ hks diff 0.121568
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00516327
+34  40
+ hks diff 0.254902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.71658
+ is skeld dist 0
+ comparable  1
+ n ring 0.00086332
+34  41
+ hks diff 0.019608
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00322355
+34  42
+ hks diff 0.003921
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.0021436
+34  43
+ hks diff 0.156863
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00403906
+34  44
+ hks diff 0.129412
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00172866
+35  36
+ hks diff 0.160785
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.000406919
+35  37
+ hks diff 0.0078431
+ is_hks 1
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00124957
+35  38
+ hks diff 0.0627451
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00235622
+35  39
+ hks diff 0.0588235
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00729232
+35  40
+ hks diff 0.317647
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.71658
+ is skeld dist 0
+ comparable  1
+ n ring 0.00126573
+35  41
+ hks diff 0.0823528
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.0010945
+35  42
+ hks diff 0.0588238
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 1.45556e-05
+35  43
+ hks diff 0.219608
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00191001
+35  44
+ hks diff 0.0666667
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.0038577
+36  37
+ hks diff 0.168628
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.513675
+ is skeld dist 1
+ comparable  1
+ n ring 0.00165649
+36  38
+ hks diff 0.22353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.162831
+ is skeld dist 1
+ comparable  1
+ n ring 0.0019493
+36  39
+ hks diff 0.219608
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00769924
+36  40
+ hks diff 0.156862
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.553748
+ is skeld dist 0
+ comparable  1
+ n ring 0.00167265
+36  41
+ hks diff 0.078432
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.169486
+ is skeld dist 1
+ comparable  1
+ n ring 0.000687581
+36  42
+ hks diff 0.101961
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.0362345
+ is skeld dist 1
+ comparable  1
+ n ring 0.000392363
+36  43
+ hks diff 0.058823
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.272728
+ is skeld dist 1
+ comparable  1
+ n ring 0.00150309
+36  44
+ hks diff 0.227451
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.026498
+ is skeld dist 1
+ comparable  1
+ n ring 0.00426462
+37  38
+ hks diff 0.054902
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.350844
+ is skeld dist 1
+ comparable  0
+ n ring 0.00360579
+37  39
+ hks diff 0.0509804
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00604275
+37  40
+ hks diff 0.32549
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 1.06742
+ is skeld dist 0
+ comparable  1
+ n ring 1.61566e-05
+37  41
+ hks diff 0.0901959
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.683161
+ is skeld dist 0
+ comparable  1
+ n ring 0.00234407
+37  42
+ hks diff 0.0666669
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.477441
+ is skeld dist 1
+ comparable  1
+ n ring 0.00126413
+37  43
+ hks diff 0.227451
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.786403
+ is skeld dist 0
+ comparable  1
+ n ring 0.00315958
+37  44
+ hks diff 0.0588236
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.540173
+ is skeld dist 0
+ comparable  1
+ n ring 0.00260813
+38  39
+ hks diff 0.0039216
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00964854
+38  40
+ hks diff 0.380392
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.71658
+ is skeld dist 0
+ comparable  1
+ n ring 0.00362195
+38  41
+ hks diff 0.145098
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.332318
+ is skeld dist 1
+ comparable  1
+ n ring 0.00126172
+38  42
+ hks diff 0.121569
+ is_hks 0
+ curv 0
+ normal 0
+ skeld dist 0.126597
+ is skeld dist 1
+ comparable  1
+ n ring 0.00234167
+38  43
+ hks diff 0.282353
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.435559
+ is skeld dist 1
+ comparable  1
+ n ring 0.00044621
+38  44
+ hks diff 0.0039216
+ is_hks 1
+ curv 0
+ normal 1
+ skeld dist 0.18933
+ is skeld dist 1
+ comparable  1
+ n ring 0.00621393
+39  40
+ hks diff 0.37647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.52725
+ is skeld dist 1
+ comparable  1
+ n ring 0.00602659
+39  41
+ hks diff 0.141176
+ is_hks 0
+ curv 0
+ normal 1
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.00838682
+39  42
+ hks diff 0.117647
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00730687
+39  43
+ hks diff 0.278431
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00920233
+39  44
+ hks diff 0.0078432
+ is_hks 1
+ curv 1
+ normal 0
+ skeld dist 0
+ is skeld dist 1
+ comparable  0
+ n ring 0.00343462
+40  41
+ hks diff 0.235294
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.384262
+ is skeld dist 1
+ comparable  1
+ n ring 0.00236023
+40  42
+ hks diff 0.258823
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.589983
+ is skeld dist 0
+ comparable  1
+ n ring 0.00128028
+40  43
+ hks diff 0.098039
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.28102
+ is skeld dist 1
+ comparable  0
+ n ring 0.00317574
+40  44
+ hks diff 0.384314
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.52725
+ is skeld dist 1
+ comparable  1
+ n ring 0.00259198
+41  42
+ hks diff 0.023529
+ is_hks 1
+ curv 1
+ normal 1
+ skeld dist 0.205721
+ is skeld dist 1
+ comparable  1
+ n ring 0.00107994
+41  43
+ hks diff 0.137255
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.103242
+ is skeld dist 1
+ comparable  1
+ n ring 0.000815513
+41  44
+ hks diff 0.149019
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.142988
+ is skeld dist 1
+ comparable  1
+ n ring 0.0049522
+42  43
+ hks diff 0.160784
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.308962
+ is skeld dist 1
+ comparable  1
+ n ring 0.00189546
+42  44
+ hks diff 0.125491
+ is_hks 0
+ curv 1
+ normal 0
+ skeld dist 0.0627325
+ is skeld dist 1
+ comparable  1
+ n ring 0.00387226
+43  44
+ hks diff 0.286275
+ is_hks 0
+ curv 1
+ normal 1
+ skeld dist 0.24623
+ is skeld dist 1
+ comparable  1
+ n ring 0.00576772

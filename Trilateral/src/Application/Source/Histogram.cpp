@@ -4,20 +4,9 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 
-
-Histogram::Histogram(int size )
+void Histogram::init(int N)
 {
-	for (size_t i = 0; i < size; i++)
-	{
-		this->histogram.push_back(0);
-	}
-}
-Histogram::Histogram(std::vector<float> vec)
-{
-	this->histogram = vec; 
-}
-Histogram::Histogram()
-{
+	this->histogram.resize(N, 0);
 }
 //normalize to N  ( usually 1 ) 
 void Histogram::normalize(float N)
@@ -178,8 +167,8 @@ float Histogram_jensenShannonDivergence(const Histogram& h1 , const Histogram& h
 	}
 
 	// Compute the Jensen-Shannon Divergence
-	Histogram M_h(M);
-	float jsd = 0.5 * Histogram_klDivergence(h1,Histogram(M_h)) + 0.5 * Histogram_klDivergence(h2, Histogram(M_h));
+	Histogram M_h = Histogram_Vector_to_Hist(M);
+	float jsd = 0.5 * Histogram_klDivergence(h1, M_h) + 0.5 * Histogram_klDivergence(h2, M_h);
 
 	return jsd;
 }
@@ -402,4 +391,19 @@ float Histogram_L2Norm_DifferentSize(Histogram& h1, Histogram& h2)
 	}
 
 	return Histogram_L2Norm(smaller, bigger);
+}
+
+std::vector<float> Histogram_to_Vector(Histogram& h1)
+{
+	std::vector<float> vec;
+	vec = h1.histogram;
+	return vec;
+}
+
+Histogram Histogram_Vector_to_Hist(std::vector<float>& h1)
+{
+	Histogram h; 
+	h.init(h1.size());
+	h.histogram = h1; 
+	return h;
 }

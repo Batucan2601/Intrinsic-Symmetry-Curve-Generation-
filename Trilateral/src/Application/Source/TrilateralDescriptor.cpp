@@ -428,7 +428,8 @@ void TrilateralDescriptor_read(std::string filename, std::vector<TrilateralDescr
 Histogram TrilateralDescriptor_generate_cdf_of_areas(TrilateralMesh* m, TrilateralDescriptor& desc1 , int division_no)
 {
     Histogram h = Histogram_triangle_area_w_res( m,desc1,division_no,6);
-    Histogram cdf(division_no); 
+    Histogram cdf;
+    cdf.init(division_no);
     float sum = 0;
     for (size_t i = 0; i < division_no; i++)
     {

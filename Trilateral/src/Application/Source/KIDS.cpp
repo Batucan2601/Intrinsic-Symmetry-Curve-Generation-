@@ -10,24 +10,7 @@ std::vector<std::vector<TrilateralDescriptor>> Kids_dataset_desc_pos;
 std::vector<std::vector<TrilateralDescriptor>> Kids_dataset_desc_neg;
 std::vector<std::vector<unsigned int>>  KIDS_dataset_gaussian_indices;
 
-void KIDS_read_meshes()
-{
-    // total of 15 + 15 meshes 
-    for (size_t i = 0; i < 30; i++)
-    {
-        std::string path("../../Trilateral/Mesh/off/");
-        std::string isometry_batch_no("000" + std::to_string((i / 15) + 1));
-        std::string isometry_no(std::to_string(i % 15 + 1));
-        // read the meshes.
-        path = path + isometry_batch_no + ".isometry." + isometry_no + ".off";
-        TrilateralMesh m((char*)path.c_str());
-        //read the symmetry format
-        read_symmetry_format((char*)"../../Trilateral/Mesh/off/sym.txt", &m);
-		std::string hks_path = "../../Trilateral/Mesh/off/HKS/";
-		HKS_read_kernel_signature(&m, hks_path);
-        Kids_dataset.push_back(m);
-    }
-}
+
 
 void KIDS_dom_sym_generate_or_read_planes(float convergence_ratio)
 {

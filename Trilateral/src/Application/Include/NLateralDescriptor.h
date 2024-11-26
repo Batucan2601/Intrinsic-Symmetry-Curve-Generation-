@@ -2,6 +2,7 @@
 #include "glm/glm.hpp"
 #include <map>
 #include "TrilateralMesh.h"
+#include "Histogram.h"
 #include "../Include/SkeletonTypes.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -13,7 +14,6 @@ struct NLateralDescriptor
 	std::vector<std::vector<double>> euclidian_distances;
 	std::vector<std::vector<double>>  geodesic_distances;
 	std::vector<std::vector<double>>  curvatures;
-	double area;
 	// extras
 	std::vector<double> k_ring_areas;
 	TrilateralMesh mesh;
@@ -27,6 +27,7 @@ struct NLateralDescriptor
 	void get_ROI();
 
 	// new implementation
+	void create_histogram(TrilateralMesh* m , int N);
 	int N; //this was present
 	std::vector<unsigned int> indices; // fist one is the origin point 
 	std::vector<std::vector<std::vector<int>>> paths;  // from indices[0] to others
@@ -36,6 +37,10 @@ struct NLateralDescriptor
 	float skel_dist_mid;
 	unsigned int skeleton_index;
 	int depth; 
+	float n_ring_area;
+	double area;
+	double skel_point_dist;
+	Histogram histogram;
 };
 
 struct NLateralParameters
@@ -82,12 +87,14 @@ void start_n_lateral_algorithm_with_skeleton_end_points(TrilateralMesh* m, NLate
 	std::vector<unsigned int>& mesh_left_endpoints, std::vector<unsigned int>& mesh_right_endpoints);
 NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices);
 
-std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree, int N, int depth_similarity);
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree, 
+int N, int depth_similarity, int histogram_size );
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 
+void NLateral_compute_skel_point_dist(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc);
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index);
-
+void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index);
 
 void NLateralDescriptor_write(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
 void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);

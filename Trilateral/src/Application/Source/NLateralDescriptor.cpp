@@ -856,8 +856,9 @@ void  NLateralDescriptor::get_ROI()
 
 
 
+
 std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N
-, int depth_similarity)
+, int depth_similarity , int histogram_size)
 
 {
 	// 1 - go gaussian to skeleton
@@ -951,10 +952,21 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		{
 			continue; 
 		}
-
+		if (i == 23)
+		{
+			int a = 1;
+		}
 		NLateralDescriptor desc;
 		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
 		desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
+		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 3);
+		desc.create_histogram(m, histogram_size);
+		std::vector<unsigned int> skel_dist_vec = { desc.indices[0] };
+		std::vector<unsigned int> skel_corresponding_point;
+		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skel, skel_dist_vec);
+		desc.skel_dist_mid = dist_mid[0];
+		skeleton_get_closest_skeleton_endpoints(m, skel, skel_dist_vec, skel_corresponding_point);
+		desc.skeleton_index = skel_corresponding_point[0];
 		nLateralDescVec.push_back(desc);
 	}
 	return nLateralDescVec;
@@ -985,7 +997,12 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 	//check visited vertices
 	desc.vertices_inside =  Nlateral_check_vertices_visited(m, desc);
 	desc.indices = mesh_indices; 
-	desc.N = N; 
+	desc.N = N;
+	desc.area = 0;
+	for (size_t i = 0; i < desc.vertices_inside.size(); i++)
+	{
+		desc.area += m->areas[desc.vertices_inside[i]];
+	}
 	return desc;
 }
 
@@ -1037,7 +1054,7 @@ std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLa
 	//the minimum sized batch is our inside 
 	for (size_t i = 0; i < visited_vertices_list.size(); i++)
 	{
-		if (visited_vertices_list[i].size() < 90.0 / 100.0 * m->vertices.size())
+		if (visited_vertices_list[i].size() < 50.0 / 100.0 * m->vertices.size())
 		{
 			for (size_t j = 0; j < visited_vertices_list[i].size(); j++)
 			{
@@ -1269,7 +1286,98 @@ void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vecto
 	return;
 }
 
+void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index)
+{
+	NLateralDescriptor* desc = &descs.first[index];
 
+	//make all black
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = 0;
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < desc->paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc->paths[i][j].size(); k++)
+			{
+				int index = desc->paths[i][j][k];
+				m->raylib_mesh.colors[index * 4] = 255;
+				m->raylib_mesh.colors[index * 4 + 1] = 0;
+				m->raylib_mesh.colors[index * 4 + 2] = 0;
+				m->raylib_mesh.colors[index * 4 + 3] = 255;
+			}
+		}
+	}
+	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
+	{
+		int index = desc->vertices_inside[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 255;
+		m->raylib_mesh.colors[index * 4 + 2] = 0;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < desc->indices.size(); i++)
+	{
+		m->raylib_mesh.colors[desc->indices[i] * 4] = 0;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 1] = 255;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 2] = 255;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 3] = 255;
+	}
+
+	m->raylib_mesh.colors[desc->indices[0] * 4] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 1] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 2] = 255;
+	m->raylib_mesh.colors[desc->indices[0] * 4 + 3] = 255;
+
+
+
+
+	NLateralDescriptor* desc_neg = &descs.second[index];
+
+	for (size_t i = 0; i < desc_neg->paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc_neg->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc_neg->paths[i][j].size(); k++)
+			{
+				int index = desc_neg->paths[i][j][k];
+				m->raylib_mesh.colors[index * 4] = 255;
+				m->raylib_mesh.colors[index * 4 + 1] = 0;
+				m->raylib_mesh.colors[index * 4 + 2] = 0;
+				m->raylib_mesh.colors[index * 4 + 3] = 255;
+			}
+		}
+	}
+	for (size_t i = 0; i < desc_neg->vertices_inside.size(); i++)
+	{
+		int index = desc_neg->vertices_inside[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+
+	for (size_t i = 0; i < desc_neg->indices.size(); i++)
+	{
+		m->raylib_mesh.colors[desc_neg->indices[i] * 4] = 0;
+		m->raylib_mesh.colors[desc_neg->indices[i] * 4 + 1] = 255;
+		m->raylib_mesh.colors[desc_neg->indices[i] * 4 + 2] = 255;
+		m->raylib_mesh.colors[desc_neg->indices[i] * 4 + 3] = 255;
+	}
+
+	m->raylib_mesh.colors[desc_neg->indices[0] * 4] = 255;
+	m->raylib_mesh.colors[desc_neg->indices[0] * 4 + 1] = 255;
+	m->raylib_mesh.colors[desc_neg->indices[0] * 4 + 2] = 255;
+	m->raylib_mesh.colors[desc_neg->indices[0] * 4 + 3] = 255;
+
+	m->update_raylib_mesh();
+}
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index)
 {
 	NLateralDescriptor* desc = &descs[index];
@@ -1306,9 +1414,162 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
 
+	for (size_t i = 0; i < desc->indices.size(); i++)
+	{
+		m->raylib_mesh.colors[desc->indices[i] * 4] = 0;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 1] = 255;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 2] = 255;
+		m->raylib_mesh.colors[desc->indices[i] * 4 + 3] = 255;
+	}
+
 	m->raylib_mesh.colors[desc->indices[0] * 4] = 255;
 	m->raylib_mesh.colors[desc->indices[0] * 4 + 1] = 255;
 	m->raylib_mesh.colors[desc->indices[0] * 4 + 2] = 255;
 	m->raylib_mesh.colors[desc->indices[0] * 4 + 3] = 255;
+
+	//check if matched
+	if (m->calculated_symmetry_pairs.size() > 0)
+	{
+		int new_index = -1; 
+		//get match
+		for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+		{
+			int index_i1 = m->calculated_symmetry_pairs[i].first;
+			int index_i2 = m->calculated_symmetry_pairs[i].second;
+			if (index_i1 == desc->indices[0])
+			{
+				new_index = index_i2;
+				break; 
+			}
+			else if (index_i2 == desc->indices[0])
+			{
+				new_index = index_i1;
+				break;
+			}
+		}
+		if (new_index == -1)
+		{
+			m->update_raylib_mesh();
+			return; 
+		}
+
+		//get the corresponding index
+		for (size_t d = 0; d < descs.size(); d++)
+		{
+			if (descs[d].indices[0] == new_index )
+			{
+				for (size_t i = 0; i < descs[d].paths.size(); i++)
+				{
+					for (size_t j = 0; j < descs[d].paths[i].size(); j++)
+					{
+						for (size_t k = 0; k < descs[d].paths[i][j].size(); k++)
+						{
+							int index = descs[d].paths[i][j][k];
+							m->raylib_mesh.colors[index * 4] = 255;
+							m->raylib_mesh.colors[index * 4 + 1] = 0;
+							m->raylib_mesh.colors[index * 4 + 2] = 0;
+							m->raylib_mesh.colors[index * 4 + 3] = 255;
+						}
+					}
+				}
+				for (size_t i = 0; i < descs[d].vertices_inside.size(); i++)
+				{
+					int index = descs[d].vertices_inside[i];
+					m->raylib_mesh.colors[index * 4] = 0;
+					m->raylib_mesh.colors[index * 4 + 1] = 0;
+					m->raylib_mesh.colors[index * 4 + 2] = 255;
+					m->raylib_mesh.colors[index * 4 + 3] = 255;
+				}
+
+				for (size_t i = 0; i < descs[d].indices.size(); i++)
+				{
+					m->raylib_mesh.colors[descs[d].indices[i] * 4] = 0;
+					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 1] = 255;
+					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 2] = 255;
+					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 3] = 255;
+				}
+
+				m->raylib_mesh.colors[descs[d].indices[0] * 4] = 255;
+				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 1] = 255;
+				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 2] = 255;
+				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 3] = 255;
+
+				std::cout << "match ==  i " << index << " j " << d << std::endl;
+			}
+		}
+
+	}
+
+
 	m->update_raylib_mesh();
+}
+
+
+void NLateralDescriptor::create_histogram(TrilateralMesh* m, int hist_no)
+{
+	Histogram hist;
+	hist.init(hist_no);
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	float longest_path = -INFINITY; 
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		if (longest_path < distances[this->vertices_inside[i]])
+		{
+			longest_path = distances[this->vertices_inside[i]];
+		}
+	}
+	
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				if (longest_path < distances[this->paths[i][j][k]])
+				{
+					longest_path = distances[this->paths[i][j][k]];
+				}
+			}
+		}
+	}
+
+	float step_size = longest_path / hist_no;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		int step_i = distances[this->vertices_inside[i]] / step_size;
+		
+		if (step_i == hist_no)
+		{
+			step_i--;
+		}
+		hist.histogram[step_i] += m->areas[this->vertices_inside[i]];
+	}
+
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				int step_i = distances[this->paths[i][j][k]] / step_size;
+
+				if (step_i == hist_no)
+				{
+					step_i--;
+				}
+				//std::cout << " i " << i << " j " << j << " k " << k << std::endl;
+				//std::cout << " step i  " << step_i << " j " << j << " k " << k << std::endl;
+				hist.histogram[step_i] += m->areas[this->paths[i][j][k]] / 3 ;
+			}
+		}
+	}
+	this->histogram = hist; 
+}
+
+
+void NLateral_compute_skel_point_dist(TrilateralMesh* m,Skeleton& skel, NLateralDescriptor& desc)
+{
+	int index = desc.indices[0];
+	int skel_index = desc.skeleton_index;
+	desc.skel_point_dist = glm::distance(skel.skeletonFormat[skel_index].point , m->vertices[index]);
 }

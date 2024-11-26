@@ -1,12 +1,14 @@
 #include "../Include/Sampling.h"
 #include "../Include/Geodesic.h"
 #include <stdlib.h>     /* srand, rand */
+#include <random>
 std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_samples, bool is_points_colored )
 {
-	float* distance = new float[m->vertices.size()];
+	int N = m->vertices.size();
+	float* distance = new float[N];
 	int* sampled = new int[no_of_samples];
 	//initialize distance
-	for (size_t i = 0; i < m->vertices.size(); i++)
+	for (size_t i = 0; i < N; i++)
 	{
 		distance[i] = 1e6; 
 	}
@@ -16,13 +18,13 @@ std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_
 	}
 	srand(time(NULL));
 	//sampling starts
-	int sample_idx = rand() % no_of_samples;
+	int sample_idx =  0;
 	sampled[0] = sample_idx;
 	for (size_t i = 1; i < no_of_samples; i++)
 	{
 		//update distances
 		std::vector<float> distance_matrix_p1 = Geodesic_dijkstra(*m, sample_idx);
-		for (size_t j = 0; j < distance_matrix_p1.size(); j++)
+		for (size_t j = 0; j < N; j++)
 		{
 			if (distance_matrix_p1[j] < distance[j])
 			{
@@ -33,7 +35,7 @@ std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_
 		// get max
 		float maxValue = -1;
 		int maxIndex = -1;
-		for (size_t j = 0; j < distance_matrix_p1.size(); j++)
+		for (size_t j = 0; j < N; j++)
 		{
 			if (maxValue < distance[j])
 			{
@@ -43,6 +45,7 @@ std::vector<unsigned int>  furthest_point_sampling(TrilateralMesh* m, int no_of_
 		}
 		sample_idx = maxIndex;
 		sampled[i] = sample_idx;
+
 	}
 	std::vector<unsigned int> sampled_id_vector; 
 	for (size_t i = 0; i < no_of_samples; i++)
@@ -166,5 +169,61 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(TrilateralM
 		
 		fps_points_corrected.push_back(fps_index_for_partial_point);
 	}
+
+	for (size_t i = 0; i < fps_points_corrected.size(); i++)
+	{
+		int index = fps_points_corrected[i];
+		m->raylib_mesh.colors[index * 4] = 255;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 0;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
 	return fps_points_corrected;
+}
+
+
+std::vector<unsigned int>  uniform_point_sampling(TrilateralMesh* m, int no_of_samples, bool is_points_colored )
+{
+	float total_area = 0;
+	float cum_sum = 0;
+	int N = m->vertices.size();
+	for (size_t i = 0; i < N; i++)
+	{
+		total_area += m->areas[i];
+	}
+	std::vector<float> cumulative_distribution;
+	for (size_t i = 0; i < N; i++)
+	{
+		cum_sum += m->areas[i] / total_area;
+		cumulative_distribution.push_back(cum_sum);
+	}
+
+	// Random sampling
+	std::vector<unsigned int> samples;
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+	
+	for (int i = 0; i < no_of_samples; ++i) {
+		double r = dist(rng);
+
+		// Find the triangle to sample using binary search
+		auto it = std::lower_bound(cumulative_distribution.begin(), cumulative_distribution.end(), r);
+		int triIndex = std::distance(cumulative_distribution.begin(), it);
+
+		// Sample a point within the selected triangle
+		//Vec3 sampledPoint = samplePointInTriangle(mesh[triIndex], rng);
+		samples.push_back(triIndex);
+	}
+
+	for (size_t i = 0; i < no_of_samples; i++)
+	{
+		int index = samples[i];
+		m->raylib_mesh.colors[index * 4] = 255;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 0;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+	
+	return samples;
 }

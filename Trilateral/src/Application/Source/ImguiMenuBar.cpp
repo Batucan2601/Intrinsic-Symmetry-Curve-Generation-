@@ -17,6 +17,7 @@
 #include "ImGuiFileDialog.h"
 #include "raymath.h"
 #include <fstream>  // Include for file stream handling
+#include "../Include/NLateralMapping.h"
 
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
@@ -25,8 +26,9 @@ static void skeleton_generation(TrilateralMesh* m);
 static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
-static void KIDS_dataset(TrilateralMesh* m);
+static void dataset(TrilateralMesh* m);
 static void SCAPE_dataset(TrilateralMesh* m);
+static void KIDS_dataset(TrilateralMesh* m);
 static void TOSCA_dataset(TrilateralMesh* m);
 static void laplace_beltrami_operations(TrilateralMesh* m);
 static void Nlateral_functions(TrilateralMesh* m);
@@ -62,13 +64,17 @@ std::vector<unsigned int> distributed_indices;
 static Eigen::SparseMatrix<double> L; //laplacian 
 static int N = 0;
 std::vector<NLateralDescriptor> nlateral_descriptors;
+std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor> > nlateral_descriptors_pos_neg;
 std::vector<NodeAffinityParams> skeleton_params;
 float hks_dif_param = 0.1;
 float curv_param = 0.5;
 float norm_angle_param = 0.985;
 float skel_dist_param = 0.2;
 float skel_depth_param = 5;
+float n_ring_param = 0.2;
 float proximity_param = 1;
+float area_dif_param = 0.2;
+float skel_point_dist_param = 0.2; 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -151,9 +157,10 @@ void imgui_menu_bar(TrilateralMesh* m)
             }
             if (ImGui::BeginMenu("dataset"))
             {
-                KIDS_dataset(m);
+                dataset(m);
                 SCAPE_dataset(m);
                 TOSCA_dataset(m);
+                KIDS_dataset(m);
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -296,6 +303,8 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("normal angle ", &norm_angle_param);
         ImGui::InputFloat("skel distance params ", &skel_dist_param);
         ImGui::InputFloat("skel depth  params ", &skel_depth_param);
+        ImGui::InputFloat("n ring param ", &n_ring_param);
+        ImGui::InputFloat("area param ", &area_dif_param);
         ImGui::EndMenu();
     }
     if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
@@ -306,7 +315,17 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("FPS matching with Dvorak significant poins Optimal transform without plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, N);
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, n_ring_param, area_dif_param ,N);
+    }
+    if (ImGui::MenuItem("End pointmatching with FPS "))
+    {
+        nlateral_descriptors = NlateralMap_point_matching_with_FPS_and_endpoints(m, skeleton, dvorak_no_of_significant_points,
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, skel_depth_param, proximity_param, N);
+    }
+    if (ImGui::MenuItem("FPS sampling with sym plane "))
+    {
+        nlateral_descriptors_pos_neg = NlateralMap_point_matching_copy_symmetric_points(m, skeleton,plane , dvorak_no_of_significant_points,
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, n_ring_param, area_dif_param, skel_point_dist_param, N);
     }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
@@ -318,10 +337,13 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
             is_reading_ndsc = true;
         }
-        if (ImGui::InputInt("descriptor no ", &descriptor_no));
-        if (ImGui::MenuItem("Display descriptor"))
+        if (ImGui::InputInt("descriptor no ", &descriptor_no))
         {
             Nlateral_display_desc(m, nlateral_descriptors , descriptor_no);
+        }
+        if (ImGui::InputInt("descriptor no symmetric", &descriptor_no))
+        {
+            Nlateral_display_desc(m, nlateral_descriptors_pos_neg, descriptor_no);
         }
         if (ImGui::MenuItem("Display descriptor all"))
         {
@@ -342,17 +364,45 @@ static void Nlateral_functions(TrilateralMesh* m)
     }
   
 }
-static void SCAPE_dataset(TrilateralMesh* m)
+static void dataset(TrilateralMesh* m)
 {
-    if (ImGui::MenuItem("read SCAPE"))
+    if (ImGui::BeginMenu("select Dataset"))
     {
-        SCB_read_SCAPE();
+        if (ImGui::MenuItem("SCAPE"))
+        {
+            SCB_select_dataset(SCAPE);
+        }
+        if (ImGui::MenuItem("KIDS"))
+        {
+            SCB_select_dataset(KIDS);
+        }
+        if (ImGui::MenuItem("TOSCA"))
+        {
+            SCB_select_dataset(TOSCA);
+        }
+        ImGui::EndMenu();
     }
     ImGui::InputInt("Mesh Index", &mesh_index);
     if (ImGui::MenuItem("display mesh "))
     {
         SCB_select_mesh(*m, mesh_index, skeleton);
     }
+
+}
+static void KIDS_dataset(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("read KIDS"))
+    {
+        SCB_read_KIDS();
+    }
+}
+static void SCAPE_dataset(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("read SCAPE"))
+    {
+        SCB_read_SCAPE();
+    }
+    
 }
 static void TOSCA_dataset(TrilateralMesh* m)
 {
@@ -360,35 +410,6 @@ static void TOSCA_dataset(TrilateralMesh* m)
     {
         SCB_read_TOSCA();
     }
-}
-static void KIDS_dataset(TrilateralMesh* m)
-{
-    if (ImGui::MenuItem("read KIDS"))
-    {
-        KIDS_read_meshes();
-    }
-    if (ImGui::MenuItem("display mesh "))
-    {
-        KIDS_select_mesh(*m , mesh_index);
-    }
-    if (ImGui::MenuItem("generate KIDS planes"))
-    {
-        KIDS_dom_sym_generate_or_read_planes(convergence_ratio);
-    }
-    if (ImGui::MenuItem(" select N curvature points "))
-    {
-        KIDS_generate_gaussians(dvorak_no_of_significant_points, dvorak_geodesic_dist_param);
-    }
-    if (ImGui::MenuItem("use gaussian for endpoint matching "))
-    {
-        KIDS_endpoint_matching_w_gaussian(dvorak_no_of_significant_points, convergence_ratio);
-    }
-    if (ImGui::MenuItem("NLATERAL use gaussian for endpoint matching  with OT "))
-    {
-        KIDS_endpoint_matching_w_NLateral(dvorak_no_of_significant_points, dvorak_geodesic_dist_param, N);
-    }
-
-   
 }
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
 int time_step = 0;
@@ -650,7 +671,10 @@ static void distribution_functions(TrilateralMesh* m)
         {
            distributed_indices = furthest_point_sampling(m, no_of_dist_points, true);
         }
-
+        if (ImGui::MenuItem("Uniform Point Sampling "))
+        {
+            distributed_indices = uniform_point_sampling(m, no_of_dist_points, true);
+        }
         ImGui::EndMenu();
     }
 

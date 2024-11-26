@@ -6,7 +6,8 @@ Histogram histogram_roi_area_detailed(TrilateralMesh* m, int point_index1, int p
 	std::vector<int> is_visited, std::vector<int>& global_is_visited)
 {
 	//histogram to be returned 
-	Histogram histogram(division_no);
+	Histogram histogram;
+	histogram.init(division_no);
 	std::vector<int> path_1_2 = Geodesic_between_two_points(*m, point_index1, point_index2);
 	std::vector<int> path_1_3 = Geodesic_between_two_points(*m, point_index1, point_index3);
 	std::vector<int> path_2_3 = Geodesic_between_two_points(*m, point_index2, point_index3);
@@ -220,7 +221,8 @@ Histogram histogram_roi_area_detailed(TrilateralMesh* m, int point_index1, int p
 
 Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc, int division_no)
 {
-	Histogram histogram(division_no);
+	Histogram histogram;
+	histogram.init(division_no);
 	std::vector<int> path_1_2 = desc.path_1_2;
 	std::vector<int> path_1_3 = desc.path_1_3;
 	std::vector<int> path_2_3 = desc.path_2_3;
@@ -233,7 +235,8 @@ Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc
 	std::vector<unsigned int> is_visited = desc.visited_indices;
 	if (is_visited.size() == 0)
 	{
-		return Histogram(division_no);
+		histogram.init(division_no);
+		return histogram;
 	}
 
 	for (size_t i = 0; i < is_visited.size(); i++)
@@ -307,7 +310,8 @@ Histogram  Histogram_triangle_area(TrilateralMesh* m, TrilateralDescriptor& desc
 //use m_inner 
 Histogram Histogram_triangle_area_w_res(TrilateralMesh* m, TrilateralDescriptor& desc, int division_no , int resolution)
 {
-	Histogram histogram(division_no);
+	Histogram histogram;
+	histogram.init(division_no);
 	std::vector<int> path_1_2 = desc.path_1_2;
 	std::vector<int> path_1_3 = desc.path_1_3;
 	std::vector<int> path_2_3 = desc.path_2_3;

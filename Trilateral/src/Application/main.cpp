@@ -25,7 +25,6 @@
 #include "Include/Shader.h"
 #include "Include/TrilateralMap.h"
 
-
 static void imgui_display_camera(Camera3D& camera);
 int main(void) 
 {

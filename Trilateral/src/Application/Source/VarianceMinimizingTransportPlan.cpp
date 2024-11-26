@@ -406,7 +406,7 @@ float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralD
 		desc2.weight = desc2.weight / desc2.weight.sum();
 	}
 	Eigen::MatrixXd cost_matrix = generate_cost_function(m, desc1, desc2);
-	Eigen::MatrixXd transport_plan = sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight, 1e-1, 10000, 1e-8);
+	Eigen::MatrixXd transport_plan = sinkhornOptimalTransport(cost_matrix, desc1.weight, desc2.weight,  1e-1, 1000, 1e-6);
 	float  totalCost = (transport_plan.cwiseProduct(cost_matrix)).sum();
 
 	/*std::cout << "====================================================================" << std::endl;
@@ -445,7 +445,7 @@ double kl_divergence(const Eigen::VectorXd& P, const Eigen::VectorXd& Q) {
 	return kl_div;
 }
 // Sinkhorn algorithm to solve regularized optimal transport problem
-Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix,
+/*Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix,
 	const Eigen::VectorXd& sourceWeights,
 	const Eigen::VectorXd& targetWeights,
 	double epsilon,  int maxIter, double tolerance) {
@@ -483,6 +483,44 @@ Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix,
 	Eigen::MatrixXd transportPlan = sourceWeights.asDiagonal().toDenseMatrix() * v.asDiagonal().toDenseMatrix() * H
 	* w.asDiagonal().toDenseMatrix() * targetWeights.asDiagonal().toDenseMatrix();
 	return transportPlan;
+}*/
+// Sinkhorn Algorithm Function
+Eigen::MatrixXd sinkhornOptimalTransport(const Eigen::MatrixXd& costMatrix,
+	const Eigen::VectorXd& a,
+	const Eigen::VectorXd& b,
+	double lambda, int maxIter, double tol) {
+	// Compute Gibbs Kernel (K = exp(-lambda * C))
+	Eigen::MatrixXd K = (-lambda * costMatrix).array().exp();
+
+	// Initialize scaling vectors u and v
+	Eigen::VectorXd u = Eigen::VectorXd::Ones(a.size());
+	Eigen::VectorXd v = Eigen::VectorXd::Ones(b.size());
+	if ( ! (a.sum() == b.sum()) )
+	{
+		std::cout << " sum is different" << std::endl;
+	}
+	// Iterative updates
+	for (int iter = 0; iter < maxIter; ++iter) {
+		Eigen::VectorXd u_prev = u;
+
+		// Update u and v
+		u = a.array() / (K * v).array();
+		v = b.array() / (K.transpose() * u).array();
+
+		// Check convergence
+		if ((u - u_prev).norm() < tol) {
+			break;
+		}
+	}
+
+	// Compute transport plan P = diag(u) * K * diag(v)
+	Eigen::MatrixXd P = u.asDiagonal() * K * v.asDiagonal();
+
+	// Compute transport cost
+	// Print results
+	//std::cout << "Optimal Transport Plan (P):\n" << P << std::endl;
+
+	return P;
 }
 
 // for now include only the INSIDE of descriptors 
