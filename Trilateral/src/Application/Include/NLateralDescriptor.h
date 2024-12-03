@@ -34,7 +34,7 @@ struct NLateralDescriptor
 	std::vector<float> distances;  // distances to others
 	std::vector<unsigned int> vertices_inside;
 	Eigen::VectorXd weight;
-	float skel_dist_mid;
+	std::vector<float> skel_dist_mid;
 	unsigned int skeleton_index;
 	int depth; 
 	float n_ring_area;
@@ -43,6 +43,28 @@ struct NLateralDescriptor
 	Histogram histogram;
 };
 
+struct NLateralDescriptorRestrictions
+{
+	int no_of_points;
+	
+	float sweep_distance;
+	bool is_sweep_distance;
+	float hks_dif_param;
+	bool is_hks_dif; 
+	float skel_dist_param;
+	bool is_skel_dist;
+	float n_ring_param;
+	bool is_n_ring; 
+	float area_dif_param;
+	bool is_area_dif; 
+	float skel_point_dist_param; 
+	bool is_skel_point_dist;
+	float paths_dif_param;
+	bool is_paths_dif; 
+	float min_geo_tau;
+	bool is_min_geo_tau; 
+	
+};
 struct NLateralParameters
 {
 	//constants
@@ -68,6 +90,8 @@ struct NLateralParameters
 };
 
 static NLateralParameters N_LATERAL_PARAMETERS; 
+
+
 
 NLateralDescriptor generate_NLateralDescriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices, const std::vector<bool>& parameter_checkbox
 	, const std::vector<bool>& parameter_weights, const std::vector<std::string>& parameter_names);
@@ -98,3 +122,11 @@ void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDesc
 
 void NLateralDescriptor_write(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
 void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
+
+std::vector<unsigned int> NLateral_sweepDistance(TrilateralMesh* m , std::vector<unsigned int> indices, float sweep_distance );
+bool NLateral_check_path_lengths(NLateralDescriptor& desc1, NLateralDescriptor& desc2, float similarity);
+
+
+bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_perc);
+bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel);
+bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring);

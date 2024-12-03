@@ -333,8 +333,6 @@ TrilateralDescriptor trilateral_get_trilateral_using_closest_pairs_with_skeleton
 std::vector<unsigned int>& skeleton_indices);
 
 
-std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points);
-std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function);
 
 
 //static int* trilateral_ROI(MeshFactory& mesh_fac, int& selected_index, int point_index1, int point_index2, int point_index3, int division_no, bool& is_visited_interior);

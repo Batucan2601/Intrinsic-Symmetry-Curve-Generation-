@@ -952,19 +952,15 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		{
 			continue; 
 		}
-		if (i == 23)
-		{
-			int a = 1;
-		}
 		NLateralDescriptor desc;
 		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
 		desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
-		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 3);
+		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
 		desc.create_histogram(m, histogram_size);
-		std::vector<unsigned int> skel_dist_vec = { desc.indices[0] };
+		std::vector<unsigned int> skel_dist_vec = desc.indices;
 		std::vector<unsigned int> skel_corresponding_point;
 		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skel, skel_dist_vec);
-		desc.skel_dist_mid = dist_mid[0];
+		desc.skel_dist_mid = dist_mid;
 		skeleton_get_closest_skeleton_endpoints(m, skel, skel_dist_vec, skel_corresponding_point);
 		desc.skeleton_index = skel_corresponding_point[0];
 		nLateralDescVec.push_back(desc);
@@ -1572,4 +1568,167 @@ void NLateral_compute_skel_point_dist(TrilateralMesh* m,Skeleton& skel, NLateral
 	int index = desc.indices[0];
 	int skel_index = desc.skeleton_index;
 	desc.skel_point_dist = glm::distance(skel.skeletonFormat[skel_index].point , m->vertices[index]);
+}
+
+
+std::vector<unsigned int> NLateral_sweepDistance(TrilateralMesh* m, std::vector<unsigned int> indices, float sweep_distance)
+{
+	std::vector<unsigned int> extracted_indices;
+	while (indices.size() > 0)
+	{
+		unsigned int p = indices[0];
+		extracted_indices.push_back(p);
+		indices.erase(indices.begin(), indices.begin() + 1);
+		int index = p;
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		std::vector<unsigned int> close_vertices;
+		for (size_t i = 0; i < indices.size(); i++)
+		{
+			if (distances[indices[i]] < sweep_distance)
+			{
+				close_vertices.push_back(i);
+			}
+		}
+
+		std::sort(close_vertices.begin(), close_vertices.end(), std::greater<unsigned int>());
+
+		// Remove elements from the vector starting from the highest index
+		for (int index : close_vertices) {
+			if (index >= 0 && index < indices.size()) {
+				indices.erase(indices.begin() + index);
+			}
+			else {
+				std::cerr << "Invalid index: " << index << std::endl;
+			}
+		}
+
+	}
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		m->raylib_mesh.colors[i * 4] = 0;
+		m->raylib_mesh.colors[i * 4 + 1] = 0;
+		m->raylib_mesh.colors[i * 4 + 2] = 0;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+	for (size_t i = 0; i < extracted_indices.size(); i++)
+	{
+		int index = extracted_indices[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 0;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+
+	return extracted_indices;
+}
+
+//for now only for N = 3 
+bool NLateral_check_path_lengths(TrilateralMesh* m , NLateralDescriptor& desc1, NLateralDescriptor& desc2, float similarity)
+{
+	float desc1_1_2_length = 0;
+	for (size_t i = 0; i < desc1.paths[0][1].size()-1; i++)
+	{
+		int index = desc1.paths[0][1][i];
+		int index_1 = desc1.paths[0][1][i+1];
+		float length = glm::distance(m->vertices[index], m->vertices[index_1]);
+		desc1_1_2_length += length; 
+	}
+	float desc1_1_3_length = 0;
+	for (size_t i = 0; i < desc1.paths[0][2].size() - 1; i++)
+	{
+		int index = desc1.paths[0][2][i];
+		int index_1 = desc1.paths[0][2][i + 1];
+		float length = glm::distance(m->vertices[index], m->vertices[index_1]);
+		desc1_1_3_length += length;
+	}
+
+	float desc1_ratio = desc1_1_2_length / desc1_1_3_length;
+	if (desc1_ratio > 1)
+	{
+		desc1_ratio = 1.0f / desc1_ratio;
+	}
+
+	float desc2_1_2_length = 0;
+	for (size_t i = 0; i < desc2.paths[0][1].size() - 1; i++)
+	{
+		int index = desc2.paths[0][1][i];
+		int index_1 = desc2.paths[0][1][i + 1];
+		float length = glm::distance(m->vertices[index], m->vertices[index_1]);
+		desc2_1_2_length += length;
+	}
+	float desc2_1_3_length = 0;
+	for (size_t i = 0; i < desc2.paths[0][2].size() - 1; i++)
+	{
+		int index = desc2.paths[0][2][i];
+		int index_1 = desc2.paths[0][2][i + 1];
+		float length = glm::distance(m->vertices[index], m->vertices[index_1]);
+		desc2_1_3_length += length;
+	}
+
+	float desc2_ratio = desc2_1_2_length / desc2_1_3_length;
+	if (desc2_ratio > 1)
+	{
+		desc2_ratio = 1.0f / desc2_ratio;
+	}
+
+	if (std::fabsf(desc1_ratio - desc2_ratio) > similarity)
+	{
+		return false;
+	}
+	return true; 
+
+
+}
+
+bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float hks_perc)
+{
+
+	// check indices[0]
+	if (std::abs(m->normalized_heat_kernel_signature[desc1.indices[0]] - m->normalized_heat_kernel_signature[desc2.indices[0]]) > hks_perc)
+	{
+		return false; 
+	}
+	//check others
+	int index1_2 = desc1.indices[1];
+	int index1_3 = desc1.indices[2];
+	int index2_2 = desc2.indices[1];
+	int index2_3 = desc2.indices[1];
+	if (std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_2]) > hks_perc &&
+		std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_3]) > hks_perc)
+	{
+		return false; 
+	}
+	if (std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_2]) > hks_perc &&
+		std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_3]) > hks_perc)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel)
+{
+	float skel_dist = std::abs(desc1.skel_dist_mid[0] - desc2.skel_dist_mid[0]);
+	if (skel_dist / maximum_skel >  skel_percentage)
+	{
+		return false;
+	}
+
+	float skel_dist_2_2 = std::abs(desc1.skel_dist_mid[1] - desc2.skel_dist_mid[1]);
+	float skel_dist_2_3 = std::abs(desc1.skel_dist_mid[1] - desc2.skel_dist_mid[2]);
+	float skel_dist_3_3 = std::abs(desc1.skel_dist_mid[2] - desc2.skel_dist_mid[2]);
+
+	if (skel_dist_2_2 / maximum_skel > skel_percentage && skel_dist_2_3 / maximum_skel > skel_percentage &&
+	skel_dist_3_3  /maximum_skel > skel_percentage)
+	{
+		return false; 
+	}
+	return true; 
+}
+
+bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring)
+{
+
+	return true; 
 }

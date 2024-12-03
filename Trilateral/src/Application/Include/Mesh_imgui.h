@@ -269,14 +269,14 @@ void imgui_mesh_window(int& selected_mesh, MeshFactory& m_factory)
         bool isSelected = false;
         if (ImGui::Selectable((const char*)"AGD", &isSelected))
         {
-            selectedIndices = AverageGeodesicFunction(m_factory, selected_mesh, no_of_points);
+            // = AverageGeodesicFunction(m_factory, selected_mesh, no_of_points);
             //trilateralDescVector = match_points_using_trilateral_decriptor(m_factory, selected_mesh, AGDIndices);
             curtrilateralItem = "AGD";
             is_trilateral_generated = true;
         }
         if (ImGui::Selectable((const char*)"MGD", &isSelected))
         {
-            selectedIndices = minimumGeodesicFunction(m_factory, selected_mesh, no_of_points, selectedIndices);
+            //selectedIndices = minimumGeodesicFunction(m_factory, selected_mesh, no_of_points, selectedIndices);
             curtrilateralItem = "MGD";
             is_trilateral_generated = true;
 

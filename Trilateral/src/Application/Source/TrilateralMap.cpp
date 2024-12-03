@@ -733,184 +733,7 @@ void trilateral_map_drawing_using_three_points(MeshFactory& mesh_fac, int& selec
 	 }
 	 return trilateralDesc;
  }
- std::vector<unsigned int> AverageGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points)
-{
-	std::vector<unsigned int> agd_indices;
-	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_index];
-	std::vector<float> agdValues(m->vertices.size(), 0);
-	// O(n * n logn )
-
-	// 1- for each vertex
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		// 2 - calculate distances for all
-		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, i);
-		// sum 
-		agdValues[i] = 0;
-		for (size_t j = 0; j < geodesic_distances.size(); j++)
-		{
-			if (i != j)
-			{
-				agdValues[i] += geodesic_distances[j];
-			}
-		}
-		// multiply it with one ring area
-		// for that look through triangles
-		float triangleArea = 0;
-		for (size_t j = 0; j < m->triangles.size(); j += 3)
-		{
-			if (m->triangles[j] == i || m->triangles[j + 1] == i || m->triangles[j + 2] == i)
-			{
-				triangleArea += glm::length(glm::cross(glm::vec3(m->vertices[m->triangles[j + 1]] - m->vertices[m->triangles[j]]), glm::vec3(m->vertices[m->triangles[j + 2]] - m->vertices[m->triangles[j]]))) / 2;
-			}
-		}
-		triangleArea = triangleArea / 3;
-		agdValues[i] *= triangleArea;
-	}
-
-	// for now pick number_of_points/2 from least number_of_points /2 from best 
-	std::vector<unsigned int> indexVector;
-	for (size_t i = 0; i < agdValues.size(); i++)
-	{
-		indexVector.push_back(i);
-	}
-	//sort the array
-	for (size_t i = 0; i < agdValues.size(); i++)
-	{
-		int biggest_index = -1;
-		int biggest_val = -1;
-
-		for (size_t j = i; j < agdValues.size(); j++)
-		{
-			if (biggest_val < agdValues[j])
-			{
-				biggest_val = agdValues[j];
-				biggest_index = j;
-			}
-		}
-		//swap i and j 
-		int temp = agdValues[i];
-		agdValues[i] = agdValues[biggest_index];
-		agdValues[biggest_index] = temp;
-		//also swap the index array
-		temp = indexVector[i];
-		indexVector[i] = indexVector[biggest_index];
-		indexVector[biggest_index] = temp;
-	}
-
-	//get the biggest no_/2
-	int addedCount = 0;
-	for (size_t i = 0; i < indexVector.size(); i++)
-	{
-		bool is_neighbour_exists = false;
-		for (size_t j = 0; j < m->neighbours[indexVector[i]].size(); j++)
-		{
-			for (size_t k = 0; k < agd_indices.size(); k++)
-			{
-				if (agd_indices[k] == m->neighbours[indexVector[i]][j])
-				{
-					is_neighbour_exists = true;
-					break;
-				}
-			}
-			if (is_neighbour_exists)
-			{
-				break;
-			}
-		}
-
-		if (!is_neighbour_exists)
-		{
-			agd_indices.push_back(indexVector[i]);
-			addedCount++;
-			if (addedCount == number_of_points)
-			{
-				break;
-			}
-		}
-	}
-	addedCount = 0;
-	/*for (size_t i = indexVector.size()-1; i > 0; i--)
-	{
-		bool is_neighbour_exists = false;
-		for (size_t j = 0; j < m->neighbours[indexVector[i]].size(); j++)
-		{
-			for (size_t k = 0; k < agd_indices.size(); k++)
-			{
-				if (agd_indices[k] == m->neighbours[indexVector[i]][j])
-				{
-					is_neighbour_exists = true;
-					break;
-				}
-			}
-			if (is_neighbour_exists)
-			{
-				break;
-			}
-		}
-
-		if (!is_neighbour_exists)
-		{
-			agd_indices.push_back(indexVector[i]);
-			addedCount++;
-			if (addedCount == number_of_points / 2)
-			{
-				break;
-			}
-		}
-	}*/
-	for (size_t i = 0; i < agd_indices.size(); i++)
-	{
-		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, agd_indices[i]);
-		float minimum_len = INFINITY;
-		int minimum_index = -1;
-		//get the minimum 
-		for (size_t j = 0; j < geodesic_distances.size(); j++)
-		{
-			if (minimum_len > geodesic_distances[j] && j != agd_indices[i])
-			{
-				minimum_index = j;
-				minimum_len = geodesic_distances[j];
-			}
-		}
-	}
-	for (size_t i = 0; i < agd_indices.size(); i++)
-	{
-		m->colors[agd_indices[i]].r = 0.0f;
-		m->colors[agd_indices[i]].g = 1.0f;
-		m->colors[agd_indices[i]].b = 0.0f;
-	}
-	return agd_indices;
-}
- std::vector<unsigned int> minimumGeodesicFunction(MeshFactory& mesh_fac, int& selected_index, int& number_of_points, std::vector<unsigned int>& average_geodesic_function)
-{
-	TrilateralMesh* m = &mesh_fac.mesh_vec[selected_index];
-	std::vector < unsigned int> mgd_indices;
-	for (size_t i = 0; i < average_geodesic_function.size(); i++)
-	{
-		std::vector<float> geodesic_distances = Geodesic_dijkstra(*m, average_geodesic_function[i]);
-		float minimum_len = INFINITY;
-		int minimum_index = -1;
-		//get the minimum 
-		for (size_t j = 0; j < geodesic_distances.size(); j++)
-		{
-			if (minimum_len > geodesic_distances[j] && j != average_geodesic_function[i])
-			{
-				minimum_index = j;
-				minimum_len = geodesic_distances[j];
-			}
-		}
-		mgd_indices.push_back(minimum_index);
-	}
-	// color the indices
-	for (size_t i = 0; i < mgd_indices.size(); i++)
-	{
-		m->colors[mgd_indices[i]].r = 0.0f;
-		m->colors[mgd_indices[i]].g = 0.0f;
-		m->colors[mgd_indices[i]].b = 1.0f;
-	}
-	return mgd_indices;
-}
+ 
 
  static int getClosestMeshIndex(TrilateralMesh* m,int point_index1, int point_index2, int point_index3)
  {
@@ -4959,7 +4782,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
 		std::vector<unsigned int> skel_corresponding_point;
 		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-		descriptors[i].skel_dist_mid = dist_mid[0];
+		//descriptors[i].skel_dist_mid = dist_mid[0];
 		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
 		descriptors[i].skeleton_index = skel_corresponding_point[0];
 	}
@@ -5007,8 +4830,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 			std::cout << " curv " << is_curv << std::endl;
 			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, dvoak_index_i, dvoak_index_j, 0.985);
 			std::cout << " normal " << is_norm << std::endl;
-			bool is_skel_dist_far = std::abs(desc_pos[i].skel_dist_mid - desc_neg[j].skel_dist_mid) < 10;
-			if (is_curv && is_norm && is_skel_dist_far)
+			//bool is_skel_dist_far = std::abs(desc_pos[i].skel_dist_mid - desc_neg[j].skel_dist_mid) < 10;
+			//if (is_curv && is_norm && is_skel_dist_far)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = optimal_transforms_pos_neg[i][j];
@@ -5042,8 +4865,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 			std::cout << " curv " << is_curv << std::endl;
 			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, dvoak_index_i, dvoak_index_j, 0.985);
 			std::cout << " normal " << is_norm << std::endl;
-			bool is_skel_dist_far = std::abs(desc_pos[j].skel_dist_mid - desc_neg[i].skel_dist_mid) < 10;
-			if (is_curv && is_norm && is_skel_dist_far)
+			//bool is_skel_dist_far = std::abs(desc_pos[j].skel_dist_mid - desc_neg[i].skel_dist_mid) < 10;
+			//if (is_curv && is_norm && is_skel_dist_far)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = optimal_transforms_pos_neg[j][i];
@@ -5223,7 +5046,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_FPS_and_endpoint
 		NLateralDescriptor desc = NLateral_generate_descriptor(m, points);
 		std::vector<unsigned int> skel_dist_vec = { desc.indices[0] };
 		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-		desc.skel_dist_mid = dist_mid[0];
+		//desc.skel_dist_mid = dist_mid[0];
 		std::vector<unsigned int> skel_corresponding_point;
 		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
 		desc.skeleton_index = skel_corresponding_point[0];
@@ -5266,7 +5089,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_FPS_and_endpoint
 			//std::cout << " curv " << is_curv << std::endl;
 			//bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, hks_index_i, hks_index_j, norm_angle_param);
 			//std::cout << " normal " << is_norm << std::endl;
-			float skel_dist = std::abs(nlateral_descs[i].skel_dist_mid - nlateral_descs[j].skel_dist_mid);
+			float skel_dist = 0;// std::abs(nlateral_descs[i].skel_dist_mid - nlateral_descs[j].skel_dist_mid);
 			bool is_skel_dist_far = skel_dist < skel_dist_param;
 			std::cout << " skeld dist " << skel_dist << std::endl;
 			std::cout << " is skeld dist " << is_skel_dist_far << std::endl;
@@ -5417,7 +5240,7 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
 		std::vector<unsigned int> skel_corresponding_point;
 		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-		descriptors[i].skel_dist_mid = dist_mid[0];
+		//descriptors[i].skel_dist_mid = dist_mid[0];
 		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
 		descriptors[i].skeleton_index = skel_corresponding_point[0];
 	}
@@ -5458,7 +5281,7 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 			std::cout << " curv " << is_curv << std::endl;
 			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, hks_index_i, hks_index_j, norm_angle_param);
 			std::cout << " normal " << is_norm << std::endl;
-			float skel_dist = std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid);
+			float skel_dist = 0;// std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid);
 			bool is_skel_dist_far = skel_dist < skel_dist_param;
 			std::cout << " skeld dist " <<  skel_dist << std::endl;
 			std::cout << " is skeld dist " << is_skel_dist_far  << std::endl;
@@ -5623,7 +5446,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
 		std::vector<unsigned int> skel_corresponding_point;
 		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skeleton, skel_dist_vec);
-		descriptors[i].skel_dist_mid = dist_mid[0];
+		//descriptors[i].skel_dist_mid = dist_mid[0];
 		skeleton_get_closest_skeleton_endpoints(m, skeleton, skel_dist_vec, skel_corresponding_point);
 		descriptors[i].skeleton_index = skel_corresponding_point[0];
 	}
@@ -5712,7 +5535,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 			file << " curv " << is_curv << std::endl;
 			bool is_norm = dvorak_normal_angle_criterion(m, dvorak_pairs, fps_index_i, fps_index_j, norm_angle_param);
 			file << " normal " << is_norm << std::endl;
-			float skel_dist = std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid);
+			float skel_dist = 0;// std::abs(descriptors[i].skel_dist_mid - descriptors[j].skel_dist_mid);
 			bool is_skel_dist_far = ( skel_dist / maximum_skel_dist ) < skel_dist_param;
 			file << " skeld dist " << skel_dist << std::endl;
 			file << " is skeld dist " << is_skel_dist_far << std::endl;
