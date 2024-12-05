@@ -80,6 +80,8 @@ float skel_point_dist_param = 0.2;
 float paths_dif_param = 0.2; 
 float min_geo_tau = 0.7;
 int avg_geo_N_ring = 2;
+float nlateral_tri_hist_param = 0.2;
+float distance_to_mid_param = 0.7; 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -319,6 +321,8 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("path dif param ", &paths_dif_param);
         ImGui::InputFloat("min geo tau param", &min_geo_tau);
         ImGui::InputInt("N ring for geodesic", &avg_geo_N_ring);
+        ImGui::InputFloat("tri sym hist param", &nlateral_tri_hist_param);
+        ImGui::InputFloat("distance to mid point", &distance_to_mid_param);
 
         ImGui::EndMenu();
     }
@@ -346,7 +350,8 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
             dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param,
-           area_dif_param, skel_point_dist_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, skel_depth_param, N);
+           area_dif_param, skel_point_dist_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, skel_depth_param, nlateral_tri_hist_param,
+            distance_to_mid_param,N);
     }
 
     if (ImGui::BeginMenu("NLateral Descriptor"))

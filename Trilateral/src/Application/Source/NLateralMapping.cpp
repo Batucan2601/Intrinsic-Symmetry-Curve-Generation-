@@ -274,7 +274,8 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
 	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float ratio_dif_param,
-	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int skel_depth_param, int N)
+	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int skel_depth_param,float tri_hist_param,
+	float distance_to_mid_param , int N)
 {
 	int size = m->vertices.size();
 	int mesh_mid_point_index = -1;
@@ -356,7 +357,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		}
 	}
 	//maximum skel distance
-	float maximum_skel_dist = -INFINITY;
+	float maximum_skel_dist= -INFINITY;
 	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
 	{
 		std::vector<int> vertex_list;
@@ -413,7 +414,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	}
 
 	//maximum gaussian curvature
-	/*float maximum_gaussian_curve = -INFINITY;
+	float maximum_gaussian_curve = -INFINITY;
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		float gaussian_i = dvorak_pairs[i].gaussian_curv;
@@ -423,7 +424,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			{
 				continue;
 			}
-			float gaussian_j = dvorak_pairs[j + descs.size()].gaussian_curv;
+			float gaussian_j = dvorak_pairs[j].gaussian_curv;
 			float div = std::abs(gaussian_i / gaussian_j);
 			if (div > maximum_gaussian_curve)
 			{
@@ -431,7 +432,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			}
 
 		}
-	}*/
+	}
+	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
 	{
@@ -443,6 +445,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			{
 				continue; 
 			}
+
 			int fps_index_i;
 			int fps_index_j;
 			file << " i " << i << " j " << j << std::endl;
@@ -473,16 +476,15 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			file << "  desc path ratio dif " << ratio_dif << std::endl;
 			file << "  desc path ratio  " << is_ratio_dif << std::endl;
 
- 			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j + desc_pos.size()].gaussian_curv);
-			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
+ 			float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
+			bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
 			bool is_depth = NLatera_compare_depth(m, descs[i], descs[j], skel_depth_param, file);
-			//float depth  = std::abs(descs[i].depth - descs[j].depth);
-			//file << " depth  i " << descs[i].depth << "  depth  j " << descs[j].depth << std::endl;
-			//bool is_depth = depth < skel_depth_param;
+			bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
+			bool is_nlateral_dist_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index,
+			distance_to_mid_param, file);
 			//file << " is depth " << is_depth << std::endl;
-			
-			if (is_hks && is_skel_dist_far && is_skel_point_dist && is_depth /* && is_gaussian*/)
+			if (is_hks && is_skel_dist_far && is_skel_point_dist && is_depth && is_endpoint && is_nlateral_dist_midpoint && is_gaussian)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];

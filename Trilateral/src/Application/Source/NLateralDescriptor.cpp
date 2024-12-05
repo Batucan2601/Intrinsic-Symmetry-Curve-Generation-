@@ -1880,7 +1880,8 @@ unsigned int NLateral_get_closest_index_to_midpoint(TrilateralMesh* m, std::vect
 	}
 	return closest_index;
 }
-bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity)
+bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity
+,std::ofstream& file )
 {
 	NLateralDescriptor desc1;
 	NLateralDescriptor desc2;
@@ -1896,6 +1897,8 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 	desc2.histogram.normalize(1);
 	float dif = Histogram_ChiSquareDistance(desc1.histogram, desc2.histogram);
 
+	file << " trilateral dissimilarity " << dif <<  " " << (dif < dissimilarity) << std::endl;
+
 	if (dif > dissimilarity)
 	{
 		return false;
@@ -1903,3 +1906,52 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 	return true;
 }
 
+bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2 , unsigned int midpoint_index
+,float distance_to_mid_param,std::ofstream& file )
+{
+	std::vector<float> distances = Geodesic_dijkstra(*m,midpoint_index);
+	float dist1 = distances[desc1.indices[0]];
+	float dist2 = distances[desc2.indices[0]];
+	
+	if (dist1 == 0 || dist2 == 0)
+	{
+		return true; 
+	}
+	float ratio = dist1 / dist2;
+	if (ratio > 1)
+	{
+		ratio = 1 / ratio; 
+	}
+	file << " distance to modpoint " << ratio << std::endl;
+	
+	if (ratio < distance_to_mid_param)
+	{
+		return false;
+	}
+	return true; 
+}
+
+bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2)
+{
+	std::vector<unsigned int> mesh_endpoints;
+	skeleton_calculate_closest_mesh_points(skel, m, mesh_endpoints);
+	bool is_endpoints[] = { false , false };
+	int index1 = desc1.indices[0];
+	int index2 = desc2.indices[1];
+	for (size_t i = 0; i < mesh_endpoints.size(); i++)
+	{
+		if (index1 == mesh_endpoints[i])
+		{
+			is_endpoints[0] = true;
+		}
+		if (index1 == mesh_endpoints[i])
+		{
+			is_endpoints[1] = true; 
+		}
+	}
+	if (is_endpoints[0] == is_endpoints[1])
+	{
+		return true; 
+	}
+	return false; 
+}

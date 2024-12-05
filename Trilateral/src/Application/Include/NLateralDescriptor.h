@@ -135,4 +135,10 @@ bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1,
 bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring, std::ofstream& file);
 bool NLateral_compare_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_area, float area_percentage, std::ofstream& file);
 bool NLatera_compare_depth(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, int depth_dif_param, std::ofstream& file);
-bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity);
+bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity
+,std::ofstream& file );
+bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
+,float distance_to_mid_param, std::ofstream& file);
+
+bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
+
