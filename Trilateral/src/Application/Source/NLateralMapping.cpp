@@ -4,6 +4,7 @@
 #include "../Include/MetricCalculations.h"
 #include "../Include/VarianceMinimizingTransportPlan.h"
 #include "../Include/Geodesic.h"
+#include "../Include/ShapeDiameter.h"
 std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> NlateralMap_point_matching_copy_symmetric_points(TrilateralMesh* m, Skeleton& skeleton,Plane& plane,
 	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float n_ring_param,
 	float area_dif_param,float skel_point_dist_param, int N)
@@ -275,7 +276,7 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
 	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float ratio_dif_param,
 	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int skel_depth_param,float tri_hist_param,
-	float distance_to_mid_param , int N)
+	float distance_to_mid_param , float sdf_param , int N)
 {
 	int size = m->vertices.size();
 	int mesh_mid_point_index = -1;
@@ -433,6 +434,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 
 		}
 	}
+	//maximum sdf
+	float maximum_sdf = ShapeDiameter_calculate_simple_max(m, point_indices);
 	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
@@ -483,8 +486,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
 			bool is_nlateral_dist_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index,
 			distance_to_mid_param, file);
+			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
+			
 			//file << " is depth " << is_depth << std::endl;
-			if (is_hks && is_skel_dist_far && is_skel_point_dist && is_depth && is_endpoint && is_nlateral_dist_midpoint && is_gaussian)
+			if (is_hks && is_skel_dist_far && is_depth && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
+			&& is_sdf)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];

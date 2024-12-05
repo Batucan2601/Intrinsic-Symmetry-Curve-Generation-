@@ -163,3 +163,48 @@ void ShapeDiameter_calculate(TrilateralMesh* mesh,  std::vector<unsigned int> in
 	}
 }
 
+float ShapeDiameter_calculate_simple(TrilateralMesh* mesh, unsigned int index)
+{
+	float min_distance = INFINITY;
+	for (size_t i = 0; i < mesh->triangles.size(); i+=3)
+	{
+		int index1 = mesh->triangles[i];
+		int index2 = mesh->triangles[i+1];
+		int index3 = mesh->triangles[i+2];
+		TrilateralRay ray; 
+		ray.origin = mesh->vertices[index];
+		ray.direction = -mesh->normals[index];
+		glm::vec3 hit_point;
+		bool is_hit = ray_triangle_intersection(ray, mesh->vertices[index1],
+		mesh->vertices[index2], mesh->vertices[index3], hit_point);
+		if (!is_hit)
+		{
+			continue; 
+		}
+		float distance = glm::distance(ray.origin, hit_point);
+		if (distance < min_distance)
+		{
+			min_distance = distance; 
+		}
+		
+	}
+	return min_distance;
+}
+float ShapeDiameter_calculate_simple_max(TrilateralMesh* mesh, std::vector<unsigned int>& indices)
+{
+	std::vector<float> results;
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		float sdf = ShapeDiameter_calculate_simple(mesh, indices[i]);
+		results.push_back(sdf);
+	}
+	float maximum = -INFINITY; 
+	for (size_t i = 0; i < results.size(); i++)
+	{
+		if (results[i] > maximum)
+		{
+			maximum = results[i];
+		}
+	}
+	return maximum; 
+}

@@ -33,6 +33,7 @@ struct NLateralDescriptor
 	std::vector<std::vector<std::vector<int>>> paths;  // from indices[0] to others
 	std::vector<float> distances;  // distances to others
 	std::vector<unsigned int> vertices_inside;
+	std::vector<unsigned int> triangles_inside;
 	Eigen::VectorXd weight;
 	std::vector<float> skel_dist_mid;
 	unsigned int skeleton_index;
@@ -116,6 +117,7 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 int N, int depth_similarity, int histogram_size );
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
+std::vector<unsigned int> Nlateral_check_triangles_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 
 void NLateral_compute_skel_point_dist(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc);
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index);
@@ -139,6 +141,8 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 ,std::ofstream& file );
 bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
 ,float distance_to_mid_param, std::ofstream& file);
+bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_sdf ,
+float sdf_param , std::ofstream& file );
 
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
 

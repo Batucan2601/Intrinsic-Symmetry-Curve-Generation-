@@ -4,7 +4,8 @@
 #include "../Include/SymmetryAwareEmbeddingForShapeCorrespondence.h"
 #include "../Include/MetricCalculations.h"
 #include "../Include/Geodesic.h"
-#include "../Include/ROI.h"
+#include "../Include/ROI.h""
+#include "../Include/ShapeDiameter.h""
 
 #pragma region Nlateral struct
 
@@ -999,6 +1000,7 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 
 	//check visited vertices
 	desc.vertices_inside =  Nlateral_check_vertices_visited(m, desc);
+	desc.triangles_inside =  Nlateral_check_triangles_visited(m, desc);
 	desc.indices = mesh_indices; 
 	desc.N = N;
 	desc.area = 0;
@@ -1078,7 +1080,27 @@ std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLa
 	// if every index has same length they are colinear
 	return vertices_inside_n_lateral;
 }
-
+std::vector<unsigned int> Nlateral_check_triangles_visited(TrilateralMesh* m, NLateralDescriptor& desc)
+{
+	std::vector<unsigned int> triangles;
+	for (size_t i = 0; i < m->triangles.size(); i+=3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i+1];
+		int index3 = m->triangles[i+2];
+		for (size_t j = 0; j < desc.vertices_inside.size(); j++)
+		{
+			int index_j = desc.vertices_inside[j];
+			if (index_j == index1 || index_j == index3 || index_j == index2)
+			{
+				triangles.push_back(index1);
+				triangles.push_back(index2);
+				triangles.push_back(index3);
+			}
+		}
+	}
+	return triangles; 
+}
 void NLateralDescriptor_write(std::string filename,TrilateralMesh* m , std::vector<NLateralDescriptor>& desc)
 {
 	std::ofstream file;                // Create an ofstream object for file output
@@ -1537,15 +1559,38 @@ void NLateralDescriptor::create_histogram(TrilateralMesh* m, int hist_no)
 	}
 
 	float step_size = longest_path / hist_no;
-	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	for (size_t i = 0; i < this->triangles_inside.size(); i+=3)
 	{
-		int step_i = distances[this->vertices_inside[i]] / step_size;
-		
-		if (step_i == hist_no)
+		int index_1 = this->triangles_inside[i];
+		int index_2 = this->triangles_inside[i + 1];
+		int index_3 = this->triangles_inside[i + 2];
+		int step_1 = distances[index_1] / step_size;
+		int step_2 = distances[index_2] / step_size;
+		int step_3 = distances[index_3] / step_size;
+		float triangle_area = compute_triangle_area(m->vertices[index_1], m->vertices[index_2], m->vertices[index_3]);
+		if (step_1 == hist_no)
 		{
-			step_i--;
+			step_1--;
 		}
-		hist.histogram[step_i] += m->areas[this->vertices_inside[i]];
+		if (step_2 == hist_no)
+		{
+			step_2--;
+		}
+		if (step_3 == hist_no)
+		{
+			step_3--;
+		}
+		// compute the areas per triangle
+		int min = std::min( step_1, std::min(step_2, step_3));
+		int max = std::max( step_1, std::max(step_2, step_3));
+		if (min == max)
+		{
+			hist.histogram[min] += triangle_area;
+		}
+		for (size_t j = min; j < max; j++)
+		{
+			hist.histogram[j] += ( triangle_area / (max-min) );
+		}
 	}
 
 	for (size_t i = 0; i < this->paths.size(); i++)
@@ -1560,8 +1605,7 @@ void NLateralDescriptor::create_histogram(TrilateralMesh* m, int hist_no)
 				{
 					step_i--;
 				}
-				//std::cout << " i " << i << " j " << j << " k " << k << std::endl;
-				//std::cout << " step i  " << step_i << " j " << j << " k " << k << std::endl;
+
 				hist.histogram[step_i] += m->areas[this->paths[i][j][k]] / 3 ;
 			}
 		}
@@ -1950,6 +1994,21 @@ bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescript
 		}
 	}
 	if (is_endpoints[0] == is_endpoints[1])
+	{
+		return true; 
+	}
+	return false; 
+}
+
+bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_sdf, 
+float param , std::ofstream& file)
+{
+	float sdf_1 = ShapeDiameter_calculate_simple(m, desc1.indices[0]);
+	float sdf_2 = ShapeDiameter_calculate_simple(m, desc2.indices[0]);
+	
+	float dif = std::abs(sdf_1 - sdf_2);
+	file << " Sdf " << dif / maximum_sdf << std::endl;
+	if ( (dif /maximum_sdf)  < param )
 	{
 		return true; 
 	}
