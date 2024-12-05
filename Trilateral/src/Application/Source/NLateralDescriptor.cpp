@@ -863,7 +863,8 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 {
 	// 1 - go gaussian to skeleton
 	std::vector<unsigned int> skeleton_end_points;
-	skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
+	//skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
+	skeleton_get_closest_nodes(m, skel, indices, skeleton_end_points);
 	// get every skeltreeNode
 	std::vector<SkeletonTreeNode> skeleton_end_point_node_list;
 	for (size_t i = 0; i < skeleton_end_points.size(); i++)
@@ -954,7 +955,11 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		}
 		NLateralDescriptor desc;
 		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
-		desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
+		//desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
+		for (size_t i = 0; i < desc.indices.size(); i++)
+		{
+			desc.depth.push_back(skeleton_end_point_node_list[selected_indices[i]].depth);
+		}
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
 		desc.create_histogram(m, histogram_size);
 		std::vector<unsigned int> skel_dist_vec = desc.indices;
@@ -963,6 +968,8 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		desc.skel_dist_mid = dist_mid;
 		skeleton_get_closest_skeleton_endpoints(m, skel, skel_dist_vec, skel_corresponding_point);
 		desc.skeleton_index = skel_corresponding_point[0];
+		desc.skel_point_dist = glm::distance(skel.skeletonFormat[desc.skeleton_index].point, m->vertices[desc.indices[0]]);
+		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		nLateralDescVec.push_back(desc);
 	}
 	return nLateralDescVec;
@@ -1681,9 +1688,11 @@ bool NLateral_check_path_lengths(TrilateralMesh* m , NLateralDescriptor& desc1, 
 
 }
 
-bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float hks_perc)
+bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float hks_perc, std::ofstream& file)
 {
 
+	file << " HKS " << std::endl;
+	file << " hks comp indices 0 0 " << std::abs(m->normalized_heat_kernel_signature[desc1.indices[0]] - m->normalized_heat_kernel_signature[desc2.indices[0]])<< std::endl; 
 	// check indices[0]
 	if (std::abs(m->normalized_heat_kernel_signature[desc1.indices[0]] - m->normalized_heat_kernel_signature[desc2.indices[0]]) > hks_perc)
 	{
@@ -1693,12 +1702,19 @@ bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralD
 	int index1_2 = desc1.indices[1];
 	int index1_3 = desc1.indices[2];
 	int index2_2 = desc2.indices[1];
-	int index2_3 = desc2.indices[1];
+	int index2_3 = desc2.indices[2];
+
+	file << " hks comp indices 1 1 " << std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_2]) << std::endl;
+	file << " hks comp indices 1 2 " << std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_3]) << std::endl;
+
 	if (std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_2]) > hks_perc &&
 		std::abs(m->normalized_heat_kernel_signature[index1_2] - m->normalized_heat_kernel_signature[index2_3]) > hks_perc)
 	{
 		return false; 
 	}
+	file << " hks comp indices 2 1 " << std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_2]) << std::endl;
+	file << " hks comp indices 2 2 " << std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_3]) << std::endl;
+
 	if (std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_2]) > hks_perc &&
 		std::abs(m->normalized_heat_kernel_signature[index1_3] - m->normalized_heat_kernel_signature[index2_3]) > hks_perc)
 	{
@@ -1707,9 +1723,12 @@ bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralD
 	return true;
 }
 
-bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel)
+bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel,
+	std::ofstream& file )
 {
+	file << " skel dist comp " << std::endl;
 	float skel_dist = std::abs(desc1.skel_dist_mid[0] - desc2.skel_dist_mid[0]);
+	file << " skel dist 0 0 " << skel_dist / maximum_skel;
 	if (skel_dist / maximum_skel >  skel_percentage)
 	{
 		return false;
@@ -1719,16 +1738,168 @@ bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1,
 	float skel_dist_2_3 = std::abs(desc1.skel_dist_mid[1] - desc2.skel_dist_mid[2]);
 	float skel_dist_3_3 = std::abs(desc1.skel_dist_mid[2] - desc2.skel_dist_mid[2]);
 
-	if (skel_dist_2_2 / maximum_skel > skel_percentage && skel_dist_2_3 / maximum_skel > skel_percentage &&
-	skel_dist_3_3  /maximum_skel > skel_percentage)
+	file << " skel dist 1  1 " << skel_dist_2_2 / maximum_skel  <<  std::endl;
+	file << " skel dist 1  2 " << skel_dist_2_2 / maximum_skel  <<  std::endl;
+	file << " skel dist 2  2 " << skel_dist_2_2 / maximum_skel  <<  std::endl;
+
+	if (skel_dist_2_2 / maximum_skel > skel_percentage && skel_dist_2_3 / maximum_skel > skel_percentage)
 	{
 		return false; 
 	}
+	
+	if (skel_dist_3_3 / maximum_skel > skel_percentage && skel_dist_2_3 / maximum_skel > skel_percentage)
+	{
+		return false; 
+	}
+
 	return true; 
 }
 
-bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring)
+bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring,std::ofstream& file)
 {
 
 	return true; 
 }
+
+bool NLateral_compare_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_area , float area_percentage
+,std::ofstream& file )
+{
+	file << " 1 ring area " << std::endl; 
+	float area_dif_0 = std::abs(desc1.skel_dist_mid[0] - desc2.skel_dist_mid[0]);
+
+	file << " 0 0 " << area_dif_0 / maximum_area << std::endl;
+
+	if (area_dif_0 / maximum_area> area_percentage)
+	{
+		return false;
+	}
+
+	float area_1_2 = m->areas[desc1.indices[1]];
+	float area_1_3 = m->areas[desc1.indices[2]];
+	float area_2_2 = m->areas[desc2.indices[1]];
+	float area_2_3 = m->areas[desc2.indices[2]];
+
+	file << " 1 2 " << std::abs(area_1_2 - area_2_2) / maximum_area << std::endl;
+	file << " 1 3 " << std::abs(area_1_2 - area_2_3) / maximum_area << std::endl;
+	file << " 2 3 " << std::abs(area_1_3 - area_2_3) / maximum_area << std::endl;
+
+	if (std::abs(area_1_2 - area_2_2) / maximum_area > area_percentage &&
+		std::abs(area_1_2 - area_2_3) / maximum_area > area_percentage)
+	{
+		return false; 
+	}
+	if (std::abs(area_1_3 - area_2_2) / maximum_area > area_percentage &&
+		std::abs(area_1_3 - area_2_3) / maximum_area > area_percentage)
+	{
+		return false;
+	}
+
+	return true; 
+
+}
+
+double NLateral_get_paths_ratio(TrilateralMesh* m, NLateralDescriptor& desc)
+{
+	float dist1 = 0;
+	for (size_t i = 0; i < desc.paths[0][1].size()-1; i++)
+	{
+		int index1 = desc.paths[0][1][i];
+		int index2 = desc.paths[0][1][i+1];
+		dist1 += glm::distance(m->vertices[index1], m->vertices[index2]);
+	}
+	float dist2 = 0;
+	for (size_t i = 0; i < desc.paths[0][2].size() - 1; i++)
+	{
+		int index1 = desc.paths[0][2][i];
+		int index2 = desc.paths[0][2][i + 1];
+		dist2 += glm::distance(m->vertices[index1], m->vertices[index2]);
+	}
+
+	if (dist1 / dist2 <= 1)
+	{
+		return dist1 / dist2;
+	}
+	return dist2 / dist1; 
+}
+bool NLatera_compare_depth(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, int depth_dif_param, std::ofstream& file)
+{
+
+	// 1 - display depths
+	for (size_t i = 0; i < desc1.depth.size(); i++)
+	{
+		file << " i " << i << " " << desc1.depth[i] << std::endl;
+	}
+	for (size_t i = 0; i < desc2.depth.size(); i++)
+	{
+		file << " j " << i << " " << desc2.depth[i] << std::endl;
+	}
+	std::vector<int> is_dif_ok(desc1.indices.size(), 0);
+	for (size_t i = 0; i < desc1.depth.size(); i++)
+	{
+		int depth_i = desc1.depth[i];
+		for (size_t j = 0; j < desc2.depth.size(); j++)
+		{
+			int depth_j = desc2.depth[j];
+			if (std::abs(depth_i - depth_j) < depth_dif_param)
+			{
+				is_dif_ok[i] = 1; 
+			}
+		}
+	}
+
+	for (size_t i = 0; i < is_dif_ok.size(); i++)
+	{
+		if (is_dif_ok[i] != 1)
+		{
+			return false;
+		}
+	}
+	return true; 
+}
+
+unsigned int NLateral_get_closest_index_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& points )
+{
+	//midpoint 
+	glm::vec3 mid_point(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		mid_point = mid_point + m->vertices[i];
+	}
+	mid_point /=  m->vertices.size();
+
+	float closest_dist = INFINITY;
+	int closest_index = -1;
+	for (size_t i = 0; i < points.size(); i++)
+	{
+		float dist = glm::distance(m->vertices[points[i]], mid_point);
+		if (dist < closest_dist)
+		{
+			dist = closest_dist; 
+			closest_index = points[i];
+		}
+	}
+	return closest_index;
+}
+bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity)
+{
+	NLateralDescriptor desc1;
+	NLateralDescriptor desc2;
+	std::vector<unsigned int> indices_p1_desc = { p1,p2,p_middle };
+	std::vector<unsigned int> indices_p2_desc = { p2,p1,p_middle };
+	desc1 = NLateral_generate_descriptor(m, indices_p1_desc);
+	desc2 = NLateral_generate_descriptor(m, indices_p2_desc);
+	desc1.create_histogram(m, 10);
+	desc2.create_histogram(m, 10);
+
+
+	desc1.histogram.normalize(1);
+	desc2.histogram.normalize(1);
+	float dif = Histogram_ChiSquareDistance(desc1.histogram, desc2.histogram);
+
+	if (dif > dissimilarity)
+	{
+		return false;
+	}
+	return true;
+}
+

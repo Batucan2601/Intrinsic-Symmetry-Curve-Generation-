@@ -183,7 +183,7 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 			int fps_index_j;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[desc_pos[i].indices[0]] - m->normalized_heat_kernel_signature[desc_neg[j].indices[0]]);
 			bool is_hks = hks_dif < hks_dif_param;
-			bool is_skel_dist_far = NLateral_compare_skeldist_mid(m,desc_pos[i],desc_pos[j],skel_point_dist_param,maximum_skel_dist);
+			bool is_skel_dist_far = 1;// NLateral_compare_skeldist_mid(m, desc_pos[i], desc_pos[j], skel_point_dist_param, maximum_skel_dist);
 			float n_ring = std::abs(desc_pos[i].n_ring_area - desc_neg[j].n_ring_area);
 			bool is_n_ring_close = (n_ring / maximum_n_ring) < n_ring_param;
 			float area_dif = std::abs(desc_pos[i].area - desc_neg[j].area);
@@ -273,8 +273,8 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float n_ring_param,
-	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int N)
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float ratio_dif_param,
+	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int skel_depth_param, int N)
 {
 	int size = m->vertices.size();
 	int mesh_mid_point_index = -1;
@@ -292,7 +292,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	Metric_set_N(N);
 
 	point_indices = Geodesic_avg_dijkstra_modified(m, dvorak_enpoint_no, sweep_distance, avg_n_ring, true);
-	for (size_t i = 0; i < 2; i++)
+	for (size_t i = 0; i < 3; i++)
 	{
 		point_indices = Geodesic_min_dijkstra(m, dvorak_enpoint_no, point_indices, sweep_distance, min_geo_tau, true);
 	}
@@ -445,26 +445,44 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			}
 			int fps_index_i;
 			int fps_index_j;
+			file << " i " << i << " j " << j << std::endl;
+			bool is_hks;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
-			bool is_hks = hks_dif < hks_dif_param;
-			bool is_skel_dist_far = NLateral_compare_skeldist_mid(m, descs[i], descs[j], skel_point_dist_param, maximum_skel_dist);
-			float n_ring = std::abs(descs[i].n_ring_area - descs[j].n_ring_area);
-			bool is_n_ring_close = (n_ring / maximum_n_ring) < n_ring_param;
-			float area_dif = std::abs(descs[i].area - descs[j].area);
-			bool is_area_dif = area_dif / maximum_area_dif < area_dif_param;
-			float skel_point_dist_dif = std::abs(descs[i].skel_point_dist - descs[j].skel_point_dist);
-			bool is_skel_point_dist = skel_point_dist_dif / maximum_skel_point_dist < skel_point_dist_param;
+			//is_hks = NLateral_compare_HKS(m,descs[i], descs[j], hks_dif_param,file);
+			is_hks = hks_dif < hks_dif_param;
+			file << " is hks " << is_hks <<  std::endl; 
+			//bool is_hks = hks_dif < hks_dif_param;
+			bool is_skel_dist_far = NLateral_compare_skeldist_mid(m, descs[i], descs[j], skel_dist_param, maximum_skel_dist,file);
+			file << " is skel dist  " <<  is_skel_dist_far << std::endl;
 
-			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j + desc_pos.size()].gaussian_curv);
+			//float n_ring = std::abs(descs[i].n_ring_area - descs[j].n_ring_area);
+			//bool is_n_ring_close = (n_ring / maximum_n_ring) < n_ring_param;
+			//float area_dif = std::abs(descs[i].area - descs[j].area);
+			//bool is_area_dif = area_dif / maximum_area_dif < area_dif_param;
+			bool is_area_dif = NLateral_compare_area(m,descs[i],descs[j],maximum_area_dif , area_dif_param,file);
+			file << " is area dif " << is_area_dif <<  std::endl;
+
+			float skel_point_dist_dif = std::abs(descs[i].skel_point_dist - descs[j].skel_point_dist);
+			file << " skel point dist " << std::endl;
+			file << skel_point_dist_dif << std::endl;
+			bool is_skel_point_dist = skel_point_dist_dif / maximum_skel_point_dist < skel_point_dist_param;
+			file << " is skel point dist " << is_skel_point_dist;
+ 
+			float ratio_dif = std::fabs(descs[i].paths_ratio - descs[j].paths_ratio);
+			bool is_ratio_dif = ratio_dif < ratio_dif_param;
+			file << "  desc path ratio dif " << ratio_dif << std::endl;
+			file << "  desc path ratio  " << is_ratio_dif << std::endl;
+
+ 			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j + desc_pos.size()].gaussian_curv);
 			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
-			file << " i " << i << " j " <<  j << std::endl;
-			file << " hks " << hks_dif << " " << is_hks << std::endl;
-			//file << " skel dist " << skel_dist << " " << is_skel_dist_far << std::endl;
-			file << " skel point dist " << skel_point_dist_dif << " " << is_skel_point_dist << std::endl;
-			file << " n ring " << n_ring << " " <<  is_n_ring_close << std::endl;
-			file << " area dif " << area_dif << " " << is_area_dif << std::endl;
-			file << " depth  i " << descs[i].depth << "  depth  j " << descs[j].depth << std::endl;
-			if (is_hks && is_n_ring_close  && is_area_dif   && is_skel_dist_far && is_skel_point_dist /* && is_gaussian*/)
+			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
+			bool is_depth = NLatera_compare_depth(m, descs[i], descs[j], skel_depth_param, file);
+			//float depth  = std::abs(descs[i].depth - descs[j].depth);
+			//file << " depth  i " << descs[i].depth << "  depth  j " << descs[j].depth << std::endl;
+			//bool is_depth = depth < skel_depth_param;
+			//file << " is depth " << is_depth << std::endl;
+			
+			if (is_hks && is_skel_dist_far && is_skel_point_dist && is_depth /* && is_gaussian*/)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
@@ -489,7 +507,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		int j = entry.second.second;
 		if (!used[i] /* && !used[j]*/) {
 			resemblance_pairs.push_back({ descs[i].indices[0], descs[j].indices[0] });
-			//used[i] = true;  // Mark these objects as used
+			used[i] = true;  // Mark these objects as used
 			//used[j] = true;  // Mark these objects as used
 		}
 	}

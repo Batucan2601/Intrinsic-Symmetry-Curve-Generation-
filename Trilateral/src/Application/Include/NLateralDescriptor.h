@@ -36,10 +36,11 @@ struct NLateralDescriptor
 	Eigen::VectorXd weight;
 	std::vector<float> skel_dist_mid;
 	unsigned int skeleton_index;
-	int depth; 
+	std::vector<unsigned int> depth; 
 	float n_ring_area;
 	double area;
 	double skel_point_dist;
+	double paths_ratio; 
 	Histogram histogram;
 };
 
@@ -126,7 +127,12 @@ void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vecto
 std::vector<unsigned int> NLateral_sweepDistance(TrilateralMesh* m , std::vector<unsigned int> indices, float sweep_distance );
 bool NLateral_check_path_lengths(NLateralDescriptor& desc1, NLateralDescriptor& desc2, float similarity);
 
+double NLateral_get_paths_ratio(TrilateralMesh* m,NLateralDescriptor& desc);
+unsigned int NLateral_get_closest_index_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& points);
 
-bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_perc);
-bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel);
-bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring);
+bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_perc , std::ofstream& file);
+bool NLateral_compare_skeldist_mid(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float skel_percentage, float maximum_skel, std::ofstream& file);
+bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_n_ring, std::ofstream& file);
+bool NLateral_compare_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_area, float area_percentage, std::ofstream& file);
+bool NLatera_compare_depth(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, int depth_dif_param, std::ofstream& file);
+bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity);

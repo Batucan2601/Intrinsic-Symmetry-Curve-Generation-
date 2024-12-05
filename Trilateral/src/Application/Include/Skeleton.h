@@ -48,6 +48,8 @@ SkeletonTree skeleton_generate_skeleton_tree(TrilateralMesh* m, Skeleton& skelet
 SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton, SkeletonTree& skelTree, int skeletonIndex);
 void skeleton_get_closest_skeleton_endpoints(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points, 
 std::vector<unsigned int >& skeleton_end_points);
+void skeleton_get_closest_nodes(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points,
+	std::vector<unsigned int >& skeleton_end_points);
 
 void skeleton_left_right_test_for_endpoint(std::vector<int>& right , std::vector<int>& left );
 

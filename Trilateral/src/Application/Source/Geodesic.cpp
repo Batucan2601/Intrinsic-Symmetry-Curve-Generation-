@@ -362,7 +362,6 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int&
 		}
 	}*/
 
-	//select 20 random pairs
 	if (is_color)
 	{
 		for (size_t i = 0; i < vertex_size; i++)

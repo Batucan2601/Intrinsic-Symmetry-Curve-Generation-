@@ -1998,6 +1998,27 @@ SkeletonTreeNode skeleton_get_skeleton_node(Skeleton& skeleton , SkeletonTree& s
 }
 
 
+void skeleton_get_closest_nodes(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points,
+	std::vector<unsigned int >& skeleton_end_points)
+{
+	for (size_t i = 0; i < mesh_points.size(); i++)
+	{
+		int closest_index = -1;
+		float closest = INFINITY;
+		glm::vec3 mesh_p = m->vertices[mesh_points[i]];
+		for (size_t j = 0; j < skeleton.skeletonFormat.size(); j++)
+		{
+			glm::vec3 skel_p = skeleton.skeletonFormat[j].point;
+			float dist = glm::distance(skel_p, mesh_p);
+			if (dist < closest)
+			{
+				closest = dist;
+				closest_index = j;
+			}
+		}
+		skeleton_end_points.push_back(closest_index);
+	}
+}
 void skeleton_get_closest_skeleton_endpoints(TrilateralMesh* m, Skeleton& skeleton, std::vector<unsigned int>& mesh_points,
 	std::vector<unsigned int >& skeleton_end_points)
 {

@@ -5093,7 +5093,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_FPS_and_endpoint
 			bool is_skel_dist_far = skel_dist < skel_dist_param;
 			std::cout << " skeld dist " << skel_dist << std::endl;
 			std::cout << " is skeld dist " << is_skel_dist_far << std::endl;
-			int skel_depth = std::abs(nlateral_descs[i].depth - nlateral_descs[j].depth);
+			int skel_depth;// = std::abs(nlateral_descs[i].depth - nlateral_descs[j].depth);
 			std::cout << " skeld depth " << skel_depth << std::endl;
 			bool is_skel_depth = skel_depth < skel_depth_param;
 			std::cout << " is skel depth " << is_skel_depth << std::endl;
@@ -5285,7 +5285,7 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 			bool is_skel_dist_far = skel_dist < skel_dist_param;
 			std::cout << " skeld dist " <<  skel_dist << std::endl;
 			std::cout << " is skeld dist " << is_skel_dist_far  << std::endl;
-			int skel_depth = std::abs(descriptors[i].depth - descriptors[j].depth);
+			int skel_depth;// = std::abs(descriptors[i].depth - descriptors[j].depth);
 			std::cout << " skeld depth " << skel_depth << std::endl;
 			bool is_skel_depth = skel_depth < skel_depth_param;
 			std::cout << " is skel depth " << is_skel_depth  << std::endl;

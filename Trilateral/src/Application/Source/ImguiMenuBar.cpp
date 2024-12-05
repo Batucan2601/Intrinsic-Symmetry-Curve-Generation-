@@ -73,7 +73,7 @@ float curv_param = 0.5;
 float norm_angle_param = 0.985;
 float skel_dist_param = 0.2;
 float skel_depth_param = 5;
-float n_ring_param = 0.2;
+float ratio_dif_param= 0.2;
 float proximity_param = 1;
 float area_dif_param = 0.2;
 float skel_point_dist_param = 0.2; 
@@ -314,7 +314,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("skel distance params ", &skel_dist_param);
         ImGui::InputFloat("skel depth  params ", &skel_depth_param);
         ImGui::InputFloat("skel poitn dist params ", &skel_point_dist_param);
-        ImGui::InputFloat("n ring param ", &n_ring_param);
+        ImGui::InputFloat("ratio dif param ", &ratio_dif_param);
         ImGui::InputFloat("area param ", &area_dif_param);
         ImGui::InputFloat("path dif param ", &paths_dif_param);
         ImGui::InputFloat("min geo tau param", &min_geo_tau);
@@ -330,7 +330,7 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("FPS matching with Dvorak significant poins Optimal transform without plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, n_ring_param, area_dif_param ,N);
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param , area_dif_param ,N);
     }
     if (ImGui::MenuItem("End pointmatching with FPS "))
     {
@@ -340,13 +340,13 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("FPS sampling with sym plane "))
     {
         nlateral_descriptors_pos_neg = NlateralMap_point_matching_copy_symmetric_points(m, skeleton,plane , dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, n_ring_param, area_dif_param, skel_point_dist_param, N);
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param, area_dif_param, skel_point_dist_param, N);
     }
     if (ImGui::MenuItem("avg min geo sampling with sym plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, n_ring_param, 
-           area_dif_param, skel_point_dist_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, N);
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param,
+           area_dif_param, skel_point_dist_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, skel_depth_param, N);
     }
 
     if (ImGui::BeginMenu("NLateral Descriptor"))
