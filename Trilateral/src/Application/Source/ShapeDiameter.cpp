@@ -190,7 +190,7 @@ float ShapeDiameter_calculate_simple(TrilateralMesh* mesh, unsigned int index)
 	}
 	return min_distance;
 }
-float ShapeDiameter_calculate_simple_max(TrilateralMesh* mesh, std::vector<unsigned int>& indices)
+float ShapeDiameter_calculate_simple_max_dif(TrilateralMesh* mesh, std::vector<unsigned int>& indices)
 {
 	std::vector<float> results;
 	for (size_t i = 0; i < indices.size(); i++)
@@ -199,12 +199,17 @@ float ShapeDiameter_calculate_simple_max(TrilateralMesh* mesh, std::vector<unsig
 		results.push_back(sdf);
 	}
 	float maximum = -INFINITY; 
+	float minimum = INFINITY; 
 	for (size_t i = 0; i < results.size(); i++)
 	{
 		if (results[i] > maximum)
 		{
 			maximum = results[i];
 		}
+		if (results[i] < minimum)
+		{
+			minimum = results[i];
+		}
 	}
-	return maximum; 
+	return maximum-minimum; 
 }

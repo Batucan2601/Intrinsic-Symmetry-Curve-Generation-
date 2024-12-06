@@ -435,7 +435,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		}
 	}
 	//maximum sdf
-	float maximum_sdf = ShapeDiameter_calculate_simple_max(m, point_indices);
+	float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
 	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
@@ -489,7 +489,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
 			
 			//file << " is depth " << is_depth << std::endl;
-			if (is_hks && is_skel_dist_far && is_depth && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
+			if (is_hks && is_sdf && is_skel_dist_far /* && is_depth */ && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
 			&& is_sdf)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;

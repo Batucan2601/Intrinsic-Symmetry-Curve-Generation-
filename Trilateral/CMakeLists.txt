@@ -44,6 +44,7 @@ set(Header_Files
     "src/Application/Include/NLateralMapping.h"
 
     "src/Application/Include/SkeletonTypes.h"
+    "src/Application/Include/CurvatureGeneration.h"
 
 
     
@@ -102,6 +103,7 @@ set(Source_Files
     "src/Application/Source/KIDS.cpp"
     "src/Application/Source/SCBDataset.cpp"
     "src/Application/Source/NLateralMapping.cpp"
+    "src/Application/Include/CurvatureGeneration.cpp"
 
 
 
