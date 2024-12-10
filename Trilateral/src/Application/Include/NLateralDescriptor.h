@@ -27,7 +27,9 @@ struct NLateralDescriptor
 	void get_ROI();
 
 	// new implementation
-	void create_histogram(TrilateralMesh* m , int N);
+	void create_histogram_area(TrilateralMesh* m , int N);
+	void create_histogram_HKS(TrilateralMesh* m , int N);
+	void create_histogram_SDF(TrilateralMesh* m, int N);
 	int N; //this was present
 	std::vector<unsigned int> indices; // fist one is the origin point 
 	std::vector<std::vector<std::vector<int>>> paths;  // from indices[0] to others
@@ -113,8 +115,8 @@ void start_n_lateral_algorithm_with_skeleton_end_points(TrilateralMesh* m, NLate
 	std::vector<unsigned int>& mesh_left_endpoints, std::vector<unsigned int>& mesh_right_endpoints);
 NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices);
 
-std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree, 
-int N, int depth_similarity, int histogram_size );
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m,  std::vector<unsigned int>& indices, 
+int N, int histogram_size );
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 std::vector<unsigned int> Nlateral_check_triangles_visited(TrilateralMesh* m, NLateralDescriptor& desc);
@@ -145,4 +147,6 @@ bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateral
 float sdf_param , std::ofstream& file );
 
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
+bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
+	float distances_from_mid, float distances_between_desc , std::ofstream& file);
 

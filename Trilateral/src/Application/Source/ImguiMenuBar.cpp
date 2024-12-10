@@ -19,6 +19,7 @@
 #include <fstream>  // Include for file stream handling
 #include "../Include/NLateralMapping.h"
 #include "../Include/Geodesic.h"
+#include "../Include/CurvatureGeneration.h"
 
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
@@ -32,6 +33,8 @@ static void SCAPE_dataset(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
 static void TOSCA_dataset(TrilateralMesh* m);
 static void geodesic(TrilateralMesh* m);
+static void curvature_creation(TrilateralMesh* m);
+
 static void laplace_beltrami_operations(TrilateralMesh* m);
 static void Nlateral_functions(TrilateralMesh* m);
 static void mesh_drawing();
@@ -51,11 +54,13 @@ static bool is_reading_ndsc = false;
 static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
+static bool is_draw_curvature = false;
 static bool is_draw_mesh = true;
 static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
 static BackBone backbone;
+static Curvature curvature; 
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
@@ -174,6 +179,11 @@ void imgui_menu_bar(TrilateralMesh* m)
             if (ImGui::BeginMenu("Geodesic distances"))
             {
                 geodesic(m);
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Curvature creation "))
+            {
+                curvature_creation(m);
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -314,9 +324,6 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("hks difference ", &hks_dif_param);
         ImGui::InputFloat("curvature parameter", &curv_param);
         ImGui::InputFloat("normal angle ", &norm_angle_param);
-        ImGui::InputFloat("skel distance params ", &skel_dist_param);
-        ImGui::InputFloat("skel depth  params ", &skel_depth_param);
-        ImGui::InputFloat("skel poitn dist params ", &skel_point_dist_param);
         ImGui::InputFloat("ratio dif param ", &ratio_dif_param);
         ImGui::InputFloat("area param ", &area_dif_param);
         ImGui::InputFloat("path dif param ", &paths_dif_param);
@@ -351,8 +358,8 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("avg min geo sampling with sym plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param,
-           area_dif_param, skel_point_dist_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, skel_depth_param, nlateral_tri_hist_param,
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param,  ratio_dif_param,
+           area_dif_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, nlateral_tri_hist_param,
             distance_to_mid_param,sdf_param , N);
     }
 
@@ -454,10 +461,25 @@ static void geodesic(TrilateralMesh* m)
     {
         avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, no_of_dist_points, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
     }
+    if (ImGui::MenuItem("average geodesic Function modified with points "))
+    {
+        avg_dijk_indices = Geodesic_avg_dijkstra_modified_to_points(m, avg_dijk_indices,
+        no_of_dist_points, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
+    }
     if (ImGui::MenuItem("minimum geodesic Function"))
     {
         avg_dijk_indices = Geodesic_min_dijkstra(m, no_of_dist_points, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau, true);
     }
+}
+static void curvature_creation(TrilateralMesh* m )
+{
+    if (ImGui::MenuItem(" Create curature from sym points "))
+    {
+        curvature = CurvatureGeneration_generate(m);
+        is_draw_curvature = true;
+
+    }
+
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
@@ -505,6 +527,7 @@ static void draw_dom_sym();
 static void draw_skeleton();
 static void draw_resemblance_pairs(TrilateralMesh* m );
 static void draw_mesh(TrilateralMesh* m);
+static void draw_curvature(TrilateralMesh* m );
 
 void draw_all(TrilateralMesh* m)
 {
@@ -512,6 +535,7 @@ void draw_all(TrilateralMesh* m)
     draw_skeleton();
     draw_mesh(m);
     draw_resemblance_pairs(m);
+    draw_curvature(m);
 }
 
 
@@ -540,7 +564,19 @@ static void draw_skeleton()
     }
     
 }
-
+static void draw_curvature(TrilateralMesh* m )
+{
+    if (is_draw_curvature)
+    {
+        for (size_t i = 0; i < curvature.points.size()-1; i++)
+        {
+            glm::vec3 p1 = curvature.points[i];
+            glm::vec3 p2 = curvature.points[i+1];
+            DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(p2)
+            , YELLOW);
+        }
+    }
+}
 static void draw_resemblance_pairs(TrilateralMesh* m )
 {
     for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)

@@ -27,6 +27,7 @@ public:
 	std::vector<std::pair<unsigned int, unsigned int>> symmetry_pairs; // for ground truth 
 	std::vector<unsigned int> ground_truth_symmetry_pairs; // for ground truth hashmap for pairs
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
+	std::vector<float> sdf; // sdf for points
 	std::vector<glm::vec3> normals; // fil with constructor, actual vertices
 	std::vector<float> normals_display; // vertex information of normals
 	std::vector<float> areas; // vertex information of normals
@@ -56,6 +57,7 @@ public:
 
 	void generate_raylib_mesh();
 	void update_raylib_mesh();
+	void calculate_sdf();
 	private:
 	void read_ply_format(char* filename);
 	void read_off_format(char* filename);

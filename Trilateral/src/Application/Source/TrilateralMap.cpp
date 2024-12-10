@@ -4776,7 +4776,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 		mesh_vertices.push_back(dvorak_pairs[i].p_index);
 	}
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices,skelTree, N ,10, 10 );
+	descriptors = NLateral_generate_closest_points(m, mesh_vertices, N , 10 );
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
@@ -5234,7 +5234,7 @@ int dvorak_enpoint_no,float sweep_distance, float hks_dif_param , float curv_par
 		mesh_vertices.push_back(hks_pairs[i].first);
 	}
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, mesh_vertices, skelTree, N,5 , 10);
+	descriptors = NLateral_generate_closest_points(m,mesh_vertices, N, 10);
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };
@@ -5440,7 +5440,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
 
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, skeleton, fps_indices, skelTree, N, 500,10); //last param becoems unimportant
+	descriptors = NLateral_generate_closest_points(m, fps_indices, N,10); //last param becoems unimportant
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };

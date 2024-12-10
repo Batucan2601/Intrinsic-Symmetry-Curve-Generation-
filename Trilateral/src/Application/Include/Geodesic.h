@@ -12,3 +12,5 @@ std::vector<unsigned int> Geodesic_avg_dijkstra(TrilateralMesh* m, int& number_o
 std::vector<unsigned int> Geodesic_min_dijkstra(TrilateralMesh* m, int& number_of_points, std::vector<unsigned int> average_geodesic_function,
 float sweep_percentage,float tau, bool is_color);
 std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int& no_of_points, float sweep_percentage, int N_ring, bool is_color);
+std::vector<unsigned int> Geodesic_avg_dijkstra_modified_to_points(TrilateralMesh* m, std::vector<unsigned int> points,
+int& no_of_points, float sweep_percentage, int N_ring, bool is_color);

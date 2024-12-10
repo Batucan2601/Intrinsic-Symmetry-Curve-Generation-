@@ -858,21 +858,14 @@ void  NLateralDescriptor::get_ROI()
 
 
 
-std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, Skeleton& skel, std::vector<unsigned int>& indices, SkeletonTree& skelTree,int N
-, int depth_similarity , int histogram_size)
+std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m, std::vector<unsigned int>& indices,int N
+,int histogram_size)
 
 {
 	// 1 - go gaussian to skeleton
 	std::vector<unsigned int> skeleton_end_points;
 	//skeleton_get_closest_skeleton_endpoints(m, skel, indices,skeleton_end_points);
-	skeleton_get_closest_nodes(m, skel, indices, skeleton_end_points);
 	// get every skeltreeNode
-	std::vector<SkeletonTreeNode> skeleton_end_point_node_list;
-	for (size_t i = 0; i < skeleton_end_points.size(); i++)
-	{
-		SkeletonTreeNode node = skeleton_get_skeleton_node(skel, skelTree, skeleton_end_points[i]);
-		skeleton_end_point_node_list.push_back(node);
-	}
 	std::vector<NLateralDescriptor> nLateralDescVec;
 	for (size_t i = 0; i < indices.size(); i++)
 	{
@@ -935,41 +928,12 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 			}
 		}
 		
-		
-		for (size_t j = 0; j < selected_indices.size(); j++)
-		{
-			std::cout << "depth" <<  skeleton_end_point_node_list[selected_indices[j]].depth << std::endl;
-		}
-		//now here is the catch
-		bool is_depth_different = false; 
-		for (size_t j = 0; j < selected_indices.size()-1; j++)
-		{
-			if (std::abs(skeleton_end_point_node_list[selected_indices[j]].depth - skeleton_end_point_node_list[selected_indices[j+1]].depth) > depth_similarity)
-			{
-				is_depth_different = true;
-				break; 
-			}
-		}
-		if (is_depth_different)
-		{
-			continue; 
-		}
 		NLateralDescriptor desc;
 		desc = NLateral_generate_descriptor(m, indices_for_nlateral_construction);
 		//desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
-		for (size_t i = 0; i < desc.indices.size(); i++)
-		{
-			desc.depth.push_back(skeleton_end_point_node_list[selected_indices[i]].depth);
-		}
+		
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
-		desc.create_histogram(m, histogram_size);
-		std::vector<unsigned int> skel_dist_vec = desc.indices;
-		std::vector<unsigned int> skel_corresponding_point;
-		std::vector<float> dist_mid = skeleton_distance_to_midpoint(m, skel, skel_dist_vec);
-		desc.skel_dist_mid = dist_mid;
-		skeleton_get_closest_skeleton_endpoints(m, skel, skel_dist_vec, skel_corresponding_point);
-		desc.skeleton_index = skel_corresponding_point[0];
-		desc.skel_point_dist = glm::distance(skel.skeletonFormat[desc.skeleton_index].point, m->vertices[desc.indices[0]]);
+		desc.create_histogram_SDF(m, histogram_size);
 		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		nLateralDescVec.push_back(desc);
 	}
@@ -1529,8 +1493,120 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 	m->update_raylib_mesh();
 }
 
+void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)
+{
+	Histogram hist;
+	hist.init(hist_no);
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	float longest_path = -INFINITY;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		if (longest_path < distances[this->vertices_inside[i]])
+		{
+			longest_path = distances[this->vertices_inside[i]];
+		}
+	}
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				if (longest_path < distances[this->paths[i][j][k]])
+				{
+					longest_path = distances[this->paths[i][j][k]];
+				}
+			}
+		}
+	}
+	float step_size = longest_path / hist_no;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		int index = this->vertices_inside[i];
+		int step_1 = distances[index] / step_size; 
+		if (step_1 == hist_no)
+		{
+			step_1--; 
+		}
+		hist.histogram[step_size] += m->normalized_heat_kernel_signature[index];
+	}
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				int step_i = distances[this->paths[i][j][k]] / step_size;
 
-void NLateralDescriptor::create_histogram(TrilateralMesh* m, int hist_no)
+				if (step_i == hist_no)
+				{
+					step_i--;
+				}
+
+				hist.histogram[step_i] += m->normalized_heat_kernel_signature[this->paths[i][j][k]];
+			}
+		}
+	}
+	this->histogram = hist;
+}
+void NLateralDescriptor::create_histogram_SDF(TrilateralMesh* m, int hist_no)
+{
+	Histogram hist;
+	hist.init(hist_no);
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	float longest_path = -INFINITY;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		if (longest_path < distances[this->vertices_inside[i]])
+		{
+			longest_path = distances[this->vertices_inside[i]];
+		}
+	}
+
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				if (longest_path < distances[this->paths[i][j][k]])
+				{
+					longest_path = distances[this->paths[i][j][k]];
+				}
+			}
+		}
+	}
+	float step_size = longest_path / hist_no;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		int index = this->vertices_inside[i];
+		int step_1 = distances[index] / step_size;
+		if (step_1 == hist_no)
+		{
+			step_1--;
+		}
+		hist.histogram[step_size] += m->sdf[index];
+	}
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				int step_i = distances[this->paths[i][j][k]] / step_size;
+
+				if (step_i == hist_no)
+				{
+					step_i--;
+				}
+
+				hist.histogram[step_i] += m->sdf[this->paths[i][j][k]];
+			}
+		}
+	}
+	this->histogram = hist;
+}
+void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no)
 {
 	Histogram hist;
 	hist.init(hist_no);
@@ -1808,15 +1884,6 @@ bool NLateral_compare_Nring(TrilateralMesh* m, NLateralDescriptor& desc1, NLater
 bool NLateral_compare_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_area , float area_percentage
 ,std::ofstream& file )
 {
-	file << " 1 ring area " << std::endl; 
-	float area_dif_0 = std::abs(desc1.skel_dist_mid[0] - desc2.skel_dist_mid[0]);
-
-	file << " 0 0 " << area_dif_0 / maximum_area << std::endl;
-
-	if (area_dif_0 / maximum_area> area_percentage)
-	{
-		return false;
-	}
 
 	float area_1_2 = m->areas[desc1.indices[1]];
 	float area_1_3 = m->areas[desc1.indices[2]];
@@ -1933,8 +2000,8 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 	std::vector<unsigned int> indices_p2_desc = { p2,p1,p_middle };
 	desc1 = NLateral_generate_descriptor(m, indices_p1_desc);
 	desc2 = NLateral_generate_descriptor(m, indices_p2_desc);
-	desc1.create_histogram(m, 10);
-	desc2.create_histogram(m, 10);
+	desc1.create_histogram_area(m, 10);
+	desc2.create_histogram_area(m, 10);
 
 
 	desc1.histogram.normalize(1);
@@ -2013,4 +2080,45 @@ float param , std::ofstream& file)
 		return true; 
 	}
 	return false; 
+}
+
+bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
+	float distances_from_mid, float distances_between_desc,  std::ofstream& file)
+{
+	int index1 = desc1.indices[0];
+	int index2 = desc2.indices[0];
+
+	std::vector<float> distances = Geodesic_dijkstra(*m, midpoint_index);
+	std::vector<float> distances_form_desc1 = Geodesic_dijkstra(*m, index1);
+
+	// get maximum distance
+	float max_dist_from_mid = -INFINITY; 
+	for (size_t i = 0; i < distances.size(); i++)
+	{
+		if (max_dist_from_mid < distances[i])
+		{
+			max_dist_from_mid = distances[i];
+		}
+	}
+	float max_dist_from_index1 = -INFINITY;
+	for (size_t i = 0; i < distances.size(); i++)
+	{
+		if (max_dist_from_index1 < distances[i])
+		{
+			max_dist_from_index1 = distances[i];
+		}
+	}
+	file << " position to mid point " << std::endl;
+	file << "dist from desc1 " << distances_form_desc1[index2] << std::endl;
+	file << "max dist from desc1 " << max_dist_from_index1 << std::endl;
+	file << "distances from  index1 " << distances[index1] << std::endl;
+	file << "maximum distance from mid  " << max_dist_from_mid << std::endl;
+	//check if the descriptors are close 
+	if (distances_form_desc1[index2] / max_dist_from_index1 <  distances_between_desc &&
+		distances[index1] / max_dist_from_mid  > distances_from_mid)
+	{
+		return false; 
+	}
+	return true;
+
 }

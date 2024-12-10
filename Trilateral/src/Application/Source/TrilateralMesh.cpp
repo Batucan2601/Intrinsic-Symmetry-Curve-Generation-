@@ -3,6 +3,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include "../Include/CoreTypeDefs.h"
+#include "../Include/ShapeDiameter.h"
 
 static void calculate_areas(TrilateralMesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
@@ -42,7 +43,6 @@ TrilateralMesh::TrilateralMesh(char* filename)
 	generate_normals();
 	calculate_areas(this);
 	calculate_mesh_area(this);
-
 	this->generate_raylib_mesh();
 }
 void TrilateralMesh::read_ply_format(char* filename)
@@ -715,7 +715,14 @@ static void calculate_areas(TrilateralMesh* m)
 		m->areas[m->triangles[i+2]] += area;
 	}
 }
-
+void TrilateralMesh::calculate_sdf()
+{
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		float sdf = ShapeDiameter_calculate_simple(this, i);
+		this->sdf.push_back(sdf);
+	}
+}
 static void calculate_mesh_area(TrilateralMesh* m )
 {
 	m->mesh_area = 0;

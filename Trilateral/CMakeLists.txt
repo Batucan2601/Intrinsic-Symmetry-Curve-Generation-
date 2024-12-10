@@ -103,7 +103,7 @@ set(Source_Files
     "src/Application/Source/KIDS.cpp"
     "src/Application/Source/SCBDataset.cpp"
     "src/Application/Source/NLateralMapping.cpp"
-    "src/Application/Include/CurvatureGeneration.cpp"
+    "src/Application/Source/CurvatureGeneration.cpp"
 
 
 

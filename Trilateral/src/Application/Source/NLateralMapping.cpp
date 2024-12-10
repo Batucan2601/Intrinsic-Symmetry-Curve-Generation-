@@ -59,8 +59,8 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 	}
 	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
 	int hist_size = 10; 
-	desc_pos = NLateral_generate_closest_points(m, skeleton, fps_indices, skelTree, N, 500 , hist_size);
-	desc_neg = NLateral_generate_closest_points(m, skeleton, fps_sym_indices, skelTree, N, 500, hist_size);
+	desc_pos = NLateral_generate_closest_points(m, fps_indices, N, hist_size);
+	desc_neg = NLateral_generate_closest_points(m, fps_sym_indices, N, hist_size);
 
 
 	for (size_t i = 0; i < fps_indices.size(); i++)
@@ -274,8 +274,8 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float ratio_dif_param,
-	float area_dif_param, float skel_point_dist_param,float paths_dif_param,float min_geo_tau,int avg_n_ring, int skel_depth_param,float tri_hist_param,
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float ratio_dif_param,
+	float area_dif_param,float paths_dif_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
 	float distance_to_mid_param , float sdf_param , int N)
 {
 	int size = m->vertices.size();
@@ -292,6 +292,9 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 
 	Metric_set_gaussian(m, dvorak_enpoint_no, sweep_distance);
 	Metric_set_N(N);
+	
+	//for sdf calculation
+	m->calculate_sdf();
 
 	point_indices = Geodesic_avg_dijkstra_modified(m, dvorak_enpoint_no, sweep_distance, avg_n_ring, true);
 	for (size_t i = 0; i < 3; i++)
@@ -308,9 +311,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		m->raylib_mesh.colors[index * 4 + 2] = 0;
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
-	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
 	int hist_size = 10;
-	descs = NLateral_generate_closest_points(m, skeleton, point_indices, skelTree, N, 500, hist_size);
+	descs = NLateral_generate_closest_points(m, point_indices,  N, hist_size);
 
 
 	for (size_t i = 0; i < point_indices.size(); i++)
@@ -354,21 +356,6 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			if (maximum_n_ring < dif)
 			{
 				maximum_n_ring = dif;
-			}
-		}
-	}
-	//maximum skel distance
-	float maximum_skel_dist= -INFINITY;
-	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
-	{
-		std::vector<int> vertex_list;
-		std::vector<float> vertex_dist;
-		skeleton_calculate_dijkstra(skeleton, i, vertex_list, vertex_dist);
-		for (size_t j = 0; j < vertex_dist.size(); j++)
-		{
-			if (maximum_skel_dist < vertex_dist[j])
-			{
-				maximum_skel_dist = vertex_dist[j];
 			}
 		}
 	}
@@ -454,26 +441,13 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			file << " i " << i << " j " << j << std::endl;
 			bool is_hks;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
-			//is_hks = NLateral_compare_HKS(m,descs[i], descs[j], hks_dif_param,file);
 			is_hks = hks_dif < hks_dif_param;
+			//is_hks = NLateral_compare_HKS(m,descs[i], descs[j], hks_dif_param,file);
 			file << " is hks " << is_hks <<  std::endl; 
 			//bool is_hks = hks_dif < hks_dif_param;
-			bool is_skel_dist_far = NLateral_compare_skeldist_mid(m, descs[i], descs[j], skel_dist_param, maximum_skel_dist,file);
-			file << " is skel dist  " <<  is_skel_dist_far << std::endl;
-
-			//float n_ring = std::abs(descs[i].n_ring_area - descs[j].n_ring_area);
-			//bool is_n_ring_close = (n_ring / maximum_n_ring) < n_ring_param;
-			//float area_dif = std::abs(descs[i].area - descs[j].area);
-			//bool is_area_dif = area_dif / maximum_area_dif < area_dif_param;
 			bool is_area_dif = NLateral_compare_area(m,descs[i],descs[j],maximum_area_dif , area_dif_param,file);
 			file << " is area dif " << is_area_dif <<  std::endl;
 
-			float skel_point_dist_dif = std::abs(descs[i].skel_point_dist - descs[j].skel_point_dist);
-			file << " skel point dist " << std::endl;
-			file << skel_point_dist_dif << std::endl;
-			bool is_skel_point_dist = skel_point_dist_dif / maximum_skel_point_dist < skel_point_dist_param;
-			file << " is skel point dist " << is_skel_point_dist;
- 
 			float ratio_dif = std::fabs(descs[i].paths_ratio - descs[j].paths_ratio);
 			bool is_ratio_dif = ratio_dif < ratio_dif_param;
 			file << "  desc path ratio dif " << ratio_dif << std::endl;
@@ -482,27 +456,21 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
  			float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
 			bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
-			bool is_depth = NLatera_compare_depth(m, descs[i], descs[j], skel_depth_param, file);
 			bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
 			bool is_nlateral_dist_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index,
 			distance_to_mid_param, file);
 			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
 			
+			bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
 			//file << " is depth " << is_depth << std::endl;
-			if (is_hks && is_sdf && is_skel_dist_far /* && is_depth */ && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
-			&& is_sdf)
+			if (is_hks && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
+			&& is_sdf && is_points_close && is_area_dif)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
 				res.second = std::make_pair(i, j);
 				compare_results.push_back(res);
 			}
-
-			/*std::cout << " i " << i << " j " << j << " " << hist_diffs[i][j] << std::endl;
-			std::pair<float, std::pair<unsigned int, unsigned int>> res;
-			res.first = hist_diffs[i][j];
-			res.second = std::make_pair(i, j);
-			compare_results.push_back(res);*/
 
 		}
 	}

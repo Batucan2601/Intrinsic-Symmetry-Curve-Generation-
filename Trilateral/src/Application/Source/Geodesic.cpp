@@ -262,6 +262,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int&
 	}
 
 	//average the one ring
+	/*
 	std::vector<float> temp_avg_values = avg_geodesic_distances;
 	for (size_t i = 0; i < vertex_size; i++)
 	{
@@ -274,7 +275,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int&
 		}
 		avg = avg / (neighbours.size() + 1);
 		avg_geodesic_distances[i] = avg;
-	}
+	}*/
 	//sample where gradient is 0
 	for (size_t i = 0; i < vertex_size; i++)
 	{
@@ -384,6 +385,139 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int&
 
 	return extremums;
 
+}
+std::vector<unsigned int> Geodesic_avg_dijkstra_modified_to_points(TrilateralMesh* m, std::vector<unsigned int> points, int& no_of_points, 
+float sweep_percentage, int N_ring, bool is_color)
+{
+	std::vector<std::pair<float, unsigned int>> gradient_indices;
+	int vertex_size = m->vertices.size();
+	std::vector<float> avg_geodesic_distances(vertex_size);
+	float biggest = -INFINITY;
+	float biggest_dijkstra = -INFINITY;
+	for (size_t i = 0; i < vertex_size; i++)
+	{
+		std::vector<float> distances_i = Geodesic_dijkstra(*m, i);
+
+		//sum the distances
+		float sum = 0;
+		for (size_t j = 0; j < points.size(); j++)
+		{
+			int index = points[j];
+			sum += distances_i[index];
+			if (biggest_dijkstra < distances_i[index])
+			{
+				biggest_dijkstra = distances_i[index];
+			}
+		}
+		avg_geodesic_distances[i] = sum;
+		if (sum > biggest)
+		{
+			biggest = sum;
+		}
+
+	}
+
+	//average the one ring
+	std::vector<float> temp_avg_values = avg_geodesic_distances;
+	for (size_t i = 0; i < vertex_size; i++)
+	{
+		float avg = temp_avg_values[i];
+		std::vector<unsigned int> neighbours = findNRingNeighbors(m, i, N_ring);
+		for (size_t j = 0; j < neighbours.size(); j++)
+		{
+			int neighbour_index = neighbours[j];
+			avg += temp_avg_values[neighbour_index];
+		}
+		avg = avg / (neighbours.size() + 1);
+		avg_geodesic_distances[i] = avg;
+	}
+	//sample where gradient is 0
+	for (size_t i = 0; i < vertex_size; i++)
+	{
+		bool is_maxima = true;
+		bool is_minima = true;
+
+		std::vector<unsigned int> neighbours;
+		neighbours = findNRingNeighbors(m, i, N_ring);
+		for (size_t j = 0; j < neighbours.size(); j++)
+		{
+			int index = neighbours[j];
+			if (index == i)
+			{
+				continue;
+			}
+			if (avg_geodesic_distances[index] > avg_geodesic_distances[i])
+			{
+				is_maxima = false;
+			}
+			if (avg_geodesic_distances[index] < avg_geodesic_distances[i])
+			{
+				is_minima = false;
+			}
+
+		}
+		/*int neighbour_size = m->adjacenies[i].size();
+		for (size_t j = 0; j < neighbour_size; j++)
+		{
+			int neighbour_index = m->adjacenies[i][j].first;
+			if (avg_geodesic_distances[neighbour_index] > avg_geodesic_distances[i])
+			{
+				is_maxima = false;
+			}
+			if (avg_geodesic_distances[neighbour_index] < avg_geodesic_distances[i])
+			{
+				is_minima = false;
+			}
+		}*/
+		if (is_maxima || is_minima)
+		{
+			gradient_indices.push_back(std::make_pair(avg_geodesic_distances[i], i));
+		}
+	}
+	std::vector< unsigned int> extremums;
+	for (size_t i = 0; i < gradient_indices.size(); i++)
+	{
+		int index_front = gradient_indices[i].second;
+		bool is_index_front = true;
+		for (size_t j = 0; j < extremums.size(); j++)
+		{
+			int ext_index = extremums[j];
+			std::vector<float> distances_ext = Geodesic_dijkstra(*m, ext_index);
+			if (distances_ext[index_front] < (biggest_dijkstra * sweep_percentage))
+			{
+				is_index_front = false;
+			}
+
+		}
+		if (is_index_front)
+		{
+			extremums.push_back(gradient_indices[i].second);
+		}
+	}
+	std::sort(gradient_indices.begin(), gradient_indices.end());
+
+	extremums.insert(extremums.end(), points.begin(), points.end());
+	if (is_color)
+	{
+		for (size_t i = 0; i < vertex_size; i++)
+		{
+			m->raylib_mesh.colors[i * 4] = avg_geodesic_distances[i] / biggest * 255;
+			m->raylib_mesh.colors[i * 4 + 1] = 0;
+			m->raylib_mesh.colors[i * 4 + 2] = 0;
+			m->raylib_mesh.colors[i * 4 + 3] = 255;
+		}
+		for (size_t i = 0; i < extremums.size(); i++)
+		{
+			int index = extremums[i];
+			m->raylib_mesh.colors[index * 4] = 255;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 255;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+		m->update_raylib_mesh();
+	}
+
+	return extremums;
 }
 std::vector<unsigned int> Geodesic_avg_dijkstra(TrilateralMesh* m, int& c, float sweep_percentage, int N_ring,  bool is_color)
 {
