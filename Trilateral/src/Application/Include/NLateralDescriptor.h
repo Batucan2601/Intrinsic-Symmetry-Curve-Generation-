@@ -45,6 +45,7 @@ struct NLateralDescriptor
 	double skel_point_dist;
 	double paths_ratio; 
 	Histogram histogram;
+	float max_distance; 
 };
 
 struct NLateralDescriptorRestrictions
@@ -120,7 +121,7 @@ int N, int histogram_size );
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 std::vector<unsigned int> Nlateral_check_triangles_visited(TrilateralMesh* m, NLateralDescriptor& desc);
-
+float Nlateral_get_maximum_dist(TrilateralMesh* m, NLateralDescriptor& desc);
 void NLateral_compute_skel_point_dist(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc);
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index);
 void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index);

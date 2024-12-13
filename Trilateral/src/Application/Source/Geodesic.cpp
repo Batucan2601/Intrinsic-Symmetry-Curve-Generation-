@@ -2,6 +2,8 @@
 #include <unordered_set>
 #include <queue>
 #include <unordered_map>
+#include "../Include/CoreTypeDefs.h"
+#include "raylib.h"
 // Function to find n-ring neighbors for a specific point
 static std::vector<unsigned int> findNRingNeighbors(TrilateralMesh* m, int startPointId, int n) {
 	std::unordered_set<int> visited; // Track visited points
@@ -232,7 +234,7 @@ bool Geodesic_proximity(TrilateralMesh& m , NLateralDescriptor& desc1, NLateralD
 	return distances[desc2.indices[0]] < proximity;
 }
 
-std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int& no_of_points, float sweep_percentage, int N_ring, bool is_color)
+std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, float sweep_percentage, int N_ring, bool is_color)
 {
 	std::vector<std::pair<float, unsigned int>> gradient_indices;
 	int vertex_size = m->vertices.size();
@@ -365,21 +367,26 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, int&
 
 	if (is_color)
 	{
+		m->color_all(BLACK);
+		//min max float 
+		auto min = std::min_element(avg_geodesic_distances.begin() , avg_geodesic_distances.end());
+		auto max = std::max_element(avg_geodesic_distances.begin() , avg_geodesic_distances.end());
 		for (size_t i = 0; i < vertex_size; i++)
 		{
-			m->raylib_mesh.colors[i * 4] = avg_geodesic_distances[i] / biggest * 255;
-			m->raylib_mesh.colors[i * 4 + 1] = 0;
-			m->raylib_mesh.colors[i * 4 + 2] = 0;
+			glm::vec3 color = CoreType_getColor(avg_geodesic_distances[i], *min, *max);
+			m->raylib_mesh.colors[i * 4] = color[0] * 255;
+			m->raylib_mesh.colors[i * 4 + 1] = color[1] * 255;
+			m->raylib_mesh.colors[i * 4 + 2] = color[2] * 255;
 			m->raylib_mesh.colors[i * 4 + 3] = 255;
 		}
-		for (size_t i = 0; i < extremums.size(); i++)
+		/*for (size_t i = 0; i < extremums.size(); i++)
 		{
 			int index = extremums[i];
 			m->raylib_mesh.colors[index * 4] = 255;
 			m->raylib_mesh.colors[index * 4 + 1] = 255;
 			m->raylib_mesh.colors[index * 4 + 2] = 255;
 			m->raylib_mesh.colors[index * 4 + 3] = 255;
-		}
+		}*/
 		m->update_raylib_mesh();
 	}
 
@@ -644,7 +651,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra(TrilateralMesh* m, int& c, float
 	return extremums;
 	
 }
-std::vector<unsigned int> Geodesic_min_dijkstra(TrilateralMesh*m , int& number_of_points, 
+std::vector<unsigned int> Geodesic_min_dijkstra(TrilateralMesh*m , 
 std::vector< unsigned int> agd_extremums, float sweep_percentage, float tau, bool is_color)
 {
 	int vertex_size = m->vertices.size();

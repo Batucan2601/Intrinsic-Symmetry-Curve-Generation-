@@ -29,6 +29,7 @@ static void trilateral_functions(TrilateralMesh* m);
 static void dvorak_functions(TrilateralMesh* m);
 static void distribution_functions(TrilateralMesh* m);
 static void dataset(TrilateralMesh* m);
+static void shape_diameter(TrilateralMesh* m);
 static void SCAPE_dataset(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
 static void TOSCA_dataset(TrilateralMesh* m);
@@ -55,7 +56,11 @@ static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static bool is_draw_curvature = false;
+static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
+static bool is_draw_normals = false; 
+static bool is_draw_agd = false; 
+static float agd_sphere_radius = 1; 
 static int descriptor_no = 0;
 static Plane plane;
 static Skeleton skeleton;
@@ -184,6 +189,11 @@ void imgui_menu_bar(TrilateralMesh* m)
             if (ImGui::BeginMenu("Curvature creation "))
             {
                 curvature_creation(m);
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Shape diameter"))
+            {
+                shape_diameter(m);
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -425,6 +435,17 @@ static void dataset(TrilateralMesh* m)
     }
 
 }
+static void shape_diameter(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("color shape diameter"))
+    {
+        ShapeDiameter_color(m);
+    }
+    if (ImGui::MenuItem("Draw normals"))
+    {
+        is_draw_normals = true;
+    }
+}
 static void KIDS_dataset(TrilateralMesh* m)
 {
     if (ImGui::MenuItem("read KIDS"))
@@ -459,7 +480,7 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("average geodesic Function modified"))
     {
-        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, no_of_dist_points, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
+        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
     }
     if (ImGui::MenuItem("average geodesic Function modified with points "))
     {
@@ -468,7 +489,7 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("minimum geodesic Function"))
     {
-        avg_dijk_indices = Geodesic_min_dijkstra(m, no_of_dist_points, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau, true);
+        avg_dijk_indices = Geodesic_min_dijkstra(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau, true);
     }
 }
 static void curvature_creation(TrilateralMesh* m )
@@ -528,6 +549,8 @@ static void draw_skeleton();
 static void draw_resemblance_pairs(TrilateralMesh* m );
 static void draw_mesh(TrilateralMesh* m);
 static void draw_curvature(TrilateralMesh* m );
+static void draw_normals(TrilateralMesh* m);
+static void draw_spheres(TrilateralMesh* m, float radius);
 
 void draw_all(TrilateralMesh* m)
 {
@@ -536,8 +559,21 @@ void draw_all(TrilateralMesh* m)
     draw_mesh(m);
     draw_resemblance_pairs(m);
     draw_curvature(m);
+    draw_normals(m);
+    draw_spheres(m, agd_sphere_radius);
 }
 
+static void draw_spheres(TrilateralMesh* m, float radius)
+{
+    if (is_draw_agd)
+    {
+        for (size_t i = 0; i < avg_dijk_indices.size(); i++)
+        {
+            int index = avg_dijk_indices[i];
+            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+        }
+    }
+}
 
 static void draw_dom_sym()
 {
@@ -564,6 +600,22 @@ static void draw_skeleton()
     }
     
 }
+static void draw_normals(TrilateralMesh* m)
+{
+    if (is_draw_normals)
+    {
+        for (size_t i = 0; i < m->normals_display.size(); i+= 12 )
+        {
+            glm::vec3 p1(m->normals_display[i], m->normals_display[i +1], m->normals_display[i + 2]);
+            glm::vec3 p2(m->normals_display[i + 6 ], m->normals_display[i + 7], m->normals_display[i + 8]);
+            glm::vec3 dir = p2 - p1; 
+            dir = dir * 1e-2f;
+            p2 = p1 + dir; 
+            DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(p2) 
+                , GREEN);
+        }
+    }
+}
 static void draw_curvature(TrilateralMesh* m )
 {
     if (is_draw_curvature)
@@ -579,13 +631,17 @@ static void draw_curvature(TrilateralMesh* m )
 }
 static void draw_resemblance_pairs(TrilateralMesh* m )
 {
-    for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+    if (is_draw_resemblance_pairs)
     {
-        int index1 = m->calculated_symmetry_pairs[i].first;
-        int index2 = m->calculated_symmetry_pairs[i].second;
-        DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
-            CoreType_conv_glm_raylib_vec3(m->vertices[index2]), BLUE);
+        for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+        {
+            int index1 = m->calculated_symmetry_pairs[i].first;
+            int index2 = m->calculated_symmetry_pairs[i].second;
+            DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+                CoreType_conv_glm_raylib_vec3(m->vertices[index2]), BLUE);
+        }
     }
+   
 }
 static void draw_mesh(TrilateralMesh* m)
 {
@@ -719,7 +775,35 @@ static void mesh_drawing()
             is_draw_mesh = !is_draw_mesh;
         }
     }
-
+    ImGui::InputFloat(" Radius for AGD Spheres "  , &agd_sphere_radius);
+    if (is_draw_agd)
+    {
+        if (ImGui::MenuItem("Disable AGD Drawing"))
+        {
+            is_draw_agd = !is_draw_agd;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable AGD Drawing "))
+        {
+            is_draw_agd = !is_draw_agd;
+        }
+    }
+    if (is_draw_resemblance_pairs)
+    {
+        if (ImGui::MenuItem("Disable resemblance Drawing"))
+        {
+            is_draw_resemblance_pairs = !is_draw_resemblance_pairs;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable resemblance Drawing "))
+        {
+            is_draw_resemblance_pairs = !is_draw_resemblance_pairs;
+        }
+    }
     
 }
 static void dvorak_functions(TrilateralMesh* m)
@@ -821,6 +905,7 @@ static void  display_descriptor(TrilateralMesh* m )
         m->raylib_mesh.colors[index * 4 + 2] = 0;
         m->raylib_mesh.colors[index * 4 + 3] = 255;
     }
+
     m->raylib_mesh.colors[desc.p1 * 4] = 255;
     m->raylib_mesh.colors[desc.p1 * 4 + 1] = 255;
     m->raylib_mesh.colors[desc.p1 * 4 + 2] = 255;

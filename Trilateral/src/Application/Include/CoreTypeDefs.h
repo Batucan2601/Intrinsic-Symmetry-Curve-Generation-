@@ -46,7 +46,7 @@ std::vector<int> getNumberFromString(std::string s);
 Eigen::VectorXd stdVectorToEigenVectorXd(const std::vector<float>& std_vec);
 float distancePointToLine(const glm::vec3& point, const glm::vec3& linePoint1, const glm::vec3& linePoint2);
 
-
+glm::vec3 CoreType_getColor(double v, double vmin, double vmax);
 float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
 glm::vec3 CoreType_conv_raylib_glm_vec3(Vector3 vec3);

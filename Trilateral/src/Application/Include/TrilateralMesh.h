@@ -54,7 +54,8 @@ public:
 	TrilateralMesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);
 	glm::mat4 move_mesh(glm::vec3 direction);
 	glm::mat4 scale_mesh(glm::vec3 scale);
-
+	void color_points(std::vector<unsigned int>& points , Color color );
+	void color_all(Color color );
 	void generate_raylib_mesh();
 	void update_raylib_mesh();
 	void calculate_sdf();

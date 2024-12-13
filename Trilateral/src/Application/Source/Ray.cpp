@@ -36,7 +36,7 @@ bool ray_triangle_intersection(TrilateralRay& ray, glm::vec3 vertex0, glm::vec3 
         return false;
 
     float t = f * glm::dot(edge2, q);
-    if (t > 0.00001) { // ray intersection
+    if (t > 0) { // ray intersection
         hitpoint.x = ray.origin.x + ray.direction.x * t;
         hitpoint.y = ray.origin.y + ray.direction.y * t;
         hitpoint.z = ray.origin.z + ray.direction.z * t;

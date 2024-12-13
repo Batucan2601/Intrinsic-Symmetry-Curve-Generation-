@@ -11,3 +11,4 @@ const int NUMBER_OF_RAYS = 30;
 void ShapeDiameter_calculate(TrilateralMesh* mesh, std::vector<unsigned int> indices, std::vector<float>& shape_diameter);
 float ShapeDiameter_calculate_simple(TrilateralMesh* mesh, unsigned int index);
 float ShapeDiameter_calculate_simple_max_dif(TrilateralMesh* mesh, std::vector<unsigned int> & indices );
+void ShapeDiameter_color(TrilateralMesh* m);

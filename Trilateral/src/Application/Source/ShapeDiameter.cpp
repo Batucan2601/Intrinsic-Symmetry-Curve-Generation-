@@ -1,10 +1,13 @@
 #include "../Include/ShapeDiameter.h"
 #include "../Include/Ray.h"
+#include "../Include/CoreTypeDefs.h"
 #include "glm/glm.hpp"
 #define _USE_MATH_DEFINES //for pi 
 #include <math.h>
 #include <random>
-
+#include <glm/ext/quaternion_trigonometric.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 static void calculateRightUpVectors(const glm::vec3& normal, const glm::vec3& pointOnPlane, glm::vec3& right, glm::vec3& up) {
 	// Assume the plane's "forward" vector is the normal
@@ -36,7 +39,7 @@ void ShapeDiameter_calculate(TrilateralMesh* mesh,  std::vector<unsigned int> in
 		//generate ray
 		TrilateralRay ray;
 		ray.origin = mesh->vertices[indices[i]];
-		ray.direction = mesh->normals[indices[i]] * -1.0f; //inverse of normal
+		ray.direction = 0.01f * (mesh->normals[indices[i]] * -1.0f) ; //inverse of normal
 		glm::vec3 cone_center = ray.origin + ray.direction * (float)CONE_HEIGHT;
 		for (size_t j = 0; j < NUMBER_OF_RAYS; j++)
 		{
@@ -73,39 +76,6 @@ void ShapeDiameter_calculate(TrilateralMesh* mesh,  std::vector<unsigned int> in
 				}
 
 			}
-		/*	if (closest_triangle_index == -1)
-			{
-				mesh->colors[indices[i]] = glm::vec3(255.0f ,0.0f , 0.0f );
-				break;
-			}*/
-			if (closest_triangle_index == -1) //somehow normal is inverted
-			{
-				TrilateralRay random_ray_inverse = random_ray;
-				random_ray_inverse.direction = -1.0f * random_ray.direction;
-				for (size_t k = 0; k < mesh->triangles.size(); k += 3)
-				{
-
-					glm::vec3 p1 = mesh->vertices[mesh->triangles[k]];
-					glm::vec3 p2 = mesh->vertices[mesh->triangles[k + 1]];
-					glm::vec3 p3 = mesh->vertices[mesh->triangles[k + 2]];
-					if (ray_triangle_intersection(random_ray_inverse, p1, p2, p3, hit_point))
-					{
-						float dist = glm::distance(ray.origin, hit_point);
-						if (dist < closest_dist)
-						{
-							closest_triangle_index = k;
-							closest_dist = dist;
-
-						}
-					}
-
-				}
-			}
-			//compute the closest again
-			glm::vec3 p1 = mesh->vertices[mesh->triangles[closest_triangle_index]];
-			glm::vec3 p2 = mesh->vertices[mesh->triangles[closest_triangle_index + 1]];
-			glm::vec3 p3 = mesh->vertices[mesh->triangles[closest_triangle_index + 2]];
-			ray_triangle_intersection(random_ray, p1, p2, p3, hit_point);
 			ray_distances.push_back(closest_dist);
 
 			
@@ -172,19 +142,32 @@ float ShapeDiameter_calculate_simple(TrilateralMesh* mesh, unsigned int index)
 		int index2 = mesh->triangles[i+1];
 		int index3 = mesh->triangles[i+2];
 		TrilateralRay ray; 
+		TrilateralRay ray_reverse; 
 		ray.origin = mesh->vertices[index];
 		ray.direction = -mesh->normals[index];
-		glm::vec3 hit_point;
+		ray_reverse.origin  = mesh->vertices[index];
+		ray_reverse.direction  = mesh->normals[index];
+		glm::vec3 hit_point1;
+		glm::vec3 hit_point2;
 		bool is_hit = ray_triangle_intersection(ray, mesh->vertices[index1],
-		mesh->vertices[index2], mesh->vertices[index3], hit_point);
-		if (!is_hit)
+		mesh->vertices[index2], mesh->vertices[index3], hit_point1);
+		bool is_hit_reverse = ray_triangle_intersection(ray_reverse, mesh->vertices[index1],
+			mesh->vertices[index2], mesh->vertices[index3], hit_point2);
+		if (is_hit)
 		{
-			continue; 
+			float distance = glm::distance(ray.origin, hit_point1);
+			if (distance < min_distance && distance != 0 )
+			{
+				min_distance = distance;
+			}
 		}
-		float distance = glm::distance(ray.origin, hit_point);
-		if (distance < min_distance)
+		else if (is_hit_reverse)
 		{
-			min_distance = distance; 
+			float distance = glm::distance(ray.origin, hit_point2);
+			if (distance < min_distance && distance != 0)
+			{
+				min_distance = distance;
+			}
 		}
 		
 	}
@@ -212,4 +195,158 @@ float ShapeDiameter_calculate_simple_max_dif(TrilateralMesh* mesh, std::vector<u
 		}
 	}
 	return maximum-minimum; 
+}
+std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
+	std::vector<float> sdfValues(m->vertices.size());
+
+	for (size_t i = 0; i < m->vertices.size(); ++i) {
+		glm::vec3& point = m->vertices[i];
+		glm::vec3& normal = m->normals[i];
+		float sdf = 0.0f;
+
+		// Shoot multiple rays in random directions around the normal
+		std::vector<TrilateralRay> rays;
+		std::vector<float> ray_distances;
+		for (int j = 0; j < numRays; ++j) {
+			// Slight random perturbation to the normal
+			glm::vec3 rayDir = normal; /* + glm::normalize(glm::vec3((std::rand() % 100 - 50) / 100.0f,
+				(std::rand() % 100 - 50) / 100.0f,
+				(std::rand() % 100 - 50) / 100.0f));*/
+			int rot_x = (std::rand() % 30) - 15; 
+			int rot_y = (std::rand() % 30) - 15;
+			glm::vec3 right, up; 
+			TrilateralRay ray;
+			ray.origin = m->vertices[i];
+			ray.direction = -rayDir;
+			calculateRightUpVectors(ray.direction, ray.origin, right, up);
+			glm::quat quaternion_right = glm::angleAxis((float)rot_x, up);
+			glm::quat quaternion_up = glm::angleAxis((float)rot_y, right);
+			//glm::quat quaternion_right{} = glm::angleAxis(rot_y, right);
+			ray.direction = quaternion_right * ray.direction;
+			ray.direction = quaternion_up * ray.direction;
+			ray.direction = glm::normalize(ray.direction);
+			//rotate direction
+			// rotate 
+			// Find intersection distance
+			float smallest_dist = INFINITY; 
+			for (size_t k = 0; k < m->triangles.size(); k+=3)
+			{
+				glm::vec3 p1 = m->vertices[m->triangles[k]];
+				glm::vec3 p2 = m->vertices[m->triangles[k+1]];
+				glm::vec3 p3 = m->vertices[m->triangles[k+2]];
+				glm::vec3 hit_point;
+				bool is_hit= ray_triangle_intersection(ray, p1,p2,p3, hit_point);
+				if (is_hit)
+				{
+					float distance = glm::distance(m->vertices[i], hit_point);
+					if (distance < smallest_dist && distance > 1e-12)
+					{
+						smallest_dist = distance;
+					}
+				}
+
+			}
+			if (smallest_dist != INFINITY &&  !std::isnan(smallest_dist))
+			{
+				ray_distances.push_back(smallest_dist);
+				rays.push_back(ray);
+			}
+			//sdf += smallest_dist;
+			 
+		}
+		// 1 -calculate mean
+		float mean = 0;
+		for (size_t j = 0; j < ray_distances.size(); j++)
+		{
+			mean += ray_distances[j];
+		}
+		mean /= ray_distances.size();
+		float variance = 0.0f;
+		for (size_t j = 0; j < ray_distances.size(); j++)
+		{
+			variance += std::pow(ray_distances[j] - mean, 2);
+		}
+		variance /= ray_distances.size();
+
+		float std_deviation = std::sqrt(variance);
+
+		std::vector<float> standart_deviation_distances;
+		for (size_t j = 0; j < ray_distances.size(); j++)
+		{
+			if (mean - std_deviation <= ray_distances[j] && mean + std_deviation >= ray_distances[j])
+			{
+				standart_deviation_distances.push_back(ray_distances[j]);
+			}
+		}
+		// Average the distances
+		for (size_t j = 0; j  < standart_deviation_distances.size(); j++)
+		{
+			sdf += standart_deviation_distances[j];
+		}
+		if (standart_deviation_distances.size() > 0)
+		{
+			sdfValues[i] = sdf / standart_deviation_distances.size();
+		}
+	}
+
+	return sdfValues;
+}
+
+void ShapeDiameter_color(TrilateralMesh* m)
+{
+	std::vector<float> sdf_values;
+	float max = -INFINITY;
+	float min = INFINITY;
+	std::vector<unsigned int> indices;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		indices.push_back(i);
+	}
+	//ShapeDiameter_calculate(m, indices, sdf_values);
+	sdf_values = computeSDF(m, 100);
+	/*for (size_t i = 0; i < sdf_values.size(); i++)
+	{
+		if (sdf_values[i] == INFINITY)
+		{
+			std::vector<float> smooth_values; 
+			//smooth it
+			for (size_t j = 0; j < m->adjacenies[i].size(); j++)
+			{
+				if (sdf_values[j] != INFINITY)
+				{
+					smooth_values.push_back(sdf_values[j]);
+				}
+			}
+			float sum = 0;
+			for (size_t j = 0; j < smooth_values.size(); j++)
+			{
+				sum += smooth_values[j];
+			}
+			sum = sum / smooth_values.size();
+			sdf_values[i] = sum; 
+		}
+	}*/
+
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float val = sdf_values[i];
+		if (val > max && val != INFINITY )
+		{
+			max = val;
+		}
+		if (val < min)
+		{
+			min = val;
+		}
+		sdf_values.push_back(val);
+	}
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		glm::vec3 color = CoreType_getColor(sdf_values[i] , min , max );
+		m->raylib_mesh.colors[i * 4] = color[0] * 255;
+		m->raylib_mesh.colors[i * 4 + 1] = color[1] * 255;
+		m->raylib_mesh.colors[i * 4 + 2] = color[2] * 255;
+		m->raylib_mesh.colors[i * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
 }

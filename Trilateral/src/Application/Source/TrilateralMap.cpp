@@ -5440,7 +5440,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_with_skeleton_endpoin
 	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
 
 	std::vector<NLateralDescriptor> descriptors;
-	descriptors = NLateral_generate_closest_points(m, fps_indices, N,10); //last param becoems unimportant
+	descriptors = NLateral_generate_closest_points(m, fps_indices, N,10); 
 	for (size_t i = 0; i < descriptors.size(); i++)
 	{
 		std::vector<unsigned int> skel_dist_vec = { descriptors[i].indices[0] };

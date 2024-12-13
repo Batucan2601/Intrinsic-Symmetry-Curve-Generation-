@@ -296,11 +296,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	//for sdf calculation
 	m->calculate_sdf();
 
-	point_indices = Geodesic_avg_dijkstra_modified(m, dvorak_enpoint_no, sweep_distance, avg_n_ring, true);
-	for (size_t i = 0; i < 3; i++)
+	point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
+	/*for (size_t i = 0; i < 3; i++)
 	{
 		point_indices = Geodesic_min_dijkstra(m, dvorak_enpoint_no, point_indices, sweep_distance, min_geo_tau, true);
-	}
+	}*/
 
 	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
 	for (size_t i = 0; i < point_indices.size(); i++)
@@ -529,4 +529,32 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	//create descriptors and match thme
 	m->update_raylib_mesh();
 	return descs;
+}
+
+
+std::vector<NLateralDescriptor> NlateralMap_descriptor_generation(TrilateralMesh* m , float sweep_distance )
+{
+	std::vector<NLateralDescriptor> descs;
+	// 1 - sample points with agd and mgd
+	std::vector<unsigned int> point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, 1, true);
+	// coloring agd 
+	m->color_points(point_indices, GREEN);
+	for (size_t i = 0; i < 3; i++)
+	{
+		point_indices = Geodesic_min_dijkstra(m,  point_indices, sweep_distance, 0.7, true);
+	}
+
+	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
+	for (size_t i = 0; i < point_indices.size(); i++)
+	{
+		int index = point_indices[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 255;
+		m->raylib_mesh.colors[index * 4 + 2] = 255;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	m->update_raylib_mesh();
+	descs = NLateral_generate_closest_points(m, point_indices, 3, 10);
+	return descs;
+
 }

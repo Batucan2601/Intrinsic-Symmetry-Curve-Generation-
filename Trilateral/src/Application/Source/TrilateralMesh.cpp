@@ -614,7 +614,7 @@ void TrilateralMesh::generate_normals()
 	{
 		glm::vec3 edge1 = this->vertices[this->triangles[i+1]] - this->vertices[this->triangles[i]];
 		glm::vec3 edge2 = this->vertices[this->triangles[i+2]] - this->vertices[this->triangles[i]];
-		glm::vec3 normal = glm::normalize(glm::cross(edge1 , edge2));
+		glm::vec3 normal = glm::cross(edge1 , edge2);
 		each_point_count[this->triangles[i]] += 1;
 		each_point_count[this->triangles[i+1]] += 1;
 		each_point_count[this->triangles[i+2]] += 1;
@@ -653,24 +653,6 @@ void TrilateralMesh::generate_normals()
 		normals_display.push_back(0);
 
 	}
-	unsigned int vbo;
-	unsigned int ibo;
-	//need to generate new vao 
-	/*glGenVertexArrays(1, &this->vao_normals);
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &ibo);
-
-
-	glBindVertexArray(this->vao_normals);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glBufferData(GL_ARRAY_BUFFER, this->normals_display.size() * sizeof(float), &this->normals_display[0], GL_STATIC_DRAW);*/
-
 
 }
 
@@ -807,3 +789,23 @@ std::vector<float> mesh_point_surfel_normalized(TrilateralMesh* m)
 }
 
 
+void TrilateralMesh::color_all(Color color)
+{
+	std::vector<unsigned int> points; 
+	for (size_t i = 0; i < this->vertices.size(); i++)
+	{
+		points.push_back(i);
+	}
+	this->color_points(points, color);
+}
+void TrilateralMesh::color_points(std::vector<unsigned int>& points , Color color)
+{
+	for (size_t i = 0; i < points.size(); i++)
+	{
+		this->raylib_mesh.colors[i * 4] = color.r;
+		this->raylib_mesh.colors[i * 4 + 1] = color.g;
+		this->raylib_mesh.colors[i * 4 + 2] = color.b;
+		this->raylib_mesh.colors[i * 4 + 3] = color.a;
+	}
+	this->update_raylib_mesh();
+}

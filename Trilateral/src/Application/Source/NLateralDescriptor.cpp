@@ -933,7 +933,8 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		//desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
 		
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
-		desc.create_histogram_SDF(m, histogram_size);
+		desc.create_histogram_area(m, histogram_size);
+		//desc.create_histogram_SDF(m, histogram_size);
 		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		nLateralDescVec.push_back(desc);
 	}
@@ -971,10 +972,39 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 	for (size_t i = 0; i < desc.vertices_inside.size(); i++)
 	{
 		desc.area += m->areas[desc.vertices_inside[i]];
-	}
+	}//get max distance
+	desc.max_distance = Nlateral_get_maximum_dist(m, desc);
+	std::vector<float> distances = Geodesic_dijkstra(*m, desc.indices[0]);
 	return desc;
 }
-
+float Nlateral_get_maximum_dist(TrilateralMesh* m, NLateralDescriptor& desc)
+{
+	std::vector<float> distances = Geodesic_dijkstra(*m, desc.indices[0]);
+	float max = -INFINITY; 
+	for (size_t i = 0; i < desc.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc.paths[i][j].size(); k++)
+			{
+				int index = desc.paths[i][j][k];
+				if (distances[index] > max)
+				{
+					max = distances[index];
+				}
+			}
+		}
+	}
+	for (size_t i = 0; i < desc.vertices_inside.size(); i++)
+	{
+		int index = desc.vertices_inside[i];
+		if (distances[index] > max)
+		{
+			max = distances[index];
+		}
+	}
+	return max; 
+}
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor &desc )
 {
@@ -1302,15 +1332,36 @@ void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDesc
 			}
 		}
 	}
-	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
+	/*for (size_t i = 0; i < desc->vertices_inside.size(); i++)
 	{
 		int index = desc->vertices_inside[i];
 		m->raylib_mesh.colors[index * 4] = 0;
 		m->raylib_mesh.colors[index * 4 + 1] = 255;
 		m->raylib_mesh.colors[index * 4 + 2] = 0;
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}*/
+	std::vector<float> distances_from_desc  = Geodesic_dijkstra(*m, desc->indices[0]);
+	float dist_step = desc->max_distance / desc->histogram.size();
+	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
+	{
+		int index = desc->vertices_inside[i];
+		float dist = distances_from_desc[index];
+		int step = dist / dist_step;
+		if (step % 2 == 0) //green; 
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+		else // (step % 2 == 1) //blue
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 0;
+			m->raylib_mesh.colors[index * 4 + 2] = 255;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
 	}
-
 	for (size_t i = 0; i < desc->indices.size(); i++)
 	{
 		m->raylib_mesh.colors[desc->indices[i] * 4] = 0;
@@ -1488,7 +1539,28 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 		}
 
 	}
-
+	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc->indices[0]);
+	float dist_step = desc->max_distance / desc->histogram.size();
+	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
+	{
+		int index = desc->vertices_inside[i];
+		float dist = distances_from_desc[index];
+		int step = dist / dist_step;
+		if (step % 2 == 0) //green; 
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+		else // (step % 2 == 1) //blue
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 0;
+			m->raylib_mesh.colors[index * 4 + 2] = 255;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+	}
 
 	m->update_raylib_mesh();
 }
