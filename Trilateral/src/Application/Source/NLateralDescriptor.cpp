@@ -934,6 +934,7 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
 		desc.create_histogram_area(m, histogram_size);
+		desc.create_histogram_HKS(m, histogram_size);
 		//desc.create_histogram_SDF(m, histogram_size);
 		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		nLateralDescVec.push_back(desc);
@@ -941,7 +942,50 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 	return nLateralDescVec;
 }
 
-
+std::vector<NLateralDescriptor> NLateral_generate_with_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
+	int N, int histogram_size)
+{
+	//get mid point
+	glm::vec3 mid_point(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		mid_point = mid_point + m->vertices[i];
+	}
+	mid_point /= m->vertices.size();
+	float closest = INFINITY;
+	int index = -1; 
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dist = glm::distance(mid_point, m->vertices[i]);
+		if (dist < closest)
+		{
+			closest = dist; 
+			index = i; 
+		}
+	}
+	std::vector<NLateralDescriptor> nLateralDescVec;
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		for (size_t j = 0; j < indices.size(); j++)
+		{
+			if (i == j)
+			{
+				continue; 
+			}
+			std::vector<unsigned int > nlateral_points;
+			nlateral_points.push_back(indices[i]);
+			nlateral_points.push_back(indices[j]);
+			nlateral_points.push_back(index);
+			NLateralDescriptor desc = NLateral_generate_descriptor(m, nlateral_points);
+			desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
+			desc.create_histogram_area(m, histogram_size);
+			desc.create_histogram_HKS(m, histogram_size);
+			desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
+			nLateralDescVec.push_back(desc);
+		}
+	}
+	return nLateralDescVec;
+}
 NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices )
 {
 	NLateralDescriptor desc;
@@ -1341,7 +1385,7 @@ void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDesc
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}*/
 	std::vector<float> distances_from_desc  = Geodesic_dijkstra(*m, desc->indices[0]);
-	float dist_step = desc->max_distance / desc->histogram.size();
+	float dist_step = desc->max_distance / desc->area_histogram.size();
 	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
 	{
 		int index = desc->vertices_inside[i];
@@ -1490,57 +1534,58 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 		if (new_index == -1)
 		{
 			m->update_raylib_mesh();
-			return; 
 		}
 
-		//get the corresponding index
-		for (size_t d = 0; d < descs.size(); d++)
+		if (new_index != -1)
 		{
-			if (descs[d].indices[0] == new_index )
+			//get the corresponding index
+			for (size_t d = 0; d < descs.size(); d++)
 			{
-				for (size_t i = 0; i < descs[d].paths.size(); i++)
+				if (descs[d].indices[0] == new_index)
 				{
-					for (size_t j = 0; j < descs[d].paths[i].size(); j++)
+					for (size_t i = 0; i < descs[d].paths.size(); i++)
 					{
-						for (size_t k = 0; k < descs[d].paths[i][j].size(); k++)
+						for (size_t j = 0; j < descs[d].paths[i].size(); j++)
 						{
-							int index = descs[d].paths[i][j][k];
-							m->raylib_mesh.colors[index * 4] = 255;
-							m->raylib_mesh.colors[index * 4 + 1] = 0;
-							m->raylib_mesh.colors[index * 4 + 2] = 0;
-							m->raylib_mesh.colors[index * 4 + 3] = 255;
+							for (size_t k = 0; k < descs[d].paths[i][j].size(); k++)
+							{
+								int index = descs[d].paths[i][j][k];
+								m->raylib_mesh.colors[index * 4] = 255;
+								m->raylib_mesh.colors[index * 4 + 1] = 0;
+								m->raylib_mesh.colors[index * 4 + 2] = 0;
+								m->raylib_mesh.colors[index * 4 + 3] = 255;
+							}
 						}
 					}
-				}
-				for (size_t i = 0; i < descs[d].vertices_inside.size(); i++)
-				{
-					int index = descs[d].vertices_inside[i];
-					m->raylib_mesh.colors[index * 4] = 0;
-					m->raylib_mesh.colors[index * 4 + 1] = 0;
-					m->raylib_mesh.colors[index * 4 + 2] = 255;
-					m->raylib_mesh.colors[index * 4 + 3] = 255;
-				}
+					for (size_t i = 0; i < descs[d].vertices_inside.size(); i++)
+					{
+						int index = descs[d].vertices_inside[i];
+						m->raylib_mesh.colors[index * 4] = 0;
+						m->raylib_mesh.colors[index * 4 + 1] = 0;
+						m->raylib_mesh.colors[index * 4 + 2] = 255;
+						m->raylib_mesh.colors[index * 4 + 3] = 255;
+					}
 
-				for (size_t i = 0; i < descs[d].indices.size(); i++)
-				{
-					m->raylib_mesh.colors[descs[d].indices[i] * 4] = 0;
-					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 1] = 255;
-					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 2] = 255;
-					m->raylib_mesh.colors[descs[d].indices[i] * 4 + 3] = 255;
+					for (size_t i = 0; i < descs[d].indices.size(); i++)
+					{
+						m->raylib_mesh.colors[descs[d].indices[i] * 4] = 0;
+						m->raylib_mesh.colors[descs[d].indices[i] * 4 + 1] = 255;
+						m->raylib_mesh.colors[descs[d].indices[i] * 4 + 2] = 255;
+						m->raylib_mesh.colors[descs[d].indices[i] * 4 + 3] = 255;
+					}
+
+					m->raylib_mesh.colors[descs[d].indices[0] * 4] = 255;
+					m->raylib_mesh.colors[descs[d].indices[0] * 4 + 1] = 255;
+					m->raylib_mesh.colors[descs[d].indices[0] * 4 + 2] = 255;
+					m->raylib_mesh.colors[descs[d].indices[0] * 4 + 3] = 255;
+
+					std::cout << "match ==  i " << index << " j " << d << std::endl;
 				}
-
-				m->raylib_mesh.colors[descs[d].indices[0] * 4] = 255;
-				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 1] = 255;
-				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 2] = 255;
-				m->raylib_mesh.colors[descs[d].indices[0] * 4 + 3] = 255;
-
-				std::cout << "match ==  i " << index << " j " << d << std::endl;
 			}
 		}
-
 	}
 	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc->indices[0]);
-	float dist_step = desc->max_distance / desc->histogram.size();
+	float dist_step = desc->max_distance / desc->area_histogram.size();
 	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
 	{
 		int index = desc->vertices_inside[i];
@@ -1600,7 +1645,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)
 		{
 			step_1--; 
 		}
-		hist.histogram[step_size] += m->normalized_heat_kernel_signature[index];
+		hist.histogram[step_1] += m->normalized_heat_kernel_signature[index];
 	}
 	for (size_t i = 0; i < this->paths.size(); i++)
 	{
@@ -1619,7 +1664,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)
 			}
 		}
 	}
-	this->histogram = hist;
+	this->hks_histogram = hist;
 }
 void NLateralDescriptor::create_histogram_SDF(TrilateralMesh* m, int hist_no)
 {
@@ -1676,7 +1721,7 @@ void NLateralDescriptor::create_histogram_SDF(TrilateralMesh* m, int hist_no)
 			}
 		}
 	}
-	this->histogram = hist;
+	this->area_histogram = hist;
 }
 void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no)
 {
@@ -1754,11 +1799,11 @@ void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no)
 					step_i--;
 				}
 
-				hist.histogram[step_i] += m->areas[this->paths[i][j][k]] / 3 ;
+				hist.histogram[step_i] += m->areas[this->paths[i][j][k]];
 			}
 		}
 	}
-	this->histogram = hist; 
+	this->area_histogram = hist; 
 }
 
 
@@ -2076,9 +2121,9 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 	desc2.create_histogram_area(m, 10);
 
 
-	desc1.histogram.normalize(1);
-	desc2.histogram.normalize(1);
-	float dif = Histogram_ChiSquareDistance(desc1.histogram, desc2.histogram);
+	desc1.area_histogram.normalize(1);
+	desc2.area_histogram.normalize(1);
+	float dif = Histogram_ChiSquareDistance(desc1.area_histogram, desc2.area_histogram);
 
 	file << " trilateral dissimilarity " << dif <<  " " << (dif < dissimilarity) << std::endl;
 
@@ -2193,4 +2238,35 @@ bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor
 	}
 	return true;
 
+}
+
+void Nlateral_write_matching_points(TrilateralMesh* m)
+{
+	std::ofstream file("matching_points.txt");
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int first = m->calculated_symmetry_pairs[i].first;
+		int second = m->calculated_symmetry_pairs[i].second;
+		file << " " << first << " " << second << "\n";
+	}
+	file.close();
+
+}
+void Nlateral_read_matching_points(TrilateralMesh* m)
+{
+	std::ifstream file("matching_points.txt");
+	// Read the file line by line
+	std::vector<std::pair<unsigned int, unsigned int>> sym_pair; 
+	std::string line; 
+	while (std::getline(file, line)) {
+		std::stringstream ss(line); // Use stringstream to parse the line
+		int number;
+		std::vector<int> nums;
+		// Extract numbers from the line
+		while (ss >> number) {
+			nums.push_back(number);
+		}
+		sym_pair.push_back(std::make_pair(nums[0] ,nums[1]));
+	}
+	m->calculated_symmetry_pairs = sym_pair; 
 }

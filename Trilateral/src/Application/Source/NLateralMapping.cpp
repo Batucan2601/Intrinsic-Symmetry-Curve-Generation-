@@ -85,11 +85,11 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 	for (size_t i = 0; i < desc_pos.size(); i++)
 	{
 		std::vector<float> hist_i;
-		desc_pos[i].histogram.normalize(1);
+		desc_pos[i].area_histogram.normalize(1);
 		for (size_t j = 0; j < desc_neg.size(); j++)
 		{
-			desc_neg[j].histogram.normalize(1);
-			float dif = Histogram_ChiSquareDistance( desc_pos[i].histogram, desc_neg[j].histogram);
+			desc_neg[j].area_histogram.normalize(1);
+			float dif = Histogram_ChiSquareDistance( desc_pos[i].area_histogram, desc_neg[j].area_histogram);
 
 			hist_i.push_back(dif);
 		}
@@ -294,14 +294,13 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	Metric_set_N(N);
 	
 	//for sdf calculation
-	m->calculate_sdf();
-
+	//m->calculate_sdf();
 	point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
-	/*for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 3; i++)
 	{
-		point_indices = Geodesic_min_dijkstra(m, dvorak_enpoint_no, point_indices, sweep_distance, min_geo_tau, true);
-	}*/
-
+		point_indices = Geodesic_min_dijkstra(m, point_indices, sweep_distance, min_geo_tau, true);
+	}
+	
 	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
 	for (size_t i = 0; i < point_indices.size(); i++)
 	{
@@ -311,8 +310,9 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		m->raylib_mesh.colors[index * 4 + 2] = 0;
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
-	int hist_size = 10;
+	int hist_size = 5;
 	descs = NLateral_generate_closest_points(m, point_indices,  N, hist_size);
+	//descs = NLateral_generate_with_midpoint(m, point_indices,  N, hist_size);
 
 
 	for (size_t i = 0; i < point_indices.size(); i++)
@@ -325,19 +325,19 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	}
 
 
-	//std::vector<std::vector<float>> hist_diffs=  VarianceMin_compare_all(m, descs,true,10,1 );
 	std::vector<std::vector<float>> hist_diffs;
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		std::vector<float> hist_i;
-		descs[i].histogram.normalize(1);
+		descs[i].area_histogram.normalize(1);
+		descs[i].hks_histogram.normalize(1);
 		for (size_t j = 0; j < descs.size(); j++)
 		{
-			descs[j].histogram.normalize(1);
-			float dif = Histogram_ChiSquareDistance(descs[i].histogram, descs[j].histogram);
-			//float dif = Histogram_ChiSquareDistance(descs[i].histogram, descs[j].histogram);
-
-			hist_i.push_back(dif);
+			descs[j].area_histogram.normalize(1);
+			descs[j].hks_histogram.normalize(1);
+			float dif_area = Histogram_ChiSquareDistance(descs[i].area_histogram, descs[j].area_histogram);
+			float dif_hks = Histogram_ChiSquareDistance(descs[i].hks_histogram, descs[j].hks_histogram);
+			hist_i.push_back(  std::sqrtf( ( dif_area*dif_area)  + (dif_hks * dif_hks)) );
 		}
 		hist_diffs.push_back(hist_i);
 	}
@@ -402,7 +402,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	}
 
 	//maximum gaussian curvature
-	float maximum_gaussian_curve = -INFINITY;
+	/*float maximum_gaussian_curve = -INFINITY;
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		float gaussian_i = dvorak_pairs[i].gaussian_curv;
@@ -420,9 +420,9 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			}
 
 		}
-	}
+	}*/
 	//maximum sdf
-	float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
+	//float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
 	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
@@ -453,18 +453,18 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			file << "  desc path ratio dif " << ratio_dif << std::endl;
 			file << "  desc path ratio  " << is_ratio_dif << std::endl;
 
- 			float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
-			bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
+ 			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
+			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
-			bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
+			//bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
 			bool is_nlateral_dist_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index,
 			distance_to_mid_param, file);
-			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
+			//bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
 			
 			bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
 			//file << " is depth " << is_depth << std::endl;
-			if (is_hks && is_endpoint && is_nlateral_dist_midpoint && is_gaussian
-			&& is_sdf && is_points_close && is_area_dif)
+			file << " histogram diff " << hist_diffs[i][j] << std::endl;
+			if ( is_hks /* && is_nlateral_dist_midpoint */&& is_area_dif /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
@@ -474,20 +474,47 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 
 		}
 	}
-	file.close();
-	std::vector<bool> used(descs.size(), false);
+	/*std::vector<bool> used(descs.size(), false);
 	std::sort(compare_results.begin(), compare_results.end());
 	// Greedily select pairs with smallest compare() result
 	for (const auto& entry : compare_results) {
 		int i = entry.second.first;
 		int j = entry.second.second;
-		if (!used[i] /* && !used[j]*/) {
+		if (!used[i]   && !used[j] ) {
 			resemblance_pairs.push_back({ descs[i].indices[0], descs[j].indices[0] });
 			used[i] = true;  // Mark these objects as used
-			//used[j] = true;  // Mark these objects as used
+			used[j] = true;  // Mark these objects as used
+		}
+	}*/
+	for (size_t i = 0; i < descs.size(); i++)
+	{
+		float smallest_dif = INFINITY;
+		int smallest_index = -1; 
+		for (size_t j = 0; j < compare_results.size(); j++)
+		{
+			std::pair<unsigned int, unsigned int> p = compare_results[j].second;
+			int i_ = p.first;
+			int j_ = p.second;
+			if (i  == i_|| i == j_)
+			{
+				float dif = compare_results[j].first; 
+				if (dif < smallest_dif)
+				{
+					smallest_dif = dif;
+					if (i == i_)
+						smallest_index = j_;
+					else
+						smallest_index = i_;
+				}
+			}
+		}
+		if (smallest_index != -1)
+		{
+			resemblance_pairs.push_back({ descs[i].indices[0] ,descs[smallest_index].indices[0] });
 		}
 	}
 
+	file.close();
 
 	//forge it into two list
 	std::vector<unsigned int> left_correspondences;

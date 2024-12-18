@@ -12,3 +12,4 @@ void ShapeDiameter_calculate(TrilateralMesh* mesh, std::vector<unsigned int> ind
 float ShapeDiameter_calculate_simple(TrilateralMesh* mesh, unsigned int index);
 float ShapeDiameter_calculate_simple_max_dif(TrilateralMesh* mesh, std::vector<unsigned int> & indices );
 void ShapeDiameter_color(TrilateralMesh* m);
+float computeSDF_index(TrilateralMesh* m, int index, int numRays );

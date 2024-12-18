@@ -56,6 +56,7 @@ static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static bool is_draw_curvature = false;
+static bool is_draw_curves = false;
 static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
 static bool is_draw_normals = false; 
@@ -66,6 +67,7 @@ static Plane plane;
 static Skeleton skeleton;
 static BackBone backbone;
 static Curvature curvature; 
+static std::vector<Curve> curves;
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
@@ -93,6 +95,9 @@ int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
 float distance_to_mid_param = 0.7; 
 float sdf_param = 0.2;
+
+//curvature
+float curv_angle_param = 70; 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -399,6 +404,14 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
           skeleton_color_path_to_backbone(m, skeleton, backbone, nlateral_descriptors[descriptor_no].skeleton_index);
         }
+        if (ImGui::MenuItem("Write matching points"))
+        {
+            Nlateral_write_matching_points(m);
+        }
+        if (ImGui::MenuItem("Read matching points"))
+        {
+            Nlateral_read_matching_points(m);
+        }
         ImGui::EndMenu();
 
     }
@@ -494,11 +507,17 @@ static void geodesic(TrilateralMesh* m)
 }
 static void curvature_creation(TrilateralMesh* m )
 {
+    ImGui::InputFloat(" normal degree dif", &curv_angle_param);
     if (ImGui::MenuItem(" Create curature from sym points "))
     {
-        curvature = CurvatureGeneration_generate(m);
+        curvature = CurvatureGeneration_generate(m , curv_angle_param);
         is_draw_curvature = true;
 
+    }
+    if (ImGui::MenuItem(" Create curve paths "))
+    {
+        curves = CurvatureGeneration_generate_curve_paths(m);
+        is_draw_curves = true; 
     }
 
 }
@@ -549,6 +568,7 @@ static void draw_skeleton();
 static void draw_resemblance_pairs(TrilateralMesh* m );
 static void draw_mesh(TrilateralMesh* m);
 static void draw_curvature(TrilateralMesh* m );
+static void draw_curves(TrilateralMesh* m);
 static void draw_normals(TrilateralMesh* m);
 static void draw_spheres(TrilateralMesh* m, float radius);
 
@@ -561,8 +581,25 @@ void draw_all(TrilateralMesh* m)
     draw_curvature(m);
     draw_normals(m);
     draw_spheres(m, agd_sphere_radius);
+    draw_curves(m);
 }
-
+static void draw_curves(TrilateralMesh* m)
+{
+    if (is_draw_curves)
+    {
+        for (size_t i = 0; i < curves.size(); i++)
+        {
+            for (size_t j = 0; j < curves[i].curve_path.size() - 1; j++)
+            {
+                int index_j = curves[i].curve_path[j];
+                int index_j_1 = curves[i].curve_path[j + 1];
+                DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[index_j]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[index_j_1]), YELLOW);
+            }
+        }
+    }
+    
+}
 static void draw_spheres(TrilateralMesh* m, float radius)
 {
     if (is_draw_agd)
@@ -570,6 +607,16 @@ static void draw_spheres(TrilateralMesh* m, float radius)
         for (size_t i = 0; i < avg_dijk_indices.size(); i++)
         {
             int index = avg_dijk_indices[i];
+            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+        }
+        if (!(avg_dijk_indices.size() == 0))
+        {
+            return; 
+        }
+        //draw the results from nlateraldess
+        for (size_t i = 0; i < nlateral_descriptors.size(); i++)
+        {
+            int index = nlateral_descriptors[i].indices[0];
             DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
         }
     }
@@ -626,6 +673,14 @@ static void draw_curvature(TrilateralMesh* m )
             glm::vec3 p2 = curvature.points[i+1];
             DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(p2)
             , YELLOW);
+        }
+        for (size_t i = 0; i < curvature.curvature_main_points.size(); i++)
+        {
+            int index = curvature.curvature_main_points[i];
+            Color c = RED; 
+            c.r = c.r - (curvature.curvature_main_points.size() * 255.0 / i );
+            c.b = c.b + (curvature.curvature_main_points.size() * 255.0 / i );
+            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01 , c );
         }
     }
 }
@@ -802,6 +857,20 @@ static void mesh_drawing()
         if (ImGui::MenuItem("Enable resemblance Drawing "))
         {
             is_draw_resemblance_pairs = !is_draw_resemblance_pairs;
+        }
+    }
+    if (is_draw_curves)
+    {
+        if (ImGui::MenuItem("Disable curve Drawing"))
+        {
+            is_draw_curves = !is_draw_curves;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable curve Drawing "))
+        {
+            is_draw_curves = !is_draw_curves;
         }
     }
     

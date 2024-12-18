@@ -244,7 +244,6 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 	for (size_t i = 0; i < vertex_size; i++)
 	{
 		std::vector<float> distances_i = Geodesic_dijkstra(*m, i);
-
 		//sum the distances
 		float sum = 0;
 		for (size_t j = 0; j < vertex_size; j++)
@@ -260,11 +259,8 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 		{
 			biggest = sum;
 		}
-
 	}
-
 	//average the one ring
-	/*
 	std::vector<float> temp_avg_values = avg_geodesic_distances;
 	for (size_t i = 0; i < vertex_size; i++)
 	{
@@ -277,7 +273,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 		}
 		avg = avg / (neighbours.size() + 1);
 		avg_geodesic_distances[i] = avg;
-	}*/
+	}
 	//sample where gradient is 0
 	for (size_t i = 0; i < vertex_size; i++)
 	{
@@ -301,21 +297,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 			{
 				is_minima = false;
 			}
-
 		}
-		/*int neighbour_size = m->adjacenies[i].size();
-		for (size_t j = 0; j < neighbour_size; j++)
-		{
-			int neighbour_index = m->adjacenies[i][j].first;
-			if (avg_geodesic_distances[neighbour_index] > avg_geodesic_distances[i])
-			{
-				is_maxima = false;
-			}
-			if (avg_geodesic_distances[neighbour_index] < avg_geodesic_distances[i])
-			{
-				is_minima = false;
-			}
-		}*/
 		if (is_maxima || is_minima)
 		{
 			gradient_indices.push_back(std::make_pair(avg_geodesic_distances[i], i));
@@ -341,30 +323,34 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 			extremums.push_back(gradient_indices[i].second);
 		}
 	}
-	std::sort(gradient_indices.begin(), gradient_indices.end());
-
-	/*while (gradient_indices.size() > 15)
+	std::vector<unsigned int> extremum_simplified; 
+	for (size_t i = 0; i < extremums.size(); i++)
 	{
-		int index = gradient_indices[0].second;
-		std::vector<float> distances_index = Geodesic_dijkstra(*m, index);
-		std::vector<unsigned int > indices_to_deleted;
-		for (size_t i = 1; i < gradient_indices.size(); i++)
+		int index_i = extremums[i];
+		float val_i = avg_geodesic_distances[index_i];
+		float percentage = 5;
+		bool is_close_found = false; 
+		for (size_t j = 0; j < extremums.size(); j++)
 		{
-			int index_i = gradient_indices[i].second;
-			if (distances_index[index_i] < (sweep_percentage * biggest_dijkstra))
+			if (i == j)
 			{
-				indices_to_deleted.push_back(i);
+				continue;
+			}
+			int index_j = extremums[j];
+			float val_j = avg_geodesic_distances[index_j];
+			float dif = std::abs(val_i - val_j);
+			if (dif < (val_i * percentage / 100 ))
+			{
+				is_close_found = true; 
+				break; 
 			}
 		}
-		//delete the indices
-		std::sort(indices_to_deleted.rbegin(), indices_to_deleted.rend());
-		for (int index : indices_to_deleted) {
-			if (index >= 0 && index < gradient_indices.size()) { // Ensure valid index
-				gradient_indices.erase(gradient_indices.begin() + index);
-			}
+		if (is_close_found)
+		{
+			extremum_simplified.push_back(index_i);
 		}
-	}*/
-
+	}
+	extremums = extremum_simplified;
 	if (is_color)
 	{
 		m->color_all(BLACK);
@@ -624,7 +610,6 @@ std::vector<unsigned int> Geodesic_avg_dijkstra(TrilateralMesh* m, int& c, float
 	for (size_t i = 0; i < gradient_indices.size(); i++)
 	{
 		extremums.push_back(gradient_indices[i].second);
-		extremums.push_back(gradient_indices[gradient_indices.size()-i-1].second);
 	}
 	
 
@@ -715,9 +700,7 @@ std::vector< unsigned int> agd_extremums, float sweep_percentage, float tau, boo
 	for (size_t i = 0; i < gradient_indices.size() ; i++)
 	{
 		int index_front = gradient_indices[i].second;
-		int index_back = gradient_indices[gradient_indices.size()-1-i].second;
 		bool is_index_front = true;
-		bool is_index_back = true;
 		for (size_t j = 0; j < extremums.size(); j++)
 		{
 			int ext_index = extremums[j];
@@ -726,19 +709,10 @@ std::vector< unsigned int> agd_extremums, float sweep_percentage, float tau, boo
 			{
 				is_index_front = false;
 			}
-			if (distances_ext[index_back] < (maximum_length * sweep_percentage))
-			{
-				is_index_back = false;
-			}
-
 		}
 		if (is_index_front)
 		{
 			extremums.push_back(gradient_indices[i].second);
-		}
-		if (is_index_front)
-		{
-			extremums.push_back(gradient_indices[gradient_indices.size()-1].second);
 		}
 	}
 

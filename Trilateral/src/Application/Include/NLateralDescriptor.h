@@ -44,7 +44,8 @@ struct NLateralDescriptor
 	double area;
 	double skel_point_dist;
 	double paths_ratio; 
-	Histogram histogram;
+	Histogram area_histogram;
+	Histogram hks_histogram;
 	float max_distance; 
 };
 
@@ -118,6 +119,8 @@ NLateralDescriptor NLateral_generate_descriptor(TrilateralMesh* m, const std::ve
 
 std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh* m,  std::vector<unsigned int>& indices, 
 int N, int histogram_size );
+std::vector<NLateralDescriptor> NLateral_generate_with_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
+	int N, int histogram_size);
 
 std::vector<unsigned int> Nlateral_check_vertices_visited(TrilateralMesh* m, NLateralDescriptor& desc);
 std::vector<unsigned int> Nlateral_check_triangles_visited(TrilateralMesh* m, NLateralDescriptor& desc);
@@ -151,3 +154,6 @@ bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescript
 bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
 	float distances_from_mid, float distances_between_desc , std::ofstream& file);
 
+
+void Nlateral_write_matching_points(TrilateralMesh* m);
+void Nlateral_read_matching_points(TrilateralMesh* m);

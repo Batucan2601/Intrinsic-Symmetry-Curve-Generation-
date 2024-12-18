@@ -58,6 +58,10 @@ float Histogram_ChiSquareDistance(const Histogram& h1, const Histogram& h2)
 		if (denominator != 0) {
 			chiSquareDist += numerator / denominator;
 		}
+		else
+		{
+			chiSquareDist += numerator / 1e-5;
+		}
 	}
 
 	return chiSquareDist;
