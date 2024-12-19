@@ -1348,7 +1348,60 @@ void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vecto
 	m->update_raylib_mesh();
 	return;
 }
+void Nlateral_display_desc(TrilateralMesh* m , NLateralDescriptor& desc)
+{
+	for (size_t i = 0; i < desc.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc.paths[i][j].size(); k++)
+			{
+				int index = desc.paths[i][j][k];
+				m->raylib_mesh.colors[index * 4] = 255;
+				m->raylib_mesh.colors[index * 4 + 1] = 0;
+				m->raylib_mesh.colors[index * 4 + 2] = 0;
+				m->raylib_mesh.colors[index * 4 + 3] = 255;
+			}
+		}
+	}
 
+	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc.indices[0]);
+	float dist_step = desc.max_distance / desc.area_histogram.size();
+	for (size_t i = 0; i < desc.vertices_inside.size(); i++)
+	{
+		int index = desc.vertices_inside[i];
+		float dist = distances_from_desc[index];
+		int step = dist / dist_step;
+		if (step % 2 == 0) //green; 
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 255;
+			m->raylib_mesh.colors[index * 4 + 2] = 0;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+		else // (step % 2 == 1) //blue
+		{
+			m->raylib_mesh.colors[index * 4] = 0;
+			m->raylib_mesh.colors[index * 4 + 1] = 0;
+			m->raylib_mesh.colors[index * 4 + 2] = 255;
+			m->raylib_mesh.colors[index * 4 + 3] = 255;
+		}
+	}
+	for (size_t i = 0; i < desc.indices.size(); i++)
+	{
+		m->raylib_mesh.colors[desc.indices[i] * 4] = 0;
+		m->raylib_mesh.colors[desc.indices[i] * 4 + 1] = 255;
+		m->raylib_mesh.colors[desc.indices[i] * 4 + 2] = 255;
+		m->raylib_mesh.colors[desc.indices[i] * 4 + 3] = 255;
+	}
+
+	m->raylib_mesh.colors[desc.indices[0] * 4] = 255;
+	m->raylib_mesh.colors[desc.indices[0] * 4 + 1] = 255;
+	m->raylib_mesh.colors[desc.indices[0] * 4 + 2] = 255;
+	m->raylib_mesh.colors[desc.indices[0] * 4 + 3] = 255;
+	m->update_raylib_mesh();
+
+}
 void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index)
 {
 	NLateralDescriptor* desc = &descs.first[index];

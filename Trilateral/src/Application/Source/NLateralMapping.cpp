@@ -276,7 +276,7 @@ std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> Nlate
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
 	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float ratio_dif_param,
 	float area_dif_param,float paths_dif_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
-	float distance_to_mid_param , float sdf_param , int N)
+	float distance_to_mid_param , float sdf_param , int N , std::vector<unsigned int>& agd_point_indices)
 {
 	int size = m->vertices.size();
 	int mesh_mid_point_index = -1;
@@ -285,7 +285,6 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	// 1 - get dvork significant points
 	std::vector<std::pair<int, float>> hks_pairs;
 	std::vector<DvorakPairs> dvorak_pairs;
-	std::vector<unsigned int> point_indices;
 	std::vector<unsigned int> points_pos;
 	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
@@ -295,29 +294,29 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	
 	//for sdf calculation
 	//m->calculate_sdf();
-	point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
+	agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
 	for (size_t i = 0; i < 3; i++)
 	{
-		point_indices = Geodesic_min_dijkstra(m, point_indices, sweep_distance, min_geo_tau, true);
+		agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, true);
 	}
 	
 	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
-	for (size_t i = 0; i < point_indices.size(); i++)
+	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
-		int index = point_indices[i];
+		int index = agd_point_indices[i];
 		m->raylib_mesh.colors[index * 4] = 0;
 		m->raylib_mesh.colors[index * 4 + 1] = 255;
 		m->raylib_mesh.colors[index * 4 + 2] = 0;
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
 	int hist_size = 5;
-	descs = NLateral_generate_closest_points(m, point_indices,  N, hist_size);
+	descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
 	//descs = NLateral_generate_with_midpoint(m, point_indices,  N, hist_size);
 
 
-	for (size_t i = 0; i < point_indices.size(); i++)
+	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
-		int index = point_indices[i];
+		int index = agd_point_indices[i];
 		DvorakPairs p;
 		p.p_index = index;
 		p.gaussian_curv = gaussian_curvature(m, index);
@@ -423,7 +422,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	}*/
 	//maximum sdf
 	//float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
-	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, point_indices);
+	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, agd_point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
 	{

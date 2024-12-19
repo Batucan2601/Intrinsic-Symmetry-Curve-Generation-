@@ -732,3 +732,31 @@ std::vector< unsigned int> agd_extremums, float sweep_percentage, float tau, boo
 	extremums.insert(extremums.end(), agd_extremums.begin(), agd_extremums.end());
 	return extremums;
 }
+
+
+void Geodesic_write_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& agd_points)
+{
+	std::ofstream file("sampled_points.txt");
+	for (size_t i = 0; i < agd_points.size(); i++)
+	{
+		file << " " << agd_points[i] << " " << "\n";
+	}
+	file.close();
+
+}
+void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points)
+{
+	std::ifstream file("sampled_points.txt");
+	// Read the file line by line
+	std::string line;
+	while (std::getline(file, line)) {
+		std::stringstream ss(line); // Use stringstream to parse the line
+		int number;
+		std::vector<int> nums;
+		// Extract numbers from the line
+		while (ss >> number) {
+			nums.push_back(number);
+		}
+		sampled_points.push_back(nums[0]);
+	}
+}

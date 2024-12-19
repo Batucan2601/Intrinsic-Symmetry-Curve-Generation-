@@ -7,12 +7,8 @@ bool ray_triangle_intersection(TrilateralRay& ray, glm::vec3 vertex0, glm::vec3 
     glm::vec3 edge1, edge2, h, s, q;
     float a, f, u, v;
 
-    edge1.x = vertex1.x - vertex0.x;
-    edge1.y = vertex1.y - vertex0.y;
-    edge1.z = vertex1.z - vertex0.z;
-    edge2.x = vertex2.x - vertex0.x;
-    edge2.y = vertex2.y - vertex0.y;
-    edge2.z = vertex2.z - vertex0.z;
+    edge1 = vertex1 - vertex0;
+    edge2 = vertex2 - vertex0;
 
     h = glm::cross(ray.direction, edge2);
     a = glm::dot(edge1, h);
@@ -21,9 +17,7 @@ bool ray_triangle_intersection(TrilateralRay& ray, glm::vec3 vertex0, glm::vec3 
         return false;
 
     f = 1.0 / a;
-    s.x = ray.origin.x - vertex0.x;
-    s.y = ray.origin.y - vertex0.y;
-    s.z = ray.origin.z - vertex0.z;
+    s = ray.origin - vertex0;
     u = f * glm::dot(s, h);
 
     if (u < 0.0 || u > 1.0)

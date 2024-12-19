@@ -802,10 +802,10 @@ void TrilateralMesh::color_points(std::vector<unsigned int>& points , Color colo
 {
 	for (size_t i = 0; i < points.size(); i++)
 	{
-		this->raylib_mesh.colors[i * 4] = color.r;
-		this->raylib_mesh.colors[i * 4 + 1] = color.g;
-		this->raylib_mesh.colors[i * 4 + 2] = color.b;
-		this->raylib_mesh.colors[i * 4 + 3] = color.a;
+		this->raylib_mesh.colors[points[i] * 4] = color.r;
+		this->raylib_mesh.colors[points[i] * 4 + 1] = color.g;
+		this->raylib_mesh.colors[points[i] * 4 + 2] = color.b;
+		this->raylib_mesh.colors[points[i] * 4 + 3] = color.a;
 	}
 	this->update_raylib_mesh();
 }
