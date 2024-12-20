@@ -56,6 +56,7 @@ static bool is_mesh_wires = false;
 static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static bool is_draw_curvature = false;
+static bool is_draw_curvature_index = false;
 static bool is_draw_curves = false;
 static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
@@ -99,7 +100,8 @@ float sdf_param = 0.2;
 std::vector<unsigned int> avg_dijk_indices;
 std::vector<unsigned int> min_dijk_indices;
 //curvature
-float curv_angle_param = 70; 
+float quality_param = 0.7; 
+int curv_point_index = 0;
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -516,17 +518,21 @@ static void geodesic(TrilateralMesh* m)
 }
 static void curvature_creation(TrilateralMesh* m )
 {
-    ImGui::InputFloat(" normal degree dif", &curv_angle_param);
+    ImGui::InputFloat(" normal degree dif", &quality_param);
     if (ImGui::MenuItem(" Create curature from sym points "))
     {
-        curvature = CurvatureGeneration_generate(m , curv_angle_param , avg_dijk_indices,hks_dif_param);
+        curvature = CurvatureGeneration_generate(m ,avg_dijk_indices,hks_dif_param, quality_param);
         is_draw_curvature = true;
 
     }
-    if (ImGui::MenuItem(" Create curve paths "))
+    if (ImGui::MenuItem(" curvature update "))
     {
-        curves = CurvatureGeneration_generate_curve_paths(m);
-        is_draw_curves = true; 
+        CurvatureGeneration_update(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
+    }
+    ImGui::InputInt(" point index", &curv_point_index );
+    if (ImGui::MenuItem(" Show point with index "))
+    {
+        is_draw_curvature_index = true; 
     }
     if (ImGui::MenuItem(" Generate minimum geodesic point "))
     {
@@ -684,12 +690,17 @@ static void draw_curvature(TrilateralMesh* m )
 {
     if (is_draw_curvature)
     {
-        for (size_t i = 0; i < curvature.points.size()-1; i++)
+        for (size_t i = 0; i < curvature.paths.size(); i++)
         {
-            glm::vec3 p1 = curvature.points[i];
-            glm::vec3 p2 = curvature.points[i+1];
-            DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(p2)
-            , YELLOW);
+            for (size_t j = 0; j < curvature.paths[i].size()-1; j++)
+            {
+                unsigned int p1 = curvature.paths[i][j];
+                unsigned int p2 = curvature.paths[i][j + 1];
+                DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[p1]), CoreType_conv_glm_raylib_vec3(m->vertices[p2])
+                    , YELLOW);
+            }
+       
+           
         }
         for (size_t i = 0; i < curvature.curve_points.size(); i++)
         {
@@ -699,6 +710,15 @@ static void draw_curvature(TrilateralMesh* m )
             c.b = c.b + (curvature.curve_points.size() * 255.0 / i );
             DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01 , c );
         }
+    }
+    if (is_draw_curvature_index)
+    {
+        int index = curvature.curve_points[curv_point_index].mid_point;
+        int first = curvature.curve_points[curv_point_index].correspondence.first;
+        int second = curvature.curve_points[curv_point_index].correspondence.second;
+        DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01, WHITE);
+        DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[first]), CoreType_conv_glm_raylib_vec3(m->vertices[second]),
+            line_thickness_3d, line_thickness_3d, 8,WHITE );
     }
 }
 static void draw_resemblance_pairs(TrilateralMesh* m )

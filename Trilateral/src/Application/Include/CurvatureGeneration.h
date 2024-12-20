@@ -10,7 +10,7 @@ struct CurvePoints
 struct Curvature
 {
 	std::vector<CurvePoints> curve_points; 
-	std::vector<glm::vec3> points; 
+	std::vector<std::vector<unsigned int>> paths; 
 };
 
 struct Curve
@@ -19,9 +19,12 @@ struct Curve
 	float length; 
 };
 
-Curvature CurvatureGeneration_generate(TrilateralMesh* m, float merge_distance_param, std::vector<unsigned int>& agd_indices,
-	float hks_param);
+Curvature CurvatureGeneration_generate(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
+	float hks_param , float quality_param);
+void CurvatureGeneration_update(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_indices,
+	float hks_param, float quality_param);
 void CurvatureGeneration_curvature_quality(TrilateralMesh* m, Curvature& curv);
 std::vector<Curve> CurvatureGeneration_generate_curve_paths(TrilateralMesh* m);
 float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
 void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
+

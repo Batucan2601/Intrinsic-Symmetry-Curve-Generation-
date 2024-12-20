@@ -5,6 +5,68 @@
 #include "../Include/Ray.h"
 #include <raymath.h>
 #include "../Include/CoreTypeDefs.h"
+
+static void build_curvature(TrilateralMesh* m, Curvature& curvature);
+static void remove_points_with_same_index(TrilateralMesh* m, Curvature& curvature);
+
+static unsigned int current_midpoint; 
+static unsigned int current_midpoint_inverse; 
+static Curvature connect_front_and_back(TrilateralMesh* m, Curvature& front, Curvature& back)
+{
+	//detemrine the ends
+	CurvePoints curv_front_start = front.curve_points[0];
+	CurvePoints curv_front_end = front.curve_points[front.curve_points.size()-1];
+	CurvePoints curv_back_start = back.curve_points[0];
+	CurvePoints curv_back_end = back.curve_points[back.curve_points.size()-1];
+
+	std::vector<float> distances_from_front_start = Geodesic_dijkstra(*m , curv_front_start.mid_point);
+	bool is_front_start_closer_to_back_start = false;
+	if (distances_from_front_start[curv_back_end.mid_point] > distances_from_front_start[curv_back_start.mid_point])
+	{
+		is_front_start_closer_to_back_start = !is_front_start_closer_to_back_start;
+	}
+	Curvature full_curvature = front; 
+	if (is_front_start_closer_to_back_start)
+	{
+		for (size_t i = 0; i < back.curve_points.size(); i++)
+		{
+			full_curvature.curve_points.push_back(back.curve_points[back.curve_points.size() - 1 - i]);
+
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < back.curve_points.size(); i++)
+		{
+			full_curvature.curve_points.push_back(back.curve_points[i]);
+		}
+	}
+	remove_points_with_same_index(m, full_curvature);
+	full_curvature.paths.clear();
+	//shall generate paths by hand 
+	for (size_t i = 0; i < full_curvature.curve_points.size()-1; i++)
+	{
+		std::vector<int> paths = Geodesic_between_two_points(*m,
+		full_curvature.curve_points[i].mid_point, full_curvature.curve_points[i+1].mid_point);
+		std::vector<unsigned int> paths_unsigned;
+		for (size_t i = 0; i < paths.size(); i++)
+		{
+			paths_unsigned.push_back(paths[i]);
+		}
+		full_curvature.paths.push_back(paths_unsigned);
+	}
+	//first and last
+	std::vector<int> paths = Geodesic_between_two_points(*m,
+	full_curvature.curve_points[0].mid_point, full_curvature.curve_points[full_curvature.curve_points.size()-1].mid_point);
+	std::vector<unsigned int> paths_unsigned;
+	for (size_t i = 0; i < paths.size(); i++)
+	{
+		paths_unsigned.push_back(paths[i]);
+	}
+	full_curvature.paths.push_back(paths_unsigned);
+	
+	return back;
+}
 //eliminates the points with same index
 unsigned int get_single_mid_point(TrilateralMesh* m, unsigned int p1, unsigned int p2)
 {
@@ -26,7 +88,7 @@ unsigned int get_single_mid_point(TrilateralMesh* m, unsigned int p1, unsigned i
 		dist += glm::distance(m->vertices[index1], m->vertices[index2]);
 		if (dist >= total_length / 2)
 		{
-			halfway_index = j;
+			halfway_index = point_list[j];
 			break;
 		}
 	}
@@ -40,6 +102,31 @@ static float get_quality_sum(Curvature& c)
 		sum += c.curve_points[i].quality;
 	}
 	return sum;
+}
+static float get_quality_sum_avg(Curvature& c)
+{
+	float sum = 0;
+	for (size_t i = 0; i < c.curve_points.size(); i++)
+	{
+		sum += c.curve_points[i].quality;
+	}
+	return sum / c.curve_points.size();
+}
+
+static CurvePoints get_smallest_quality(Curvature& c)
+{
+	float smallest = INFINITY;
+	int smallest_index = -1;
+	for (size_t i = 0; i < c.curve_points.size(); i++)
+	{
+		float quality = c.curve_points[i].quality;
+		if (quality < smallest)
+		{
+			smallest = quality; 
+			smallest_index = i;
+		}
+	}
+	return c.curve_points[smallest_index];
 }
 static void remove_points_with_same_index(TrilateralMesh* m , Curvature& curvature)
 {
@@ -74,15 +161,12 @@ static void remove_points_with_same_index(TrilateralMesh* m , Curvature& curvatu
 	{
 		curvature.curve_points.erase(curvature.curve_points.begin() + vertices_to_be_removed[i]);
 	}
-
-
-	
 }
 static void build_curvature(TrilateralMesh* m , Curvature& curvature)
 {
-	curvature.points.clear();
+	curvature.paths.clear();
 	//start generating curves
-	std::vector<float> midpoint_fron_sum;
+	std::vector<float> midpoint_from_sum;
 	for (size_t i = 0; i < curvature.curve_points.size(); i++)
 	{
 		std::vector<float> distances = Geodesic_dijkstra(*m, curvature.curve_points[i].mid_point);
@@ -91,10 +175,10 @@ static void build_curvature(TrilateralMesh* m , Curvature& curvature)
 		{
 			sum += distances[curvature.curve_points[j].mid_point];
 		}
-		midpoint_fron_sum.push_back(sum);
+		midpoint_from_sum.push_back(sum);
 	}
-	auto best_midpoint_from_sum = std::max_element(midpoint_fron_sum.begin(), midpoint_fron_sum.end());
-	int best_midpoint_from_index = (std::distance(midpoint_fron_sum.begin(), best_midpoint_from_sum));
+	auto best_midpoint_from_sum = std::max_element(midpoint_from_sum.begin(), midpoint_from_sum.end());
+	int best_midpoint_from_index = (std::distance(midpoint_from_sum.begin(), best_midpoint_from_sum));
 	std::vector<float> distances = Geodesic_dijkstra(*m, curvature.curve_points[best_midpoint_from_index].mid_point);
 	std::vector<std::pair<float, unsigned int>> distances_from_best;
 	for (size_t i = 0; i < curvature.curve_points.size(); i++)
@@ -108,17 +192,20 @@ static void build_curvature(TrilateralMesh* m , Curvature& curvature)
 		int index1 = distances_from_best[i].second;
 		int index2 = distances_from_best[i + 1].second;
 		std::vector<int> path = Geodesic_between_two_points(*m, index1, index2);
+		std::vector<unsigned int> path_points; 
 		for (size_t j = 0; j < path.size(); j++)
 		{
-			curvature.points.push_back(m->vertices[path[j]]);
+			path_points.push_back(path[j]);
 		}
+		curvature.paths.push_back(path_points);
 	}
+	m->color_points(std::vector<unsigned int>{curvature.curve_points[best_midpoint_from_index].mid_point} , BLUE );
 	CurvatureGeneration_curvature_quality(m, curvature);
 
 	
 }
 static void update_curvature(TrilateralMesh* m, Curvature& c, 
-unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> agd_vertices , float hks_param , int histogram_size)
+unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigned int> agd_vertices , float hks_param , int histogram_size)
 {
 	float worst_quality = INFINITY;
 	int  worst_quality_index = -1;
@@ -131,24 +218,37 @@ unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> a
 			worst_quality_index = i;
 		}
 	}
-	// this pair is wrong,
-	int index1 = c.curve_points[worst_quality_index].correspondence.first;
+	
 	//int index2 = res_pair.second; 
-	float current_quality_sum = get_quality_sum(c);
+	float current_quality_sum = get_quality_sum_avg(c);
 	float new_quality_sum = 0;
 	int smallest_point_index = -1;
 	int midpoint_index = -1;
 	NLateralDescriptor best_desc;
 	NLateralDescriptor best_desc_counterpart;
+	std::pair<unsigned int, unsigned int> result = { -1,-1 };
 	while (current_quality_sum > new_quality_sum)
 	{
 		unsigned int selected_midpoint = midpoint_other;
 		float smallest_hist_dif = INFINITY;
-		int index1_pair = -1;
+		// this pair is wrong,
+		CurvePoints worst_curve_point = c.curve_points[worst_quality_index];
+		c.curve_points.erase(c.curve_points.begin() + worst_quality_index);
+		//erase from mesh
+		for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+		{
+			std::pair<unsigned int, unsigned int> pair = m->calculated_symmetry_pairs[i];
+			if (pair.first == worst_curve_point.correspondence.first && pair.second == worst_curve_point.correspondence.second)
+			{
+				m->calculated_symmetry_pairs.erase(m->calculated_symmetry_pairs.begin() + i);
+				break;
+			}
+		}
+		unsigned int index1 = worst_curve_point.correspondence.first;
 		glm::vec3 index1_normal = m->normals[index1];
 		for (size_t i = 0; i < agd_vertices.size(); i++)
 		{
-			if (index1 == agd_vertices[i])
+			if (index1 == agd_vertices[i] || agd_vertices[i] == worst_curve_point.correspondence.second)
 			{
 				continue;
 			}
@@ -156,13 +256,18 @@ unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> a
 			{
 				continue; 
 			}
-			index1_pair = agd_vertices[i];
+			float dot_front = glm::dot(m->normals[midpoint_selected], m->normals[agd_vertices[i]]);
+			float dot_back = glm::dot(m->normals[midpoint_other], m->normals[agd_vertices[i]]);
+			if (dot_back > dot_front)
+			{
+				continue; 
+			}
 			//also check the hks
 			//generate two trialteral
 			std::vector<unsigned int> indices;
 			indices.push_back(index1);
 			indices.push_back(selected_midpoint);
-			indices.push_back(index1_pair);
+			indices.push_back(agd_vertices[i]);
 
 			NLateralDescriptor desc = NLateral_generate_descriptor(m, indices);
 			desc.create_histogram_area(m, histogram_size);
@@ -171,41 +276,43 @@ unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> a
 			desc.hks_histogram.normalize(1);
 			//swap 
 			indices.clear();
-			indices.push_back(index1_pair);
+			
+			indices.push_back(agd_vertices[i]);
 			indices.push_back(selected_midpoint);
 			indices.push_back(index1);
+			
 			NLateralDescriptor desc1 = NLateral_generate_descriptor(m, indices);
 			desc1.create_histogram_area(m, histogram_size);
 			desc1.create_histogram_HKS(m, histogram_size);
-
 			desc1.area_histogram.normalize(1);
 			desc1.hks_histogram.normalize(1);
+
 			float dif_area = Histogram_ChiSquareDistance(desc.area_histogram, desc1.area_histogram);
 			float dif_hks = Histogram_ChiSquareDistance(desc.hks_histogram, desc1.hks_histogram);
 			float total_dif = (dif_area * dif_area) + (dif_hks * dif_hks);
 
 			if (total_dif < smallest_hist_dif)
 			{
+				result.first = index1;
+				result.second = agd_vertices[i];
 				smallest_hist_dif = total_dif;
-				smallest_point_index = index1_pair;
 				best_desc = desc;
 				best_desc_counterpart = desc1;
 			}
 		}
-		//add the new pair and build the system again
-		c.curve_points.erase(c.curve_points.begin() + worst_quality_index);
-		if (index1_pair == -1)
+		//could not find any corresponding better point
+		if (result.second == -1)
 		{
 			continue; 
 		}
 		CurvePoints p; 
-		p.correspondence = std::make_pair(index1 ,index1_pair );
-		unsigned int new_mid_point = get_single_mid_point(m, index1, index1_pair);
+		p.correspondence = std::make_pair(result.first ,result.second);
+		unsigned int new_mid_point = get_single_mid_point(m, result.first, result.second);
 		p.mid_point = new_mid_point;
 
 		c.curve_points.push_back(p);
 		build_curvature(m, c);
-		new_quality_sum =  get_quality_sum(c);
+		new_quality_sum = get_quality_sum_avg(c);
 		if (new_quality_sum > current_quality_sum)
 		{
 			continue;
@@ -215,8 +322,8 @@ unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> a
 		int erased_index = -1;
 		for (size_t i = 0; i < c.curve_points.size(); i++)
 		{
-			if (c.curve_points[i].correspondence.first == index1 &&
-				c.curve_points[i].correspondence.second == index1_pair &&
+			if (c.curve_points[i].correspondence.first == result.first &&
+				c.curve_points[i].correspondence.second == result.second &&
 				c.curve_points[i].mid_point == new_mid_point)
 			{
 				erased_index = i;
@@ -237,11 +344,14 @@ unsigned int midpoint1, unsigned int midpoint_other, std::vector<unsigned int> a
 				worst_quality_index = i;
 			}
 		}
-		index1 = worst_quality_index;
+		result.first = c.curve_points[worst_quality_index].correspondence.first;
+		result.second = c.curve_points[worst_quality_index].correspondence.second;
+
 	}
-	Nlateral_display_desc(m, best_desc);
-	Nlateral_display_desc(m, best_desc_counterpart);
-	m->color_points(std::vector<unsigned int>(index1, smallest_point_index), WHITE);
+	//Nlateral_display_desc(m, best_desc);
+	//Nlateral_display_desc(m, best_desc_counterpart);
+	m->color_points(std::vector<unsigned int>(result.first, result.second), WHITE);
+	
 }
 static Curvature get_mid_points(TrilateralMesh* m)
 {
@@ -280,8 +390,8 @@ static Curvature get_mid_points(TrilateralMesh* m)
 	}
 	return c;
 }
-Curvature CurvatureGeneration_generate(TrilateralMesh* m , float merge_distance_param, std::vector<unsigned int>& agd_indices,
-float hks_param)
+Curvature CurvatureGeneration_generate(TrilateralMesh* m , std::vector<unsigned int>& agd_indices,
+float hks_param , float quality_param)
 {
 	Curvature curv_front;
 	Curvature curv_back;
@@ -308,14 +418,31 @@ float hks_param)
 			curv_back.curve_points.push_back(p);
 		}
 	}
-	remove_points_with_same_index(m, curv_front);
+	current_midpoint = midpoint_back;
+	current_midpoint_inverse = midpoint_front;
+	//front
+	/*remove_points_with_same_index(m, curv_front);
 	build_curvature(m, curv_front);
-	//remove_points_with_same_index(m, curv_back);
-	//build_curvature(m, curv_back);
-	//for front
-	update_curvature(m, curv_front, midpoint_front, midpoint_back,agd_indices, hks_param, 10);
+	while (get_smallest_quality(curv_front).quality < quality_param)
+	{
+		update_curvature(m, curv_front, midpoint_front, midpoint_back, agd_indices, hks_param, 10);
+	}
+	CurvatureGeneration_curvature_quality(m, curv_front);*/
+	// back 
+	remove_points_with_same_index(m, curv_back);
+	build_curvature(m, curv_back);
+	/*while (get_smallest_quality(curv_back).quality < quality_param)
+	{
+		update_curvature(m, curv_back, midpoint_back, midpoint_front, agd_indices, hks_param, 10);
+	}*/
+	CurvatureGeneration_curvature_quality(m, curv_back);
 
-	return curv_front;
+	//Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
+	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
+	m->color_points(std::vector<unsigned int>{ midpoint_back }, WHITE);
+
+
+	return curv_back;
 }
 // the quality is the measure of 
 // the following
@@ -335,32 +462,18 @@ void CurvatureGeneration_curvature_quality(TrilateralMesh* m, Curvature& curv)
 		int index_p1 = curv.curve_points[i-1].mid_point;
 		int index_p2 = curv.curve_points[i].mid_point;
 		int index_p3 = curv.curve_points[i+1].mid_point;
-		std::vector<int> paths = Geodesic_between_two_points(*m, index_p1 , index_p3);
-		for (size_t i = 0; i < paths.size()-1; i++)
-		{
-			int index_i = paths[i];
-			int index_i1 = paths[i+1];
-			float dist = glm::distance(m->vertices[index_i] , m->vertices[index_i1]);
-			geodesic_distance += dist; 
-		}
-		std::vector<int> paths_1_2 = Geodesic_between_two_points(*m, index_p1, index_p2);
-		std::vector<int> paths_2_3 = Geodesic_between_two_points(*m, index_p2, index_p3);
-		for (size_t i = 0; i < paths_1_2.size() - 1; i++)
-		{
-			int index_i = paths_1_2[i];
-			int index_i1 = paths_1_2[i + 1];
-			float dist = glm::distance(m->vertices[index_i], m->vertices[index_i1]);
-			algorithm_distance += dist;
-		}
-		for (size_t i = 0; i < paths_2_3.size() - 1; i++)
-		{
-			int index_i = paths_2_3[i];
-			int index_i1 = paths_2_3[i + 1];
-			float dist = glm::distance(m->vertices[index_i], m->vertices[index_i1]);
-			algorithm_distance += dist;
-		}
+		std::vector<float> dist_1 = Geodesic_dijkstra(*m, index_p1);
+		geodesic_distance = dist_1[index_p3]; // dsit 1 - 3 
+		std::vector<float> dist_2 = Geodesic_dijkstra(*m, index_p2);
+		algorithm_distance += dist_1[index_p2];// dist 1 - 2 
+		algorithm_distance += dist_2[index_p3]; // dist 2 -3 
 		float quality_of_point = geodesic_distance / algorithm_distance;
 		curv.curve_points[i].quality= quality_of_point;
+		std::cout << " current point " << index_p2 << std::endl;
+		std::cout << " dijksra dist " << geodesic_distance << std::endl;
+		std::cout << " alg dist " << dist_1[index_p2]  << " " << dist_2[index_p3] << std::endl;
+		std::cout << "alg dist sum " << algorithm_distance << std::endl;
+		std::cout << "divided  " << geodesic_distance / algorithm_distance << std::endl;
 	}
 	curv.curve_points[curv.curve_points.size()-1].quality = 1.0f;
 }
@@ -471,4 +584,11 @@ void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m , unsigned int& p1 , 
 	p1 = smallest_index;
 	p2 = smallest_hit_index;
 	
+}
+
+void CurvatureGeneration_update(TrilateralMesh* m,Curvature& c, std::vector<unsigned int>& agd_indices,
+	float hks_param, float quality_param)
+{
+	update_curvature(m, c, current_midpoint, current_midpoint_inverse,
+		agd_indices, hks_param, 10);
 }
