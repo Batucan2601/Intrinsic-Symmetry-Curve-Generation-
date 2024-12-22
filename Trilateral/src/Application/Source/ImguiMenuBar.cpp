@@ -525,10 +525,20 @@ static void curvature_creation(TrilateralMesh* m )
         is_draw_curvature = true;
 
     }
-    if (ImGui::MenuItem(" curvature update "))
+    if (ImGui::MenuItem(" Create curvature full with updates "))
+    {
+        curvature =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param);
+        is_draw_curvature = true; 
+    }
+    if (ImGui::MenuItem(" curvature update once  "))
     {
         CurvatureGeneration_update(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
     }
+    if (ImGui::MenuItem(" curvature update multiple times  "))
+    {
+        CurvatureGeneration_update_w_quality(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
+    }
+
     ImGui::InputInt(" point index", &curv_point_index );
     if (ImGui::MenuItem(" Show point with index "))
     {
@@ -699,8 +709,6 @@ static void draw_curvature(TrilateralMesh* m )
                 DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[p1]), CoreType_conv_glm_raylib_vec3(m->vertices[p2])
                     , YELLOW);
             }
-       
-           
         }
         for (size_t i = 0; i < curvature.curve_points.size(); i++)
         {
@@ -909,6 +917,20 @@ static void mesh_drawing()
         if (ImGui::MenuItem("Enable curve Drawing "))
         {
             is_draw_curves = !is_draw_curves;
+        }
+    }
+    if (is_draw_curvature)
+    {
+        if (ImGui::MenuItem("Disable curvature Drawing"))
+        {
+            is_draw_curvature = !is_draw_curvature;
+        }
+    }
+    else
+    {
+        if (ImGui::MenuItem("Enable curvature Drawing "))
+        {
+            is_draw_curvature = !is_draw_curvature;
         }
     }
     

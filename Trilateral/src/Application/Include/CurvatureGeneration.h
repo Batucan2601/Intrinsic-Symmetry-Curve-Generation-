@@ -21,10 +21,16 @@ struct Curve
 
 Curvature CurvatureGeneration_generate(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
 	float hks_param , float quality_param);
+Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
+	float hks_param, float quality_param);
 void CurvatureGeneration_update(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_indices,
+	float hks_param, float quality_param);
+void CurvatureGeneration_update_w_quality(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_indices,
 	float hks_param, float quality_param);
 void CurvatureGeneration_curvature_quality(TrilateralMesh* m, Curvature& curv);
 std::vector<Curve> CurvatureGeneration_generate_curve_paths(TrilateralMesh* m);
 float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
 void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
+
+
 

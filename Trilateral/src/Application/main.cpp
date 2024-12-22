@@ -31,7 +31,7 @@ int main(void)
     InitWindow(1024, 768, " Trialteral");
 
     // build and compile our shader program
-    //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0002.isometry.1.off");
+    //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.12.off");
     TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off");
 
 
