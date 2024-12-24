@@ -60,7 +60,7 @@ static Curvature connect_front_and_back(TrilateralMesh* m, Curvature& front, Cur
 			full_curvature.curve_points.push_back(back.curve_points[i]);
 		}
 	}
-	remove_points_with_same_index(m, full_curvature);
+	//remove_points_with_same_index(m, full_curvature);
 	full_curvature.paths.clear();
 	//shall generate paths by hand 
 	for (size_t i = 0; i < full_curvature.curve_points.size()-1; i++)
@@ -84,7 +84,7 @@ static Curvature connect_front_and_back(TrilateralMesh* m, Curvature& front, Cur
 	}
 	full_curvature.paths.push_back(paths_unsigned);
 	
-	return back;
+	return full_curvature;
 }
 //eliminates the points with same index
 unsigned int get_single_mid_point(TrilateralMesh* m, unsigned int p1, unsigned int p2)
@@ -653,7 +653,50 @@ void CurvatureGeneration_update_w_quality(TrilateralMesh* m, Curvature& c, std::
 	}
 
 }
+static void get_base_points_from_full_curvature(TrilateralMesh* m , Curvature& c , unsigned int& index1,
+unsigned int& index2 )
+{
+	//find the biggest distanced to everyone and it's most distanced counterpart
+	std::vector<float> midpoint_from_sum;
+	for (size_t i = 0; i < c.curve_points.size(); i++)
+	{
+		std::vector<float> distances = Geodesic_dijkstra(*m, c.curve_points[i].mid_point);
+		float sum = 0;
+		for (size_t j = 0; j < c.curve_points.size(); j++)
+		{
+			sum += distances[c.curve_points[j].mid_point];
+		}
+		midpoint_from_sum.push_back(sum);
+	}
+	auto best_midpoint_from_sum = std::max_element(midpoint_from_sum.begin(), midpoint_from_sum.end());
+	int best_midpoint_from_index = (std::distance(midpoint_from_sum.begin(), best_midpoint_from_sum));
+	std::vector<float> distances = Geodesic_dijkstra(*m, c.curve_points[best_midpoint_from_index].mid_point);
 
+	float biggest = -INFINITY;
+	int biggest_index = -1;
+	for (size_t i = 0; i < c.curve_points.size(); i++)
+	{
+		int index = c.curve_points[i].mid_point;
+		float dist = distances[index];
+		if (dist > 1e-12 && dist > biggest)
+		{
+			biggest = dist;
+			biggest_index = i;
+		}
+	}
+
+	index1 =  best_midpoint_from_index;
+	index2 = biggest_index;
+}
+Curvature CurvatureGeneration_generate_update_full_curv(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_vertices,
+float hks_param , int histogram_size )
+{
+	unsigned int base_index1;
+	unsigned int base_index2;
+	get_base_points_from_full_curvature(m, c, base_index1, base_index2);
+	//get_full_curve_quality( m ,c , base_index1 , base_index2);
+	return c; 
+}
 Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
 	float hks_param, float quality_param)
 {
@@ -687,18 +730,19 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 	//front
 	remove_points_with_same_index(m, curv_front);
 	build_curvature(m, curv_front);
-	CurvatureGeneration_update_w_quality(m, curv_front, agd_indices, hks_param, quality_param);
+	//CurvatureGeneration_update_w_quality(m, curv_front, agd_indices, hks_param, quality_param);
 	// back 
 	current_midpoint = midpoint_back;
 	current_midpoint_inverse = midpoint_front;
 	remove_points_with_same_index(m, curv_back);
 	build_curvature(m, curv_back);
-
-	CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
+	//CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
 
 	Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
 	m->color_points(std::vector<unsigned int>{ midpoint_back }, WHITE);
+
+
 
 	return full_curvature;
 }

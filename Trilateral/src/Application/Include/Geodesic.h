@@ -15,5 +15,6 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, floa
 std::vector<unsigned int> Geodesic_avg_dijkstra_modified_to_points(TrilateralMesh* m, std::vector<unsigned int> points,
 int& no_of_points, float sweep_percentage, int N_ring, bool is_color);
 
+std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float sweep_percentage, int sample_size );
 void Geodesic_write_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& agd_points);
 void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points);

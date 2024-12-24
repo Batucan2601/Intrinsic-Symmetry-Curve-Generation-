@@ -69,6 +69,7 @@ static Plane plane;
 static Skeleton skeleton;
 static BackBone backbone;
 static Curvature curvature; 
+static std::pair<Curvature, Curvature> curvature_front_and_back;
 static std::vector<Curve> curves;
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
@@ -507,6 +508,10 @@ static void geodesic(TrilateralMesh* m)
     {
         avg_dijk_indices = Geodesic_min_dijkstra(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau, true);
     }
+    if (ImGui::MenuItem("Biggest Geodesics "))
+    {
+        avg_dijk_indices = Geodesic_find_biggest_AGD(m, dvorak_geodesic_dist_param, 10 );
+    }
     if (ImGui::MenuItem("Write Sampled points "))
     {
         Geodesic_write_sampled_points(m, avg_dijk_indices);
@@ -527,7 +532,7 @@ static void curvature_creation(TrilateralMesh* m )
     }
     if (ImGui::MenuItem(" Create curvature full with updates "))
     {
-        curvature =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param);
+        curvature  =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param);
         is_draw_curvature = true; 
     }
     if (ImGui::MenuItem(" curvature update once  "))
@@ -718,6 +723,9 @@ static void draw_curvature(TrilateralMesh* m )
             c.b = c.b + (curvature.curve_points.size() * 255.0 / i );
             DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01 , c );
         }
+
+
+ 
     }
     if (is_draw_curvature_index)
     {

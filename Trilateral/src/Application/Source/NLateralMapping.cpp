@@ -463,7 +463,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
 			//file << " is depth " << is_depth << std::endl;
 			file << " histogram diff " << hist_diffs[i][j] << std::endl;
-			if ( is_hks /* && is_nlateral_dist_midpoint */&& is_area_dif /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/)
+			if ( is_hks  && is_area_dif /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/)
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
@@ -473,7 +473,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 
 		}
 	}
-	/*std::vector<bool> used(descs.size(), false);
+	std::vector<bool> used(descs.size(), false);
 	std::sort(compare_results.begin(), compare_results.end());
 	// Greedily select pairs with smallest compare() result
 	for (const auto& entry : compare_results) {
@@ -484,7 +484,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			used[i] = true;  // Mark these objects as used
 			used[j] = true;  // Mark these objects as used
 		}
-	}*/
+	}
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		float smallest_dif = INFINITY;

@@ -552,6 +552,7 @@ std::vector<unsigned int> Geodesic_avg_dijkstra(TrilateralMesh* m, int& c, float
 		for (size_t j = 0; j < neighbours.size(); j++)
 		{
 			int neighbour_index = neighbours[j];
+	
 			avg += temp_avg_values[neighbour_index];
 		}
 		avg = avg / (neighbours.size() + 1);
@@ -759,4 +760,62 @@ void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& 
 		}
 		sampled_points.push_back(nums[0]);
 	}
+}
+
+
+std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float sweep_percentage , int sample_size )
+{
+	std::vector<unsigned int> biggest_agd_indices; 
+	int vertex_size = m->vertices.size();
+	std::vector<float> avg_geodesic_distances(vertex_size);
+	float biggest = -INFINITY;
+	float biggest_dijkstra = -INFINITY;
+	for (size_t i = 0; i < vertex_size; i++)
+	{
+		std::vector<float> distances_i = Geodesic_dijkstra(*m, i);
+		//sum the distances
+		float sum = 0;
+		for (size_t j = 0; j < vertex_size; j++)
+		{
+			sum += distances_i[j];
+			if (biggest_dijkstra < distances_i[j])
+			{
+				biggest_dijkstra = distances_i[j];
+			}
+		}
+		sum = sum * m->areas[i] / 3.0;
+		avg_geodesic_distances[i] = sum;
+		if (sum > biggest)
+		{
+			biggest = sum;
+		}
+	}
+
+	for (size_t i = 0; i < sample_size; i++)
+	{
+		auto max_auto= std::max_element(avg_geodesic_distances.begin(), avg_geodesic_distances.end());
+		int max_index = std::distance(avg_geodesic_distances.begin() , max_auto);
+		float max_val = *max_auto;
+
+		std::vector<float> distances = Geodesic_dijkstra(*m , max_index);
+		bool is_new_point_added = true; 
+		for (size_t j = 0; j < biggest_agd_indices.size(); j++)
+		{
+			if (distances[biggest_agd_indices[j]] <  biggest_dijkstra *  sweep_percentage )
+			{
+				is_new_point_added = false;
+				break; 
+			}
+		}
+		if (is_new_point_added)
+		{
+			biggest_agd_indices.push_back(max_index);
+		}
+		avg_geodesic_distances.erase(avg_geodesic_distances.begin() + max_index);
+	}
+
+
+	return biggest_agd_indices;
+
+
 }
