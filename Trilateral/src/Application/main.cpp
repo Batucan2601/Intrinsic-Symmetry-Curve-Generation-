@@ -15,8 +15,11 @@
 #include "Include/Mesh_imgui.h"
 #include "Include/ImguiMenuBar.h"
 #include "Include/Ray.h"
+#include "Include/Camera.h"
 #include "rlImGui/rlImGui.h"
 
+#define RLIGHTS_IMPLEMENTATION
+#include "raylib/examples/shaders/rlights.h"
 
 //include prototypes
 #include "Include/Prototypes.h"
@@ -24,49 +27,46 @@
 #include "Include/MeshFactory.h"
 #include "Include/Shader.h"
 #include "Include/TrilateralMap.h"
+#include <raymath.h>
+#define GLSL_VERSION            330
 
+static ModifiedCamera camera; 
 static void imgui_display_camera(Camera3D& camera);
 int main(void) 
 {
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(1024, 768, " Trialteral");
 
     // build and compile our shader program
     //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.12.off");
     TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off");
+    // Load basic lighting shader
+    std::string vs_path = RAYLIB_PATH"/examples/shaders/resources/shaders/glsl330/lighting.vs";
+    std::string fs_path = RAYLIB_PATH"/examples/shaders/resources/shaders/glsl330/lighting.fs";
+    Shader shader = LoadShader(vs_path.c_str(), fs_path.c_str());
 
-
-    Camera camera;
-    camera.position = { 0,0,-1 };
-    camera.projection= CAMERA_PERSPECTIVE;
-    camera.target = {0,0,0};
-    camera.fovy = 90;
-    camera.up = { 0 , 1 ,0 };
-
-    
+    camera.set_camera();
+    camera.set_shader(shader);
+    camera.set_light();
+    int ambientLoc = GetShaderLocation(shader, "ambient");
+    float ambient[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+    //SetShaderValue(shader, ambientLoc, ambient, SHADER_UNIFORM_VEC4);
     rlImGuiSetup(true);
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(LIGHTGRAY);
-        UpdateCamera(&camera, CAMERA_FREE);
-        BeginMode3D(camera);
-
-        draw_all(&m1);
-        EndMode3D();
-
-        rlImGuiBegin();
-        // show ImGui Content
-        bool open = true;
-        //ImGui::ShowDemoWindow(&open);
-        /*imgui_mesh_window(selected_mesh, mesh_fac);
-        imgui_selected_mesh_properties_window(selected_mesh, mesh_fac);
-        imgui_KIDS_skeleton(selected_mesh, mesh_fac);
-        imgui_N_Lateral_Parameters(selected_mesh, mesh_fac);
-        imgui_debug_layer(selected_mesh, mesh_fac, cameraPos, cameraFront, cameraUp); */
-        imgui_menu_bar(&m1);
-        imgui_display_camera(camera);
-        // end ImGui Content
-        rlImGuiEnd();
+            ClearBackground(LIGHTGRAY);
+            camera.update();
+            BeginMode3D(camera.camera);
+                BeginShaderMode(shader);
+                    SetShaderValue(shader, ambientLoc, ambient, SHADER_UNIFORM_VEC4);
+                    draw_all(&m1 , shader );
+                EndShaderMode();
+            EndMode3D();
+            rlImGuiBegin();
+            imgui_menu_bar(&m1);
+            imgui_display_camera(camera.camera);
+            rlImGuiEnd();
 
         EndDrawing();
         

@@ -1400,7 +1400,7 @@ void Nlateral_display_desc(TrilateralMesh* m , NLateralDescriptor& desc)
 	m->raylib_mesh.colors[desc.indices[0] * 4 + 2] = 255;
 	m->raylib_mesh.colors[desc.indices[0] * 4 + 3] = 255;
 	m->update_raylib_mesh();
-
+	UploadMesh(&m->raylib_mesh, false);
 }
 void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index)
 {
@@ -1637,6 +1637,7 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 			}
 		}
 	}
+	m->color_all(LIGHTGRAY);
 	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc->indices[0]);
 	float dist_step = desc->max_distance / desc->area_histogram.size();
 	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
@@ -1659,8 +1660,9 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 			m->raylib_mesh.colors[index * 4 + 3] = 255;
 		}
 	}
-
 	m->update_raylib_mesh();
+	UploadMesh(&m->raylib_mesh, false);
+
 }
 
 void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)

@@ -602,17 +602,17 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
 static void draw_dom_sym();
 static void draw_skeleton();
 static void draw_resemblance_pairs(TrilateralMesh* m );
-static void draw_mesh(TrilateralMesh* m);
+static void draw_mesh(TrilateralMesh* m, Shader& shader);
 static void draw_curvature(TrilateralMesh* m );
 static void draw_curves(TrilateralMesh* m);
 static void draw_normals(TrilateralMesh* m);
 static void draw_spheres(TrilateralMesh* m, float radius);
 
-void draw_all(TrilateralMesh* m)
+void draw_all(TrilateralMesh* m , Shader& shader )
 {
     draw_dom_sym();
     draw_skeleton();
-    draw_mesh(m);
+    draw_mesh(m , shader);
     draw_resemblance_pairs(m);
     draw_curvature(m);
     draw_normals(m);
@@ -751,19 +751,23 @@ static void draw_resemblance_pairs(TrilateralMesh* m )
     }
    
 }
-static void draw_mesh(TrilateralMesh* m)
+static void draw_mesh(TrilateralMesh* m , Shader& shader )
 {
+    Material mat = LoadMaterialDefault();
+    mat.shader = shader;
+
     if (is_draw_mesh)
     {
         if (!is_mesh_wires)
         {
-            DrawMesh(m->raylib_mesh, LoadMaterialDefault(), MatrixIdentity());
+            DrawMesh(m->raylib_mesh, mat, MatrixIdentity());
         }
         else
         {
             DrawMeshWires(m->raylib_mesh, Vector3{ 0,0,0 }, 1, BLACK);
         }
     }
+    free(mat.maps); 
     
 }
 static void drawFileDialog(std::string& file_path , std::string& file_path_name , std::string file_type , bool& is_open) {

@@ -45,6 +45,7 @@ set(Header_Files
 
     "src/Application/Include/SkeletonTypes.h"
     "src/Application/Include/CurvatureGeneration.h"
+    "src/Application/Include/Camera.h"
 
 
     
@@ -104,6 +105,7 @@ set(Source_Files
     "src/Application/Source/SCBDataset.cpp"
     "src/Application/Source/NLateralMapping.cpp"
     "src/Application/Source/CurvatureGeneration.cpp"
+    "src/Application/Source/Camera.cpp"
 
 
 
@@ -119,7 +121,6 @@ set(ALL_FILES
     ${Header_Files}
     ${Source_Files}
 )
-
 ################################################################################
 # Target
 ################################################################################
@@ -128,6 +129,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC  "$ENV{SolutionDIr}/Trilateral
             "${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib/src)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/imgui)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/External/Include/raylib)
