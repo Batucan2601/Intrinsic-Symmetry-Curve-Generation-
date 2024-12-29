@@ -5,277 +5,11 @@
 #include "../Include/VarianceMinimizingTransportPlan.h"
 #include "../Include/Geodesic.h"
 #include "../Include/ShapeDiameter.h"
-std::pair<std::vector<NLateralDescriptor>,std::vector<NLateralDescriptor>> NlateralMap_point_matching_copy_symmetric_points(TrilateralMesh* m, Skeleton& skeleton,Plane& plane,
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float n_ring_param,
-	float area_dif_param,float skel_point_dist_param, int N)
-{
-
-	int size = m->vertices.size();
-	int mesh_mid_point_index = -1;
-	std::vector<NLateralDescriptor> desc_neg;
-	std::vector<NLateralDescriptor> desc_pos;
-	glm::vec3 mesh_mid_point;
-	// 1 - get dvork significant points
-	std::vector<std::pair<int, float>> hks_pairs;
-	std::vector<DvorakPairs> dvorak_pairs;
-	std::vector<unsigned int> fps_indices;
-	std::vector<unsigned int> fps_sym_indices;
-	std::vector<unsigned int> points_pos;
-	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
-	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
-	//hks_pairs = HKS_extraction_significant_points(m, dvorak_enpoint_no);
-	//sweep 
-	//hks_pairs = HKS_sweep_distance(m, hks_pairs, sweep_distance);
-	//dvorak_pairs = HKS_to_dvorak_pairs(m, hks_pairs);
-	
-
-	Metric_set_gaussian(m, dvorak_enpoint_no, sweep_distance);
-	Metric_set_N(N);
-	if (plane.isNull())
-	{
-		plane = generate_dominant_symmetry_plane(glm::vec3(0, 0, 0), *m); //dont use this
-	}
-	//get one side
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		if (get_point_status_from_plane(&plane, &(m->vertices[i])) > 0   )
-		{
-			points_pos.push_back(i);
-		}
-	}
-	fps_indices = furthest_point_sampling_on_partial_points(m, dvorak_enpoint_no, points_pos);
-	
-	
-
-	for (size_t i = 0; i < dvorak_enpoint_no; i++)
-	{
-		int index = fps_indices[i];
-		int sym = m->ground_truth_symmetry_pairs[index];
-		m->raylib_mesh.colors[sym * 4] = 0;
-		m->raylib_mesh.colors[sym * 4 + 1] = 255;
-		m->raylib_mesh.colors[sym * 4 + 2] = 0; 
-		m->raylib_mesh.colors[sym * 4 + 3] = 255;
-		fps_sym_indices.push_back(sym);
-	}
-	SkeletonTree skelTree = skeleton_generate_skeleton_tree(m, skeleton);
-	int hist_size = 10; 
-	desc_pos = NLateral_generate_closest_points(m, fps_indices, N, hist_size);
-	desc_neg = NLateral_generate_closest_points(m, fps_sym_indices, N, hist_size);
-
-
-	for (size_t i = 0; i < fps_indices.size(); i++)
-	{
-		int index = fps_indices[i];
-		DvorakPairs p;
-		p.p_index = index;
-		p.gaussian_curv = gaussian_curvature(m, index);
-		dvorak_pairs.push_back(p);
-	}
-	for (size_t i = 0; i < fps_sym_indices.size(); i++)
-	{
-		int index = fps_sym_indices[i];
-		DvorakPairs p;
-		p.p_index = index;
-		p.gaussian_curv = gaussian_curvature(m, index);
-		dvorak_pairs.push_back(p);
-	}
-
-	//std::vector<std::vector<float>> hist_diffs=  VarianceMin_compare_all(m, desc_pos, desc_neg,true,10,1 );
-	std::vector<std::vector<float>> hist_diffs;
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		std::vector<float> hist_i;
-		desc_pos[i].area_histogram.normalize(1);
-		for (size_t j = 0; j < desc_neg.size(); j++)
-		{
-			desc_neg[j].area_histogram.normalize(1);
-			float dif = Histogram_ChiSquareDistance( desc_pos[i].area_histogram, desc_neg[j].area_histogram);
-
-			hist_i.push_back(dif);
-		}
-		hist_diffs.push_back(hist_i);
-	}
-
-	// maximum n ring 
-	float maximum_n_ring = -INFINITY;
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		for (size_t j = 0; j < desc_neg.size(); j++)
-		{
-			float dif = std::fabs(desc_pos[i].n_ring_area - desc_neg[j].n_ring_area);
-			if (maximum_n_ring < dif)
-			{
-				maximum_n_ring = dif;
-			}
-		}
-	}
-	//maximum skel distance
-	float maximum_skel_dist = -INFINITY;
-	for (size_t i = 0; i < skeleton.skeletonFormat.size(); i++)
-	{
-		std::vector<int> vertex_list;
-		std::vector<float> vertex_dist;
-		skeleton_calculate_dijkstra(skeleton, i, vertex_list, vertex_dist);
-		for (size_t j = 0; j < vertex_dist.size(); j++)
-		{
-			if (maximum_skel_dist < vertex_dist[j])
-			{
-				maximum_skel_dist = vertex_dist[j];
-			}
-		}
-	}
-	//maximum area dif
-	float maximum_area_dif = -INFINITY;
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		float area_i = desc_pos[i].area;
-		for (size_t j = i; j < desc_neg.size(); j++)
-		{
-			float area_j = desc_neg[j].area;
-			float dif = std::abs(area_i - area_j);
-			if (dif > maximum_area_dif)
-			{
-				maximum_area_dif = dif;
-			}
-
-		}
-	}
-
-	//maximum skel point dif
-	float maximum_skel_point_dist = -INFINITY; 
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		float skel_i = desc_pos[i].skel_point_dist;
-		for (size_t j = i; j < desc_neg.size(); j++)
-		{
-			float skel_j = desc_neg[j].skel_point_dist;
-			float dif = std::abs(skel_i - skel_j);
-			if (dif > maximum_area_dif)
-			{
-				maximum_skel_point_dist = dif;
-			}
-
-		}
-	}
-
-	//maximum gaussian curvature
-	float maximum_gaussian_curve = -INFINITY;
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		float gaussian_i = dvorak_pairs[i].gaussian_curv;
-		for (size_t j = i; j < desc_neg.size(); j++)
-		{
-			float gaussian_j = dvorak_pairs[j + desc_pos.size()].gaussian_curv;
-			float div = std::abs(gaussian_i / gaussian_j);
-			if (div > maximum_gaussian_curve)
-			{
-				maximum_gaussian_curve = div;
-			}
-
-		}
-	}
-	for (size_t i = 0; i < desc_pos.size(); i++)
-	{
-		float smallest = INFINITY;
-		int index = -1;
-		for (size_t j = 0; j < desc_neg.size(); j++)
-		{
-			int fps_index_i;
-			int fps_index_j;
-			float hks_dif = std::abs(m->normalized_heat_kernel_signature[desc_pos[i].indices[0]] - m->normalized_heat_kernel_signature[desc_neg[j].indices[0]]);
-			bool is_hks = hks_dif < hks_dif_param;
-			bool is_skel_dist_far = 1;// NLateral_compare_skeldist_mid(m, desc_pos[i], desc_pos[j], skel_point_dist_param, maximum_skel_dist);
-			float n_ring = std::abs(desc_pos[i].n_ring_area - desc_neg[j].n_ring_area);
-			bool is_n_ring_close = (n_ring / maximum_n_ring) < n_ring_param;
-			float area_dif = std::abs(desc_pos[i].area - desc_neg[j].area);
-			bool is_area_dif = area_dif / maximum_area_dif < area_dif_param;
-			float skel_point_dist_dif = std::abs(desc_pos[i].skel_point_dist- desc_neg[j].skel_point_dist);
-			bool is_skel_point_dist = skel_point_dist_dif / maximum_skel_point_dist < skel_point_dist_param; 
-			
-			float gaussian_curve= std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j + desc_pos.size()].gaussian_curv);
-			bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
-			std::cout << "hks " <<  is_hks << std::endl;
-			std::cout << "skel dist " << is_skel_dist_far <<  std::endl;
-			std::cout << "n ring " <<  is_n_ring_close << std::endl;
-			std::cout << "area dif " <<  is_area_dif << std::endl;
-			std::cout << "gaussian dif " <<  is_area_dif << std::endl;
-			if (  is_hks && is_n_ring_close && is_area_dif && is_skel_dist_far && is_skel_point_dist /* && is_gaussian*/)
-			{
-				std::pair<float, std::pair<unsigned int, unsigned int>> res;
-				res.first = hist_diffs[i][j];
-				res.second = std::make_pair(i, j);
-				compare_results.push_back(res);
-			}
-
-			/*std::cout << " i " << i << " j " << j << " " << hist_diffs[i][j] << std::endl;
-			std::pair<float, std::pair<unsigned int, unsigned int>> res;
-			res.first = hist_diffs[i][j];
-			res.second = std::make_pair(i, j);
-			compare_results.push_back(res);*/
-			
-		}
-	}
-	std::vector<bool> used(desc_pos.size(), false);
-	std::sort(compare_results.begin(), compare_results.end());
-	// Greedily select pairs with smallest compare() result
-	for (const auto& entry : compare_results) {
-		int i = entry.second.first;
-		int j = entry.second.second;
-		if (!used[i] /* && !used[j]*/) {
-			resemblance_pairs.push_back({ desc_pos[i].indices[0], desc_neg[j].indices[0] });
-			used[i] = true;  // Mark these objects as used
-			//used[j] = true;  // Mark these objects as used
-		}
-	}
-
-
-	//forge it into two list
-	std::vector<unsigned int> left_correspondences;
-	std::vector<unsigned int> right_correspondences;
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
-	{
-		left_correspondences.push_back(resemblance_pairs[i].first);
-		right_correspondences.push_back(resemblance_pairs[i].second);
-	}
-	//float total_error = Metric_get_geodesic_cost_with_list(m, left_correspondences, right_correspondences);
-
-	// color left red
-	std::vector<unsigned int> is_selected(m->vertices.size(), 0);
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
-	{
-		m->colors[resemblance_pairs[i].first].r = 255;
-		m->colors[resemblance_pairs[i].first].g = 0;
-		m->colors[resemblance_pairs[i].first].b = 0;
-
-		m->colors[resemblance_pairs[i].second].r = 0;
-		m->colors[resemblance_pairs[i].second].g = 255;
-		m->colors[resemblance_pairs[i].second].b = 0;
-	}
-
-	m->calculated_symmetry_pairs = resemblance_pairs;
-	
-	int correct_count = 0;
-	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
-	{
-		int index1 = m->calculated_symmetry_pairs[i].first;
-		int index2 = m->calculated_symmetry_pairs[i].second;
-		int ground_truth = m->ground_truth_symmetry_pairs[index1];
-		if (index2 == ground_truth)
-		{
-			correct_count++;
-		}
-	}
-
-	std::cout << " total == " << correct_count << " " << m->calculated_symmetry_pairs.size() << std::endl;
-	//create descriptors and match thme
-	m->update_raylib_mesh();
-	return std::make_pair(desc_pos,desc_neg);
-}
-
+#include "../Include/CurvatureGeneration.h"
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
 	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float ratio_dif_param,
-	float area_dif_param,float paths_dif_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
+	float area_dif_param,float fuzzy_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
 	float distance_to_mid_param , float sdf_param , int N , std::vector<unsigned int>& agd_point_indices)
 {
 	int size = m->vertices.size();
@@ -291,14 +25,18 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 
 	Metric_set_gaussian(m, dvorak_enpoint_no, sweep_distance);
 	Metric_set_N(N);
-	
+
 	//for sdf calculation
 	//m->calculate_sdf();
-	agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
-	for (size_t i = 0; i < 3; i++)
+	if (agd_point_indices.size() == 0)
 	{
-		agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, true);
+		agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
+		for (size_t i = 0; i < 3; i++)
+		{
+			agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, true);
+		}
 	}
+	
 	
 	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
@@ -310,9 +48,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
 	int hist_size = 5;
-	descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
-	//descs = NLateral_generate_with_midpoint(m, point_indices,  N, hist_size);
-
+	//descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
+	unsigned int mid_point_index = -1;
+	unsigned int mid_point_index_2 = -1;
+	CurvatureGeneration_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
+	descs = NLateral_select_farthest_to_midpoint(m, agd_point_indices,5, mid_point_index, 10);
 
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
@@ -328,15 +68,30 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		std::vector<float> hist_i;
-		descs[i].area_histogram.normalize(1);
-		descs[i].hks_histogram.normalize(1);
+		for (size_t j = 0; j < 3; j++)
+		{
+			descs[i].area_histogram[j].normalize(1);
+			descs[i].hks_histogram[j].normalize(1);
+		}
 		for (size_t j = 0; j < descs.size(); j++)
 		{
-			descs[j].area_histogram.normalize(1);
-			descs[j].hks_histogram.normalize(1);
-			float dif_area = Histogram_ChiSquareDistance(descs[i].area_histogram, descs[j].area_histogram);
-			float dif_hks = Histogram_ChiSquareDistance(descs[i].hks_histogram, descs[j].hks_histogram);
+			for (size_t k = 0; k < 3; k++)
+			{
+				descs[j].area_histogram[k].normalize(1);
+				descs[j].hks_histogram[k].normalize(1);
+			}
+			float dif_area_arr[3] = {0,0,0};
+			float dif_hks_arr[3] = { 0,0,0 };
+			for (size_t k = 0; k < 3; k++)
+			{
+				dif_area_arr[k] = Histogram_ChiSquareDistance(descs[i].area_histogram[k], descs[j].area_histogram[k]);
+				dif_hks_arr[k] = Histogram_ChiSquareDistance(descs[i].hks_histogram[k], descs[j].hks_histogram[k]);
+			}
+			float dif_area = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]).length();
+			float dif_hks = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]).length();
 			hist_i.push_back(  std::sqrtf( ( dif_area*dif_area)  + (dif_hks * dif_hks)) );
+			//float dif_area_hks = Histogram_ChiSquareDistance(descs[i].area_hks_histogram, descs[j].area_hks_histogram);
+			//hist_i.push_back(dif_area_hks);
 		}
 		hist_diffs.push_back(hist_i);
 	}
@@ -422,7 +177,6 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	}*/
 	//maximum sdf
 	//float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
-	unsigned int mid_point_index = NLateral_get_closest_index_to_midpoint(m, agd_point_indices);
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
 	{
@@ -440,30 +194,30 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			file << " i " << i << " j " << j << std::endl;
 			bool is_hks;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
+			//is_hks = NLateral_compare_HKS(m , descs[i] , descs[j] , hks_dif_param);
 			is_hks = hks_dif < hks_dif_param;
-			//is_hks = NLateral_compare_HKS(m,descs[i], descs[j], hks_dif_param,file);
 			file << " is hks " << is_hks <<  std::endl; 
-			//bool is_hks = hks_dif < hks_dif_param;
+			
+			
 			bool is_area_dif = NLateral_compare_area(m,descs[i],descs[j],maximum_area_dif , area_dif_param,file);
 			file << " is area dif " << is_area_dif <<  std::endl;
-
 			float ratio_dif = std::fabs(descs[i].paths_ratio - descs[j].paths_ratio);
 			bool is_ratio_dif = ratio_dif < ratio_dif_param;
 			file << "  desc path ratio dif " << ratio_dif << std::endl;
 			file << "  desc path ratio  " << is_ratio_dif << std::endl;
 
+			//bool is_fuzzy = NLateral_compare_FuzzyGeodesics(m, descs[i], descs[j], fuzzy_param);
+			bool is_angle_dif = Nlateral_compare_angles(m, descs[i], descs[j], norm_angle_param);
  			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
 			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
 			//bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
-			bool is_nlateral_dist_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index,
-			distance_to_mid_param, file);
 			//bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
 			
-			bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
+			//bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
 			//file << " is depth " << is_depth << std::endl;
 			file << " histogram diff " << hist_diffs[i][j] << std::endl;
-			if ( is_hks  && is_area_dif /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/)
+			if ( is_hks && is_area_dif ) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
@@ -479,13 +233,17 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	for (const auto& entry : compare_results) {
 		int i = entry.second.first;
 		int j = entry.second.second;
-		if (!used[i]   && !used[j] ) {
+		if (!used[i]   && !used[j]) {
 			resemblance_pairs.push_back({ descs[i].indices[0], descs[j].indices[0] });
 			used[i] = true;  // Mark these objects as used
-			used[j] = true;  // Mark these objects as used
+			//used[j] = true;  // Mark these objects as used
 		}
 	}
-	for (size_t i = 0; i < descs.size(); i++)
+
+	//NLateralMapping_get_best_pairs(m , descs,resemblance_pairs,mid_point_index,mid_point_index_2, 10);
+	
+
+	/*for (size_t i = 0; i < descs.size(); i++)
 	{
 		float smallest_dif = INFINITY;
 		int smallest_index = -1; 
@@ -511,7 +269,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		{
 			resemblance_pairs.push_back({ descs[i].indices[0] ,descs[smallest_index].indices[0] });
 		}
-	}
+	}*/
 
 	file.close();
 
@@ -583,4 +341,70 @@ std::vector<NLateralDescriptor> NlateralMap_descriptor_generation(TrilateralMesh
 	descs = NLateral_generate_closest_points(m, point_indices, 3, 10);
 	return descs;
 
+}
+
+
+
+//using the midpoints
+void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
+	std::vector<std::pair<unsigned int, unsigned int>>& resemblance_pairs , unsigned int midpoint, unsigned int midpoint_2,
+	unsigned int histogram_size) 
+{
+	std::vector<std::pair<unsigned int, unsigned int>> new_pairs;
+	for (size_t i = 0; i < descs.size(); i++)
+	{
+		unsigned int index = descs[i].indices[0];
+		std::vector<std::pair<unsigned int, unsigned int>> pairs_i;
+		std::vector<std::pair<float, unsigned int>> hist_values;
+		for (size_t j = 0; j < resemblance_pairs.size(); j++)
+		{
+			if (resemblance_pairs[j].first == index || resemblance_pairs[j].second == index)
+			{
+				pairs_i.push_back(resemblance_pairs[j]);
+			}
+		}
+		for (size_t j = 0; j < pairs_i.size(); j++)
+		{
+			unsigned int other_index;
+			if (resemblance_pairs[j].first == index)
+			{
+				other_index = resemblance_pairs[j].second; 
+			}
+			else
+			{
+				other_index = resemblance_pairs[j].first;
+			}
+			std::vector<unsigned int> indices;
+			indices.push_back(index);
+			indices.push_back(midpoint_2);
+			indices.push_back(midpoint);
+			NLateralDescriptor desc_i = NLateral_generate_descriptor(m, indices);
+			desc_i.create_histogram_area(m, histogram_size,0);
+			desc_i.create_histogram_HKS(m, histogram_size,0);
+			desc_i.area_histogram[0].normalize(1);
+			desc_i.hks_histogram[0].normalize(1);
+
+			indices.clear();
+			indices.push_back(other_index);
+			indices.push_back(midpoint_2);
+			indices.push_back(midpoint);
+			NLateralDescriptor desc_i_other = NLateral_generate_descriptor(m, indices);
+			desc_i_other.create_histogram_area(m, histogram_size,0);
+			desc_i_other.create_histogram_HKS(m, histogram_size,0);
+			desc_i_other.area_histogram[0].normalize(1);
+			desc_i_other.hks_histogram[0].normalize(1);
+			
+			
+			float dif_area = Histogram_ChiSquareDistance(desc_i.area_histogram[0], desc_i_other.area_histogram[0]);
+			float dif_hks = Histogram_ChiSquareDistance(desc_i.hks_histogram[0], desc_i_other.hks_histogram[0]);
+			float dif = std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks));
+			hist_values.push_back(std::make_pair(dif,other_index));
+		}
+		std::sort(hist_values.begin(), hist_values.end());
+		if (hist_values.size() > 0)
+		{
+			new_pairs.push_back(std::make_pair(index, hist_values[0].second));
+		}
+	}
+	resemblance_pairs = new_pairs;
 }

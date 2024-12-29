@@ -60,8 +60,9 @@ int main(void)
             BeginMode3D(camera.camera);
                 BeginShaderMode(shader);
                     SetShaderValue(shader, ambientLoc, ambient, SHADER_UNIFORM_VEC4);
-                    draw_all(&m1 , shader );
+                    draw_all_shader(&m1, camera.shader);
                 EndShaderMode();
+                draw_all(&m1);
             EndMode3D();
             rlImGuiBegin();
             imgui_menu_bar(&m1);

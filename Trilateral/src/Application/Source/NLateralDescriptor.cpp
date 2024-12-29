@@ -6,7 +6,6 @@
 #include "../Include/Geodesic.h"
 #include "../Include/ROI.h""
 #include "../Include/ShapeDiameter.h""
-
 #pragma region Nlateral struct
 
 NLateralDescriptor::NLateralDescriptor(TrilateralMesh& mesh, const std::vector<unsigned int>& point_indices, int N)
@@ -854,6 +853,62 @@ void  NLateralDescriptor::get_ROI()
 }
 
 
+//this is trilteral
+//actually select most far away  from midpoitns
+std::vector<NLateralDescriptor> NLateral_select_farthest_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
+int no_of_points, unsigned int smallest_agd_index , int histogram_size )
+{
+	std::vector<NLateralDescriptor> descs; 
+	std::vector<unsigned int> nlateral_indices;
+	std::vector<float> midpoint_distances = Geodesic_dijkstra(*m , smallest_agd_index);
+	for (size_t i = 0; i < indices.size(); i++)
+	{
+		std::vector<float> distances_from_i = Geodesic_dijkstra(*m, indices[i]);
+		std::vector<std::pair<float, unsigned int>> selected_indices_dist; 
+		for (size_t j = 0; j < indices.size(); j++)
+		{
+			if (i == j)
+			{
+				continue; 
+			}
+			int index = indices[j];
+			selected_indices_dist.push_back(std::make_pair(distances_from_i[index], index));
+		}
+		//sort and pick no_of_points
+		std::sort(selected_indices_dist.begin(), selected_indices_dist.end() );
+
+		//now pick the two which are closest to midpoint
+		std::vector<std::pair<float, unsigned int>>  closest_points_midpoint;
+		for (size_t j = 0; j < no_of_points; j++)
+		{
+			closest_points_midpoint.push_back(std::make_pair(midpoint_distances[selected_indices_dist[j].second], selected_indices_dist[j].second));
+		}
+		std::sort(closest_points_midpoint.begin(), closest_points_midpoint.end());
+		
+		nlateral_indices.push_back(indices[i]);
+		nlateral_indices.push_back(closest_points_midpoint[no_of_points - 1 ].second);
+		nlateral_indices.push_back(closest_points_midpoint[no_of_points - 2].second);
+
+		NLateralDescriptor desc;
+		desc = NLateral_generate_descriptor(m, nlateral_indices);
+
+		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
+		for (size_t i = 0; i < 3; i++)
+		{
+			desc.create_histogram_area(m, histogram_size, i);
+		}
+		for (size_t i = 0; i < 3; i++)
+		{
+			desc.create_histogram_HKS(m, histogram_size,i);
+		}
+		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
+		descs.push_back(desc);
+
+
+		nlateral_indices.clear();
+	}
+	return descs;
+}
 
 
 
@@ -933,8 +988,8 @@ std::vector<NLateralDescriptor> NLateral_generate_closest_points(TrilateralMesh*
 		//desc.depth = skeleton_end_point_node_list[selected_indices[0]].depth;
 		
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
-		desc.create_histogram_area(m, histogram_size);
-		desc.create_histogram_HKS(m, histogram_size);
+		desc.create_histogram_area(m, histogram_size,0);
+		desc.create_histogram_HKS(m, histogram_size,0);
 		//desc.create_histogram_SDF(m, histogram_size);
 		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		nLateralDescVec.push_back(desc);
@@ -978,8 +1033,8 @@ std::vector<NLateralDescriptor> NLateral_generate_with_midpoint(TrilateralMesh* 
 			nlateral_points.push_back(index);
 			NLateralDescriptor desc = NLateral_generate_descriptor(m, nlateral_points);
 			desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
-			desc.create_histogram_area(m, histogram_size);
-			desc.create_histogram_HKS(m, histogram_size);
+			desc.create_histogram_area(m, histogram_size,0);
+			desc.create_histogram_HKS(m, histogram_size ,0);
 			desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 			nLateralDescVec.push_back(desc);
 		}
@@ -1366,7 +1421,7 @@ void Nlateral_display_desc(TrilateralMesh* m , NLateralDescriptor& desc)
 	}
 
 	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc.indices[0]);
-	float dist_step = desc.max_distance / desc.area_histogram.size();
+	float dist_step = desc.max_distance / desc.area_histogram[0].size();
 	for (size_t i = 0; i < desc.vertices_inside.size(); i++)
 	{
 		int index = desc.vertices_inside[i];
@@ -1438,7 +1493,7 @@ void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDesc
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}*/
 	std::vector<float> distances_from_desc  = Geodesic_dijkstra(*m, desc->indices[0]);
-	float dist_step = desc->max_distance / desc->area_histogram.size();
+	float dist_step = desc->max_distance / desc->area_histogram[0].size();
 	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
 	{
 		int index = desc->vertices_inside[i];
@@ -1519,15 +1574,7 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 {
 	NLateralDescriptor* desc = &descs[index];
 
-	//make all black
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		m->raylib_mesh.colors[i * 4] = 0;
-		m->raylib_mesh.colors[i * 4 + 1] = 0;
-		m->raylib_mesh.colors[i * 4 + 2] = 0;
-		m->raylib_mesh.colors[i * 4 + 3] = 255;
-	}
-
+	m->color_all(LIGHTGRAY);
 	for (size_t i = 0; i < desc->paths.size(); i++)
 	{
 		for (size_t j = 0; j < desc->paths[i].size(); j++)
@@ -1637,9 +1684,8 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 			}
 		}
 	}
-	m->color_all(LIGHTGRAY);
 	std::vector<float> distances_from_desc = Geodesic_dijkstra(*m, desc->indices[0]);
-	float dist_step = desc->max_distance / desc->area_histogram.size();
+	float dist_step = desc->max_distance / desc->area_histogram[0].size();
 	for (size_t i = 0; i < desc->vertices_inside.size(); i++)
 	{
 		int index = desc->vertices_inside[i];
@@ -1665,11 +1711,11 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 
 }
 
-void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)
+void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, int descriptor_point_index)
 {
 	Histogram hist;
 	hist.init(hist_no);
-	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[descriptor_point_index]);
 	float longest_path = -INFINITY;
 	for (size_t i = 0; i < this->vertices_inside.size(); i++)
 	{
@@ -1719,7 +1765,49 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no)
 			}
 		}
 	}
-	this->hks_histogram = hist;
+	this->hks_histogram[descriptor_point_index] = hist;
+}
+void NLateralDescriptor::create_histogram_area_HKS_combined(TrilateralMesh* m, int hist_no)
+{
+	Histogram hist;
+	hist.init(hist_no);
+	//get tlongest path
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	float longest_path = -INFINITY;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		if (longest_path < distances[this->vertices_inside[i]])
+		{
+			longest_path = distances[this->vertices_inside[i]];
+		}
+	}
+	for (size_t i = 0; i < this->paths.size(); i++)
+	{
+		for (size_t j = 0; j < this->paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < this->paths[i][j].size(); k++)
+			{
+				if (longest_path < distances[this->paths[i][j][k]])
+				{
+					longest_path = distances[this->paths[i][j][k]];
+				}
+			}
+		}
+	}
+	float step_size = longest_path / hist_no;
+	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	{
+		int index = this->vertices_inside[i];
+		int step_1 = distances[index] / step_size;
+		if (step_1 == hist_no)
+		{
+			step_1--;
+		}
+		hist.histogram[step_1] += m->normalized_heat_kernel_signature[index] * m->areas[index];
+	}
+
+	//lets ignore the paths only
+	this->area_hks_histogram = hist; 
 }
 void NLateralDescriptor::create_histogram_SDF(TrilateralMesh* m, int hist_no)
 {
@@ -1776,13 +1864,13 @@ void NLateralDescriptor::create_histogram_SDF(TrilateralMesh* m, int hist_no)
 			}
 		}
 	}
-	this->area_histogram = hist;
+	this->sdf_histogram = hist;
 }
-void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no)
+void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no ,int descriptor_point_index)
 {
 	Histogram hist;
 	hist.init(hist_no);
-	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[0]);
+	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[descriptor_point_index]);
 	float longest_path = -INFINITY; 
 	for (size_t i = 0; i < this->vertices_inside.size(); i++)
 	{
@@ -1858,7 +1946,7 @@ void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no)
 			}
 		}
 	}
-	this->area_histogram = hist; 
+	this->area_histogram[descriptor_point_index] = hist;
 }
 
 
@@ -1979,7 +2067,28 @@ bool NLateral_check_path_lengths(TrilateralMesh* m , NLateralDescriptor& desc1, 
 
 
 }
+bool Nlateral_compare_angles(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float angle_param)
+{
+	//first 
+	glm::vec3 vec1 = m->vertices[desc1.paths[0][1][desc1.paths[0][1].size() - 2]] - m->vertices[desc1.indices[0]];
+	glm::vec3 vec2 = m->vertices[desc1.paths[0][2][desc1.paths[0][2].size() - 2]] - m->vertices[desc1.indices[0]];
+	float angle = glm::dot(vec1, vec2) / (glm::length(vec1) * glm::length(vec2));
+	float cosTheta = glm::clamp(angle, -1.0f, 1.0f);
+	float angleRadians = std::acos(cosTheta);
+	float angleDegrees_1 = glm::degrees(angleRadians);
 
+	vec1 = m->vertices[desc2.paths[0][1][desc2.paths[0][1].size() - 2]] - m->vertices[desc2.indices[0]];
+	vec2 = m->vertices[desc2.paths[0][2][desc2.paths[0][2].size() - 2]] - m->vertices[desc2.indices[0]];
+	angle = glm::dot(vec1, vec2) / (glm::length(vec1) * glm::length(vec2));
+	cosTheta = glm::clamp(angle, -1.0f, 1.0f);
+	angleRadians = std::acos(cosTheta);
+	float angleDegrees_2 = glm::degrees(angleRadians);
+	if (std::abs(angleDegrees_1 - angleDegrees_2) > angle_param)
+	{
+		return false; 
+	}
+	return true; 
+}
 bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float hks_perc, std::ofstream& file)
 {
 
@@ -2172,13 +2281,13 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 	std::vector<unsigned int> indices_p2_desc = { p2,p1,p_middle };
 	desc1 = NLateral_generate_descriptor(m, indices_p1_desc);
 	desc2 = NLateral_generate_descriptor(m, indices_p2_desc);
-	desc1.create_histogram_area(m, 10);
-	desc2.create_histogram_area(m, 10);
+	desc1.create_histogram_area(m, 10,0);
+	desc2.create_histogram_area(m, 10,0);
 
 
-	desc1.area_histogram.normalize(1);
-	desc2.area_histogram.normalize(1);
-	float dif = Histogram_ChiSquareDistance(desc1.area_histogram, desc2.area_histogram);
+	desc1.area_histogram[0].normalize(1);
+	desc2.area_histogram[0].normalize(1);
+	float dif = Histogram_ChiSquareDistance(desc1.area_histogram[0], desc2.area_histogram[0]);
 
 	file << " trilateral dissimilarity " << dif <<  " " << (dif < dissimilarity) << std::endl;
 
@@ -2324,4 +2433,58 @@ void Nlateral_read_matching_points(TrilateralMesh* m)
 		sym_pair.push_back(std::make_pair(nums[0] ,nums[1]));
 	}
 	m->calculated_symmetry_pairs = sym_pair; 
+}
+
+bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_param)
+{
+	float dif_0_0 = std::abs(m->normalized_heat_kernel_signature[desc1.indices[0]] - m->normalized_heat_kernel_signature[desc2.indices[0]]);
+	if (dif_0_0 > hks_param)
+	{
+		return false; 
+	}
+	float dif_1_1 = std::abs(m->normalized_heat_kernel_signature[desc1.indices[1]] - m->normalized_heat_kernel_signature[desc2.indices[1]]);
+	float dif_1_2 = std::abs(m->normalized_heat_kernel_signature[desc1.indices[1]] - m->normalized_heat_kernel_signature[desc2.indices[2]]);
+	if (dif_1_1 > hks_param )
+	{
+		return false;
+	}
+	float dif_2_1 = std::abs(m->normalized_heat_kernel_signature[desc1.indices[2]] - m->normalized_heat_kernel_signature[desc2.indices[1]]);
+	float dif_2_2 = std::abs(m->normalized_heat_kernel_signature[desc1.indices[2]] - m->normalized_heat_kernel_signature[desc2.indices[2]]);
+	if (dif_2_2 > hks_param )
+	{
+		return false;
+	}
+	return true; 
+}
+
+bool NLateral_compare_FuzzyGeodesics(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float fuzzy_param)
+{
+
+	if (std::abs(desc1.fuzzy - desc2.fuzzy) < fuzzy_param )
+	{
+		return true; 
+	}
+	return false; 
+}
+
+
+void NLateral_calculate_fuzzyGeodesics(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs)
+{
+	//compute every fuzzygeodesic
+	for (size_t i = 0; i < descs.size(); i++)
+	{
+		float total_fuzziness_d1 = 0;
+		for (size_t j = 0; j < descs[i].vertices_inside.size(); j++)
+		{
+			int index = descs[i].vertices_inside[j];
+			float fuzziness = FuzzyGeodesic_fuzzyGeo(m, index, descs[i].indices[0], descs[i].indices[1]);
+			fuzziness += FuzzyGeodesic_fuzzyGeo(m, index, descs[i].indices[0], descs[i].indices[2]);
+			fuzziness += FuzzyGeodesic_fuzzyGeo(m, index, descs[i].indices[1], descs[i].indices[2]);
+
+			total_fuzziness_d1 = fuzziness / 3;
+		}
+		total_fuzziness_d1 = total_fuzziness_d1 / descs[i].vertices_inside.size();
+		descs[i].fuzzy = total_fuzziness_d1;
+	}
+	
 }

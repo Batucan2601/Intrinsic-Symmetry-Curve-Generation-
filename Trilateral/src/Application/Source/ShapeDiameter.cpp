@@ -384,7 +384,7 @@ std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
 			sdfValues[i] = sdf / standart_deviation_distances.size();
 		}
 	}
-
+	m->sdf = sdfValues;
 	return sdfValues;
 }
 

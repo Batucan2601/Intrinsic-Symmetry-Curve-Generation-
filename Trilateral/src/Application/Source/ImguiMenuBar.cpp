@@ -62,6 +62,7 @@ static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
 static bool is_draw_normals = false; 
 static bool is_draw_agd = false; 
+static bool is_draw_desc = false; 
 static float agd_sphere_radius = 1; 
 static float line_thickness_3d = 0.01; 
 static int descriptor_no = 0;
@@ -92,7 +93,7 @@ float ratio_dif_param= 0.2;
 float proximity_param = 1;
 float area_dif_param = 0.2;
 float skel_point_dist_param = 0.2; 
-float paths_dif_param = 0.2; 
+float fuzzy_param = 0.2;
 float min_geo_tau = 0.7;
 int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
@@ -346,7 +347,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("normal angle ", &norm_angle_param);
         ImGui::InputFloat("ratio dif param ", &ratio_dif_param);
         ImGui::InputFloat("area param ", &area_dif_param);
-        ImGui::InputFloat("path dif param ", &paths_dif_param);
+        ImGui::InputFloat("fuzzy param ", &fuzzy_param);
         ImGui::InputFloat("min geo tau param", &min_geo_tau);
         ImGui::InputInt("N ring for geodesic", &avg_geo_N_ring);
         ImGui::InputFloat("tri sym hist param", &nlateral_tri_hist_param);
@@ -370,16 +371,11 @@ static void Nlateral_functions(TrilateralMesh* m)
         nlateral_descriptors = NlateralMap_point_matching_with_FPS_and_endpoints(m, skeleton, dvorak_no_of_significant_points,
             dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, skel_depth_param, proximity_param, N);
     }
-    if (ImGui::MenuItem("FPS sampling with sym plane "))
-    {
-        nlateral_descriptors_pos_neg = NlateralMap_point_matching_copy_symmetric_points(m, skeleton,plane , dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param, area_dif_param, skel_point_dist_param, N);
-    }
     if (ImGui::MenuItem("avg min geo sampling with sym plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
             dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param,  ratio_dif_param,
-           area_dif_param,paths_dif_param, min_geo_tau,avg_geo_N_ring, nlateral_tri_hist_param,
+           area_dif_param,fuzzy_param, min_geo_tau,avg_geo_N_ring, nlateral_tri_hist_param,
             distance_to_mid_param,sdf_param , N, avg_dijk_indices);
     }
 
@@ -396,10 +392,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::InputInt("descriptor no ", &descriptor_no))
         {
             Nlateral_display_desc(m, nlateral_descriptors , descriptor_no);
-        }
-        if (ImGui::InputInt("descriptor no symmetric", &descriptor_no))
-        {
-            Nlateral_display_desc(m, nlateral_descriptors_pos_neg, descriptor_no);
+            is_draw_desc = true;
         }
         if (ImGui::MenuItem("Display descriptor all"))
         {
@@ -510,7 +503,7 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("Biggest Geodesics "))
     {
-        avg_dijk_indices = Geodesic_find_biggest_AGD(m, dvorak_geodesic_dist_param, 10 );
+        avg_dijk_indices = Geodesic_find_biggest_AGD(m, dvorak_geodesic_dist_param, 100 );
     }
     if (ImGui::MenuItem("Write Sampled points "))
     {
@@ -607,17 +600,23 @@ static void draw_curvature(TrilateralMesh* m );
 static void draw_curves(TrilateralMesh* m);
 static void draw_normals(TrilateralMesh* m);
 static void draw_spheres(TrilateralMesh* m, float radius);
+static void draw_descriptor(TrilateralMesh* m);
 
-void draw_all(TrilateralMesh* m , Shader& shader )
+
+void draw_all_shader(TrilateralMesh* m , Shader& shader )
+{
+    draw_mesh(m , shader);
+}
+void draw_all(TrilateralMesh* m)
 {
     draw_dom_sym();
     draw_skeleton();
-    draw_mesh(m , shader);
     draw_resemblance_pairs(m);
     draw_curvature(m);
     draw_normals(m);
     draw_spheres(m, agd_sphere_radius);
     draw_curves(m);
+    draw_descriptor(m);
 }
 static void draw_curves(TrilateralMesh* m)
 {
@@ -745,8 +744,16 @@ static void draw_resemblance_pairs(TrilateralMesh* m )
         {
             int index1 = m->calculated_symmetry_pairs[i].first;
             int index2 = m->calculated_symmetry_pairs[i].second;
-            DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
-                CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
+            if (descriptor_no == i)
+            {
+                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, RED);
+            }
+            else
+            {
+                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
+            }
         }
     }
    
@@ -841,7 +848,20 @@ static void display_file_dialogs(TrilateralMesh* m )
         file_path_name = "";
     }
 }
-
+static void draw_descriptor(TrilateralMesh* m)
+{
+    if (is_draw_desc)
+    {
+        NLateralDescriptor* desc = &nlateral_descriptors[descriptor_no];
+        
+        Vector3 p1 = CoreType_conv_glm_raylib_vec3( m->vertices[desc->indices[0]]);
+        Vector3 p2 = CoreType_conv_glm_raylib_vec3(m->vertices[desc->indices[1]]);
+        Vector3 p3 = CoreType_conv_glm_raylib_vec3(m->vertices[desc->indices[2]]);
+        DrawSphere(p1,agd_sphere_radius , WHITE );
+        DrawSphere(p2 , agd_sphere_radius,BLUE);
+        DrawSphere(p3 , agd_sphere_radius, RED);
+    }
+}
 static void mesh_drawing()
 {
     ImGui::InputFloat("line thickness"  , &line_thickness_3d );
@@ -1052,6 +1072,8 @@ static void  display_descriptor(TrilateralMesh* m )
     m->raylib_mesh.colors[desc.p1 * 4 + 2] = 255;
     m->raylib_mesh.colors[desc.p1 * 4 + 3] = 255;
     m->update_raylib_mesh();
+
+    
 }
 
 static void  display_descriptor_all(TrilateralMesh* m)

@@ -241,13 +241,12 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 	CurvePoints least_c = get_worst_curv_point(c , worst_quality_index);
 	float worst_quality = least_c.quality;
 	
-	int smallest_point_index = -1;
-	int midpoint_index = -1;
 	NLateralDescriptor best_desc;
 	NLateralDescriptor best_desc_counterpart;
-	std::pair<unsigned int, unsigned int> result = { -1,-1 };
+	std::pair<int, int> result = { -1,-1 };
 	unsigned int selected_midpoint = midpoint_other;
 	float smallest_hist_dif = INFINITY;
+	std::vector<float> distances = Geodesic_dijkstra(*m, selected_midpoint);
 	// this pair is wrong,
 	CurvePoints worst_curve_point = c.curve_points[worst_quality_index];
 
@@ -275,6 +274,18 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 		{
 			continue; 
 		}
+
+		//check their distances from midpoint
+		float dist_to_midpoint = distances[index1] / distances[agd_vertices[i]];
+		if (dist_to_midpoint > 1)
+		{
+			dist_to_midpoint = 1 / dist_to_midpoint;
+		}
+		if(dist_to_midpoint < 0.8 )
+		{
+			continue;
+		}
+			
 		unsigned int mid_index = get_single_mid_point(m, index1, agd_vertices[i]);
 		float dot_front = glm::dot(m->normals[midpoint_selected], m->normals[mid_index]);
 		float dot_back = glm::dot(m->normals[midpoint_other], m->normals[mid_index]);
@@ -290,10 +301,10 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 		indices.push_back(agd_vertices[i]);
 
 		NLateralDescriptor desc = NLateral_generate_descriptor(m, indices);
-		desc.create_histogram_area(m, histogram_size);
-		desc.create_histogram_HKS(m, histogram_size);
-		desc.area_histogram.normalize(1);
-		desc.hks_histogram.normalize(1);
+		desc.create_histogram_area(m, histogram_size,0);
+		desc.create_histogram_HKS(m, histogram_size,0);
+		desc.area_histogram[0].normalize(1);
+		desc.hks_histogram[0].normalize(1);
 		//swap 
 		indices.clear();
 			
@@ -302,13 +313,13 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 		indices.push_back(index1);
 			
 		NLateralDescriptor desc1 = NLateral_generate_descriptor(m, indices);
-		desc1.create_histogram_area(m, histogram_size);
-		desc1.create_histogram_HKS(m, histogram_size);
-		desc1.area_histogram.normalize(1);
-		desc1.hks_histogram.normalize(1);
+		desc1.create_histogram_area(m, histogram_size,0);
+		desc1.create_histogram_HKS(m, histogram_size,0);
+		desc1.area_histogram[0].normalize(1);
+		desc1.hks_histogram[0].normalize(1);
 
-		float dif_area = Histogram_ChiSquareDistance(desc.area_histogram, desc1.area_histogram);
-		float dif_hks = Histogram_ChiSquareDistance(desc.hks_histogram, desc1.hks_histogram);
+		float dif_area = Histogram_ChiSquareDistance(desc.area_histogram[0], desc1.area_histogram[0]);
+		float dif_hks = Histogram_ChiSquareDistance(desc.hks_histogram[0], desc1.hks_histogram[0]);
 		float total_dif = (dif_area * dif_area) + (dif_hks * dif_hks);
 
 		if (total_dif < smallest_hist_dif)
@@ -333,6 +344,7 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 
 	// match second point now
 	index1 = worst_curve_point.correspondence.second;
+	smallest_hist_dif = INFINITY;
 	for (size_t i = 0; i < agd_vertices.size(); i++)
 	{
 		if (index1 == agd_vertices[i] || agd_vertices[i] == worst_curve_point.correspondence.first)
@@ -340,6 +352,16 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 			continue;
 		}
 		if (std::abs(m->normalized_heat_kernel_signature[index1] - m->normalized_heat_kernel_signature[agd_vertices[i]]) > hks_param)
+		{
+			continue;
+		}
+		//check their distances from midpoint
+		float dist_to_midpoint = distances[index1] / distances[agd_vertices[i]];
+		if (dist_to_midpoint > 1)
+		{
+			dist_to_midpoint = 1 / dist_to_midpoint;
+		}
+		if (dist_to_midpoint < 0.8)
 		{
 			continue;
 		}
@@ -358,10 +380,10 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 		indices.push_back(agd_vertices[i]);
 
 		NLateralDescriptor desc = NLateral_generate_descriptor(m, indices);
-		desc.create_histogram_area(m, histogram_size);
-		desc.create_histogram_HKS(m, histogram_size);
-		desc.area_histogram.normalize(1);
-		desc.hks_histogram.normalize(1);
+		desc.create_histogram_area(m, histogram_size,0);
+		desc.create_histogram_HKS(m, histogram_size,0);
+		desc.area_histogram[0].normalize(1);
+		desc.hks_histogram[0].normalize(1);
 		//swap 
 		indices.clear();
 
@@ -370,13 +392,13 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 		indices.push_back(index1);
 
 		NLateralDescriptor desc1 = NLateral_generate_descriptor(m, indices);
-		desc1.create_histogram_area(m, histogram_size);
-		desc1.create_histogram_HKS(m, histogram_size);
-		desc1.area_histogram.normalize(1);
-		desc1.hks_histogram.normalize(1);
+		desc1.create_histogram_area(m, histogram_size, 0);
+		desc1.create_histogram_HKS(m, histogram_size,0);
+		desc1.area_histogram[0].normalize(1);
+		desc1.hks_histogram[0].normalize(1);
 
-		float dif_area = Histogram_ChiSquareDistance(desc.area_histogram, desc1.area_histogram);
-		float dif_hks = Histogram_ChiSquareDistance(desc.hks_histogram, desc1.hks_histogram);
+		float dif_area = Histogram_ChiSquareDistance(desc.area_histogram[0], desc1.area_histogram[0]);
+		float dif_hks = Histogram_ChiSquareDistance(desc.hks_histogram[0], desc1.hks_histogram[0]);
 		float total_dif = (dif_area * dif_area) + (dif_hks * dif_hks);
 
 		if (total_dif < smallest_hist_dif)
@@ -401,7 +423,7 @@ unsigned int midpoint_selected, unsigned int midpoint_other, std::vector<unsigne
 
 	//Nlateral_display_desc(m, best_desc);
 	//Nlateral_display_desc(m, best_desc_counterpart);
-	m->color_points(std::vector<unsigned int>(result.first, result.second), WHITE);
+	//m->color_points(std::vector<unsigned int>(result.first, result.second), WHITE);
 }
 static Curvature get_mid_points(TrilateralMesh* m)
 {
@@ -745,4 +767,17 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 
 
 	return full_curvature;
+}
+
+void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c)
+{
+	for (size_t i = 1; i < c.curve_points.size()-1; i++)
+	{
+		int index_i_m = c.curve_points[i-1].mid_point; 
+		int index_i_p = c.curve_points[i+1].mid_point;
+		int index = c.curve_points[i].mid_point;
+		// find midpoint 
+		unsigned int new_index = Geodesic_find_midpoint(m, index_i_m, index_i_p);
+		c.curve_points[i].mid_point = index; 
+	}
 }

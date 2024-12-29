@@ -7,4 +7,5 @@ void imgui_menu_bar(TrilateralMesh* m );
 
 
 //draw functions
-void draw_all(TrilateralMesh* m , Shader& shader );
+void draw_all_shader(TrilateralMesh* m, Shader& shader);
+void draw_all(TrilateralMesh* m);

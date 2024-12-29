@@ -27,8 +27,9 @@ struct NLateralDescriptor
 	void get_ROI();
 
 	// new implementation
-	void create_histogram_area(TrilateralMesh* m , int N);
-	void create_histogram_HKS(TrilateralMesh* m , int N);
+	void create_histogram_area(TrilateralMesh* m , int N, int index );
+	void create_histogram_HKS(TrilateralMesh* m , int N, int index);
+	void create_histogram_area_HKS_combined(TrilateralMesh* m, int N);
 	void create_histogram_SDF(TrilateralMesh* m, int N);
 	int N; //this was present
 	std::vector<unsigned int> indices; // fist one is the origin point 
@@ -44,9 +45,12 @@ struct NLateralDescriptor
 	double area;
 	double skel_point_dist;
 	double paths_ratio; 
-	Histogram area_histogram;
-	Histogram hks_histogram;
+	Histogram area_histogram[3];
+	Histogram hks_histogram[3];
+	Histogram sdf_histogram;
+	Histogram area_hks_histogram;
 	float max_distance; 
+	float fuzzy; 
 };
 
 struct NLateralDescriptorRestrictions
@@ -145,15 +149,20 @@ bool NLateral_compare_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLatera
 bool NLatera_compare_depth(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, int depth_dif_param, std::ofstream& file);
 bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p1, unsigned int p2, unsigned int p_middle, float dissimilarity
 ,std::ofstream& file );
+bool NLateral_compare_FuzzyGeodesics(TrilateralMesh* m ,  NLateralDescriptor& desc1 , NLateralDescriptor& desc2 , float fuzzy_param);
 bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
 ,float distance_to_mid_param, std::ofstream& file);
 bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_sdf ,
 float sdf_param , std::ofstream& file );
+bool Nlateral_compare_angles(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float angle_param);
 
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
 bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
 	float distances_from_mid, float distances_between_desc , std::ofstream& file);
+bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_param);
+std::vector<NLateralDescriptor> NLateral_select_farthest_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
+	int no_of_points, unsigned int smallest_agd_index, int histogram_size);
 
-
+void NLateral_calculate_fuzzyGeodesics(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs);
 void Nlateral_write_matching_points(TrilateralMesh* m);
 void Nlateral_read_matching_points(TrilateralMesh* m);

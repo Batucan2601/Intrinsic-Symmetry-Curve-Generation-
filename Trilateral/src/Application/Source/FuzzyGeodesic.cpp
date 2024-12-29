@@ -105,3 +105,13 @@ float FuzzyGeodesic_FuzzyArea(TrilateralMesh* m, const FuzzyGeodesicList& fuzzyL
 
 	return area;
 }
+
+float FuzzyGeodesic_fuzzyGeo(TrilateralMesh* m, int start_index, int end_index, int index_x)
+{
+	std::vector<float> distances_s = Geodesic_dijkstra(*m, start_index);
+	std::vector<float> distances_x = Geodesic_dijkstra(*m, index_x);
+	float dist_normal = distances_s[end_index];
+	float dist_x = distances_x[start_index];
+	dist_x += distances_x[end_index];
+	return dist_normal / dist_x;
+}

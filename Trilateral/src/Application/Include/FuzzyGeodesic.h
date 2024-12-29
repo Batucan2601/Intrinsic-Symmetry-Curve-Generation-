@@ -18,3 +18,4 @@ typedef struct
 
 FuzzyGeodesicList FuzzyGeodesic_calculateFuzzyGedoesic(TrilateralMesh* m, int startIndex, int endIndex, float sigma);
 float FuzzyGeodesic_FuzzyArea(TrilateralMesh* m , const FuzzyGeodesicList& fuzzyList , bool color = false );
+float FuzzyGeodesic_fuzzyGeo(TrilateralMesh* m, int start_index, int end_index, int index_x);

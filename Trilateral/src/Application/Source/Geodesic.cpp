@@ -819,3 +819,22 @@ std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float swe
 
 
 }
+
+unsigned int Geodesic_find_midpoint(TrilateralMesh* m, unsigned int index1, unsigned int index2)
+{
+	std::vector<int> paths =Geodesic_between_two_points(*m, index1, index2);
+	float dist = 0;
+	for (size_t i = 0; i < paths.size()-1; i++)
+	{
+		dist = dist + glm::distance(m->vertices[paths[i]], m->vertices[paths[i + 1]]);
+	}
+	float half_dist = 0; 
+	for (size_t i = 0; i < paths.size()-1; i++)
+	{
+		half_dist = half_dist + glm::distance(m->vertices[paths[i]], m->vertices[paths[i + 1]]);
+		if (half_dist >= dist / 2)
+		{
+			return paths[i];
+		}
+	}
+}
