@@ -32,5 +32,5 @@ std::vector<Curve> CurvatureGeneration_generate_curve_paths(TrilateralMesh* m);
 float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
 void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
 
-void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c  );
+void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param  );
 

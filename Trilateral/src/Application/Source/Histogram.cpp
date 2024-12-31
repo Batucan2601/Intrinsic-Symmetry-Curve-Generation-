@@ -270,7 +270,7 @@ float Histogram2D_earthMoversDistance(const Histogram2D& h1, const Histogram2D& 
 	double h1_sum = 0.0, h2_sum = 0.0;
 	for (size_t i = 0; i < h1.histogram.rows(); ++i) 
 	{
-		for (size_t j = 0; i < h1.histogram.cols(); ++i)
+		for (size_t j = 0; i < h2.histogram.cols(); ++i)
 		{
 			h2_sum += h2.histogram(i,j);
 			h1_sum += h1.histogram(i,j);
@@ -287,7 +287,7 @@ float Histogram2D_earthMoversDistance(const Histogram2D& h1, const Histogram2D& 
 	{
 		for (size_t j = 0; j < h1.histogram.cols(); j++)
 		{
-			cumulativeDifference += h1.histogram(i, j) - h2.histogram(i,j);
+			cumulativeDifference += h2.histogram(i, j) - h2.histogram(i,j);
 			totalDistance += fabs(cumulativeDifference);
 		}
 	}
@@ -411,3 +411,5 @@ Histogram Histogram_Vector_to_Hist(std::vector<float>& h1)
 	h.histogram = h1; 
 	return h;
 }
+
+

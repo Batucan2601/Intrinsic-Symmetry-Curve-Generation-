@@ -12,7 +12,36 @@ static void remove_points_with_same_index(TrilateralMesh* m, Curvature& curvatur
 static unsigned int current_midpoint; 
 static unsigned int current_midpoint_inverse; 
 
+static float get_quality(TrilateralMesh* m, Curvature& c , int index  )
+{
+	unsigned int index_m1 = c.curve_points[index - 1].mid_point;
+	unsigned int index_i = c.curve_points[index ].mid_point;
+	unsigned int index_p1 = c.curve_points[index + 1].mid_point;
+	std::vector<float> distances_p1 = Geodesic_dijkstra(*m, index_p1);
+	std::vector<float> distances_index = Geodesic_dijkstra(*m, index_i);
 
+	float dist_on_curve = distances_p1[index_i] +distances_index[index_m1];
+	float true_dist = distances_p1[index_m1];
+
+	return  true_dist / dist_on_curve;
+	
+}
+
+static void remove_index_w_correspon(TrilateralMesh* m, Curvature& c, unsigned int i)
+{
+	CurvePoints temp = c.curve_points[i];
+	c.curve_points.erase(c.curve_points.begin() + i);
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		if (temp.correspondence.first == m->calculated_symmetry_pairs[i].first &&
+			temp.correspondence.second == m->calculated_symmetry_pairs[i].second)
+		{
+			m->calculated_symmetry_pairs.erase(m->calculated_symmetry_pairs.begin() + i);
+			break;
+		}
+	}
+
+}
 static CurvePoints get_worst_curv_point(Curvature& c ,int& index)
 {
 	// 1 - get the vertex with worst quality. 
@@ -760,24 +789,33 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 	build_curvature(m, curv_back);
 	//CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
 
+
 	Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
 	m->color_points(std::vector<unsigned int>{ midpoint_back }, WHITE);
 
 
 
-	return full_curvature;
+	return curv_front;
 }
 
-void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c)
+void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param )
 {
 	for (size_t i = 1; i < c.curve_points.size()-1; i++)
 	{
 		int index_i_m = c.curve_points[i-1].mid_point; 
 		int index_i_p = c.curve_points[i+1].mid_point;
 		int index = c.curve_points[i].mid_point;
+		
 		// find midpoint 
 		unsigned int new_index = Geodesic_find_midpoint(m, index_i_m, index_i_p);
 		c.curve_points[i].mid_point = index; 
-	}
+		if (get_quality(m , c,i) < quality_param)
+		{
+			//remove point and correspondence
+			remove_index_w_correspon(m, c, i);
+		}
+	} 
+	build_curvature(m, c);
+
 }

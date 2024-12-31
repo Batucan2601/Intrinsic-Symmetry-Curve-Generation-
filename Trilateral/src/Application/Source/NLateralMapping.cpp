@@ -87,11 +87,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 				dif_area_arr[k] = Histogram_ChiSquareDistance(descs[i].area_histogram[k], descs[j].area_histogram[k]);
 				dif_hks_arr[k] = Histogram_ChiSquareDistance(descs[i].hks_histogram[k], descs[j].hks_histogram[k]);
 			}
-			float dif_area = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]).length();
-			float dif_hks = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]).length();
+			glm::vec3 dif_area_arr_vec = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]);
+			glm::vec3 dif_hks_arr_vec = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]);
+			float dif_area = glm::length(dif_area_arr_vec);
+			float dif_hks = glm::length(dif_hks_arr_vec);
 			hist_i.push_back(  std::sqrtf( ( dif_area*dif_area)  + (dif_hks * dif_hks)) );
-			//float dif_area_hks = Histogram_ChiSquareDistance(descs[i].area_hks_histogram, descs[j].area_hks_histogram);
-			//hist_i.push_back(dif_area_hks);
 		}
 		hist_diffs.push_back(hist_i);
 	}
@@ -176,7 +176,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		}
 	}*/
 	//maximum sdf
-	//float maximum_sdf = ShapeDiameter_calculate_simple_max_dif(m, point_indices);
+	std::vector<float> sdf = computeSDF(m, 1);
+	auto best_sdf_auto = std::max_element(sdf.begin(), sdf.end());
+	int best_sdf_index = (std::distance(sdf.begin(), best_sdf_auto));
+	float maximum_sdf = sdf[best_sdf_index];
+	
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	for (size_t i = 0; i < descs.size(); i++)
 	{
@@ -201,10 +205,6 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			
 			bool is_area_dif = NLateral_compare_area(m,descs[i],descs[j],maximum_area_dif , area_dif_param,file);
 			file << " is area dif " << is_area_dif <<  std::endl;
-			float ratio_dif = std::fabs(descs[i].paths_ratio - descs[j].paths_ratio);
-			bool is_ratio_dif = ratio_dif < ratio_dif_param;
-			file << "  desc path ratio dif " << ratio_dif << std::endl;
-			file << "  desc path ratio  " << is_ratio_dif << std::endl;
 
 			//bool is_fuzzy = NLateral_compare_FuzzyGeodesics(m, descs[i], descs[j], fuzzy_param);
 			bool is_angle_dif = Nlateral_compare_angles(m, descs[i], descs[j], norm_angle_param);
@@ -212,12 +212,13 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
 			//bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
-			//bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], maximum_sdf, sdf_param, file);
+			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], sdf, sdf_param, file);
+			bool is_points_close = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
 			
-			//bool is_points_close = NLateral_compare_position_to_midpoint(m, descs[i], descs[j], mid_point_index, 0.1, 0.2, file);
+			//bool is_ratio = NLateral_compare_path_ratio(m, descs[i], descs[j], ratio_dif_param, file);
 			//file << " is depth " << is_depth << std::endl;
 			file << " histogram diff " << hist_diffs[i][j] << std::endl;
-			if ( is_hks && is_area_dif ) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
+			if ( is_hks && is_area_dif && is_points_close && is_sdf) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];

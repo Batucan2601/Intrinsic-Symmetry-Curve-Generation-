@@ -133,6 +133,7 @@ void NLateral_compute_skel_point_dist(TrilateralMesh* m, Skeleton& skel, NLatera
 void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int index);
 void Nlateral_display_desc(TrilateralMesh* m, std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>>& descs, int index);
 void Nlateral_display_desc(TrilateralMesh* m, NLateralDescriptor& desc);
+void Nlateral_display_histogram(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int descriptor_no);
 void NLateralDescriptor_write(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
 void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vector<NLateralDescriptor>& desc);
 
@@ -152,10 +153,10 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 bool NLateral_compare_FuzzyGeodesics(TrilateralMesh* m ,  NLateralDescriptor& desc1 , NLateralDescriptor& desc2 , float fuzzy_param);
 bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
 ,float distance_to_mid_param, std::ofstream& file);
-bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_sdf ,
-float sdf_param , std::ofstream& file );
+bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<float>& sdf,
+	float sdf_param, std::ofstream& file);
 bool Nlateral_compare_angles(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float angle_param);
-
+bool NLateral_compare_path_ratio(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float ratio_param, std::ofstream& file);
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
 bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
 	float distances_from_mid, float distances_between_desc , std::ofstream& file);

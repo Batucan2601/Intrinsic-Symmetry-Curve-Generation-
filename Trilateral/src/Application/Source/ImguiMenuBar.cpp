@@ -63,6 +63,7 @@ static bool is_draw_mesh = true;
 static bool is_draw_normals = false; 
 static bool is_draw_agd = false; 
 static bool is_draw_desc = false; 
+static bool is_draw_hist = false; 
 static float agd_sphere_radius = 1; 
 static float line_thickness_3d = 0.01; 
 static int descriptor_no = 0;
@@ -212,6 +213,10 @@ void imgui_menu_bar(TrilateralMesh* m)
         ImGui::EndMainMenuBar();
     }
     display_file_dialogs(m);
+    if (is_draw_hist)
+    {
+        Nlateral_display_histogram(m, nlateral_descriptors, descriptor_no);
+    }
 }
 
 
@@ -394,6 +399,10 @@ static void Nlateral_functions(TrilateralMesh* m)
             Nlateral_display_desc(m, nlateral_descriptors , descriptor_no);
             is_draw_desc = true;
         }
+        if (ImGui::MenuItem("Display histogram "))
+        {
+            is_draw_hist = true;
+        }
         if (ImGui::MenuItem("Display descriptor all"))
         {
             display_descriptor_all(m);
@@ -548,7 +557,10 @@ static void curvature_creation(TrilateralMesh* m )
         unsigned int p2; 
         CurvatureGeneration_mid_point_w_AGD(m, p1, p2);
     }
-
+    if (ImGui::MenuItem("Laplacian smoothing"))
+    {
+        CurvatureGeneration_laplacian_smoothing(m, curvature, quality_param);
+    }
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;

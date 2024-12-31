@@ -6,6 +6,7 @@
 #include "../Include/Geodesic.h"
 #include "../Include/ROI.h""
 #include "../Include/ShapeDiameter.h""
+#include "../Include/imgui/implot.h"
 #pragma region Nlateral struct
 
 NLateralDescriptor::NLateralDescriptor(TrilateralMesh& mesh, const std::vector<unsigned int>& point_indices, int N)
@@ -886,7 +887,7 @@ int no_of_points, unsigned int smallest_agd_index , int histogram_size )
 		std::sort(closest_points_midpoint.begin(), closest_points_midpoint.end());
 		
 		nlateral_indices.push_back(indices[i]);
-		nlateral_indices.push_back(closest_points_midpoint[no_of_points - 1 ].second);
+		nlateral_indices.push_back(closest_points_midpoint[no_of_points - 1].second);
 		nlateral_indices.push_back(closest_points_midpoint[no_of_points - 2].second);
 
 		NLateralDescriptor desc;
@@ -2348,15 +2349,20 @@ bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescript
 	return false; 
 }
 
-bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float maximum_sdf, 
-float param , std::ofstream& file)
+bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<float>& sdf, 
+float sdf_param , std::ofstream& file)
 {
-	float sdf_1 = ShapeDiameter_calculate_simple(m, desc1.indices[0]);
-	float sdf_2 = ShapeDiameter_calculate_simple(m, desc2.indices[0]);
+	float sdf_1 = sdf[desc1.indices[0]];
+	float sdf_2 = sdf[desc2.indices[0]];
 	
-	float dif = std::abs(sdf_1 - sdf_2);
-	file << " Sdf " << dif / maximum_sdf << std::endl;
-	if ( (dif /maximum_sdf)  < param )
+	float ratio = sdf_1 / sdf_2;
+	if (ratio > 1 )
+	{
+		ratio = 1 / ratio;
+	}
+
+	file << " Sdf ratio " << ratio << std::endl;
+	if ( ratio > sdf_param )
 	{
 		return true; 
 	}
@@ -2457,6 +2463,40 @@ bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateral
 	return true; 
 }
 
+bool NLateral_compare_path_ratio(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float ratio_param, std::ofstream& file)
+{
+	std::vector<float> distances_1 = Geodesic_dijkstra(*m,desc1.indices[0]);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m,desc2.indices[0]);
+	float length_1_1_2 = distances_1[desc1.indices[1]];
+	float length_2_1_2 = distances_2[desc2.indices[1]];
+	float ratio_1_2 = length_1_1_2 / length_2_1_2; 
+	bool return_value = true;
+	if (ratio_1_2 > 1)
+	{
+		ratio_1_2 = 1.0f / ratio_1_2;
+	}
+	if (ratio_1_2 < ratio_param)
+	{
+		return_value = false;
+	}
+	float length_1_1_3 = distances_1[desc1.indices[2]];
+	float length_2_1_3 = distances_2[desc2.indices[2]];
+	float ratio_1_3 = length_1_1_3 / length_2_1_3;
+	if (ratio_1_3 > 1)
+	{
+		ratio_1_3 = 1.0f / ratio_1_3;
+	}
+	if (ratio_1_3 < ratio_param)
+	{
+		return_value = false;
+	}
+
+	file << " ratio  1 - 2 " << ratio_1_2 << std::endl;
+	file << " ratio 1 - 3 " << ratio_1_3 << std::endl;
+	file << "ratio " << return_value << std::endl;
+
+	return return_value;
+}
 bool NLateral_compare_FuzzyGeodesics(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float fuzzy_param)
 {
 
@@ -2487,4 +2527,26 @@ void NLateral_calculate_fuzzyGeodesics(TrilateralMesh* m, std::vector<NLateralDe
 		descs[i].fuzzy = total_fuzziness_d1;
 	}
 	
+}
+
+void Nlateral_display_histogram(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs, int descriptor_no)
+{
+	NLateralDescriptor* d = &descs[descriptor_no];
+	ImGui::Begin("Histogram");
+	if (ImPlot::BeginPlot("Plot for point 1")) {
+		ImPlot::PlotBars("Area histogram", &(d->area_histogram[0].histogram[0]), d->area_histogram[0].size());
+		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[0].histogram[0]), d->hks_histogram[0].size());
+		ImPlot::EndPlot();
+	}
+	if (ImPlot::BeginPlot("Plot for point 2")) {
+		ImPlot::PlotBars("Area histogram",&(d->area_histogram[1].histogram[0]), d->area_histogram[1].size());
+		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[1].histogram[0]), d->hks_histogram[1].size());
+		ImPlot::EndPlot();
+	}
+	if (ImPlot::BeginPlot("Plot for point 1")) {
+		ImPlot::PlotBars("Area histogram", &(d->area_histogram[2].histogram[0]), d->area_histogram[2].size());
+		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[2].histogram[0]), d->hks_histogram[2].size());
+		ImPlot::EndPlot();
+	}
+	ImGui::End();
 }

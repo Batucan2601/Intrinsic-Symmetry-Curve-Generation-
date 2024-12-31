@@ -314,13 +314,13 @@ std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
 			TrilateralRay ray;
 			ray.origin = m->vertices[i];
 			ray.direction = -rayDir;
-			calculateRightUpVectors(ray.direction, ray.origin, right, up);
+			/*calculateRightUpVectors(ray.direction, ray.origin, right, up);
 			glm::quat quaternion_right = glm::angleAxis((float)rot_x, up);
 			glm::quat quaternion_up = glm::angleAxis((float)rot_y, right);
 			//glm::quat quaternion_right{} = glm::angleAxis(rot_y, right);
 			ray.direction = quaternion_right * ray.direction;
 			ray.direction = quaternion_up * ray.direction;
-			ray.direction = glm::normalize(ray.direction);
+			ray.direction = glm::normalize(ray.direction);*/
 			//rotate direction
 			// rotate 
 			// Find intersection distance
@@ -344,6 +344,7 @@ std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
 			}
 			if (smallest_dist != INFINITY &&  !std::isnan(smallest_dist))
 			{
+				sdfValues[i] = (smallest_dist);
 				ray_distances.push_back(smallest_dist);
 				rays.push_back(ray);
 			}
@@ -351,7 +352,7 @@ std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
 			 
 		}
 		// 1 -calculate mean
-		float mean = 0;
+		/*float mean = 0;
 		for (size_t j = 0; j < ray_distances.size(); j++)
 		{
 			mean += ray_distances[j];
@@ -382,7 +383,7 @@ std::vector<float> computeSDF(TrilateralMesh* m,  int numRays = 10) {
 		if (standart_deviation_distances.size() > 0)
 		{
 			sdfValues[i] = sdf / standart_deviation_distances.size();
-		}
+		}*/
 	}
 	m->sdf = sdfValues;
 	return sdfValues;
@@ -399,7 +400,7 @@ void ShapeDiameter_color(TrilateralMesh* m)
 		indices.push_back(i);
 	}
 	//ShapeDiameter_calculate(m, indices, sdf_values);
-	sdf_values = computeSDF(m, 100);
+	sdf_values = computeSDF(m, 1);
 	/*for (size_t i = 0; i < sdf_values.size(); i++)
 	{
 		if (sdf_values[i] == INFINITY)
