@@ -19,7 +19,8 @@ struct Curvature
 	float get_avg_quality(TrilateralMesh* m );
 	std::vector<unsigned int> get_strong_points();
 	void add_strong_list(std::vector<unsigned int> strong_list);
-	void generate_curve_quality();
+	void generate_curve_quality(TrilateralMesh* m);
+
 };
 
 struct Curve
@@ -42,5 +43,7 @@ float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
 void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param  );
+bool CurvatureGeneration_curve_smoothing(TrilateralMesh* m, Curvature& c, float quality_dif_param);
+
 void CurvatureGeneration_add_new_matching(TrilateralMesh* m, Curvature& c,
 	std::vector<unsigned int>& agd_indices, float quality_param, float hks_param, float distance_to_midpoint_param);

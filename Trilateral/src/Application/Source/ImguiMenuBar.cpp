@@ -561,6 +561,10 @@ static void curvature_creation(TrilateralMesh* m )
     {
         CurvatureGeneration_laplacian_smoothing(m, curvature, quality_param);
     }
+    if (ImGui::MenuItem("Curve smoothing"))
+    {
+        CurvatureGeneration_curve_smoothing(m, curvature, quality_param);
+    }
     if (ImGui::MenuItem("Add new matching"))
     {
         CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,quality_param ,hks_dif_param , distance_to_mid_param);

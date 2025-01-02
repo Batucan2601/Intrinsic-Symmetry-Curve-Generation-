@@ -67,8 +67,24 @@ void Curvature::add_strong_list(std::vector<unsigned int> strong_list)
 	}
 }
 
-void Curvature::generate_curve_quality()
+void Curvature::generate_curve_quality(TrilateralMesh* m )
 {
+	this->curve_quality.clear();
+	this->curve_quality.push_back(1.0f);
+
+	int first_index = this->curve_points[0].mid_point;
+	std::vector<float> distances_from_first = Geodesic_dijkstra(*m, first_index);
+	float distance_so_far = 0;
+	for (size_t i = 1; i < this->curve_points.size(); i++)
+	{
+		int index = this->curve_points[i].mid_point;
+		float nominator = distances_from_first[index];
+		std::vector<float> distances_from_i = Geodesic_dijkstra(*m, index);
+		float distance = distances_from_i[this->curve_points[i-1].mid_point];
+		distance_so_far += distance;
+		float quality = nominator / distance_so_far; 
+		this->curve_quality.push_back(quality);
+	}
 
 }
 static float get_quality(TrilateralMesh* m, Curvature& c , int index  )
@@ -86,10 +102,11 @@ static float get_quality(TrilateralMesh* m, Curvature& c , int index  )
 	
 }
 
-static void remove_index_w_correspon(TrilateralMesh* m, Curvature& c, unsigned int i)
+static bool remove_index_w_correspon(TrilateralMesh* m, Curvature& c, unsigned int i)
 {
-	CurvePoints temp = c.curve_points[i];
-	c.curve_points.erase(c.curve_points.begin() + i);
+	Curvature curve_temp = c; 
+	CurvePoints temp = curve_temp.curve_points[i];
+	curve_temp.curve_points.erase(curve_temp.curve_points.begin() + i);
 	if (!temp.is_strong)
 	{
 		for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
@@ -102,8 +119,36 @@ static void remove_index_w_correspon(TrilateralMesh* m, Curvature& c, unsigned i
 			}
 		}
 	}
-	
+	build_curvature(m, curve_temp);
 
+	int no_of_normal = 0;
+	int no_of_inv_normal = 0;
+	for (size_t i = 0; i < curve_temp.paths.size(); i++)
+	{
+		for (size_t j = 0; j < curve_temp.paths[i].size(); j++)
+		{
+			int index = curve_temp.paths[i][j];
+			glm::vec3 normal = m->normals[index];
+
+			float dot = glm::dot(m->normals[curve_temp.midpoint_index], m->normals[index]);
+			float dot_inv = glm::dot(m->normals[curve_temp.midpoint_inv_index], m->normals[index]);
+			if (dot > dot_inv)
+			{
+				no_of_normal++;
+			}
+			else
+			{
+				no_of_inv_normal++;
+			}
+		}
+	}
+
+	if (no_of_normal > no_of_inv_normal)
+	{
+		c = curve_temp;
+		return true; 
+	}
+	return false;
 }
 static CurvePoints get_worst_curv_point(Curvature& c ,int& index)
 {
@@ -176,6 +221,7 @@ static Curvature connect_front_and_back(TrilateralMesh* m, Curvature& front, Cur
 	}
 	full_curvature.paths.push_back(paths_unsigned);
 	
+	full_curvature.generate_curve_quality(m);
 	return full_curvature;
 }
 //eliminates the points with same index
@@ -344,7 +390,7 @@ static void build_curvature(TrilateralMesh* m , Curvature& curvature)
 
 	m->color_points(std::vector<unsigned int>{curvature.curve_points[best_midpoint_from_index].mid_point} , BLUE );
 	CurvatureGeneration_curvature_quality(m, curvature);
-
+	curvature.generate_curve_quality(m);
 	
 }
 static void update_curvature(TrilateralMesh* m, Curvature& c, 
@@ -889,23 +935,16 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 	build_curvature(m, curv_back);
 	//CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
 
-	/*for (size_t i = 0; i < 5; i++)
-	{
-		CurvatureGeneration_laplacian_smoothing(m, curv_front, 0.9);
-	}
-	for (size_t i = 0; i < 5; i++)
-	{
-		CurvatureGeneration_laplacian_smoothing(m, curv_back, 0.9);
-	}*/
+	while(CurvatureGeneration_curve_smoothing(m, curv_front, quality_param)); 
+	while(CurvatureGeneration_curve_smoothing(m, curv_back, quality_param)); 
 
-	//Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
+	Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
 	m->color_points(std::vector<unsigned int>{ midpoint_back }, WHITE);
 
 	m->color_points(std::vector<unsigned int>{ strong_list }, RED);
 
-
-	return curv_back;
+	return full_curvature;
 }
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param )
@@ -935,7 +974,6 @@ void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, fl
 	if (worst_quality_index != -1 )
 	{
 		remove_index_w_correspon(m, c, worst_quality_index);
-		build_curvature(m, c);
 	}
 
 }
@@ -1055,4 +1093,31 @@ std::vector<unsigned int>& agd_indices , float quality_param , float hks_param ,
 	m->calculated_symmetry_pairs.push_back(p.correspondence);
 
 	build_curvature(m,c);
+}
+
+bool CurvatureGeneration_curve_smoothing(TrilateralMesh* m, Curvature& c, float quality_dif_param)
+{
+	if (c.curve_points.size() <= 2)
+	{
+		return false;
+	}
+	int index_i = -1;
+	for (size_t i = 0; i < c.curve_points.size()-1; i++)
+	{
+		if (c.curve_quality[i] - c.curve_quality[i + 1] > quality_dif_param)
+		{
+			index_i = i;
+			break;
+		}
+	}
+	if (index_i != -1)
+	{
+		bool is_ok = remove_index_w_correspon(m, c, index_i);
+		if (is_ok)
+		{
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
