@@ -5,12 +5,21 @@ struct CurvePoints
 {
 	std::pair<unsigned int, unsigned int> correspondence;
 	unsigned int mid_point;
+	unsigned int strength; // how many points have been here
 	float quality;
+	bool is_strong;
 };
 struct Curvature
 {
 	std::vector<CurvePoints> curve_points; 
-	std::vector<std::vector<unsigned int>> paths; 
+	std::vector<std::vector<unsigned int>> paths;
+	std::vector<float> curve_quality; // quality of the curve not the points 
+	unsigned int midpoint_index; 
+	unsigned int midpoint_inv_index; 
+	float get_avg_quality(TrilateralMesh* m );
+	std::vector<unsigned int> get_strong_points();
+	void add_strong_list(std::vector<unsigned int> strong_list);
+	void generate_curve_quality();
 };
 
 struct Curve
@@ -33,4 +42,5 @@ float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
 void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param  );
-
+void CurvatureGeneration_add_new_matching(TrilateralMesh* m, Curvature& c,
+	std::vector<unsigned int>& agd_indices, float quality_param, float hks_param, float distance_to_midpoint_param);

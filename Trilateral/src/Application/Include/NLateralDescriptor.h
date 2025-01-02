@@ -160,6 +160,8 @@ bool NLateral_compare_path_ratio(TrilateralMesh* m, NLateralDescriptor& desc1, N
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2);
 bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index,
 	float distances_from_mid, float distances_between_desc , std::ofstream& file);
+bool Nlateral_compare_closeness(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpointIndex
+	, float closeness_param, std::ofstream& file);
 bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_param);
 std::vector<NLateralDescriptor> NLateral_select_farthest_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
 	int no_of_points, unsigned int smallest_agd_index, int histogram_size);

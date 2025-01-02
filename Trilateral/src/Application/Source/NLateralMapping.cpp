@@ -8,7 +8,7 @@
 #include "../Include/CurvatureGeneration.h"
 
 std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float ratio_dif_param,
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float closeness_param, float ratio_dif_param,
 	float area_dif_param,float fuzzy_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
 	float distance_to_mid_param , float sdf_param , int N , std::vector<unsigned int>& agd_point_indices)
 {
@@ -176,7 +176,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 		}
 	}*/
 	//maximum sdf
-	std::vector<float> sdf = computeSDF(m, 1);
+	std::vector<float> sdf = computeSDF(m, 20,20);
 	auto best_sdf_auto = std::max_element(sdf.begin(), sdf.end());
 	int best_sdf_index = (std::distance(sdf.begin(), best_sdf_auto));
 	float maximum_sdf = sdf[best_sdf_index];
@@ -207,18 +207,17 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			file << " is area dif " << is_area_dif <<  std::endl;
 
 			//bool is_fuzzy = NLateral_compare_FuzzyGeodesics(m, descs[i], descs[j], fuzzy_param);
-			bool is_angle_dif = Nlateral_compare_angles(m, descs[i], descs[j], norm_angle_param);
  			//float gaussian_curve = std::abs(dvorak_pairs[i].gaussian_curv / dvorak_pairs[j].gaussian_curv);
 			//bool is_gaussian = gaussian_curve / maximum_gaussian_curve < curv_param;
 			//file << " area dif " << area_dif << " " << is_area_dif << std::endl;
 			//bool is_endpoint = Nlateral_check_endpoint(m, skeleton, descs[i], descs[j]);
 			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], sdf, sdf_param, file);
-			bool is_points_close = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
-			
+			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
+			bool is_points_far_from_each_other = Nlateral_compare_closeness(m, descs[i], descs[j], mid_point_index, closeness_param, file);
 			//bool is_ratio = NLateral_compare_path_ratio(m, descs[i], descs[j], ratio_dif_param, file);
 			//file << " is depth " << is_depth << std::endl;
 			file << " histogram diff " << hist_diffs[i][j] << std::endl;
-			if ( is_hks && is_area_dif && is_points_close && is_sdf) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
+			if ( is_hks && is_area_dif && is_points_close_to_midpoint  && is_sdf && is_points_far_from_each_other) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
 				res.first = hist_diffs[i][j];
@@ -312,7 +311,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	std::cout << " total == " << correct_count << " " << m->calculated_symmetry_pairs.size() << std::endl;*/
 	
 	//create descriptors and match thme
-	m->update_raylib_mesh();
+	//m->update_raylib_mesh();
 	return descs;
 }
 

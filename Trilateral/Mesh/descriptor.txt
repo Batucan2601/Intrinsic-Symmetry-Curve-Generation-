@@ -4,8 +4,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.204875
+ Sdf ratio 0.177724
  distance to modpoint 0.347752
+ closeness comparison 
+ ratio 1.97755
+1
  histogram diff 2.56028
  i 0 j 2
  is hks 0
@@ -13,8 +16,11 @@
  1 3 0.000804221
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.235441
+ Sdf ratio 0.240274
  distance to modpoint 0.338982
+ closeness comparison 
+ ratio 3.24387
+1
  histogram diff 0.928367
  i 0 j 3
  is hks 1
@@ -22,8 +28,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.780734
+ Sdf ratio 0.732306
  distance to modpoint 0.574004
+ closeness comparison 
+ ratio 1.44873
+1
  histogram diff 1.7185
  i 0 j 4
  is hks 1
@@ -31,8 +40,11 @@
  1 3 0.000488715
  2 3 0
  is area dif 1
- Sdf ratio 0.6529
+ Sdf ratio 0.740616
  distance to modpoint 0.462323
+ closeness comparison 
+ ratio 1.18016
+1
  histogram diff 1.07395
  i 0 j 5
  is hks 0
@@ -40,8 +52,11 @@
  1 3 0.000783579
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.542791
+ Sdf ratio 0.625018
  distance to modpoint 0.21314
+ closeness comparison 
+ ratio 4.9491
+1
  histogram diff 1.08424
  i 0 j 6
  is hks 1
@@ -49,8 +64,11 @@
  1 3 0.000999154
  2 3 0.000510439
  is area dif 1
- Sdf ratio 0.772179
+ Sdf ratio 0.709231
  distance to modpoint 0.905916
+ closeness comparison 
+ ratio 1.39938
+1
  histogram diff 0.682593
  i 0 j 7
  is hks 1
@@ -58,8 +76,11 @@
  1 3 0.000805263
  2 3 0.000316548
  is area dif 1
- Sdf ratio 0.361402
+ Sdf ratio 0.33568
  distance to modpoint 0.569128
+ closeness comparison 
+ ratio 1.53459
+1
  histogram diff 1.5756
  i 0 j 8
  is hks 0
@@ -67,8 +88,11 @@
  1 3 0.000506427
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.65036
+ Sdf ratio 0.713491
  distance to modpoint 0.212347
+ closeness comparison 
+ ratio 5.51177
+1
  histogram diff 0.797109
  i 0 j 9
  is hks 0
@@ -76,8 +100,11 @@
  1 3 0.000852881
  2 3 0.000364166
  is area dif 1
- Sdf ratio 0.269127
+ Sdf ratio 0.27055
  distance to modpoint 0.258758
+ closeness comparison 
+ ratio 4.1731
+1
  histogram diff 0.952389
  i 0 j 10
  is hks 0
@@ -85,8 +112,11 @@
  1 3 0.000947734
  2 3 0.00045902
  is area dif 1
- Sdf ratio 0.243056
+ Sdf ratio 0.229709
  distance to modpoint 0.255763
+ closeness comparison 
+ ratio 4.74812
+1
  histogram diff 0.61148
  i 0 j 11
  is hks 1
@@ -94,8 +124,11 @@
  1 3 0.00103727
  2 3 0.00054855
  is area dif 1
- Sdf ratio 0.553504
+ Sdf ratio 0.48768
  distance to modpoint 0.70423
+ closeness comparison 
+ ratio 1.59529
+1
  histogram diff 1.02733
  i 0 j 12
  is hks 0
@@ -103,8 +136,11 @@
  1 3 0.000562506
  2 3 7.37915e-05
  is area dif 1
- Sdf ratio 0.532111
+ Sdf ratio 0.44594
  distance to modpoint 0.340819
+ closeness comparison 
+ ratio 3.32119
+1
  histogram diff 0.900244
  i 0 j 13
  is hks 1
@@ -112,8 +148,11 @@
  1 3 0.000836766
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.574243
+ Sdf ratio 0.550207
  distance to modpoint 0.6727
+ closeness comparison 
+ ratio 2.48655
+1
  histogram diff 0.938316
  i 0 j 14
  is hks 1
@@ -121,8 +160,11 @@
  1 3 0.000836766
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.844451
+ Sdf ratio 0.944023
  distance to modpoint 0.646988
+ closeness comparison 
+ ratio 2.16332
+1
  histogram diff 1.19987
  i 0 j 15
  is hks 0
@@ -130,8 +172,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.288167
+ Sdf ratio 0.285567
  distance to modpoint 0.529856
+ closeness comparison 
+ ratio 0.989246
+1
  histogram diff 1.67766
  i 0 j 16
  is hks 1
@@ -139,8 +184,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.409802
+ Sdf ratio 0.320812
  distance to modpoint 0.441496
+ closeness comparison 
+ ratio 2.24472
+1
  histogram diff 1.869
  i 0 j 17
  is hks 0
@@ -148,8 +196,11 @@
  1 3 0.000783579
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.390216
+ Sdf ratio 0.359451
  distance to modpoint 0.385859
+ closeness comparison 
+ ratio 2.91981
+1
  histogram diff 0.773647
  i 0 j 18
  is hks 0
@@ -157,8 +208,11 @@
  1 3 0.000783579
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.368906
+ Sdf ratio 0.341073
  distance to modpoint 0.359678
+ closeness comparison 
+ ratio 2.95144
+1
  histogram diff 0.675244
  i 0 j 19
  is hks 0
@@ -166,8 +220,11 @@
  1 3 0.000506427
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.40063
+ Sdf ratio 0.408489
  distance to modpoint 0.379853
+ closeness comparison 
+ ratio 3.48438
+1
  histogram diff 0.899475
  i 0 j 20
  is hks 0
@@ -175,8 +232,11 @@
  1 3 0.000506427
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.392529
+ Sdf ratio 0.373568
  distance to modpoint 0.35179
+ closeness comparison 
+ ratio 3.48844
+1
  histogram diff 0.859881
  i 0 j 21
  is hks 0
@@ -184,8 +244,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.839385
+ Sdf ratio 0.881895
  distance to modpoint 0.339932
+ closeness comparison 
+ ratio 2.67793
+1
  histogram diff 1.5079
  i 0 j 22
  is hks 0
@@ -193,8 +256,11 @@
  1 3 0.000783579
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.0384
+ Sdf ratio 0.0428586
  distance to modpoint 0.195661
+ closeness comparison 
+ ratio 5.41937
+1
  histogram diff 0.984252
  i 0 j 23
  is hks 0
@@ -202,8 +268,11 @@
  1 3 0.000506427
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.0568643
+ Sdf ratio 0.0688303
  distance to modpoint 0.192027
+ closeness comparison 
+ ratio 6.04586
+1
  histogram diff 0.825851
  i 0 j 24
  is hks 0
@@ -211,8 +280,11 @@
  1 3 0.000804221
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.814575
+ Sdf ratio 0.497454
  distance to modpoint 0.25132
+ closeness comparison 
+ ratio 4.27294
+1
  histogram diff 0.861272
  i 0 j 25
  is hks 0
@@ -220,8 +292,11 @@
  1 3 0
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.11837
+ Sdf ratio 0.101038
  distance to modpoint 0.271847
+ closeness comparison 
+ ratio 2.78048
+1
  histogram diff 2.61224
  i 0 j 26
  is hks 1
@@ -229,8 +304,11 @@
  1 3 0.000726693
  2 3 0.00121541
  is area dif 1
- Sdf ratio 0.593817
+ Sdf ratio 0.579924
  distance to modpoint 0.620118
+ closeness comparison 
+ ratio 1.02301
+1
  histogram diff 0.943461
  i 0 j 27
  is hks 1
@@ -238,8 +316,11 @@
  1 3 0.00023303
  2 3 0.000255684
  is area dif 1
- Sdf ratio 0.618284
+ Sdf ratio 0.601614
  distance to modpoint 0.0674427
+ closeness comparison 
+ ratio 14.7691
+1
  histogram diff 0.591008
  i 1 j 0
  is hks 0
@@ -247,8 +328,11 @@
  1 3 0.000426418
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.204875
+ Sdf ratio 0.177724
  distance to modpoint 0.347752
+ closeness comparison 
+ ratio 1.97755
+1
  histogram diff 2.56028
  i 1 j 2
  is hks 1
@@ -256,8 +340,11 @@
  1 3 0.000110911
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.870174
+ Sdf ratio 0.739673
  distance to modpoint 0.97478
+ closeness comparison 
+ ratio 1.48858
+1
  histogram diff 1.10323
  i 1 j 3
  is hks 0
@@ -265,8 +352,11 @@
  1 3 0.000915132
  2 3 0
  is area dif 1
- Sdf ratio 0.262413
+ Sdf ratio 0.242691
  distance to modpoint 0.605836
+ closeness comparison 
+ ratio 1.55433
+1
  histogram diff 1.58835
  i 1 j 4
  is hks 0
@@ -274,8 +364,11 @@
  1 3 0.000426418
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.313792
+ Sdf ratio 0.239968
  distance to modpoint 0.752185
+ closeness comparison 
+ ratio 0.974334
+1
  histogram diff 2.19575
  i 1 j 5
  is hks 1
@@ -283,8 +376,11 @@
  1 3 0.000131553
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.377447
+ Sdf ratio 0.28435
  distance to modpoint 0.612906
+ closeness comparison 
+ ratio 2.39951
+1
  histogram diff 1.26513
  i 1 j 6
  is hks 0
@@ -292,8 +388,11 @@
  1 3 8.40218e-05
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.26532
+ Sdf ratio 0.250587
  distance to modpoint 0.383868
+ closeness comparison 
+ ratio 2.46856
+1
  histogram diff 1.94105
  i 1 j 7
  is hks 0
@@ -301,8 +400,11 @@
  1 3 0.000109869
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.566889
+ Sdf ratio 0.529445
  distance to modpoint 0.611027
+ closeness comparison 
+ ratio 1.39091
+1
  histogram diff 1.46864
  i 1 j 8
  is hks 1
@@ -310,8 +412,11 @@
  1 3 0.000408706
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.315018
+ Sdf ratio 0.249091
  distance to modpoint 0.610627
+ closeness comparison 
+ ratio 2.57456
+1
  histogram diff 1.35687
  i 1 j 9
  is hks 1
@@ -319,8 +424,11 @@
  1 3 6.22517e-05
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.761258
+ Sdf ratio 0.6569
  distance to modpoint 0.744087
+ closeness comparison 
+ ratio 2.13251
+1
  histogram diff 1.50977
  i 1 j 10
  is hks 1
@@ -328,8 +436,11 @@
  1 3 3.2602e-05
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.842912
+ Sdf ratio 0.773692
  distance to modpoint 0.735475
+ closeness comparison 
+ ratio 2.32694
+1
  histogram diff 1.56728
  i 1 j 11
  is hks 0
@@ -337,8 +448,11 @@
  1 3 0.000122133
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.370142
+ Sdf ratio 0.364427
  distance to modpoint 0.493805
+ closeness comparison 
+ ratio 2.50315
+1
  histogram diff 2.11431
  i 1 j 12
  is hks 1
@@ -346,8 +460,11 @@
  1 3 0.000352626
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.385022
+ Sdf ratio 0.398537
  distance to modpoint 0.980062
+ closeness comparison 
+ ratio 1.53613
+1
  histogram diff 1.31494
  i 1 j 13
  is hks 0
@@ -355,8 +472,11 @@
  1 3 7.83666e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.356774
+ Sdf ratio 0.323013
  distance to modpoint 0.51695
+ closeness comparison 
+ ratio 2.9223
+1
  histogram diff 1.90886
  i 1 j 14
  is hks 0
@@ -364,8 +484,11 @@
  1 3 7.83666e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.242613
+ Sdf ratio 0.188262
  distance to modpoint 0.537494
+ closeness comparison 
+ ratio 2.67168
+1
  histogram diff 2.21516
  i 1 j 15
  is hks 0
@@ -373,8 +496,11 @@
  1 3 0.000915132
  2 3 0
  is area dif 1
- Sdf ratio 0.710958
+ Sdf ratio 0.622354
  distance to modpoint 0.656315
+ closeness comparison 
+ ratio 0.53479
+1
  histogram diff 0.870771
  i 1 j 16
  is hks 0
@@ -382,8 +508,11 @@
  1 3 0.000915132
  2 3 0
  is area dif 1
- Sdf ratio 0.499937
+ Sdf ratio 0.553981
  distance to modpoint 0.787669
+ closeness comparison 
+ ratio 1.41493
+1
  histogram diff 0.961159
  i 1 j 17
  is hks 0
@@ -391,8 +520,11 @@
  1 3 0.000131553
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.525029
+ Sdf ratio 0.494431
  distance to modpoint 0.901243
+ closeness comparison 
+ ratio 1.88302
+1
  histogram diff 1.61351
  i 1 j 18
  is hks 0
@@ -400,8 +532,11 @@
  1 3 0.000131553
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.555358
+ Sdf ratio 0.521072
  distance to modpoint 0.966843
+ closeness comparison 
+ ratio 1.75992
+1
  histogram diff 1.69985
  i 1 j 19
  is hks 0
@@ -409,8 +544,11 @@
  1 3 0.000408706
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.511381
+ Sdf ratio 0.435076
  distance to modpoint 0.915491
+ closeness comparison 
+ ratio 2.06787
+1
  histogram diff 1.5347
  i 1 j 20
  is hks 0
@@ -418,8 +556,11 @@
  1 3 0.000408706
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.521935
+ Sdf ratio 0.475747
  distance to modpoint 0.988521
+ closeness comparison 
+ ratio 1.89266
+1
  histogram diff 1.78224
  i 1 j 21
  is hks 0
@@ -427,8 +568,11 @@
  1 3 0.000915132
  2 3 0
  is area dif 1
- Sdf ratio 0.244077
+ Sdf ratio 0.156734
  distance to modpoint 0.977511
+ closeness comparison 
+ ratio 1.19105
+1
  histogram diff 1.7367
  i 1 j 22
  is hks 0
@@ -436,8 +580,11 @@
  1 3 0.000131553
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.187432
+ Sdf ratio 0.241153
  distance to modpoint 0.562644
+ closeness comparison 
+ ratio 2.5659
+1
  histogram diff 1.40391
  i 1 j 23
  is hks 0
@@ -445,8 +592,11 @@
  1 3 0.000408706
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.277556
+ Sdf ratio 0.387288
  distance to modpoint 0.552194
+ closeness comparison 
+ ratio 2.77696
+1
  histogram diff 1.59071
  i 1 j 24
  is hks 0
@@ -454,8 +604,11 @@
  1 3 0.000110911
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.166886
+ Sdf ratio 0.357267
  distance to modpoint 0.722697
+ closeness comparison 
+ ratio 1.84644
+1
  histogram diff 1.43431
  i 1 j 25
  is hks 0
@@ -463,8 +616,11 @@
  1 3 0.000915132
  2 3 0
  is area dif 1
- Sdf ratio 0.577765
+ Sdf ratio 0.568514
  distance to modpoint 0.781725
+ closeness comparison 
+ ratio 0.344279
+0
  histogram diff 0.962505
  i 1 j 26
  is hks 0
@@ -472,8 +628,11 @@
  1 3 0.00164183
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.345013
+ Sdf ratio 0.30646
  distance to modpoint 0.560784
+ closeness comparison 
+ ratio 1.74965
+1
  histogram diff 1.4498
  i 1 j 27
  is hks 0
@@ -481,8 +640,11 @@
  1 3 0.000682102
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.33136
+ Sdf ratio 0.295412
  distance to modpoint 0.0234533
+ closeness comparison 
+ ratio 42.6644
+1
  histogram diff 1.85562
  i 2 j 0
  is hks 0
@@ -490,8 +652,11 @@
  1 3 0.000723421
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.235441
+ Sdf ratio 0.240274
  distance to modpoint 0.338982
+ closeness comparison 
+ ratio 3.24387
+1
  histogram diff 0.928367
  i 2 j 1
  is hks 1
@@ -499,8 +664,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.870174
+ Sdf ratio 0.739673
  distance to modpoint 0.97478
+ closeness comparison 
+ ratio 1.48858
+1
  histogram diff 1.10323
  i 2 j 3
  is hks 0
@@ -508,8 +676,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.301564
+ Sdf ratio 0.328106
  distance to modpoint 0.590557
+ closeness comparison 
+ ratio 1.05573
+1
  histogram diff 0.588485
  i 2 j 4
  is hks 0
@@ -517,8 +688,11 @@
  1 3 0.000723421
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.360608
+ Sdf ratio 0.324424
  distance to modpoint 0.733215
+ closeness comparison 
+ ratio 1.01053
+1
  histogram diff 0.929828
  i 2 j 5
  is hks 0
@@ -526,8 +700,11 @@
  1 3 0.000428557
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.43376
+ Sdf ratio 0.384427
  distance to modpoint 0.628764
+ closeness comparison 
+ ratio 2.54087
+1
  histogram diff 0.35147
  i 2 j 6
  is hks 0
@@ -535,8 +712,11 @@
  1 3 0.000212982
  2 3 0.000194933
  is area dif 1
- Sdf ratio 0.304905
+ Sdf ratio 0.33878
  distance to modpoint 0.374187
+ closeness comparison 
+ ratio 1.7329
+1
  histogram diff 0.463709
  i 2 j 7
  is hks 0
@@ -544,8 +724,11 @@
  1 3 0.000406873
  2 3 1.04175e-06
  is area dif 1
- Sdf ratio 0.651466
+ Sdf ratio 0.715783
  distance to modpoint 0.595617
+ closeness comparison 
+ ratio 1.23974
+1
  histogram diff 0.943353
  i 2 j 8
  is hks 0
@@ -553,8 +736,11 @@
  1 3 0.000705709
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.362017
+ Sdf ratio 0.336758
  distance to modpoint 0.626425
+ closeness comparison 
+ ratio 2.38334
+1
  histogram diff 0.21837
  i 2 j 9
  is hks 1
@@ -562,8 +748,11 @@
  1 3 0.000359255
  2 3 4.86596e-05
  is area dif 1
- Sdf ratio 0.874834
+ Sdf ratio 0.888095
  distance to modpoint 0.763339
+ closeness comparison 
+ ratio 2.30205
+1
  histogram diff 0.391277
  i 2 j 10
  is hks 1
@@ -571,8 +760,11 @@
  1 3 0.000264402
  2 3 0.000143513
  is area dif 1
- Sdf ratio 0.968671
+ Sdf ratio 0.95603
  distance to modpoint 0.754504
+ closeness comparison 
+ ratio 2.12575
+1
  histogram diff 0.194719
  i 2 j 11
  is hks 0
@@ -580,8 +772,11 @@
  1 3 0.000174871
  2 3 0.000233044
  is area dif 1
- Sdf ratio 0.425365
+ Sdf ratio 0.492687
  distance to modpoint 0.481351
+ closeness comparison 
+ ratio 3.01703
+1
  histogram diff 0.677329
  i 2 j 12
  is hks 1
@@ -589,8 +784,11 @@
  1 3 0.00064963
  2 3 0.000241715
  is area dif 1
- Sdf ratio 0.442466
+ Sdf ratio 0.538802
  distance to modpoint 0.99461
+ closeness comparison 
+ ratio 0.261361
+0
  histogram diff 0.0705421
  i 2 j 13
  is hks 0
@@ -598,8 +796,11 @@
  1 3 0.00037537
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.410003
+ Sdf ratio 0.436697
  distance to modpoint 0.503912
+ closeness comparison 
+ ratio 2.49875
+1
  histogram diff 0.598445
  i 2 j 14
  is hks 0
@@ -607,8 +808,11 @@
  1 3 0.00037537
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.27881
+ Sdf ratio 0.254521
  distance to modpoint 0.523939
+ closeness comparison 
+ ratio 2.7745
+1
  histogram diff 0.790774
  i 2 j 15
  is hks 0
@@ -616,8 +820,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.81703
+ Sdf ratio 0.841392
  distance to modpoint 0.639763
+ closeness comparison 
+ ratio 1.73331
+1
  histogram diff 0.463325
  i 2 j 16
  is hks 0
@@ -625,8 +832,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.574525
+ Sdf ratio 0.748954
  distance to modpoint 0.767804
+ closeness comparison 
+ ratio 0.485823
+0
  histogram diff 0.49652
  i 2 j 17
  is hks 0
@@ -634,8 +844,11 @@
  1 3 0.000428557
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.603361
+ Sdf ratio 0.668446
  distance to modpoint 0.878513
+ closeness comparison 
+ ratio 2.13332
+1
  histogram diff 0.336616
  i 2 j 18
  is hks 0
@@ -643,8 +856,11 @@
  1 3 0.000428557
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.638215
+ Sdf ratio 0.704463
  distance to modpoint 0.942459
+ closeness comparison 
+ ratio 1.97113
+1
  histogram diff 0.327684
  i 2 j 19
  is hks 0
@@ -652,8 +868,11 @@
  1 3 0.000705709
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.587677
+ Sdf ratio 0.5882
  distance to modpoint 0.892403
+ closeness comparison 
+ ratio 1.91861
+1
  histogram diff 0.31049
  i 2 j 20
  is hks 0
@@ -661,8 +880,11 @@
  1 3 0.000705709
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.599806
+ Sdf ratio 0.643186
  distance to modpoint 0.96359
+ closeness comparison 
+ ratio 1.77332
+1
  histogram diff 0.406258
  i 2 j 21
  is hks 1
@@ -670,8 +892,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.280493
+ Sdf ratio 0.211896
  distance to modpoint 0.997206
+ closeness comparison 
+ ratio 0.941354
+1
  histogram diff 0.897864
  i 2 j 22
  is hks 0
@@ -679,8 +904,11 @@
  1 3 0.000428557
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.163098
+ Sdf ratio 0.178374
  distance to modpoint 0.577201
+ closeness comparison 
+ ratio 2.72814
+1
  histogram diff 0.483789
  i 2 j 23
  is hks 0
@@ -688,8 +916,11 @@
  1 3 0.000705709
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.241522
+ Sdf ratio 0.286466
  distance to modpoint 0.566481
+ closeness comparison 
+ ratio 2.55637
+1
  histogram diff 0.584003
  i 2 j 24
  is hks 0
@@ -697,8 +928,11 @@
  1 3 0.000407915
  2 3 0
  is area dif 1
- Sdf ratio 0.191785
+ Sdf ratio 0.483007
  distance to modpoint 0.741395
+ closeness comparison 
+ ratio 0.35688
+0
  histogram diff 0.575561
  i 2 j 25
  is hks 0
@@ -706,8 +940,11 @@
  1 3 0.00121214
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.502756
+ Sdf ratio 0.420514
  distance to modpoint 0.80195
+ closeness comparison 
+ ratio 1.72686
+1
  histogram diff 1.43431
  i 2 j 26
  is hks 0
@@ -715,8 +952,11 @@
  1 3 0.00193883
  2 3 0.00153091
  is area dif 1
- Sdf ratio 0.396488
+ Sdf ratio 0.414319
  distance to modpoint 0.546641
+ closeness comparison 
+ ratio 1.80608
+1
  histogram diff 0.443335
  i 2 j 27
  is hks 0
@@ -724,8 +964,11 @@
  1 3 0.000979106
  2 3 0.000571191
  is area dif 1
- Sdf ratio 0.380798
+ Sdf ratio 0.399382
  distance to modpoint 0.0228618
+ closeness comparison 
+ ratio 44.741
+1
  histogram diff 0.603163
  i 3 j 0
  is hks 1
@@ -733,8 +976,11 @@
  1 3 0.000316548
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.780734
+ Sdf ratio 0.732306
  distance to modpoint 0.574004
+ closeness comparison 
+ ratio 1.44873
+1
  histogram diff 1.7185
  i 3 j 1
  is hks 0
@@ -742,8 +988,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.262413
+ Sdf ratio 0.242691
  distance to modpoint 0.605836
+ closeness comparison 
+ ratio 1.55433
+1
  histogram diff 1.58835
  i 3 j 2
  is hks 0
@@ -751,8 +1000,11 @@
  1 3 1.04175e-06
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.301564
+ Sdf ratio 0.328106
  distance to modpoint 0.590557
+ closeness comparison 
+ ratio 1.05573
+1
  histogram diff 0.588485
  i 3 j 4
  is hks 1
@@ -760,8 +1012,11 @@
  1 3 0.000316548
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.836265
+ Sdf ratio 0.98878
  distance to modpoint 0.805435
+ closeness comparison 
+ ratio 0.470198
+0
  histogram diff 1.46153
  i 3 j 5
  is hks 0
@@ -769,8 +1024,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.695233
+ Sdf ratio 0.853493
  distance to modpoint 0.371321
+ closeness comparison 
+ ratio 3.26027
+1
  histogram diff 0.364538
  i 3 j 6
  is hks 1
@@ -778,8 +1036,11 @@
  1 3 0.000193891
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.989043
+ Sdf ratio 0.96849
  distance to modpoint 0.633617
+ closeness comparison 
+ ratio 1.11079
+1
  histogram diff 0.573054
  i 3 j 7
  is hks 1
@@ -787,8 +1048,11 @@
  1 3 0
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.462901
+ Sdf ratio 0.458387
  distance to modpoint 0.991504
+ closeness comparison 
+ ratio 0.898174
+1
  histogram diff 0.599346
  i 3 j 8
  is hks 0
@@ -796,8 +1060,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.833011
+ Sdf ratio 0.974307
  distance to modpoint 0.369939
+ closeness comparison 
+ ratio 3.11726
+1
  histogram diff 0.701958
  i 3 j 9
  is hks 0
@@ -805,8 +1072,11 @@
  1 3 4.76178e-05
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.34471
+ Sdf ratio 0.369449
  distance to modpoint 0.450795
+ closeness comparison 
+ ratio 2.85588
+1
  histogram diff 0.417467
  i 3 j 10
  is hks 0
@@ -814,8 +1084,11 @@
  1 3 0.000142471
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.311318
+ Sdf ratio 0.313679
  distance to modpoint 0.445577
+ closeness comparison 
+ ratio 2.70436
+1
  histogram diff 0.736962
  i 3 j 11
  is hks 1
@@ -823,8 +1096,11 @@
  1 3 0.000232002
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.708954
+ Sdf ratio 0.665952
  distance to modpoint 0.81508
+ closeness comparison 
+ ratio 1.72178
+1
  histogram diff 1.27754
  i 3 j 12
  is hks 0
@@ -832,8 +1108,11 @@
  1 3 0.000242757
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.681553
+ Sdf ratio 0.608954
  distance to modpoint 0.593757
+ closeness comparison 
+ ratio 1.08974
+1
  histogram diff 0.633831
  i 3 j 13
  is hks 1
@@ -841,8 +1120,11 @@
  1 3 3.15028e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.735517
+ Sdf ratio 0.751335
  distance to modpoint 0.853284
+ closeness comparison 
+ ratio 1.45958
+1
  histogram diff 0.841771
  i 3 j 14
  is hks 1
@@ -850,8 +1132,11 @@
  1 3 3.15028e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.924546
+ Sdf ratio 0.775729
  distance to modpoint 0.887195
+ closeness comparison 
+ ratio 1.79821
+1
  histogram diff 1.33415
  i 3 j 15
  is hks 0
@@ -859,8 +1144,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.369098
+ Sdf ratio 0.389956
  distance to modpoint 0.923087
+ closeness comparison 
+ ratio 0.975083
+1
  histogram diff 0.465275
  i 3 j 16
  is hks 1
@@ -868,8 +1156,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.524893
+ Sdf ratio 0.438085
  distance to modpoint 0.769151
+ closeness comparison 
+ ratio 0.617602
+1
  histogram diff 0.334135
  i 3 j 17
  is hks 0
@@ -877,8 +1168,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.499807
+ Sdf ratio 0.490849
  distance to modpoint 0.672223
+ closeness comparison 
+ ratio 2.15992
+1
  histogram diff 1.07092
  i 3 j 18
  is hks 0
@@ -886,8 +1180,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.472512
+ Sdf ratio 0.465753
  distance to modpoint 0.626613
+ closeness comparison 
+ ratio 2.10347
+1
  histogram diff 1.10403
  i 3 j 19
  is hks 0
@@ -895,8 +1192,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.513146
+ Sdf ratio 0.557813
  distance to modpoint 0.66176
+ closeness comparison 
+ ratio 2.00423
+1
  histogram diff 0.897997
  i 3 j 20
  is hks 0
@@ -904,8 +1204,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.50277
+ Sdf ratio 0.510126
  distance to modpoint 0.612871
+ closeness comparison 
+ ratio 1.96788
+1
  histogram diff 1.16605
  i 3 j 21
  is hks 0
@@ -913,8 +1216,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.930126
+ Sdf ratio 0.645817
  distance to modpoint 0.592211
+ closeness comparison 
+ ratio 1.21332
+1
  histogram diff 1.62698
  i 3 j 22
  is hks 0
@@ -922,8 +1228,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0491845
+ Sdf ratio 0.0585256
  distance to modpoint 0.34087
+ closeness comparison 
+ ratio 3.58732
+1
  histogram diff 0.955066
  i 3 j 23
  is hks 0
@@ -931,8 +1240,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.0728345
+ Sdf ratio 0.0939912
  distance to modpoint 0.334539
+ closeness comparison 
+ ratio 3.43352
+1
  histogram diff 0.859012
  i 3 j 24
  is hks 0
@@ -940,8 +1252,11 @@
  1 3 1.04175e-06
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.635966
+ Sdf ratio 0.679298
  distance to modpoint 0.437836
+ closeness comparison 
+ ratio 1.64642
+1
  histogram diff 0.922014
  i 3 j 25
  is hks 0
@@ -949,8 +1264,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.151613
+ Sdf ratio 0.137973
  distance to modpoint 0.473597
+ closeness comparison 
+ ratio 2.01522
+1
  histogram diff 1.65339
  i 3 j 26
  is hks 1
@@ -958,8 +1276,11 @@
  1 3 0.00153196
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.760589
+ Sdf ratio 0.791915
  distance to modpoint 0.925637
+ closeness comparison 
+ ratio 0.673903
+1
  histogram diff 0.721688
  i 3 j 27
  is hks 1
@@ -967,8 +1288,11 @@
  1 3 0.000572233
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.791927
+ Sdf ratio 0.821534
  distance to modpoint 0.0387124
+ closeness comparison 
+ ratio 26.8315
+1
  histogram diff 0.821054
  i 4 j 0
  is hks 1
@@ -976,8 +1300,11 @@
  1 3 0.000316548
  2 3 0
  is area dif 1
- Sdf ratio 0.6529
+ Sdf ratio 0.740616
  distance to modpoint 0.462323
+ closeness comparison 
+ ratio 1.18016
+1
  histogram diff 1.07395
  i 4 j 1
  is hks 0
@@ -985,8 +1312,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.313792
+ Sdf ratio 0.239968
  distance to modpoint 0.752185
+ closeness comparison 
+ ratio 0.974334
+1
  histogram diff 2.19575
  i 4 j 2
  is hks 0
@@ -994,8 +1324,11 @@
  1 3 1.04175e-06
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.360608
+ Sdf ratio 0.324424
  distance to modpoint 0.733215
+ closeness comparison 
+ ratio 1.01053
+1
  histogram diff 0.929828
  i 4 j 3
  is hks 1
@@ -1003,8 +1336,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.836265
+ Sdf ratio 0.98878
  distance to modpoint 0.805435
+ closeness comparison 
+ ratio 0.470198
+0
  histogram diff 1.46153
  i 4 j 5
  is hks 0
@@ -1012,8 +1348,11 @@
  1 3 2.16838e-05
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.831354
+ Sdf ratio 0.843917
  distance to modpoint 0.461019
+ closeness comparison 
+ ratio 2.74714
+1
  histogram diff 1.17433
  i 4 j 6
  is hks 1
@@ -1021,8 +1360,11 @@
  1 3 0.000193891
  2 3 0.000510439
  is area dif 1
- Sdf ratio 0.845529
+ Sdf ratio 0.957624
  distance to modpoint 0.510337
+ closeness comparison 
+ ratio 1.47001
+1
  histogram diff 0.935322
  i 4 j 7
  is hks 1
@@ -1030,8 +1372,11 @@
  1 3 0
  2 3 0.000316548
  is area dif 1
- Sdf ratio 0.553533
+ Sdf ratio 0.453244
  distance to modpoint 0.812336
+ closeness comparison 
+ ratio 0.470742
+0
  histogram diff 1.85284
  i 4 j 8
  is hks 0
@@ -1039,8 +1384,11 @@
  1 3 0.000298836
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.996109
+ Sdf ratio 0.963375
  distance to modpoint 0.459304
+ closeness comparison 
+ ratio 2.8347
+1
  histogram diff 1.19865
  i 4 j 9
  is hks 0
@@ -1048,8 +1396,11 @@
  1 3 4.76178e-05
  2 3 0.000364166
  is area dif 1
- Sdf ratio 0.412202
+ Sdf ratio 0.365304
  distance to modpoint 0.559691
+ closeness comparison 
+ ratio 2.40295
+1
  histogram diff 1.0718
  i 4 j 10
  is hks 0
@@ -1057,8 +1408,11 @@
  1 3 0.000142471
  2 3 0.00045902
  is area dif 1
- Sdf ratio 0.372271
+ Sdf ratio 0.310159
  distance to modpoint 0.553213
+ closeness comparison 
+ ratio 2.5075
+1
  histogram diff 0.974441
  i 4 j 11
  is hks 1
@@ -1066,8 +1420,11 @@
  1 3 0.000232002
  2 3 0.00054855
  is area dif 1
- Sdf ratio 0.847762
+ Sdf ratio 0.65848
  distance to modpoint 0.656494
+ closeness comparison 
+ ratio 1.85701
+1
  histogram diff 1.33151
  i 4 j 12
  is hks 0
@@ -1075,8 +1432,11 @@
  1 3 0.000242757
  2 3 7.37915e-05
  is area dif 1
- Sdf ratio 0.814996
+ Sdf ratio 0.602121
  distance to modpoint 0.737188
+ closeness comparison 
+ ratio 1.07374
+1
  histogram diff 0.967634
  i 4 j 13
  is hks 1
@@ -1084,8 +1444,11 @@
  1 3 3.15028e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.879526
+ Sdf ratio 0.742905
  distance to modpoint 0.687264
+ closeness comparison 
+ ratio 1.95936
+1
  histogram diff 0.866276
  i 4 j 14
  is hks 1
@@ -1093,8 +1456,11 @@
  1 3 3.15028e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.773165
+ Sdf ratio 0.784531
  distance to modpoint 0.714577
+ closeness comparison 
+ ratio 2.13247
+1
  histogram diff 1.4289
  i 4 j 15
  is hks 0
@@ -1102,8 +1468,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.441365
+ Sdf ratio 0.38558
  distance to modpoint 0.872545
+ closeness comparison 
+ ratio 0.581869
+1
  histogram diff 1.51836
  i 4 j 16
  is hks 1
@@ -1111,8 +1480,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.627663
+ Sdf ratio 0.43317
  distance to modpoint 0.954951
+ closeness comparison 
+ ratio 0.513193
+1
  histogram diff 1.58226
  i 4 j 17
  is hks 0
@@ -1120,8 +1492,11 @@
  1 3 2.16838e-05
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.597666
+ Sdf ratio 0.485341
  distance to modpoint 0.834609
+ closeness comparison 
+ ratio 1.83226
+1
  histogram diff 0.909471
  i 4 j 18
  is hks 0
@@ -1129,8 +1504,11 @@
  1 3 2.16838e-05
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.565027
+ Sdf ratio 0.460527
  distance to modpoint 0.777981
+ closeness comparison 
+ ratio 1.81573
+1
  histogram diff 1.15713
  i 4 j 19
  is hks 0
@@ -1138,8 +1516,11 @@
  1 3 0.000298836
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.613616
+ Sdf ratio 0.551554
  distance to modpoint 0.821619
+ closeness comparison 
+ ratio 1.94843
+1
  histogram diff 0.860793
  i 4 j 20
  is hks 0
@@ -1147,8 +1528,11 @@
  1 3 0.000298836
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.601209
+ Sdf ratio 0.504402
  distance to modpoint 0.76092
+ closeness comparison 
+ ratio 1.90363
+1
  histogram diff 1.1701
  i 4 j 21
  is hks 0
@@ -1156,8 +1540,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.777832
+ Sdf ratio 0.653145
  distance to modpoint 0.735269
+ closeness comparison 
+ ratio 0.723509
+1
  histogram diff 1.94374
  i 4 j 22
  is hks 0
@@ -1165,8 +1552,11 @@
  1 3 2.16838e-05
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.0588145
+ Sdf ratio 0.0578689
  distance to modpoint 0.423212
+ closeness comparison 
+ ratio 2.98609
+1
  histogram diff 1.28821
  i 4 j 23
  is hks 0
@@ -1174,8 +1564,11 @@
  1 3 0.000298836
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.087095
+ Sdf ratio 0.0929366
  distance to modpoint 0.415352
+ closeness comparison 
+ ratio 3.09479
+1
  histogram diff 1.27685
  i 4 j 24
  is hks 0
@@ -1183,8 +1576,11 @@
  1 3 1.04175e-06
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.531836
+ Sdf ratio 0.671676
  distance to modpoint 0.543602
+ closeness comparison 
+ ratio 1.48629
+1
  histogram diff 1.12348
  i 4 j 25
  is hks 0
@@ -1192,8 +1588,11 @@
  1 3 0.000805263
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.181298
+ Sdf ratio 0.136425
  distance to modpoint 0.588002
+ closeness comparison 
+ ratio 1.35051
+1
  histogram diff 2.41646
  i 4 j 26
  is hks 1
@@ -1201,8 +1600,11 @@
  1 3 0.00153196
  2 3 0.00121541
  is area dif 1
- Sdf ratio 0.909507
+ Sdf ratio 0.78303
  distance to modpoint 0.74554
+ closeness comparison 
+ ratio 0.963871
+1
  histogram diff 0.963031
  i 4 j 27
  is hks 1
@@ -1210,8 +1612,11 @@
  1 3 0.000572233
  2 3 0.000255684
  is area dif 1
- Sdf ratio 0.946981
+ Sdf ratio 0.812316
  distance to modpoint 0.0311803
+ closeness comparison 
+ ratio 32.0133
+1
  histogram diff 1.43144
  i 5 j 0
  is hks 0
@@ -1219,8 +1624,11 @@
  1 3 0.00064228
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.542791
+ Sdf ratio 0.625018
  distance to modpoint 0.21314
+ closeness comparison 
+ ratio 4.9491
+1
  histogram diff 1.08424
  i 5 j 1
  is hks 1
@@ -1228,8 +1636,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.377447
+ Sdf ratio 0.28435
  distance to modpoint 0.612906
+ closeness comparison 
+ ratio 2.39951
+1
  histogram diff 1.26513
  i 5 j 2
  is hks 0
@@ -1237,8 +1648,11 @@
  1 3 0.000326773
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.43376
+ Sdf ratio 0.384427
  distance to modpoint 0.628764
+ closeness comparison 
+ ratio 2.54087
+1
  histogram diff 0.35147
  i 5 j 3
  is hks 0
@@ -1246,8 +1660,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.695233
+ Sdf ratio 0.853493
  distance to modpoint 0.371321
+ closeness comparison 
+ ratio 3.26027
+1
  histogram diff 0.364538
  i 5 j 4
  is hks 0
@@ -1255,8 +1672,11 @@
  1 3 0.00064228
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.831354
+ Sdf ratio 0.843917
  distance to modpoint 0.461019
+ closeness comparison 
+ ratio 2.74714
+1
  histogram diff 1.17433
  i 5 j 6
  is hks 0
@@ -1264,8 +1684,11 @@
  1 3 0.00013184
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.702934
+ Sdf ratio 0.881262
  distance to modpoint 0.235275
+ closeness comparison 
+ ratio 5.24049
+1
  histogram diff 0.307386
  i 5 j 7
  is hks 0
@@ -1273,8 +1696,11 @@
  1 3 0.000325732
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.665821
+ Sdf ratio 0.537072
  distance to modpoint 0.374502
+ closeness comparison 
+ ratio 3.5961
+1
  histogram diff 0.417535
  i 5 j 8
  is hks 1
@@ -1282,8 +1708,11 @@
  1 3 0.000624568
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.834602
+ Sdf ratio 0.876001
  distance to modpoint 0.99628
+ closeness comparison 
+ ratio 1.45549
+1
  histogram diff 0.280407
  i 5 j 9
  is hks 0
@@ -1291,8 +1720,11 @@
  1 3 0.000278114
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.49582
+ Sdf ratio 0.432867
  distance to modpoint 0.823703
+ closeness comparison 
+ ratio 0.221261
+0
  histogram diff 0.0706497
  i 5 j 10
  is hks 0
@@ -1300,8 +1732,11 @@
  1 3 0.00018326
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.447789
+ Sdf ratio 0.367524
  distance to modpoint 0.833347
+ closeness comparison 
+ ratio 1.54921
+1
  histogram diff 0.326161
  i 5 j 11
  is hks 0
@@ -1309,8 +1744,11 @@
  1 3 9.37293e-05
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.980646
+ Sdf ratio 0.780266
  distance to modpoint 0.302656
+ closeness comparison 
+ ratio 2.36814
+1
  histogram diff 0.760689
  i 5 j 12
  is hks 0
@@ -1318,8 +1756,11 @@
  1 3 0.000568488
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.980324
+ Sdf ratio 0.713484
  distance to modpoint 0.625375
+ closeness comparison 
+ ratio 2.54812
+1
  histogram diff 0.391277
  i 5 j 13
  is hks 0
@@ -1327,8 +1768,11 @@
  1 3 0.000294229
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.94523
+ Sdf ratio 0.880305
  distance to modpoint 0.316842
+ closeness comparison 
+ ratio 3.14031
+1
  histogram diff 0.46673
  i 5 j 14
  is hks 0
@@ -1336,8 +1780,11 @@
  1 3 0.000294229
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.642774
+ Sdf ratio 0.662079
  distance to modpoint 0.329434
+ closeness comparison 
+ ratio 2.23899
+1
  histogram diff 0.824986
  i 5 j 15
  is hks 0
@@ -1345,8 +1792,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.530899
+ Sdf ratio 0.456894
  distance to modpoint 0.40226
+ closeness comparison 
+ ratio 3.13238
+1
  histogram diff 0.377563
  i 5 j 16
  is hks 0
@@ -1354,8 +1804,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.754989
+ Sdf ratio 0.513285
  distance to modpoint 0.482767
+ closeness comparison 
+ ratio 2.96851
+1
  histogram diff 0.364944
  i 5 j 17
  is hks 0
@@ -1363,8 +1816,11 @@
  1 3 0.000347415
  2 3 0
  is area dif 1
- Sdf ratio 0.718906
+ Sdf ratio 0.575105
  distance to modpoint 0.552377
+ closeness comparison 
+ ratio 0.810356
+1
  histogram diff 0.578627
  i 5 j 18
  is hks 0
@@ -1372,8 +1828,11 @@
  1 3 0.000347415
  2 3 0
  is area dif 1
- Sdf ratio 0.679646
+ Sdf ratio 0.545702
  distance to modpoint 0.592584
+ closeness comparison 
+ ratio 0.736769
+1
  histogram diff 0.605292
  i 5 j 19
  is hks 0
@@ -1381,8 +1840,11 @@
  1 3 0.000624568
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.738092
+ Sdf ratio 0.653564
  distance to modpoint 0.56111
+ closeness comparison 
+ ratio 1.84537
+1
  histogram diff 0.46093
  i 5 j 20
  is hks 0
@@ -1390,8 +1852,11 @@
  1 3 0.000624568
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.723168
+ Sdf ratio 0.597692
  distance to modpoint 0.605871
+ closeness comparison 
+ ratio 1.70414
+1
  histogram diff 0.700906
  i 5 j 21
  is hks 0
@@ -1399,8 +1864,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.646654
+ Sdf ratio 0.551201
  distance to modpoint 0.627007
+ closeness comparison 
+ ratio 2.54957
+1
  histogram diff 1.05319
  i 5 j 22
  is hks 0
@@ -1408,8 +1876,11 @@
  1 3 0.000347415
  2 3 0
  is area dif 1
- Sdf ratio 0.0707454
+ Sdf ratio 0.0685718
  distance to modpoint 0.917993
+ closeness comparison 
+ ratio 0.240098
+0
  histogram diff 0.500019
  i 5 j 23
  is hks 0
@@ -1417,8 +1888,11 @@
  1 3 0.000624568
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.104763
+ Sdf ratio 0.110125
  distance to modpoint 0.900943
+ closeness comparison 
+ ratio 1.56763
+1
  histogram diff 0.393403
  i 5 j 24
  is hks 0
@@ -1426,8 +1900,11 @@
  1 3 0.000326773
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.442144
+ Sdf ratio 0.795903
  distance to modpoint 0.848082
+ closeness comparison 
+ ratio 2.14241
+1
  histogram diff 0.483789
  i 5 j 25
  is hks 0
@@ -1435,8 +1912,11 @@
  1 3 0.00113099
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.218075
+ Sdf ratio 0.161657
  distance to modpoint 0.784043
+ closeness comparison 
+ ratio 2.09403
+1
  histogram diff 1.40391
  i 5 j 26
  is hks 0
@@ -1444,8 +1924,11 @@
  1 3 0.00185769
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.914071
+ Sdf ratio 0.927852
  distance to modpoint 0.343708
+ closeness comparison 
+ ratio 2.84829
+1
  histogram diff 0.43608
  i 5 j 27
  is hks 0
@@ -1453,8 +1936,11 @@
  1 3 0.000897964
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.8779
+ Sdf ratio 0.962554
  distance to modpoint 0.0143747
+ closeness comparison 
+ ratio 68.5667
+1
  histogram diff 0.390457
  i 6 j 0
  is hks 1
@@ -1462,8 +1948,11 @@
  1 3 0.000316548
  2 3 0.000510439
  is area dif 1
- Sdf ratio 0.772179
+ Sdf ratio 0.709231
  distance to modpoint 0.905916
+ closeness comparison 
+ ratio 1.39938
+1
  histogram diff 0.682594
  i 6 j 1
  is hks 0
@@ -1471,8 +1960,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.26532
+ Sdf ratio 0.250587
  distance to modpoint 0.383868
+ closeness comparison 
+ ratio 2.46856
+1
  histogram diff 1.94105
  i 6 j 2
  is hks 0
@@ -1480,8 +1972,11 @@
  1 3 1.04175e-06
  2 3 0.000194933
  is area dif 1
- Sdf ratio 0.304905
+ Sdf ratio 0.33878
  distance to modpoint 0.374187
+ closeness comparison 
+ ratio 1.7329
+1
  histogram diff 0.463709
  i 6 j 3
  is hks 1
@@ -1489,8 +1984,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.989043
+ Sdf ratio 0.96849
  distance to modpoint 0.633617
+ closeness comparison 
+ ratio 1.11079
+1
  histogram diff 0.573054
  i 6 j 4
  is hks 1
@@ -1498,8 +1996,11 @@
  1 3 0.000316548
  2 3 0.000510439
  is area dif 1
- Sdf ratio 0.845529
+ Sdf ratio 0.957624
  distance to modpoint 0.510337
+ closeness comparison 
+ ratio 1.47001
+1
  histogram diff 0.935322
  i 6 j 5
  is hks 0
@@ -1507,8 +2008,11 @@
  1 3 2.16838e-05
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.702934
+ Sdf ratio 0.881262
  distance to modpoint 0.235275
+ closeness comparison 
+ ratio 5.24049
+1
  histogram diff 0.307386
  i 6 j 7
  is hks 1
@@ -1516,8 +2020,11 @@
  1 3 0
  2 3 0.000193891
  is area dif 1
- Sdf ratio 0.468029
+ Sdf ratio 0.4733
  distance to modpoint 0.628234
+ closeness comparison 
+ ratio 0.803498
+1
  histogram diff 0.66532
  i 6 j 8
  is hks 0
@@ -1525,8 +2032,11 @@
  1 3 0.000298836
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.842239
+ Sdf ratio 0.99403
  distance to modpoint 0.2344
+ closeness comparison 
+ ratio 5.01805
+1
  histogram diff 0.403506
  i 6 j 9
  is hks 0
@@ -1534,8 +2044,11 @@
  1 3 4.76178e-05
  2 3 0.000146273
  is area dif 1
- Sdf ratio 0.348529
+ Sdf ratio 0.381469
  distance to modpoint 0.285631
+ closeness comparison 
+ ratio 4.49117
+1
  histogram diff 0.227559
  i 6 j 10
  is hks 0
@@ -1543,8 +2056,11 @@
  1 3 0.000142471
  2 3 5.14198e-05
  is area dif 1
- Sdf ratio 0.314766
+ Sdf ratio 0.323884
  distance to modpoint 0.282325
+ closeness comparison 
+ ratio 4.3174
+1
  histogram diff 0.23929
  i 6 j 11
  is hks 1
@@ -1552,8 +2068,11 @@
  1 3 0.000232002
  2 3 3.81109e-05
  is area dif 1
- Sdf ratio 0.716808
+ Sdf ratio 0.687618
  distance to modpoint 0.777368
+ closeness comparison 
+ ratio 2.23137
+1
  histogram diff 0.486043
  i 6 j 12
  is hks 0
@@ -1561,8 +2080,11 @@
  1 3 0.000242757
  2 3 0.000436648
  is area dif 1
- Sdf ratio 0.689103
+ Sdf ratio 0.628766
  distance to modpoint 0.376214
+ closeness comparison 
+ ratio 1.78605
+1
  histogram diff 0.457809
  i 6 j 13
  is hks 1
@@ -1570,8 +2092,11 @@
  1 3 3.15028e-05
  2 3 0.000162388
  is area dif 1
- Sdf ratio 0.743665
+ Sdf ratio 0.775779
  distance to modpoint 0.742563
+ closeness comparison 
+ ratio 1.99518
+1
  histogram diff 0.547163
  i 6 j 14
  is hks 1
@@ -1579,8 +2104,11 @@
  1 3 3.15028e-05
  2 3 0.000162388
  is area dif 1
- Sdf ratio 0.914416
+ Sdf ratio 0.751286
  distance to modpoint 0.714181
+ closeness comparison 
+ ratio 2.37786
+1
  histogram diff 0.569135
  i 6 j 15
  is hks 0
@@ -1588,8 +2116,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.373187
+ Sdf ratio 0.402643
  distance to modpoint 0.584884
+ closeness comparison 
+ ratio 1.59979
+1
  histogram diff 0.694045
  i 6 j 16
  is hks 1
@@ -1597,8 +2128,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.530708
+ Sdf ratio 0.452338
  distance to modpoint 0.487347
+ closeness comparison 
+ ratio 1.07796
+1
  histogram diff 0.706433
  i 6 j 17
  is hks 0
@@ -1606,8 +2140,11 @@
  1 3 2.16838e-05
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.505344
+ Sdf ratio 0.506818
  distance to modpoint 0.425932
+ closeness comparison 
+ ratio 3.33794
+1
  histogram diff 0.408776
  i 6 j 18
  is hks 0
@@ -1615,8 +2152,11 @@
  1 3 2.16838e-05
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.477747
+ Sdf ratio 0.480906
  distance to modpoint 0.397033
+ closeness comparison 
+ ratio 3.51011
+1
  histogram diff 0.391262
  i 6 j 19
  is hks 0
@@ -1624,8 +2164,11 @@
  1 3 0.000298836
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.518831
+ Sdf ratio 0.575961
  distance to modpoint 0.419303
+ closeness comparison 
+ ratio 3.16268
+1
  histogram diff 0.454418
  i 6 j 20
  is hks 0
@@ -1633,8 +2176,11 @@
  1 3 0.000298836
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.50834
+ Sdf ratio 0.526723
  distance to modpoint 0.388326
+ closeness comparison 
+ ratio 3.25919
+1
  histogram diff 0.435442
  i 6 j 21
  is hks 0
@@ -1642,8 +2188,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.919935
+ Sdf ratio 0.625468
  distance to modpoint 0.375235
+ closeness comparison 
+ ratio 1.77727
+1
  histogram diff 1.41234
  i 6 j 22
  is hks 0
@@ -1651,8 +2200,11 @@
  1 3 2.16838e-05
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.0497294
+ Sdf ratio 0.0604297
  distance to modpoint 0.215981
+ closeness comparison 
+ ratio 5.62019
+1
  histogram diff 0.750964
  i 6 j 23
  is hks 0
@@ -1660,8 +2212,11 @@
  1 3 0.000298836
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.0736413
+ Sdf ratio 0.0970491
  distance to modpoint 0.21197
+ closeness comparison 
+ ratio 5.48045
+1
  histogram diff 0.509503
  i 6 j 24
  is hks 0
@@ -1669,8 +2224,11 @@
  1 3 1.04175e-06
  2 3 0.000194933
  is area dif 1
- Sdf ratio 0.628998
+ Sdf ratio 0.701398
  distance to modpoint 0.27742
+ closeness comparison 
+ ratio 2.66507
+1
  histogram diff 0.710187
  i 6 j 25
  is hks 0
@@ -1678,8 +2236,11 @@
  1 3 0.000805263
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.153293
+ Sdf ratio 0.142462
  distance to modpoint 0.300079
+ closeness comparison 
+ ratio 3.19595
+1
  histogram diff 1.94513
  i 6 j 26
  is hks 1
@@ -1687,8 +2248,11 @@
  1 3 0.00153196
  2 3 0.00172585
  is area dif 1
- Sdf ratio 0.769015
+ Sdf ratio 0.81768
  distance to modpoint 0.684521
+ closeness comparison 
+ ratio 1.66488
+1
  histogram diff 0.535845
  i 6 j 27
  is hks 1
@@ -1696,8 +2260,11 @@
  1 3 0.000572233
  2 3 0.000766124
  is area dif 1
- Sdf ratio 0.8007
+ Sdf ratio 0.848262
  distance to modpoint 0.0610974
+ closeness comparison 
+ ratio 17.3673
+1
  histogram diff 0.361841
  i 7 j 0
  is hks 1
@@ -1705,8 +2272,11 @@
  1 3 0.000588448
  2 3 0.000316548
  is area dif 1
- Sdf ratio 0.361402
+ Sdf ratio 0.33568
  distance to modpoint 0.569128
+ closeness comparison 
+ ratio 1.53459
+1
  histogram diff 1.5756
  i 7 j 1
  is hks 0
@@ -1714,8 +2284,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.566889
+ Sdf ratio 0.529445
  distance to modpoint 0.611027
+ closeness comparison 
+ ratio 1.39091
+1
  histogram diff 1.46864
  i 7 j 2
  is hks 0
@@ -1723,8 +2296,11 @@
  1 3 0.000272942
  2 3 1.04175e-06
  is area dif 1
- Sdf ratio 0.651466
+ Sdf ratio 0.715783
  distance to modpoint 0.595617
+ closeness comparison 
+ ratio 1.23974
+1
  histogram diff 0.943353
  i 7 j 3
  is hks 1
@@ -1732,8 +2308,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.462901
+ Sdf ratio 0.458387
  distance to modpoint 0.991504
+ closeness comparison 
+ ratio 0.898174
+1
  histogram diff 0.599346
  i 7 j 4
  is hks 1
@@ -1741,8 +2320,11 @@
  1 3 0.000588448
  2 3 0.000316548
  is area dif 1
- Sdf ratio 0.553533
+ Sdf ratio 0.453244
  distance to modpoint 0.812336
+ closeness comparison 
+ ratio 0.470742
+0
  histogram diff 1.85284
  i 7 j 5
  is hks 0
@@ -1750,8 +2332,11 @@
  1 3 0.000293584
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.665821
+ Sdf ratio 0.537072
  distance to modpoint 0.374502
+ closeness comparison 
+ ratio 3.5961
+1
  histogram diff 0.417535
  i 7 j 6
  is hks 1
@@ -1759,8 +2344,11 @@
  1 3 7.80087e-05
  2 3 0.000193891
  is area dif 1
- Sdf ratio 0.468029
+ Sdf ratio 0.4733
  distance to modpoint 0.628234
+ closeness comparison 
+ ratio 0.803498
+1
  histogram diff 0.66532
  i 7 j 8
  is hks 0
@@ -1768,8 +2356,11 @@
  1 3 0.000570736
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.555696
+ Sdf ratio 0.470475
  distance to modpoint 0.373109
+ closeness comparison 
+ ratio 3.64126
+1
  histogram diff 0.855376
  i 7 j 9
  is hks 0
@@ -1777,8 +2368,11 @@
  1 3 0.000224282
  2 3 4.76178e-05
  is area dif 1
- Sdf ratio 0.744674
+ Sdf ratio 0.805976
  distance to modpoint 0.454657
+ closeness comparison 
+ ratio 3.13418
+1
  histogram diff 0.525831
  i 7 j 10
  is hks 0
@@ -1786,8 +2380,11 @@
  1 3 0.000129429
  2 3 0.000142471
  is area dif 1
- Sdf ratio 0.672536
+ Sdf ratio 0.68431
  distance to modpoint 0.449395
+ closeness comparison 
+ ratio 3.19275
+1
  histogram diff 0.956507
  i 7 j 11
  is hks 1
@@ -1795,8 +2392,11 @@
  1 3 3.98978e-05
  2 3 0.000232002
  is area dif 1
- Sdf ratio 0.652935
+ Sdf ratio 0.688319
  distance to modpoint 0.808156
+ closeness comparison 
+ ratio 2.08826
+1
  histogram diff 1.25363
  i 7 j 12
  is hks 0
@@ -1804,8 +2404,11 @@
  1 3 0.000514657
  2 3 0.000242757
  is area dif 1
- Sdf ratio 0.679185
+ Sdf ratio 0.752745
  distance to modpoint 0.598844
+ closeness comparison 
+ ratio 1.30223
+1
  histogram diff 0.987015
  i 7 j 13
  is hks 1
@@ -1813,8 +2416,11 @@
  1 3 0.000240397
  2 3 3.15028e-05
  is area dif 1
- Sdf ratio 0.629354
+ Sdf ratio 0.610097
  distance to modpoint 0.846035
+ closeness comparison 
+ ratio 2.05924
+1
  histogram diff 0.953134
  i 7 j 14
  is hks 1
@@ -1822,8 +2428,11 @@
  1 3 0.000240397
  2 3 3.15028e-05
  is area dif 1
- Sdf ratio 0.427973
+ Sdf ratio 0.355584
  distance to modpoint 0.879657
+ closeness comparison 
+ ratio 2.13114
+1
  histogram diff 1.26579
  i 7 j 15
  is hks 1
@@ -1831,8 +2440,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.797359
+ Sdf ratio 0.850713
  distance to modpoint 0.930996
+ closeness comparison 
+ ratio 0.856094
+1
  histogram diff 0.708956
  i 7 j 16
  is hks 1
@@ -1840,8 +2452,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.881896
+ Sdf ratio 0.95571
  distance to modpoint 0.775741
+ closeness comparison 
+ ratio 0.68893
+1
  histogram diff 0.665939
  i 7 j 17
  is hks 0
@@ -1849,8 +2464,11 @@
  1 3 0.000293584
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.926159
+ Sdf ratio 0.933866
  distance to modpoint 0.677983
+ closeness comparison 
+ ratio 2.40969
+1
  histogram diff 1.11458
  i 7 j 18
  is hks 1
@@ -1858,8 +2476,11 @@
  1 3 0.000293584
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.979659
+ Sdf ratio 0.984185
  distance to modpoint 0.631982
+ closeness comparison 
+ ratio 2.49088
+1
  histogram diff 1.11843
  i 7 j 19
  is hks 1
@@ -1867,8 +2488,11 @@
  1 3 0.000570736
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.902084
+ Sdf ratio 0.821758
  distance to modpoint 0.667431
+ closeness comparison 
+ ratio 2.46732
+1
  histogram diff 1.01766
  i 7 j 20
  is hks 1
@@ -1876,8 +2500,11 @@
  1 3 0.000570736
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.920701
+ Sdf ratio 0.898576
  distance to modpoint 0.618122
+ closeness comparison 
+ ratio 2.53857
+1
  histogram diff 1.21138
  i 7 j 21
  is hks 0
@@ -1885,8 +2512,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.430556
+ Sdf ratio 0.296034
  distance to modpoint 0.597286
+ closeness comparison 
+ ratio 0.684859
+1
  histogram diff 1.3583
  i 7 j 22
  is hks 0
@@ -1894,8 +2524,11 @@
  1 3 0.000293584
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.106253
+ Sdf ratio 0.127677
  distance to modpoint 0.34379
+ closeness comparison 
+ ratio 3.84347
+1
  histogram diff 0.709691
  i 7 j 23
  is hks 0
@@ -1903,8 +2536,11 @@
  1 3 0.000570736
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.157344
+ Sdf ratio 0.205048
  distance to modpoint 0.337405
+ closeness comparison 
+ ratio 3.93133
+1
  histogram diff 0.712919
  i 7 j 24
  is hks 0
@@ -1912,8 +2548,11 @@
  1 3 0.000272942
  2 3 1.04175e-06
  is area dif 1
- Sdf ratio 0.294389
+ Sdf ratio 0.674795
  distance to modpoint 0.441587
+ closeness comparison 
+ ratio 1.82541
+1
  histogram diff 0.899085
  i 7 j 25
  is hks 0
@@ -1921,8 +2560,11 @@
  1 3 0.00107716
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.327529
+ Sdf ratio 0.300997
  distance to modpoint 0.477655
+ closeness comparison 
+ ratio 1.83778
+1
  histogram diff 1.46603
  i 7 j 26
  is hks 1
@@ -1930,8 +2572,11 @@
  1 3 0.00180386
  2 3 0.00153196
  is area dif 1
- Sdf ratio 0.608608
+ Sdf ratio 0.578833
  distance to modpoint 0.917773
+ closeness comparison 
+ ratio 1.47587
+1
  histogram diff 0.875712
  i 7 j 27
  is hks 1
@@ -1939,8 +2584,11 @@
  1 3 0.000844133
  2 3 0.000572233
  is area dif 1
- Sdf ratio 0.584524
+ Sdf ratio 0.557965
  distance to modpoint 0.0383835
+ closeness comparison 
+ ratio 26.9231
+1
  histogram diff 0.501779
  i 8 j 0
  is hks 0
@@ -1948,8 +2596,11 @@
  1 3 0.000604094
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.65036
+ Sdf ratio 0.713491
  distance to modpoint 0.212347
+ closeness comparison 
+ ratio 5.51177
+1
  histogram diff 0.797109
  i 8 j 1
  is hks 1
@@ -1957,8 +2608,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.315018
+ Sdf ratio 0.249091
  distance to modpoint 0.610627
+ closeness comparison 
+ ratio 2.57455
+1
  histogram diff 1.35687
  i 8 j 2
  is hks 0
@@ -1966,8 +2620,11 @@
  1 3 0.000288587
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.362017
+ Sdf ratio 0.336758
  distance to modpoint 0.626425
+ closeness comparison 
+ ratio 2.38334
+1
  histogram diff 0.21837
  i 8 j 3
  is hks 0
@@ -1975,8 +2632,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.833011
+ Sdf ratio 0.974307
  distance to modpoint 0.369939
+ closeness comparison 
+ ratio 3.11726
+1
  histogram diff 0.701958
  i 8 j 4
  is hks 0
@@ -1984,8 +2644,11 @@
  1 3 0.000604094
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.996109
+ Sdf ratio 0.963375
  distance to modpoint 0.459304
+ closeness comparison 
+ ratio 2.8347
+1
  histogram diff 1.19865
  i 8 j 5
  is hks 1
@@ -1993,8 +2656,11 @@
  1 3 0.000309229
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.834602
+ Sdf ratio 0.876001
  distance to modpoint 0.99628
+ closeness comparison 
+ ratio 1.45549
+1
  histogram diff 0.280407
  i 8 j 6
  is hks 0
@@ -2002,8 +2668,11 @@
  1 3 9.36542e-05
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.842239
+ Sdf ratio 0.99403
  distance to modpoint 0.2344
+ closeness comparison 
+ ratio 5.01805
+1
  histogram diff 0.403506
  i 8 j 7
  is hks 0
@@ -2011,8 +2680,11 @@
  1 3 0.000287545
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.555696
+ Sdf ratio 0.470475
  distance to modpoint 0.373109
+ closeness comparison 
+ ratio 3.64126
+1
  histogram diff 0.855376
  i 8 j 9
  is hks 0
@@ -2020,8 +2692,11 @@
  1 3 0.000239928
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.413812
+ Sdf ratio 0.379191
  distance to modpoint 0.820639
+ closeness comparison 
+ ratio 1.58796
+1
  histogram diff 0.326161
  i 8 j 10
  is hks 0
@@ -2029,8 +2704,11 @@
  1 3 0.000145074
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.373726
+ Sdf ratio 0.321951
  distance to modpoint 0.830248
+ closeness comparison 
+ ratio 0.215711
+0
  histogram diff 0.0963838
  i 8 j 11
  is hks 0
@@ -2038,8 +2716,11 @@
  1 3 5.55433e-05
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.851074
+ Sdf ratio 0.683513
  distance to modpoint 0.30153
+ closeness comparison 
+ ratio 3.26349
+1
  histogram diff 0.687014
  i 8 j 12
  is hks 0
@@ -2047,8 +2728,11 @@
  1 3 0.000530302
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.81818
+ Sdf ratio 0.625012
  distance to modpoint 0.623049
+ closeness comparison 
+ ratio 2.37751
+1
  histogram diff 0.194719
  i 8 j 13
  is hks 0
@@ -2056,8 +2740,11 @@
  1 3 0.000256043
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.882962
+ Sdf ratio 0.771148
  distance to modpoint 0.315663
+ closeness comparison 
+ ratio 2.24668
+1
  histogram diff 0.610096
  i 8 j 14
  is hks 0
@@ -2065,8 +2752,11 @@
  1 3 0.000256043
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.770157
+ Sdf ratio 0.755798
  distance to modpoint 0.328208
+ closeness comparison 
+ ratio 2.21463
+1
  histogram diff 0.841729
  i 8 j 15
  is hks 0
@@ -2074,8 +2764,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.443089
+ Sdf ratio 0.400239
  distance to modpoint 0.400763
+ closeness comparison 
+ ratio 3.39908
+1
  histogram diff 0.630436
  i 8 j 16
  is hks 0
@@ -2083,8 +2776,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.630115
+ Sdf ratio 0.449638
  distance to modpoint 0.480971
+ closeness comparison 
+ ratio 2.8232
+1
  histogram diff 0.700002
  i 8 j 17
  is hks 0
@@ -2092,8 +2788,11 @@
  1 3 0.000309229
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.6
+ Sdf ratio 0.503793
  distance to modpoint 0.550323
+ closeness comparison 
+ ratio 1.90826
+1
  histogram diff 0.372818
  i 8 j 18
  is hks 0
@@ -2101,8 +2800,11 @@
  1 3 0.000309229
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.567234
+ Sdf ratio 0.478035
  distance to modpoint 0.59038
+ closeness comparison 
+ ratio 1.7425
+1
  histogram diff 0.34745
  i 8 j 19
  is hks 0
@@ -2110,8 +2812,11 @@
  1 3 0.000586382
  2 3 0
  is area dif 1
- Sdf ratio 0.616014
+ Sdf ratio 0.572523
  distance to modpoint 0.559023
+ closeness comparison 
+ ratio 0.797593
+1
  histogram diff 0.353197
  i 8 j 20
  is hks 0
@@ -2119,8 +2824,11 @@
  1 3 0.000586382
  2 3 0
  is area dif 1
- Sdf ratio 0.603557
+ Sdf ratio 0.523578
  distance to modpoint 0.603617
+ closeness comparison 
+ ratio 0.725275
+1
  histogram diff 0.474604
  i 8 j 21
  is hks 0
@@ -2128,8 +2836,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.774805
+ Sdf ratio 0.629224
  distance to modpoint 0.624675
+ closeness comparison 
+ ratio 2.54186
+1
  histogram diff 0.747189
  i 8 j 22
  is hks 0
@@ -2137,8 +2848,11 @@
  1 3 0.000309229
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.0590443
+ Sdf ratio 0.0600689
  distance to modpoint 0.92142
+ closeness comparison 
+ ratio 1.56128
+1
  histogram diff 0.393403
  i 8 j 23
  is hks 0
@@ -2146,8 +2860,11 @@
  1 3 0.000586382
  2 3 0
  is area dif 1
- Sdf ratio 0.0874352
+ Sdf ratio 0.0964698
  distance to modpoint 0.904307
+ closeness comparison 
+ ratio 0.264414
+0
  histogram diff 0.506363
  i 8 j 24
  is hks 0
@@ -2155,8 +2872,11 @@
  1 3 0.000288587
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.529767
+ Sdf ratio 0.697211
  distance to modpoint 0.844927
+ closeness comparison 
+ ratio 2.02562
+1
  histogram diff 0.584003
  i 8 j 25
  is hks 0
@@ -2164,8 +2884,11 @@
  1 3 0.00109281
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.182006
+ Sdf ratio 0.141612
  distance to modpoint 0.781127
+ closeness comparison 
+ ratio 2.23087
+1
  histogram diff 1.59071
  i 8 j 26
  is hks 0
@@ -2173,8 +2896,11 @@
  1 3 0.0018195
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.91306
+ Sdf ratio 0.812799
  distance to modpoint 0.34243
+ closeness comparison 
+ ratio 2.88369
+1
  histogram diff 0.400999
  i 8 j 27
  is hks 0
@@ -2182,8 +2908,11 @@
  1 3 0.000859778
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.95068
+ Sdf ratio 0.843198
  distance to modpoint 0.0143212
+ closeness comparison 
+ ratio 69.4162
+1
  histogram diff 0.463578
  i 9 j 0
  is hks 0
@@ -2191,8 +2920,11 @@
  1 3 0.00064228
  2 3 0.000364166
  is area dif 1
- Sdf ratio 0.269127
+ Sdf ratio 0.27055
  distance to modpoint 0.258758
+ closeness comparison 
+ ratio 4.1731
+1
  histogram diff 0.952389
  i 9 j 1
  is hks 1
@@ -2200,8 +2932,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.761258
+ Sdf ratio 0.6569
  distance to modpoint 0.744087
+ closeness comparison 
+ ratio 2.13251
+1
  histogram diff 1.50977
  i 9 j 2
  is hks 1
@@ -2209,8 +2944,11 @@
  1 3 0.000326773
  2 3 4.86596e-05
  is area dif 1
- Sdf ratio 0.874834
+ Sdf ratio 0.888095
  distance to modpoint 0.763339
+ closeness comparison 
+ ratio 2.30205
+1
  histogram diff 0.391277
  i 9 j 3
  is hks 0
@@ -2218,8 +2956,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.34471
+ Sdf ratio 0.369449
  distance to modpoint 0.450795
+ closeness comparison 
+ ratio 2.85588
+1
  histogram diff 0.417467
  i 9 j 4
  is hks 0
@@ -2227,8 +2968,11 @@
  1 3 0.00064228
  2 3 0.000364166
  is area dif 1
- Sdf ratio 0.412202
+ Sdf ratio 0.365304
  distance to modpoint 0.559691
+ closeness comparison 
+ ratio 2.40295
+1
  histogram diff 1.0718
  i 9 j 5
  is hks 0
@@ -2236,8 +2980,11 @@
  1 3 0.000347415
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.49582
+ Sdf ratio 0.432867
  distance to modpoint 0.823703
+ closeness comparison 
+ ratio 0.221261
+0
  histogram diff 0.0706497
  i 9 j 6
  is hks 0
@@ -2245,8 +2992,11 @@
  1 3 0.00013184
  2 3 0.000146273
  is area dif 1
- Sdf ratio 0.348529
+ Sdf ratio 0.381469
  distance to modpoint 0.285631
+ closeness comparison 
+ ratio 4.49117
+1
  histogram diff 0.227559
  i 9 j 7
  is hks 0
@@ -2254,8 +3004,11 @@
  1 3 0.000325732
  2 3 4.76178e-05
  is area dif 1
- Sdf ratio 0.744674
+ Sdf ratio 0.805976
  distance to modpoint 0.454657
+ closeness comparison 
+ ratio 3.13418
+1
  histogram diff 0.525831
  i 9 j 8
  is hks 0
@@ -2263,8 +3016,11 @@
  1 3 0.000624568
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.413812
+ Sdf ratio 0.379191
  distance to modpoint 0.820639
+ closeness comparison 
+ ratio 1.58796
+1
  histogram diff 0.326161
  i 9 j 10
  is hks 1
@@ -2272,8 +3028,11 @@
  1 3 0.00018326
  2 3 9.48536e-05
  is area dif 1
- Sdf ratio 0.903128
+ Sdf ratio 0.849046
  distance to modpoint 0.988426
+ closeness comparison 
+ ratio 1.3883
+1
  histogram diff 0.280407
  i 9 j 11
  is hks 0
@@ -2281,8 +3040,11 @@
  1 3 9.37293e-05
  2 3 0.000184384
  is area dif 1
- Sdf ratio 0.486224
+ Sdf ratio 0.554768
  distance to modpoint 0.367434
+ closeness comparison 
+ ratio 1.81931
+1
  histogram diff 0.562709
  i 9 j 12
  is hks 1
@@ -2290,8 +3052,11 @@
  1 3 0.000568488
  2 3 0.000290374
  is area dif 1
- Sdf ratio 0.505772
+ Sdf ratio 0.606694
  distance to modpoint 0.759224
+ closeness comparison 
+ ratio 2.30579
+1
  histogram diff 0.35147
  i 9 j 13
  is hks 0
@@ -2299,8 +3064,11 @@
  1 3 0.000294229
  2 3 1.6115e-05
  is area dif 1
- Sdf ratio 0.468664
+ Sdf ratio 0.491723
  distance to modpoint 0.384656
+ closeness comparison 
+ ratio 2.67482
+1
  histogram diff 0.41851
  i 9 j 14
  is hks 0
@@ -2308,8 +3076,11 @@
  1 3 0.000294229
  2 3 1.6115e-05
  is area dif 1
- Sdf ratio 0.3187
+ Sdf ratio 0.286592
  distance to modpoint 0.399943
+ closeness comparison 
+ ratio 1.79129
+1
  histogram diff 0.626594
  i 9 j 15
  is hks 0
@@ -2317,8 +3088,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.933926
+ Sdf ratio 0.947412
  distance to modpoint 0.488355
+ closeness comparison 
+ ratio 2.72555
+1
  histogram diff 0.418264
  i 9 j 16
  is hks 0
@@ -2326,8 +3100,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.656725
+ Sdf ratio 0.843326
  distance to modpoint 0.586094
+ closeness comparison 
+ ratio 2.6538
+1
  histogram diff 0.415962
  i 9 j 17
  is hks 1
@@ -2335,8 +3112,11 @@
  1 3 0.000347415
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.689687
+ Sdf ratio 0.752674
  distance to modpoint 0.670603
+ closeness comparison 
+ ratio 0.491195
+0
  histogram diff 0.425403
  i 9 j 18
  is hks 1
@@ -2344,8 +3124,11 @@
  1 3 0.000347415
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.729527
+ Sdf ratio 0.79323
  distance to modpoint 0.719415
+ closeness comparison 
+ ratio 0.515719
+1
  histogram diff 0.433881
  i 9 j 19
  is hks 1
@@ -2353,8 +3136,11 @@
  1 3 0.000624568
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.671758
+ Sdf ratio 0.662317
  distance to modpoint 0.681205
+ closeness comparison 
+ ratio 1.58252
+1
  histogram diff 0.331961
  i 9 j 20
  is hks 1
@@ -2362,8 +3148,11 @@
  1 3 0.000624568
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.685622
+ Sdf ratio 0.724231
  distance to modpoint 0.735546
+ closeness comparison 
+ ratio 1.46071
+1
  histogram diff 0.513587
  i 9 j 21
  is hks 1
@@ -2371,8 +3160,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.320624
+ Sdf ratio 0.238596
  distance to modpoint 0.761206
+ closeness comparison 
+ ratio 2.27919
+1
  histogram diff 1.22969
  i 9 j 22
  is hks 0
@@ -2380,8 +3172,11 @@
  1 3 0.000347415
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.142684
+ Sdf ratio 0.158413
  distance to modpoint 0.756153
+ closeness comparison 
+ ratio 0.330566
+0
  histogram diff 0.612482
  i 9 j 23
  is hks 0
@@ -2389,8 +3184,11 @@
  1 3 0.000624568
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.211292
+ Sdf ratio 0.254409
  distance to modpoint 0.742109
+ closeness comparison 
+ ratio 1.7241
+1
  histogram diff 0.376627
  i 9 j 24
  is hks 0
@@ -2398,8 +3196,11 @@
  1 3 0.000326773
  2 3 4.86596e-05
  is area dif 1
- Sdf ratio 0.219224
+ Sdf ratio 0.543869
  distance to modpoint 0.971254
+ closeness comparison 
+ ratio 2.02352
+1
  histogram diff 0.502566
  i 9 j 25
  is hks 0
@@ -2407,8 +3208,11 @@
  1 3 0.00113099
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.439828
+ Sdf ratio 0.373456
  distance to modpoint 0.951852
+ closeness comparison 
+ ratio 1.88531
+1
  histogram diff 1.59898
  i 9 j 26
  is hks 0
@@ -2416,8 +3220,11 @@
  1 3 0.00185769
  2 3 0.00157957
  is area dif 1
- Sdf ratio 0.453215
+ Sdf ratio 0.466526
  distance to modpoint 0.417272
+ closeness comparison 
+ ratio 2.41141
+1
  histogram diff 0.463532
  i 9 j 27
  is hks 0
@@ -2425,8 +3232,11 @@
  1 3 0.000897964
  2 3 0.00061985
  is area dif 1
- Sdf ratio 0.43528
+ Sdf ratio 0.449706
  distance to modpoint 0.0174513
+ closeness comparison 
+ ratio 56.3023
+1
  histogram diff 0.381991
  i 10 j 0
  is hks 0
@@ -2434,8 +3244,11 @@
  1 3 0.000604094
  2 3 0.00045902
  is area dif 1
- Sdf ratio 0.243056
+ Sdf ratio 0.229709
  distance to modpoint 0.255763
+ closeness comparison 
+ ratio 4.74812
+1
  histogram diff 0.61148
  i 10 j 1
  is hks 1
@@ -2443,8 +3256,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.842912
+ Sdf ratio 0.773692
  distance to modpoint 0.735475
+ closeness comparison 
+ ratio 2.32694
+1
  histogram diff 1.56728
  i 10 j 2
  is hks 1
@@ -2452,8 +3268,11 @@
  1 3 0.000288587
  2 3 0.000143513
  is area dif 1
- Sdf ratio 0.968671
+ Sdf ratio 0.95603
  distance to modpoint 0.754504
+ closeness comparison 
+ ratio 2.12575
+1
  histogram diff 0.194719
  i 10 j 3
  is hks 0
@@ -2461,8 +3280,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.311318
+ Sdf ratio 0.313679
  distance to modpoint 0.445577
+ closeness comparison 
+ ratio 2.70436
+1
  histogram diff 0.736962
  i 10 j 4
  is hks 0
@@ -2470,8 +3292,11 @@
  1 3 0.000604094
  2 3 0.00045902
  is area dif 1
- Sdf ratio 0.372271
+ Sdf ratio 0.310159
  distance to modpoint 0.553213
+ closeness comparison 
+ ratio 2.5075
+1
  histogram diff 0.974441
  i 10 j 5
  is hks 0
@@ -2479,8 +3304,11 @@
  1 3 0.000309229
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.447789
+ Sdf ratio 0.367524
  distance to modpoint 0.833347
+ closeness comparison 
+ ratio 1.54921
+1
  histogram diff 0.326161
  i 10 j 6
  is hks 0
@@ -2488,8 +3316,11 @@
  1 3 9.36542e-05
  2 3 5.14198e-05
  is area dif 1
- Sdf ratio 0.314766
+ Sdf ratio 0.323884
  distance to modpoint 0.282325
+ closeness comparison 
+ ratio 4.3174
+1
  histogram diff 0.23929
  i 10 j 7
  is hks 0
@@ -2497,8 +3328,11 @@
  1 3 0.000287545
  2 3 0.000142471
  is area dif 1
- Sdf ratio 0.672536
+ Sdf ratio 0.68431
  distance to modpoint 0.449395
+ closeness comparison 
+ ratio 3.19275
+1
  histogram diff 0.956507
  i 10 j 8
  is hks 0
@@ -2506,8 +3340,11 @@
  1 3 0.000586382
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.373726
+ Sdf ratio 0.321951
  distance to modpoint 0.830248
+ closeness comparison 
+ ratio 0.215711
+0
  histogram diff 0.0963838
  i 10 j 9
  is hks 1
@@ -2515,8 +3352,11 @@
  1 3 0.000239928
  2 3 9.48536e-05
  is area dif 1
- Sdf ratio 0.903128
+ Sdf ratio 0.849046
  distance to modpoint 0.988426
+ closeness comparison 
+ ratio 1.3883
+1
  histogram diff 0.280407
  i 10 j 11
  is hks 0
@@ -2524,8 +3364,11 @@
  1 3 5.55433e-05
  2 3 8.95307e-05
  is area dif 1
- Sdf ratio 0.439122
+ Sdf ratio 0.471023
  distance to modpoint 0.363181
+ closeness comparison 
+ ratio 2.7201
+1
  histogram diff 0.584014
  i 10 j 12
  is hks 1
@@ -2533,8 +3376,11 @@
  1 3 0.000530302
  2 3 0.000385228
  is area dif 1
- Sdf ratio 0.456777
+ Sdf ratio 0.515111
  distance to modpoint 0.750437
+ closeness comparison 
+ ratio 2.11852
+1
  histogram diff 0.21837
  i 10 j 13
  is hks 0
@@ -2542,8 +3388,11 @@
  1 3 0.000256043
  2 3 0.000110969
  is area dif 1
- Sdf ratio 0.423264
+ Sdf ratio 0.417495
  distance to modpoint 0.380204
+ closeness comparison 
+ ratio 1.7355
+1
  histogram diff 0.545221
  i 10 j 14
  is hks 0
@@ -2551,8 +3400,11 @@
  1 3 0.000256043
  2 3 0.000110969
  is area dif 1
- Sdf ratio 0.287827
+ Sdf ratio 0.24333
  distance to modpoint 0.395314
+ closeness comparison 
+ ratio 1.71541
+1
  histogram diff 0.731392
  i 10 j 15
  is hks 0
@@ -2560,8 +3412,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.843455
+ Sdf ratio 0.804396
  distance to modpoint 0.482703
+ closeness comparison 
+ ratio 3.02181
+1
  histogram diff 0.679779
  i 10 j 16
  is hks 0
@@ -2569,8 +3424,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.593107
+ Sdf ratio 0.716023
  distance to modpoint 0.579311
+ closeness comparison 
+ ratio 2.48771
+1
  histogram diff 0.761561
  i 10 j 17
  is hks 1
@@ -2578,8 +3436,11 @@
  1 3 0.000309229
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.622876
+ Sdf ratio 0.639054
  distance to modpoint 0.662842
+ closeness comparison 
+ ratio 1.61053
+1
  histogram diff 0.278558
  i 10 j 18
  is hks 1
@@ -2587,8 +3448,11 @@
  1 3 0.000309229
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.658856
+ Sdf ratio 0.673488
  distance to modpoint 0.711089
+ closeness comparison 
+ ratio 1.46497
+1
  histogram diff 0.233972
  i 10 j 19
  is hks 1
@@ -2596,8 +3460,11 @@
  1 3 0.000586382
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.606684
+ Sdf ratio 0.562337
  distance to modpoint 0.673321
+ closeness comparison 
+ ratio 0.487131
+0
  histogram diff 0.352375
  i 10 j 20
  is hks 1
@@ -2605,8 +3472,11 @@
  1 3 0.000586382
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.619205
+ Sdf ratio 0.614905
  distance to modpoint 0.727033
+ closeness comparison 
+ ratio 0.478033
+0
  histogram diff 0.335438
  i 10 j 21
  is hks 1
@@ -2614,8 +3484,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.289564
+ Sdf ratio 0.202579
  distance to modpoint 0.752396
+ closeness comparison 
+ ratio 2.28355
+1
  histogram diff 1.01254
  i 10 j 22
  is hks 0
@@ -2623,8 +3496,11 @@
  1 3 0.000309229
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.157988
+ Sdf ratio 0.186578
  distance to modpoint 0.765007
+ closeness comparison 
+ ratio 1.68315
+1
  histogram diff 0.562605
  i 10 j 23
  is hks 0
@@ -2632,8 +3508,11 @@
  1 3 0.000586382
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.233956
+ Sdf ratio 0.299641
  distance to modpoint 0.750799
+ closeness comparison 
+ ratio 0.335289
+0
  histogram diff 0.518807
  i 10 j 24
  is hks 0
@@ -2641,8 +3520,11 @@
  1 3 0.000288587
  2 3 0.000143513
  is area dif 1
- Sdf ratio 0.197987
+ Sdf ratio 0.461769
  distance to modpoint 0.982626
+ closeness comparison 
+ ratio 1.86709
+1
  histogram diff 0.612367
  i 10 j 25
  is hks 0
@@ -2650,8 +3532,11 @@
  1 3 0.00109281
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.487005
+ Sdf ratio 0.439854
  distance to modpoint 0.940836
+ closeness comparison 
+ ratio 2.03731
+1
  histogram diff 1.80293
  i 10 j 26
  is hks 0
@@ -2659,8 +3544,11 @@
  1 3 0.0018195
  2 3 0.00167443
  is area dif 1
- Sdf ratio 0.409311
+ Sdf ratio 0.396102
  distance to modpoint 0.412443
+ closeness comparison 
+ ratio 2.4433
+1
  histogram diff 0.46088
  i 10 j 27
  is hks 0
@@ -2668,8 +3556,11 @@
  1 3 0.000859778
  2 3 0.000714704
  is area dif 1
- Sdf ratio 0.393114
+ Sdf ratio 0.381821
  distance to modpoint 0.0172493
+ closeness comparison 
+ ratio 57.563
+1
  histogram diff 0.450473
  i 11 j 0
  is hks 1
@@ -2677,8 +3568,11 @@
  1 3 0.000144181
  2 3 0.00054855
  is area dif 1
- Sdf ratio 0.553504
+ Sdf ratio 0.48768
  distance to modpoint 0.70423
+ closeness comparison 
+ ratio 1.59529
+1
  histogram diff 1.02733
  i 11 j 1
  is hks 0
@@ -2686,8 +3580,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.370142
+ Sdf ratio 0.364427
  distance to modpoint 0.493805
+ closeness comparison 
+ ratio 2.50315
+1
  histogram diff 2.11431
  i 11 j 2
  is hks 0
@@ -2695,8 +3592,11 @@
  1 3 0.000171325
  2 3 0.000233044
  is area dif 1
- Sdf ratio 0.425365
+ Sdf ratio 0.492687
  distance to modpoint 0.481351
+ closeness comparison 
+ ratio 3.01703
+1
  histogram diff 0.677329
  i 11 j 3
  is hks 1
@@ -2704,8 +3604,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.708954
+ Sdf ratio 0.665952
  distance to modpoint 0.81508
+ closeness comparison 
+ ratio 1.72178
+1
  histogram diff 1.27754
  i 11 j 4
  is hks 1
@@ -2713,8 +3616,11 @@
  1 3 0.000144181
  2 3 0.00054855
  is area dif 1
- Sdf ratio 0.847762
+ Sdf ratio 0.65848
  distance to modpoint 0.656494
+ closeness comparison 
+ ratio 1.85701
+1
  histogram diff 1.33151
  i 11 j 5
  is hks 0
@@ -2722,8 +3628,11 @@
  1 3 0.000150683
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.980646
+ Sdf ratio 0.780266
  distance to modpoint 0.302656
+ closeness comparison 
+ ratio 2.36814
+1
  histogram diff 0.760689
  i 11 j 6
  is hks 1
@@ -2731,8 +3640,11 @@
  1 3 0.000366258
  2 3 3.81109e-05
  is area dif 1
- Sdf ratio 0.716808
+ Sdf ratio 0.687618
  distance to modpoint 0.777368
+ closeness comparison 
+ ratio 2.23137
+1
  histogram diff 0.486043
  i 11 j 7
  is hks 1
@@ -2740,8 +3652,11 @@
  1 3 0.000172367
  2 3 0.000232002
  is area dif 1
- Sdf ratio 0.652935
+ Sdf ratio 0.688319
  distance to modpoint 0.808156
+ closeness comparison 
+ ratio 2.08826
+1
  histogram diff 1.25363
  i 11 j 8
  is hks 0
@@ -2749,8 +3664,11 @@
  1 3 0.000126469
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.851074
+ Sdf ratio 0.683513
  distance to modpoint 0.30153
+ closeness comparison 
+ ratio 3.26349
+1
  histogram diff 0.687014
  i 11 j 9
  is hks 0
@@ -2758,8 +3676,11 @@
  1 3 0.000219985
  2 3 0.000184384
  is area dif 1
- Sdf ratio 0.486224
+ Sdf ratio 0.554768
  distance to modpoint 0.367434
+ closeness comparison 
+ ratio 1.81931
+1
  histogram diff 0.562709
  i 11 j 10
  is hks 0
@@ -2767,8 +3688,11 @@
  1 3 0.000314838
  2 3 8.95307e-05
  is area dif 1
- Sdf ratio 0.439122
+ Sdf ratio 0.471023
  distance to modpoint 0.363181
+ closeness comparison 
+ ratio 2.7201
+1
  histogram diff 0.584014
  i 11 j 12
  is hks 0
@@ -2776,8 +3700,11 @@
  1 3 7.03896e-05
  2 3 0.000474759
  is area dif 1
- Sdf ratio 0.96135
+ Sdf ratio 0.914411
  distance to modpoint 0.483959
+ closeness comparison 
+ ratio 3.02472
+1
  histogram diff 0.563568
  i 11 j 13
  is hks 1
@@ -2785,8 +3712,11 @@
  1 3 0.00020387
  2 3 0.000200499
  is area dif 1
- Sdf ratio 0.963885
+ Sdf ratio 0.886358
  distance to modpoint 0.955228
+ closeness comparison 
+ ratio 1.61775
+1
  histogram diff 0.903419
  i 11 j 14
  is hks 1
@@ -2794,8 +3724,11 @@
  1 3 0.00020387
  2 3 0.000200499
  is area dif 1
- Sdf ratio 0.65546
+ Sdf ratio 0.516598
  distance to modpoint 0.918716
+ closeness comparison 
+ ratio 0.92881
+1
  histogram diff 0.0631163
  i 11 j 15
  is hks 1
@@ -2803,8 +3736,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.520623
+ Sdf ratio 0.585562
  distance to modpoint 0.75239
+ closeness comparison 
+ ratio 1.80716
+1
  histogram diff 1.05939
  i 11 j 16
  is hks 1
@@ -2812,8 +3748,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.740377
+ Sdf ratio 0.657833
  distance to modpoint 0.62692
+ closeness comparison 
+ ratio 2.43715
+1
  histogram diff 1.16106
  i 11 j 17
  is hks 0
@@ -2821,8 +3760,11 @@
  1 3 0.000150683
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.704992
+ Sdf ratio 0.737063
  distance to modpoint 0.547915
+ closeness comparison 
+ ratio 0.936594
+1
  histogram diff 0.294957
  i 11 j 18
  is hks 1
@@ -2830,8 +3772,11 @@
  1 3 0.000150683
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.666492
+ Sdf ratio 0.699379
  distance to modpoint 0.51074
+ closeness comparison 
+ ratio 1.00763
+1
  histogram diff 0.268439
  i 11 j 19
  is hks 1
@@ -2839,8 +3784,11 @@
  1 3 0.000126469
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.723807
+ Sdf ratio 0.837617
  distance to modpoint 0.539388
+ closeness comparison 
+ ratio 1.87714
+1
  histogram diff 0.374026
  i 11 j 20
  is hks 1
@@ -2848,8 +3796,11 @@
  1 3 0.000126469
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.709172
+ Sdf ratio 0.76601
  distance to modpoint 0.499539
+ closeness comparison 
+ ratio 1.86585
+1
  histogram diff 0.250313
  i 11 j 21
  is hks 0
@@ -2857,8 +3808,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.659416
+ Sdf ratio 0.430083
  distance to modpoint 0.4827
+ closeness comparison 
+ ratio 2.92737
+1
  histogram diff 1.71503
  i 11 j 22
  is hks 0
@@ -2866,8 +3820,11 @@
  1 3 0.000150683
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.0693762
+ Sdf ratio 0.0878826
  distance to modpoint 0.277836
+ closeness comparison 
+ ratio 2.69697
+1
  histogram diff 0.978844
  i 11 j 23
  is hks 0
@@ -2875,8 +3832,11 @@
  1 3 0.000126469
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.102735
+ Sdf ratio 0.141138
  distance to modpoint 0.272676
+ closeness comparison 
+ ratio 3.63401
+1
  histogram diff 0.500948
  i 11 j 24
  is hks 0
@@ -2884,8 +3844,11 @@
  1 3 0.000171325
  2 3 0.000233044
  is area dif 1
- Sdf ratio 0.450871
+ Sdf ratio 0.980353
  distance to modpoint 0.356871
+ closeness comparison 
+ ratio 3.74173
+1
  histogram diff 0.634696
  i 11 j 25
  is hks 0
@@ -2893,8 +3856,11 @@
  1 3 0.000632896
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.213855
+ Sdf ratio 0.207182
  distance to modpoint 0.38602
+ closeness comparison 
+ ratio 3.0686
+1
  histogram diff 2.05234
  i 11 j 26
  is hks 1
@@ -2902,8 +3868,11 @@
  1 3 0.00135959
  2 3 0.00176396
  is area dif 1
- Sdf ratio 0.932112
+ Sdf ratio 0.840938
  distance to modpoint 0.880562
+ closeness comparison 
+ ratio 0.998159
+1
  histogram diff 0.729784
  i 11 j 27
  is hks 1
@@ -2911,8 +3880,11 @@
  1 3 0.000399866
  2 3 0.000804235
  is area dif 1
- Sdf ratio 0.895226
+ Sdf ratio 0.81062
  distance to modpoint 0.0474951
+ closeness comparison 
+ ratio 20.0548
+1
  histogram diff 0.627341
  i 12 j 0
  is hks 0
@@ -2920,8 +3892,11 @@
  1 3 0.000723421
  2 3 7.37915e-05
  is area dif 1
- Sdf ratio 0.532111
+ Sdf ratio 0.44594
  distance to modpoint 0.340819
+ closeness comparison 
+ ratio 3.32119
+1
  histogram diff 0.900244
  i 12 j 1
  is hks 1
@@ -2929,8 +3904,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.385023
+ Sdf ratio 0.398537
  distance to modpoint 0.980062
+ closeness comparison 
+ ratio 1.53613
+1
  histogram diff 1.31494
  i 12 j 2
  is hks 1
@@ -2938,8 +3916,11 @@
  1 3 0.000407915
  2 3 0.000241715
  is area dif 1
- Sdf ratio 0.442466
+ Sdf ratio 0.538802
  distance to modpoint 0.99461
+ closeness comparison 
+ ratio 0.261361
+0
  histogram diff 0.0705421
  i 12 j 3
  is hks 0
@@ -2947,8 +3928,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.681553
+ Sdf ratio 0.608954
  distance to modpoint 0.593757
+ closeness comparison 
+ ratio 1.08974
+1
  histogram diff 0.633831
  i 12 j 4
  is hks 0
@@ -2956,8 +3940,11 @@
  1 3 0.000723421
  2 3 7.37915e-05
  is area dif 1
- Sdf ratio 0.814996
+ Sdf ratio 0.602121
  distance to modpoint 0.737188
+ closeness comparison 
+ ratio 1.07374
+1
  histogram diff 0.967634
  i 12 j 5
  is hks 0
@@ -2965,8 +3952,11 @@
  1 3 0.000428557
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.980324
+ Sdf ratio 0.713484
  distance to modpoint 0.625375
+ closeness comparison 
+ ratio 2.54812
+1
  histogram diff 0.391277
  i 12 j 6
  is hks 0
@@ -2974,8 +3964,11 @@
  1 3 0.000212982
  2 3 0.000436648
  is area dif 1
- Sdf ratio 0.689103
+ Sdf ratio 0.628766
  distance to modpoint 0.376215
+ closeness comparison 
+ ratio 1.78605
+1
  histogram diff 0.457809
  i 12 j 7
  is hks 0
@@ -2983,8 +3976,11 @@
  1 3 0.000406873
  2 3 0.000242757
  is area dif 1
- Sdf ratio 0.679185
+ Sdf ratio 0.752745
  distance to modpoint 0.598844
+ closeness comparison 
+ ratio 1.30223
+1
  histogram diff 0.987015
  i 12 j 8
  is hks 0
@@ -2992,8 +3988,11 @@
  1 3 0.000705709
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.81818
+ Sdf ratio 0.625012
  distance to modpoint 0.623049
+ closeness comparison 
+ ratio 2.37751
+1
  histogram diff 0.194719
  i 12 j 9
  is hks 1
@@ -3001,8 +4000,11 @@
  1 3 0.000359255
  2 3 0.000290374
  is area dif 1
- Sdf ratio 0.505772
+ Sdf ratio 0.606694
  distance to modpoint 0.759224
+ closeness comparison 
+ ratio 2.30579
+1
  histogram diff 0.35147
  i 12 j 10
  is hks 1
@@ -3010,8 +4012,11 @@
  1 3 0.000264402
  2 3 0.000385228
  is area dif 1
- Sdf ratio 0.456777
+ Sdf ratio 0.515111
  distance to modpoint 0.750437
+ closeness comparison 
+ ratio 2.11852
+1
  histogram diff 0.21837
  i 12 j 11
  is hks 0
@@ -3019,8 +4024,11 @@
  1 3 0.000174871
  2 3 0.000474759
  is area dif 1
- Sdf ratio 0.96135
+ Sdf ratio 0.914411
  distance to modpoint 0.483959
+ closeness comparison 
+ ratio 3.02472
+1
  histogram diff 0.563568
  i 12 j 13
  is hks 0
@@ -3028,8 +4036,11 @@
  1 3 0.00037537
  2 3 0.000274259
  is area dif 1
- Sdf ratio 0.926632
+ Sdf ratio 0.810496
  distance to modpoint 0.506643
+ closeness comparison 
+ ratio 2.46175
+1
  histogram diff 0.535535
  i 12 j 14
  is hks 0
@@ -3037,8 +4048,11 @@
  1 3 0.00037537
  2 3 0.000274259
  is area dif 1
- Sdf ratio 0.630127
+ Sdf ratio 0.472383
  distance to modpoint 0.526778
+ closeness comparison 
+ ratio 2.73891
+1
  histogram diff 0.670102
  i 12 j 15
  is hks 0
@@ -3046,8 +4060,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.541554
+ Sdf ratio 0.64037
  distance to modpoint 0.643229
+ closeness comparison 
+ ratio 1.80575
+1
  histogram diff 0.524461
  i 12 j 16
  is hks 0
@@ -3055,8 +4072,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.770142
+ Sdf ratio 0.719406
  distance to modpoint 0.771964
+ closeness comparison 
+ ratio 0.583697
+1
  histogram diff 0.583683
  i 12 j 17
  is hks 1
@@ -3064,8 +4084,11 @@
  1 3 0.000428557
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.733335
+ Sdf ratio 0.806052
  distance to modpoint 0.883274
+ closeness comparison 
+ ratio 2.11931
+1
  histogram diff 0.266228
  i 12 j 18
  is hks 1
@@ -3073,8 +4096,11 @@
  1 3 0.000428557
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.693287
+ Sdf ratio 0.764841
  distance to modpoint 0.947566
+ closeness comparison 
+ ratio 1.96425
+1
  histogram diff 0.223932
  i 12 j 19
  is hks 1
@@ -3082,8 +4108,11 @@
  1 3 0.000705709
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.752907
+ Sdf ratio 0.916018
  distance to modpoint 0.897238
+ closeness comparison 
+ ratio 1.89772
+1
  histogram diff 0.22562
  i 12 j 20
  is hks 0
@@ -3091,8 +4120,11 @@
  1 3 0.000705709
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.737683
+ Sdf ratio 0.837709
  distance to modpoint 0.968812
+ closeness comparison 
+ ratio 1.76287
+1
  histogram diff 0.324437
  i 12 j 21
  is hks 1
@@ -3100,8 +4132,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.63393
+ Sdf ratio 0.393273
  distance to modpoint 0.997397
+ closeness comparison 
+ ratio 1.00613
+1
  histogram diff 0.95225
  i 12 j 22
  is hks 0
@@ -3109,8 +4144,11 @@
  1 3 0.000428557
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.0721654
+ Sdf ratio 0.0961084
  distance to modpoint 0.57409
+ closeness comparison 
+ ratio 2.73055
+1
  histogram diff 0.524239
  i 12 j 23
  is hks 0
@@ -3118,8 +4156,11 @@
  1 3 0.000705709
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.106865
+ Sdf ratio 0.154349
  distance to modpoint 0.563428
+ closeness comparison 
+ ratio 2.55147
+1
  histogram diff 0.540873
  i 12 j 24
  is hks 0
@@ -3127,8 +4168,11 @@
  1 3 0.000407915
  2 3 0.000241715
  is area dif 1
- Sdf ratio 0.433445
+ Sdf ratio 0.896446
  distance to modpoint 0.7374
+ closeness comparison 
+ ratio 0.561072
+1
  histogram diff 0.572459
  i 12 j 25
  is hks 0
@@ -3136,8 +4180,11 @@
  1 3 0.00121214
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.222453
+ Sdf ratio 0.226574
  distance to modpoint 0.797628
+ closeness comparison 
+ ratio 1.78171
+1
  histogram diff 1.53412
  i 12 j 26
  is hks 0
@@ -3145,8 +4192,11 @@
  1 3 0.00193883
  2 3 0.0012892
  is area dif 1
- Sdf ratio 0.896086
+ Sdf ratio 0.768963
  distance to modpoint 0.549603
+ closeness comparison 
+ ratio 1.79423
+1
  histogram diff 0.418904
  i 12 j 27
  is hks 0
@@ -3154,8 +4204,11 @@
  1 3 0.000979106
  2 3 0.000329476
  is area dif 1
- Sdf ratio 0.860626
+ Sdf ratio 0.74124
  distance to modpoint 0.0229857
+ closeness comparison 
+ ratio 44.5053
+1
  histogram diff 0.611179
  i 13 j 0
  is hks 1
@@ -3163,8 +4216,11 @@
  1 3 1.08332e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.574243
+ Sdf ratio 0.550207
  distance to modpoint 0.6727
+ closeness comparison 
+ ratio 2.48655
+1
  histogram diff 0.938316
  i 13 j 1
  is hks 0
@@ -3172,8 +4228,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.356774
+ Sdf ratio 0.323013
  distance to modpoint 0.51695
+ closeness comparison 
+ ratio 2.92229
+1
  histogram diff 1.90886
  i 13 j 2
  is hks 0
@@ -3181,8 +4240,11 @@
  1 3 0.000304673
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.410003
+ Sdf ratio 0.436697
  distance to modpoint 0.503912
+ closeness comparison 
+ ratio 2.49875
+1
  histogram diff 0.598445
  i 13 j 3
  is hks 1
@@ -3190,8 +4252,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.735517
+ Sdf ratio 0.751335
  distance to modpoint 0.853284
+ closeness comparison 
+ ratio 1.45958
+1
  histogram diff 0.841771
  i 13 j 4
  is hks 1
@@ -3199,8 +4264,11 @@
  1 3 1.08332e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.879526
+ Sdf ratio 0.742905
  distance to modpoint 0.687264
+ closeness comparison 
+ ratio 1.95936
+1
  histogram diff 0.866276
  i 13 j 5
  is hks 0
@@ -3208,8 +4276,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.94523
+ Sdf ratio 0.880305
  distance to modpoint 0.316842
+ closeness comparison 
+ ratio 3.14031
+1
  histogram diff 0.46673
  i 13 j 6
  is hks 1
@@ -3217,8 +4288,11 @@
  1 3 0.000499606
  2 3 0.000162388
  is area dif 1
- Sdf ratio 0.743665
+ Sdf ratio 0.775779
  distance to modpoint 0.742563
+ closeness comparison 
+ ratio 1.99518
+1
  histogram diff 0.547163
  i 13 j 7
  is hks 1
@@ -3226,8 +4300,11 @@
  1 3 0.000305715
  2 3 3.15028e-05
  is area dif 1
- Sdf ratio 0.629354
+ Sdf ratio 0.610097
  distance to modpoint 0.846035
+ closeness comparison 
+ ratio 2.05924
+1
  histogram diff 0.953134
  i 13 j 8
  is hks 0
@@ -3235,8 +4312,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.882962
+ Sdf ratio 0.771148
  distance to modpoint 0.315663
+ closeness comparison 
+ ratio 2.24668
+1
  histogram diff 0.610096
  i 13 j 9
  is hks 0
@@ -3244,8 +4324,11 @@
  1 3 0.000353333
  2 3 1.6115e-05
  is area dif 1
- Sdf ratio 0.468664
+ Sdf ratio 0.491723
  distance to modpoint 0.384656
+ closeness comparison 
+ ratio 2.67482
+1
  histogram diff 0.41851
  i 13 j 10
  is hks 0
@@ -3253,8 +4336,11 @@
  1 3 0.000448186
  2 3 0.000110969
  is area dif 1
- Sdf ratio 0.423264
+ Sdf ratio 0.417495
  distance to modpoint 0.380204
+ closeness comparison 
+ ratio 1.7355
+1
  histogram diff 0.545221
  i 13 j 11
  is hks 1
@@ -3262,8 +4348,11 @@
  1 3 0.000537717
  2 3 0.000200499
  is area dif 1
- Sdf ratio 0.963885
+ Sdf ratio 0.886358
  distance to modpoint 0.955228
+ closeness comparison 
+ ratio 1.61775
+1
  histogram diff 0.903419
  i 13 j 12
  is hks 0
@@ -3271,8 +4360,11 @@
  1 3 6.29583e-05
  2 3 0.000274259
  is area dif 1
- Sdf ratio 0.926632
+ Sdf ratio 0.810496
  distance to modpoint 0.506643
+ closeness comparison 
+ ratio 2.46175
+1
  histogram diff 0.535535
  i 13 j 14
  is hks 1
@@ -3280,8 +4372,11 @@
  1 3 0.000337218
  2 3 0
  is area dif 1
- Sdf ratio 0.680019
+ Sdf ratio 0.582832
  distance to modpoint 0.961777
+ closeness comparison 
+ ratio 0.898833
+1
  histogram diff 0.982735
  i 13 j 15
  is hks 1
@@ -3289,8 +4384,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.501821
+ Sdf ratio 0.519017
  distance to modpoint 0.787655
+ closeness comparison 
+ ratio 2.25746
+1
  histogram diff 1.02682
  i 13 j 16
  is hks 1
@@ -3298,8 +4396,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.713638
+ Sdf ratio 0.583076
  distance to modpoint 0.656304
+ closeness comparison 
+ ratio 2.07074
+1
  histogram diff 1.05689
  i 13 j 17
  is hks 1
@@ -3307,8 +4408,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.679532
+ Sdf ratio 0.653302
  distance to modpoint 0.573597
+ closeness comparison 
+ ratio 1.88199
+1
  histogram diff 0.717421
  i 13 j 18
  is hks 1
@@ -3316,8 +4420,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.642422
+ Sdf ratio 0.6199
  distance to modpoint 0.534678
+ closeness comparison 
+ ratio 1.80296
+1
  histogram diff 0.682066
  i 13 j 19
  is hks 1
@@ -3325,8 +4432,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.697667
+ Sdf ratio 0.742429
  distance to modpoint 0.564669
+ closeness comparison 
+ ratio 0.908214
+1
  histogram diff 0.605576
  i 13 j 20
  is hks 1
@@ -3334,8 +4444,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.68356
+ Sdf ratio 0.678959
  distance to modpoint 0.522953
+ closeness comparison 
+ ratio 0.962674
+1
  histogram diff 0.768825
  i 13 j 21
  is hks 0
@@ -3343,8 +4456,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.684123
+ Sdf ratio 0.485225
  distance to modpoint 0.505324
+ closeness comparison 
+ ratio 2.7927
+1
  histogram diff 1.2343
  i 13 j 22
  is hks 0
@@ -3352,8 +4468,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.0668707
+ Sdf ratio 0.0778954
  distance to modpoint 0.290859
+ closeness comparison 
+ ratio 3.49257
+1
  histogram diff 0.728053
  i 13 j 23
  is hks 0
@@ -3361,8 +4480,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.0990249
+ Sdf ratio 0.125099
  distance to modpoint 0.285457
+ closeness comparison 
+ ratio 2.59004
+1
  histogram diff 0.589573
  i 13 j 24
  is hks 0
@@ -3370,8 +4492,11 @@
  1 3 0.000304673
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.467764
+ Sdf ratio 0.904121
  distance to modpoint 0.373598
+ closeness comparison 
+ ratio 3.19101
+1
  histogram diff 0.628415
  i 13 j 25
  is hks 0
@@ -3379,8 +4504,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.206132
+ Sdf ratio 0.183637
  distance to modpoint 0.404113
+ closeness comparison 
+ ratio 3.46243
+1
  histogram diff 1.89096
  i 13 j 26
  is hks 1
@@ -3388,8 +4516,11 @@
  1 3 0.00122624
  2 3 0.00156346
  is area dif 1
- Sdf ratio 0.967036
+ Sdf ratio 0.948756
  distance to modpoint 0.921834
+ closeness comparison 
+ ratio 1.02921
+1
  histogram diff 0.604554
  i 13 j 27
  is hks 1
@@ -3397,8 +4528,11 @@
  1 3 0.000266518
  2 3 0.000603735
  is area dif 1
- Sdf ratio 0.928768
+ Sdf ratio 0.914551
  distance to modpoint 0.0453687
+ closeness comparison 
+ ratio 22.4032
+1
  histogram diff 0.554649
  i 14 j 0
  is hks 1
@@ -3406,8 +4540,11 @@
  1 3 1.08332e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.844451
+ Sdf ratio 0.944023
  distance to modpoint 0.646988
+ closeness comparison 
+ ratio 2.16332
+1
  histogram diff 1.19987
  i 14 j 1
  is hks 0
@@ -3415,8 +4552,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.242613
+ Sdf ratio 0.188262
  distance to modpoint 0.537494
+ closeness comparison 
+ ratio 2.67168
+1
  histogram diff 2.21516
  i 14 j 2
  is hks 0
@@ -3424,8 +4564,11 @@
  1 3 0.000304673
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.27881
+ Sdf ratio 0.254521
  distance to modpoint 0.523939
+ closeness comparison 
+ ratio 2.7745
+1
  histogram diff 0.790774
  i 14 j 3
  is hks 1
@@ -3433,8 +4576,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.924546
+ Sdf ratio 0.775729
  distance to modpoint 0.887195
+ closeness comparison 
+ ratio 1.79821
+1
  histogram diff 1.33415
  i 14 j 4
  is hks 1
@@ -3442,8 +4588,11 @@
  1 3 1.08332e-05
  2 3 0.000348051
  is area dif 1
- Sdf ratio 0.773165
+ Sdf ratio 0.784531
  distance to modpoint 0.714577
+ closeness comparison 
+ ratio 2.13247
+1
  histogram diff 1.4289
  i 14 j 5
  is hks 0
@@ -3451,8 +4600,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.642774
+ Sdf ratio 0.662079
  distance to modpoint 0.329434
+ closeness comparison 
+ ratio 2.23899
+1
  histogram diff 0.824986
  i 14 j 6
  is hks 1
@@ -3460,8 +4612,11 @@
  1 3 0.000499606
  2 3 0.000162388
  is area dif 1
- Sdf ratio 0.914416
+ Sdf ratio 0.751286
  distance to modpoint 0.714181
+ closeness comparison 
+ ratio 2.37786
+1
  histogram diff 0.569135
  i 14 j 7
  is hks 1
@@ -3469,8 +4624,11 @@
  1 3 0.000305715
  2 3 3.15028e-05
  is area dif 1
- Sdf ratio 0.427973
+ Sdf ratio 0.355584
  distance to modpoint 0.879657
+ closeness comparison 
+ ratio 2.13114
+1
  histogram diff 1.26579
  i 14 j 8
  is hks 0
@@ -3478,8 +4636,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.770157
+ Sdf ratio 0.755798
  distance to modpoint 0.328208
+ closeness comparison 
+ ratio 2.21463
+1
  histogram diff 0.841729
  i 14 j 9
  is hks 0
@@ -3487,8 +4648,11 @@
  1 3 0.000353333
  2 3 1.6115e-05
  is area dif 1
- Sdf ratio 0.3187
+ Sdf ratio 0.286592
  distance to modpoint 0.399943
+ closeness comparison 
+ ratio 1.79129
+1
  histogram diff 0.626594
  i 14 j 10
  is hks 0
@@ -3496,8 +4660,11 @@
  1 3 0.000448186
  2 3 0.000110969
  is area dif 1
- Sdf ratio 0.287827
+ Sdf ratio 0.24333
  distance to modpoint 0.395314
+ closeness comparison 
+ ratio 1.71541
+1
  histogram diff 0.731392
  i 14 j 11
  is hks 1
@@ -3505,8 +4672,11 @@
  1 3 0.000537717
  2 3 0.000200499
  is area dif 1
- Sdf ratio 0.65546
+ Sdf ratio 0.516598
  distance to modpoint 0.918716
+ closeness comparison 
+ ratio 0.928811
+1
  histogram diff 0.0631163
  i 14 j 12
  is hks 0
@@ -3514,8 +4684,11 @@
  1 3 6.29583e-05
  2 3 0.000274259
  is area dif 1
- Sdf ratio 0.630127
+ Sdf ratio 0.472383
  distance to modpoint 0.526778
+ closeness comparison 
+ ratio 2.73891
+1
  histogram diff 0.670102
  i 14 j 13
  is hks 1
@@ -3523,8 +4696,11 @@
  1 3 0.000337218
  2 3 0
  is area dif 1
- Sdf ratio 0.680019
+ Sdf ratio 0.582832
  distance to modpoint 0.961777
+ closeness comparison 
+ ratio 0.898833
+1
  histogram diff 0.982735
  i 14 j 15
  is hks 0
@@ -3532,8 +4708,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.341248
+ Sdf ratio 0.3025
  distance to modpoint 0.818958
+ closeness comparison 
+ ratio 2.03226
+1
  histogram diff 1.13818
  i 14 j 16
  is hks 1
@@ -3541,8 +4720,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.485288
+ Sdf ratio 0.339835
  distance to modpoint 0.682386
+ closeness comparison 
+ ratio 2.38524
+1
  histogram diff 1.206
  i 14 j 17
  is hks 0
@@ -3550,8 +4732,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.462094
+ Sdf ratio 0.380765
  distance to modpoint 0.596392
+ closeness comparison 
+ ratio 1.00226
+1
  histogram diff 0.404211
  i 14 j 18
  is hks 0
@@ -3559,8 +4744,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.436859
+ Sdf ratio 0.361298
  distance to modpoint 0.555927
+ closeness comparison 
+ ratio 0.958493
+1
  histogram diff 0.392343
  i 14 j 19
  is hks 0
@@ -3568,8 +4756,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.474427
+ Sdf ratio 0.432711
  distance to modpoint 0.58711
+ closeness comparison 
+ ratio 0.93948
+1
  histogram diff 0.478432
  i 14 j 20
  is hks 0
@@ -3577,8 +4768,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.464834
+ Sdf ratio 0.395719
  distance to modpoint 0.543736
+ closeness comparison 
+ ratio 0.94316
+1
  histogram diff 0.337605
  i 14 j 21
  is hks 0
@@ -3586,8 +4780,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.994001
+ Sdf ratio 0.832529
  distance to modpoint 0.525407
+ closeness comparison 
+ ratio 2.89762
+1
  histogram diff 1.88887
  i 14 j 22
  is hks 0
@@ -3595,8 +4792,11 @@
  1 3 0.000284031
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.0454734
+ Sdf ratio 0.0453999
  distance to modpoint 0.302418
+ closeness comparison 
+ ratio 2.57779
+1
  histogram diff 1.13266
  i 14 j 23
  is hks 0
@@ -3604,8 +4804,11 @@
  1 3 6.87866e-06
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.0673388
+ Sdf ratio 0.0729116
  distance to modpoint 0.296801
+ closeness comparison 
+ ratio 2.55503
+1
  histogram diff 0.635645
  i 14 j 24
  is hks 0
@@ -3613,8 +4816,11 @@
  1 3 0.000304673
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.687869
+ Sdf ratio 0.526951
  distance to modpoint 0.388446
+ closeness comparison 
+ ratio 3.44029
+1
  histogram diff 0.755881
  i 14 j 25
  is hks 0
@@ -3622,8 +4828,11 @@
  1 3 0.000499548
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.140173
+ Sdf ratio 0.10703
  distance to modpoint 0.420173
+ closeness comparison 
+ ratio 3.19117
+1
  histogram diff 2.12954
  i 14 j 26
  is hks 1
@@ -3631,8 +4840,11 @@
  1 3 0.00122624
  2 3 0.00156346
  is area dif 1
- Sdf ratio 0.703199
+ Sdf ratio 0.614312
  distance to modpoint 0.95847
+ closeness comparison 
+ ratio 1.14787
+1
  histogram diff 0.855967
  i 14 j 27
  is hks 1
@@ -3640,8 +4852,11 @@
  1 3 0.000266518
  2 3 0.000603735
  is area dif 1
- Sdf ratio 0.732173
+ Sdf ratio 0.637287
  distance to modpoint 0.0436346
+ closeness comparison 
+ ratio 21.9176
+1
  histogram diff 0.724185
  i 15 j 0
  is hks 0
@@ -3649,8 +4864,11 @@
  1 3 0.000423971
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.288167
+ Sdf ratio 0.285567
  distance to modpoint 0.529856
+ closeness comparison 
+ ratio 0.989246
+1
  histogram diff 1.67766
  i 15 j 1
  is hks 0
@@ -3658,8 +4876,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.710958
+ Sdf ratio 0.622354
  distance to modpoint 0.656315
+ closeness comparison 
+ ratio 0.53479
+1
  histogram diff 0.870771
  i 15 j 2
  is hks 0
@@ -3667,8 +4888,11 @@
  1 3 0.000108465
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.81703
+ Sdf ratio 0.841392
  distance to modpoint 0.639763
+ closeness comparison 
+ ratio 1.73331
+1
  histogram diff 0.463325
  i 15 j 3
  is hks 0
@@ -3676,8 +4900,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.369098
+ Sdf ratio 0.389956
  distance to modpoint 0.923087
+ closeness comparison 
+ ratio 0.975083
+1
  histogram diff 0.465275
  i 15 j 4
  is hks 0
@@ -3685,8 +4912,11 @@
  1 3 0.000423971
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.441365
+ Sdf ratio 0.38558
  distance to modpoint 0.872545
+ closeness comparison 
+ ratio 0.581869
+1
  histogram diff 1.51836
  i 15 j 5
  is hks 0
@@ -3694,8 +4924,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.530899
+ Sdf ratio 0.456894
  distance to modpoint 0.40226
+ closeness comparison 
+ ratio 3.13238
+1
  histogram diff 0.377563
  i 15 j 6
  is hks 0
@@ -3703,8 +4936,11 @@
  1 3 8.64683e-05
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.373187
+ Sdf ratio 0.402643
  distance to modpoint 0.584884
+ closeness comparison 
+ ratio 1.59979
+1
  histogram diff 0.694045
  i 15 j 7
  is hks 1
@@ -3712,8 +4948,11 @@
  1 3 0.000107423
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.797359
+ Sdf ratio 0.850713
  distance to modpoint 0.930996
+ closeness comparison 
+ ratio 0.856094
+1
  histogram diff 0.708956
  i 15 j 8
  is hks 0
@@ -3721,8 +4960,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.443089
+ Sdf ratio 0.400239
  distance to modpoint 0.400763
+ closeness comparison 
+ ratio 3.39908
+1
  histogram diff 0.630436
  i 15 j 9
  is hks 0
@@ -3730,8 +4972,11 @@
  1 3 5.98051e-05
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.933926
+ Sdf ratio 0.947412
  distance to modpoint 0.488355
+ closeness comparison 
+ ratio 2.72555
+1
  histogram diff 0.418264
  i 15 j 10
  is hks 0
@@ -3739,8 +4984,11 @@
  1 3 3.50485e-05
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.843455
+ Sdf ratio 0.804396
  distance to modpoint 0.482703
+ closeness comparison 
+ ratio 3.02181
+1
  histogram diff 0.679779
  i 15 j 11
  is hks 1
@@ -3748,8 +4996,11 @@
  1 3 0.000124579
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.520623
+ Sdf ratio 0.585562
  distance to modpoint 0.75239
+ closeness comparison 
+ ratio 1.80716
+1
  histogram diff 1.05939
  i 15 j 12
  is hks 0
@@ -3757,8 +5008,11 @@
  1 3 0.00035018
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.541554
+ Sdf ratio 0.64037
  distance to modpoint 0.643229
+ closeness comparison 
+ ratio 1.80575
+1
  histogram diff 0.524461
  i 15 j 13
  is hks 1
@@ -3766,8 +5020,11 @@
  1 3 7.59201e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.501821
+ Sdf ratio 0.519017
  distance to modpoint 0.787655
+ closeness comparison 
+ ratio 2.25746
+1
  histogram diff 1.02682
  i 15 j 14
  is hks 0
@@ -3775,8 +5032,11 @@
  1 3 7.59201e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.341248
+ Sdf ratio 0.3025
  distance to modpoint 0.818958
+ closeness comparison 
+ ratio 2.03226
+1
  histogram diff 1.13818
  i 15 j 16
  is hks 1
@@ -3784,8 +5044,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.703187
+ Sdf ratio 0.890137
  distance to modpoint 0.833237
+ closeness comparison 
+ ratio 1.16332
+1
  histogram diff 0.15589
  i 15 j 17
  is hks 1
@@ -3793,8 +5056,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.738481
+ Sdf ratio 0.794452
  distance to modpoint 0.728233
+ closeness comparison 
+ ratio 2.06207
+1
  histogram diff 0.807535
  i 15 j 18
  is hks 1
@@ -3802,8 +5068,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.78114
+ Sdf ratio 0.837259
  distance to modpoint 0.678823
+ closeness comparison 
+ ratio 2.06894
+1
  histogram diff 0.889417
  i 15 j 19
  is hks 1
@@ -3811,8 +5080,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.719285
+ Sdf ratio 0.69908
  distance to modpoint 0.716899
+ closeness comparison 
+ ratio 2.36081
+1
  histogram diff 0.662305
  i 15 j 20
  is hks 1
@@ -3820,8 +5092,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.734129
+ Sdf ratio 0.764431
  distance to modpoint 0.663936
+ closeness comparison 
+ ratio 2.32701
+1
  histogram diff 0.905018
  i 15 j 21
  is hks 1
@@ -3829,8 +5104,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.343308
+ Sdf ratio 0.25184
  distance to modpoint 0.641555
+ closeness comparison 
+ ratio 1.27996
+1
  histogram diff 1.39606
  i 15 j 22
  is hks 0
@@ -3838,8 +5116,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.133256
+ Sdf ratio 0.150083
  distance to modpoint 0.369271
+ closeness comparison 
+ ratio 3.3859
+1
  histogram diff 0.862875
  i 15 j 23
  is hks 0
@@ -3847,8 +5128,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.197331
+ Sdf ratio 0.24103
  distance to modpoint 0.362413
+ closeness comparison 
+ ratio 3.70747
+1
  histogram diff 0.710876
  i 15 j 24
  is hks 0
@@ -3856,8 +5140,11 @@
  1 3 0.000108465
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.234734
+ Sdf ratio 0.574057
  distance to modpoint 0.474317
+ closeness comparison 
+ ratio 2.27856
+1
  histogram diff 0.684806
  i 15 j 25
  is hks 0
@@ -3865,8 +5152,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.410767
+ Sdf ratio 0.353817
  distance to modpoint 0.513058
+ closeness comparison 
+ ratio 0.965913
+1
  histogram diff 0.997697
  i 15 j 26
  is hks 0
@@ -3874,8 +5164,11 @@
  1 3 0.00163938
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.485279
+ Sdf ratio 0.492421
  distance to modpoint 0.854443
+ closeness comparison 
+ ratio 1.13679
+1
  histogram diff 0.684755
  i 15 j 27
  is hks 0
@@ -3883,8 +5176,11 @@
  1 3 0.000679656
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.466076
+ Sdf ratio 0.474668
  distance to modpoint 0.0357349
+ closeness comparison 
+ ratio 28.0104
+1
  histogram diff 0.886111
  i 16 j 0
  is hks 1
@@ -3892,8 +5188,11 @@
  1 3 7.37915e-05
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.409802
+ Sdf ratio 0.320812
  distance to modpoint 0.441496
+ closeness comparison 
+ ratio 2.24472
+1
  histogram diff 1.869
  i 16 j 1
  is hks 0
@@ -3901,8 +5200,11 @@
  1 3 0.000562506
  2 3 0
  is area dif 1
- Sdf ratio 0.499937
+ Sdf ratio 0.553981
  distance to modpoint 0.787669
+ closeness comparison 
+ ratio 1.41493
+1
  histogram diff 0.961159
  i 16 j 2
  is hks 0
@@ -3910,8 +5212,11 @@
  1 3 0.000241715
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.574525
+ Sdf ratio 0.748954
  distance to modpoint 0.767804
+ closeness comparison 
+ ratio 0.485823
+0
  histogram diff 0.49652
  i 16 j 3
  is hks 1
@@ -3919,8 +5224,11 @@
  1 3 0.000562506
  2 3 0
  is area dif 1
- Sdf ratio 0.524893
+ Sdf ratio 0.438085
  distance to modpoint 0.769151
+ closeness comparison 
+ ratio 0.617602
+1
  histogram diff 0.334135
  i 16 j 4
  is hks 1
@@ -3928,8 +5236,11 @@
  1 3 7.37915e-05
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.627663
+ Sdf ratio 0.43317
  distance to modpoint 0.954951
+ closeness comparison 
+ ratio 0.513193
+1
  histogram diff 1.58226
  i 16 j 5
  is hks 0
@@ -3937,8 +5248,11 @@
  1 3 0.000221073
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.754989
+ Sdf ratio 0.513285
  distance to modpoint 0.482767
+ closeness comparison 
+ ratio 2.96851
+1
  histogram diff 0.364944
  i 16 j 6
  is hks 1
@@ -3946,8 +5260,11 @@
  1 3 0.000436648
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.530708
+ Sdf ratio 0.452338
  distance to modpoint 0.487347
+ closeness comparison 
+ ratio 1.07796
+1
  histogram diff 0.706433
  i 16 j 7
  is hks 1
@@ -3955,8 +5272,11 @@
  1 3 0.000242757
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.881896
+ Sdf ratio 0.95571
  distance to modpoint 0.775741
+ closeness comparison 
+ ratio 0.68893
+1
  histogram diff 0.665939
  i 16 j 8
  is hks 0
@@ -3964,8 +5284,11 @@
  1 3 5.60796e-05
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.630115
+ Sdf ratio 0.449638
  distance to modpoint 0.480971
+ closeness comparison 
+ ratio 2.8232
+1
  histogram diff 0.700002
  i 16 j 9
  is hks 0
@@ -3973,8 +5296,11 @@
  1 3 0.000290374
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.656725
+ Sdf ratio 0.843326
  distance to modpoint 0.586094
+ closeness comparison 
+ ratio 2.6538
+1
  histogram diff 0.415962
  i 16 j 10
  is hks 0
@@ -3982,8 +5308,11 @@
  1 3 0.000385228
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.593107
+ Sdf ratio 0.716023
  distance to modpoint 0.579311
+ closeness comparison 
+ ratio 2.48771
+1
  histogram diff 0.761561
  i 16 j 11
  is hks 1
@@ -3991,8 +5320,11 @@
  1 3 0.000474759
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.740377
+ Sdf ratio 0.657833
  distance to modpoint 0.62692
+ closeness comparison 
+ ratio 2.43715
+1
  histogram diff 1.16106
  i 16 j 12
  is hks 0
@@ -4000,8 +5332,11 @@
  1 3 0
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.770142
+ Sdf ratio 0.719406
  distance to modpoint 0.771964
+ closeness comparison 
+ ratio 0.583697
+1
  histogram diff 0.583683
  i 16 j 13
  is hks 1
@@ -4009,8 +5344,11 @@
  1 3 0.000274259
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.713638
+ Sdf ratio 0.583076
  distance to modpoint 0.656304
+ closeness comparison 
+ ratio 2.07074
+1
  histogram diff 1.05689
  i 16 j 14
  is hks 1
@@ -4018,8 +5356,11 @@
  1 3 0.000274259
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.485288
+ Sdf ratio 0.339835
  distance to modpoint 0.682386
+ closeness comparison 
+ ratio 2.38524
+1
  histogram diff 1.206
  i 16 j 15
  is hks 1
@@ -4027,8 +5368,11 @@
  1 3 0.000562506
  2 3 0
  is area dif 1
- Sdf ratio 0.703187
+ Sdf ratio 0.890137
  distance to modpoint 0.833237
+ closeness comparison 
+ ratio 1.16332
+1
  histogram diff 0.15589
  i 16 j 17
  is hks 1
@@ -4036,8 +5380,11 @@
  1 3 0.000221073
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.952207
+ Sdf ratio 0.892506
  distance to modpoint 0.873981
+ closeness comparison 
+ ratio 2.11341
+1
  histogram diff 0.952381
  i 16 j 18
  is hks 1
@@ -4045,8 +5392,11 @@
  1 3 0.000221073
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.900207
+ Sdf ratio 0.940596
  distance to modpoint 0.814681
+ closeness comparison 
+ ratio 2.07875
+1
  histogram diff 1.02616
  i 16 j 19
  is hks 1
@@ -4054,8 +5404,11 @@
  1 3 5.60796e-05
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.97762
+ Sdf ratio 0.785363
  distance to modpoint 0.860378
+ closeness comparison 
+ ratio 1.94905
+1
  histogram diff 0.783091
  i 16 j 20
  is hks 1
@@ -4063,8 +5416,11 @@
  1 3 5.60796e-05
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.957852
+ Sdf ratio 0.858779
  distance to modpoint 0.796815
+ closeness comparison 
+ ratio 1.94073
+1
  histogram diff 1.05582
  i 16 j 21
  is hks 0
@@ -4072,8 +5428,11 @@
  1 3 0.000562506
  2 3 0
  is area dif 1
- Sdf ratio 0.488216
+ Sdf ratio 0.282923
  distance to modpoint 0.769955
+ closeness comparison 
+ ratio 0.74116
+1
  histogram diff 1.5228
  i 16 j 22
  is hks 0
@@ -4081,8 +5440,11 @@
  1 3 0.000221073
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0937039
+ Sdf ratio 0.133594
  distance to modpoint 0.443177
+ closeness comparison 
+ ratio 3.21391
+1
  histogram diff 0.9672
  i 16 j 23
  is hks 0
@@ -4090,8 +5452,11 @@
  1 3 5.60796e-05
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.138761
+ Sdf ratio 0.21455
  distance to modpoint 0.434946
+ closeness comparison 
+ ratio 3.04854
+1
  histogram diff 0.787729
  i 16 j 24
  is hks 0
@@ -4099,8 +5464,11 @@
  1 3 0.000241715
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.333814
+ Sdf ratio 0.644909
  distance to modpoint 0.569246
+ closeness comparison 
+ ratio 0.940152
+1
  histogram diff 0.797567
  i 16 j 25
  is hks 0
@@ -4108,8 +5476,11 @@
  1 3 0.000562506
  2 3 0
  is area dif 1
- Sdf ratio 0.288846
+ Sdf ratio 0.314946
  distance to modpoint 0.61574
+ closeness comparison 
+ ratio 1.77416
+1
  histogram diff 1.11835
  i 16 j 26
  is hks 1
@@ -4117,8 +5488,11 @@
  1 3 0.0012892
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.690114
+ Sdf ratio 0.553197
  distance to modpoint 0.711954
+ closeness comparison 
+ ratio 1.32123
+1
  histogram diff 0.733778
  i 16 j 27
  is hks 1
@@ -4126,8 +5500,11 @@
  1 3 0.000329476
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.662805
+ Sdf ratio 0.533253
  distance to modpoint 0.0297756
+ closeness comparison 
+ ratio 34.5845
+1
  histogram diff 1.00185
  i 17 j 0
  is hks 0
@@ -4135,8 +5512,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.390216
+ Sdf ratio 0.359451
  distance to modpoint 0.385859
+ closeness comparison 
+ ratio 2.91981
+1
  histogram diff 0.773647
  i 17 j 1
  is hks 0
@@ -4144,8 +5524,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.525029
+ Sdf ratio 0.494431
  distance to modpoint 0.901243
+ closeness comparison 
+ ratio 1.88302
+1
  histogram diff 1.61351
  i 17 j 2
  is hks 0
@@ -4153,8 +5536,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.603361
+ Sdf ratio 0.668446
  distance to modpoint 0.878513
+ closeness comparison 
+ ratio 2.13332
+1
  histogram diff 0.336616
  i 17 j 3
  is hks 0
@@ -4162,8 +5548,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.499807
+ Sdf ratio 0.490849
  distance to modpoint 0.672223
+ closeness comparison 
+ ratio 2.15992
+1
  histogram diff 1.07092
  i 17 j 4
  is hks 0
@@ -4171,8 +5560,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.597666
+ Sdf ratio 0.485341
  distance to modpoint 0.834609
+ closeness comparison 
+ ratio 1.83226
+1
  histogram diff 0.909471
  i 17 j 5
  is hks 0
@@ -4180,8 +5572,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.718906
+ Sdf ratio 0.575105
  distance to modpoint 0.552377
+ closeness comparison 
+ ratio 0.810356
+1
  histogram diff 0.578627
  i 17 j 6
  is hks 0
@@ -4189,8 +5584,11 @@
  1 3 0.000146273
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.505344
+ Sdf ratio 0.506818
  distance to modpoint 0.425932
+ closeness comparison 
+ ratio 3.33794
+1
  histogram diff 0.408776
  i 17 j 7
  is hks 0
@@ -4198,8 +5596,11 @@
  1 3 4.76178e-05
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.926159
+ Sdf ratio 0.933866
  distance to modpoint 0.677983
+ closeness comparison 
+ ratio 2.40969
+1
  histogram diff 1.11458
  i 17 j 8
  is hks 0
@@ -4207,8 +5608,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.6
+ Sdf ratio 0.503793
  distance to modpoint 0.550323
+ closeness comparison 
+ ratio 1.90826
+1
  histogram diff 0.372818
  i 17 j 9
  is hks 1
@@ -4216,8 +5620,11 @@
  1 3 0
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.689687
+ Sdf ratio 0.752674
  distance to modpoint 0.670603
+ closeness comparison 
+ ratio 0.491195
+0
  histogram diff 0.425403
  i 17 j 10
  is hks 1
@@ -4225,8 +5632,11 @@
  1 3 9.48536e-05
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.622876
+ Sdf ratio 0.639054
  distance to modpoint 0.662842
+ closeness comparison 
+ ratio 1.61053
+1
  histogram diff 0.278558
  i 17 j 11
  is hks 0
@@ -4234,8 +5644,11 @@
  1 3 0.000184384
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.704992
+ Sdf ratio 0.737063
  distance to modpoint 0.547915
+ closeness comparison 
+ ratio 0.936594
+1
  histogram diff 0.294957
  i 17 j 12
  is hks 1
@@ -4243,8 +5656,11 @@
  1 3 0.000290374
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.733335
+ Sdf ratio 0.806052
  distance to modpoint 0.883274
+ closeness comparison 
+ ratio 2.11931
+1
  histogram diff 0.266228
  i 17 j 13
  is hks 1
@@ -4252,8 +5668,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.679532
+ Sdf ratio 0.653302
  distance to modpoint 0.573597
+ closeness comparison 
+ ratio 1.88199
+1
  histogram diff 0.717421
  i 17 j 14
  is hks 0
@@ -4261,8 +5680,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.462094
+ Sdf ratio 0.380765
  distance to modpoint 0.596392
+ closeness comparison 
+ ratio 1.00226
+1
  histogram diff 0.404211
  i 17 j 15
  is hks 1
@@ -4270,8 +5692,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.738481
+ Sdf ratio 0.794452
  distance to modpoint 0.728233
+ closeness comparison 
+ ratio 2.06207
+1
  histogram diff 0.807535
  i 17 j 16
  is hks 1
@@ -4279,8 +5704,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.952207
+ Sdf ratio 0.892506
  distance to modpoint 0.873981
+ closeness comparison 
+ ratio 2.11341
+1
  histogram diff 0.952381
  i 17 j 18
  is hks 1
@@ -4288,8 +5716,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.945389
+ Sdf ratio 0.948872
  distance to modpoint 0.93215
+ closeness comparison 
+ ratio 0.289928
+0
  histogram diff 0.169878
  i 17 j 19
  is hks 1
@@ -4297,8 +5728,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.974005
+ Sdf ratio 0.879953
  distance to modpoint 0.984436
+ closeness comparison 
+ ratio 1.14784
+1
  histogram diff 0.088737
  i 17 j 20
  is hks 1
@@ -4306,8 +5740,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.994107
+ Sdf ratio 0.962211
  distance to modpoint 0.911708
+ closeness comparison 
+ ratio 1.14247
+1
  histogram diff 0.151643
  i 17 j 21
  is hks 1
@@ -4315,8 +5752,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.464883
+ Sdf ratio 0.316998
  distance to modpoint 0.880975
+ closeness comparison 
+ ratio 2.09592
+1
  histogram diff 1.18193
  i 17 j 22
  is hks 0
@@ -4324,8 +5764,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.0984071
+ Sdf ratio 0.119233
  distance to modpoint 0.507078
+ closeness comparison 
+ ratio 0.972081
+1
  histogram diff 0.664996
  i 17 j 23
  is hks 0
@@ -4333,8 +5776,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.145725
+ Sdf ratio 0.191487
  distance to modpoint 0.497661
+ closeness comparison 
+ ratio 2.11127
+1
  histogram diff 0.389304
  i 17 j 24
  is hks 0
@@ -4342,8 +5788,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.31786
+ Sdf ratio 0.722582
  distance to modpoint 0.651326
+ closeness comparison 
+ ratio 2.53037
+1
  histogram diff 0.406965
  i 17 j 25
  is hks 0
@@ -4351,8 +5800,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.303344
+ Sdf ratio 0.281091
  distance to modpoint 0.704524
+ closeness comparison 
+ ratio 2.19283
+1
  histogram diff 1.6882
  i 17 j 26
  is hks 0
@@ -4360,8 +5812,11 @@
  1 3 0.00157957
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.657131
+ Sdf ratio 0.619824
  distance to modpoint 0.622234
+ closeness comparison 
+ ratio 1.68633
+1
  histogram diff 0.438574
  i 17 j 27
  is hks 0
@@ -4369,8 +5824,11 @@
  1 3 0.00061985
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.631127
+ Sdf ratio 0.597478
  distance to modpoint 0.0260233
+ closeness comparison 
+ ratio 37.4271
+1
  histogram diff 0.545681
  i 18 j 0
  is hks 0
@@ -4378,8 +5836,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.368906
+ Sdf ratio 0.341073
  distance to modpoint 0.359678
+ closeness comparison 
+ ratio 2.95144
+1
  histogram diff 0.675244
  i 18 j 1
  is hks 0
@@ -4387,8 +5848,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.555358
+ Sdf ratio 0.521072
  distance to modpoint 0.966843
+ closeness comparison 
+ ratio 1.75992
+1
  histogram diff 1.69985
  i 18 j 2
  is hks 0
@@ -4396,8 +5860,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.638215
+ Sdf ratio 0.704463
  distance to modpoint 0.942459
+ closeness comparison 
+ ratio 1.97113
+1
  histogram diff 0.327684
  i 18 j 3
  is hks 0
@@ -4405,8 +5872,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.472512
+ Sdf ratio 0.465753
  distance to modpoint 0.626613
+ closeness comparison 
+ ratio 2.10347
+1
  histogram diff 1.10403
  i 18 j 4
  is hks 0
@@ -4414,8 +5884,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.565027
+ Sdf ratio 0.460527
  distance to modpoint 0.777981
+ closeness comparison 
+ ratio 1.81573
+1
  histogram diff 1.15713
  i 18 j 5
  is hks 0
@@ -4423,8 +5896,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.679646
+ Sdf ratio 0.545702
  distance to modpoint 0.592584
+ closeness comparison 
+ ratio 0.736769
+1
  histogram diff 0.605292
  i 18 j 6
  is hks 0
@@ -4432,8 +5908,11 @@
  1 3 0.000146273
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.477747
+ Sdf ratio 0.480906
  distance to modpoint 0.397033
+ closeness comparison 
+ ratio 3.51011
+1
  histogram diff 0.391262
  i 18 j 7
  is hks 1
@@ -4441,8 +5920,11 @@
  1 3 4.76178e-05
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.979659
+ Sdf ratio 0.984185
  distance to modpoint 0.631982
+ closeness comparison 
+ ratio 2.49088
+1
  histogram diff 1.11843
  i 18 j 8
  is hks 0
@@ -4450,8 +5932,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.567234
+ Sdf ratio 0.478035
  distance to modpoint 0.59038
+ closeness comparison 
+ ratio 1.7425
+1
  histogram diff 0.34745
  i 18 j 9
  is hks 1
@@ -4459,8 +5944,11 @@
  1 3 0
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.729527
+ Sdf ratio 0.79323
  distance to modpoint 0.719415
+ closeness comparison 
+ ratio 0.515719
+1
  histogram diff 0.433881
  i 18 j 10
  is hks 1
@@ -4468,8 +5956,11 @@
  1 3 9.48536e-05
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.658856
+ Sdf ratio 0.673488
  distance to modpoint 0.711089
+ closeness comparison 
+ ratio 1.46497
+1
  histogram diff 0.233972
  i 18 j 11
  is hks 1
@@ -4477,8 +5968,11 @@
  1 3 0.000184384
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.666492
+ Sdf ratio 0.699379
  distance to modpoint 0.51074
+ closeness comparison 
+ ratio 1.00763
+1
  histogram diff 0.268439
  i 18 j 12
  is hks 1
@@ -4486,8 +5980,11 @@
  1 3 0.000290374
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.693287
+ Sdf ratio 0.764841
  distance to modpoint 0.947566
+ closeness comparison 
+ ratio 1.96425
+1
  histogram diff 0.223932
  i 18 j 13
  is hks 1
@@ -4495,8 +5992,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.642422
+ Sdf ratio 0.6199
  distance to modpoint 0.534678
+ closeness comparison 
+ ratio 1.80296
+1
  histogram diff 0.682066
  i 18 j 14
  is hks 0
@@ -4504,8 +6004,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.436859
+ Sdf ratio 0.361298
  distance to modpoint 0.555927
+ closeness comparison 
+ ratio 0.958493
+1
  histogram diff 0.392343
  i 18 j 15
  is hks 1
@@ -4513,8 +6016,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.78114
+ Sdf ratio 0.837259
  distance to modpoint 0.678823
+ closeness comparison 
+ ratio 2.06894
+1
  histogram diff 0.889417
  i 18 j 16
  is hks 1
@@ -4522,8 +6028,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.900207
+ Sdf ratio 0.940596
  distance to modpoint 0.814681
+ closeness comparison 
+ ratio 2.07875
+1
  histogram diff 1.02616
  i 18 j 17
  is hks 1
@@ -4531,8 +6040,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.945389
+ Sdf ratio 0.948872
  distance to modpoint 0.93215
+ closeness comparison 
+ ratio 0.289928
+0
  histogram diff 0.169878
  i 18 j 19
  is hks 1
@@ -4540,8 +6052,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.920814
+ Sdf ratio 0.834963
  distance to modpoint 0.946887
+ closeness comparison 
+ ratio 1.09165
+1
  histogram diff 0.230567
  i 18 j 20
  is hks 1
@@ -4549,8 +6064,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.939818
+ Sdf ratio 0.913015
  distance to modpoint 0.97807
+ closeness comparison 
+ ratio 1.02867
+1
  histogram diff 0.102445
  i 18 j 21
  is hks 1
@@ -4558,8 +6076,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.439496
+ Sdf ratio 0.300791
  distance to modpoint 0.9451
+ closeness comparison 
+ ratio 1.97305
+1
  histogram diff 1.17458
  i 18 j 22
  is hks 0
@@ -4567,8 +6088,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.104092
+ Sdf ratio 0.125658
  distance to modpoint 0.543988
+ closeness comparison 
+ ratio 0.944513
+1
  histogram diff 0.67341
  i 18 j 23
  is hks 0
@@ -4576,8 +6100,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.154143
+ Sdf ratio 0.201805
  distance to modpoint 0.533885
+ closeness comparison 
+ ratio 1.93174
+1
  histogram diff 0.407186
  i 18 j 24
  is hks 0
@@ -4585,8 +6112,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.300502
+ Sdf ratio 0.685638
  distance to modpoint 0.698735
+ closeness comparison 
+ ratio 2.34126
+1
  histogram diff 0.429593
  i 18 j 25
  is hks 0
@@ -4594,8 +6124,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.320866
+ Sdf ratio 0.296237
  distance to modpoint 0.755805
+ closeness comparison 
+ ratio 2.04871
+1
  histogram diff 1.77855
  i 18 j 26
  is hks 0
@@ -4603,8 +6136,11 @@
  1 3 0.00157957
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.621245
+ Sdf ratio 0.588134
  distance to modpoint 0.580016
+ closeness comparison 
+ ratio 1.59855
+1
  histogram diff 0.514789
  i 18 j 27
  is hks 0
@@ -4612,8 +6148,11 @@
  1 3 0.00061985
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.596661
+ Sdf ratio 0.566931
  distance to modpoint 0.0242576
+ closeness comparison 
+ ratio 40.2241
+1
  histogram diff 0.461532
  i 19 j 0
  is hks 0
@@ -4621,8 +6160,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.40063
+ Sdf ratio 0.408489
  distance to modpoint 0.379853
+ closeness comparison 
+ ratio 3.48438
+1
  histogram diff 0.899475
  i 19 j 1
  is hks 0
@@ -4630,8 +6172,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.511381
+ Sdf ratio 0.435076
  distance to modpoint 0.915491
+ closeness comparison 
+ ratio 2.06787
+1
  histogram diff 1.5347
  i 19 j 2
  is hks 0
@@ -4639,8 +6184,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.587677
+ Sdf ratio 0.5882
  distance to modpoint 0.892403
+ closeness comparison 
+ ratio 1.91861
+1
  histogram diff 0.31049
  i 19 j 3
  is hks 0
@@ -4648,8 +6196,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.513146
+ Sdf ratio 0.557813
  distance to modpoint 0.66176
+ closeness comparison 
+ ratio 2.00423
+1
  histogram diff 0.897997
  i 19 j 4
  is hks 0
@@ -4657,8 +6208,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.613616
+ Sdf ratio 0.551554
  distance to modpoint 0.821619
+ closeness comparison 
+ ratio 1.94843
+1
  histogram diff 0.860793
  i 19 j 5
  is hks 0
@@ -4666,8 +6220,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.738093
+ Sdf ratio 0.653564
  distance to modpoint 0.56111
+ closeness comparison 
+ ratio 1.84537
+1
  histogram diff 0.46093
  i 19 j 6
  is hks 0
@@ -4675,8 +6232,11 @@
  1 3 5.14198e-05
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.518831
+ Sdf ratio 0.575961
  distance to modpoint 0.419303
+ closeness comparison 
+ ratio 3.16268
+1
  histogram diff 0.454418
  i 19 j 7
  is hks 1
@@ -4684,8 +6244,11 @@
  1 3 0.000142471
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.902084
+ Sdf ratio 0.821758
  distance to modpoint 0.66743
+ closeness comparison 
+ ratio 2.46732
+1
  histogram diff 1.01766
  i 19 j 8
  is hks 0
@@ -4693,8 +6256,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.616014
+ Sdf ratio 0.572523
  distance to modpoint 0.559023
+ closeness comparison 
+ ratio 0.797593
+1
  histogram diff 0.353197
  i 19 j 9
  is hks 1
@@ -4702,8 +6268,11 @@
  1 3 9.48536e-05
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.671758
+ Sdf ratio 0.662317
  distance to modpoint 0.681205
+ closeness comparison 
+ ratio 1.58252
+1
  histogram diff 0.331961
  i 19 j 10
  is hks 1
@@ -4711,8 +6280,11 @@
  1 3 0
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.606684
+ Sdf ratio 0.562337
  distance to modpoint 0.673321
+ closeness comparison 
+ ratio 0.487131
+0
  histogram diff 0.352375
  i 19 j 11
  is hks 1
@@ -4720,8 +6292,11 @@
  1 3 8.95307e-05
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.723807
+ Sdf ratio 0.837617
  distance to modpoint 0.539388
+ closeness comparison 
+ ratio 1.87715
+1
  histogram diff 0.374026
  i 19 j 12
  is hks 1
@@ -4729,8 +6304,11 @@
  1 3 0.000385228
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.752907
+ Sdf ratio 0.916018
  distance to modpoint 0.897238
+ closeness comparison 
+ ratio 1.89772
+1
  histogram diff 0.22562
  i 19 j 13
  is hks 1
@@ -4738,8 +6316,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.697667
+ Sdf ratio 0.742429
  distance to modpoint 0.564669
+ closeness comparison 
+ ratio 0.908214
+1
  histogram diff 0.605576
  i 19 j 14
  is hks 0
@@ -4747,8 +6328,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.474427
+ Sdf ratio 0.432711
  distance to modpoint 0.58711
+ closeness comparison 
+ ratio 0.939481
+1
  histogram diff 0.478432
  i 19 j 15
  is hks 1
@@ -4756,8 +6340,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.719285
+ Sdf ratio 0.69908
  distance to modpoint 0.716899
+ closeness comparison 
+ ratio 2.36081
+1
  histogram diff 0.662305
  i 19 j 16
  is hks 1
@@ -4765,8 +6352,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.97762
+ Sdf ratio 0.785363
  distance to modpoint 0.860378
+ closeness comparison 
+ ratio 1.94905
+1
  histogram diff 0.783091
  i 19 j 17
  is hks 1
@@ -4774,8 +6364,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.974005
+ Sdf ratio 0.879953
  distance to modpoint 0.984436
+ closeness comparison 
+ ratio 1.14784
+1
  histogram diff 0.088737
  i 19 j 18
  is hks 1
@@ -4783,8 +6376,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.920814
+ Sdf ratio 0.834963
  distance to modpoint 0.946887
+ closeness comparison 
+ ratio 1.09165
+1
  histogram diff 0.230567
  i 19 j 20
  is hks 1
@@ -4792,8 +6388,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.979779
+ Sdf ratio 0.914511
  distance to modpoint 0.926122
+ closeness comparison 
+ ratio 0.289306
+0
  histogram diff 0.205312
  i 19 j 21
  is hks 1
@@ -4801,8 +6400,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.47729
+ Sdf ratio 0.360245
  distance to modpoint 0.894903
+ closeness comparison 
+ ratio 2.07133
+1
  histogram diff 1.14993
  i 19 j 22
  is hks 0
@@ -4810,8 +6412,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.095849
+ Sdf ratio 0.10492
  distance to modpoint 0.515095
+ closeness comparison 
+ ratio 2.04428
+1
  histogram diff 0.595671
  i 19 j 23
  is hks 0
@@ -4819,8 +6424,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.141937
+ Sdf ratio 0.1685
  distance to modpoint 0.505529
+ closeness comparison 
+ ratio 0.980082
+1
  histogram diff 0.365467
  i 19 j 24
  is hks 0
@@ -4828,8 +6436,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.326344
+ Sdf ratio 0.821161
  distance to modpoint 0.661623
+ closeness comparison 
+ ratio 2.30951
+1
  histogram diff 0.367456
  i 19 j 25
  is hks 0
@@ -4837,8 +6448,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.295458
+ Sdf ratio 0.247347
  distance to modpoint 0.715663
+ closeness comparison 
+ ratio 2.37287
+1
  histogram diff 1.56747
  i 19 j 26
  is hks 0
@@ -4846,8 +6460,11 @@
  1 3 0.00167443
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.674669
+ Sdf ratio 0.704384
  distance to modpoint 0.61255
+ closeness comparison 
+ ratio 1.74749
+1
  histogram diff 0.319185
  i 19 j 27
  is hks 0
@@ -4855,8 +6472,11 @@
  1 3 0.000714704
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.647971
+ Sdf ratio 0.678989
  distance to modpoint 0.0256183
+ closeness comparison 
+ ratio 38.6244
+1
  histogram diff 0.64165
  i 20 j 0
  is hks 0
@@ -4864,8 +6484,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.392529
+ Sdf ratio 0.373568
  distance to modpoint 0.35179
+ closeness comparison 
+ ratio 3.48844
+1
  histogram diff 0.859881
  i 20 j 1
  is hks 0
@@ -4873,8 +6496,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.521935
+ Sdf ratio 0.475747
  distance to modpoint 0.988521
+ closeness comparison 
+ ratio 1.89266
+1
  histogram diff 1.78224
  i 20 j 2
  is hks 0
@@ -4882,8 +6508,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.599806
+ Sdf ratio 0.643186
  distance to modpoint 0.96359
+ closeness comparison 
+ ratio 1.77332
+1
  histogram diff 0.406258
  i 20 j 3
  is hks 0
@@ -4891,8 +6520,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.50277
+ Sdf ratio 0.510126
  distance to modpoint 0.612871
+ closeness comparison 
+ ratio 1.96788
+1
  histogram diff 1.16605
  i 20 j 4
  is hks 0
@@ -4900,8 +6532,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.601209
+ Sdf ratio 0.504402
  distance to modpoint 0.76092
+ closeness comparison 
+ ratio 1.90363
+1
  histogram diff 1.1701
  i 20 j 5
  is hks 0
@@ -4909,8 +6544,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.723168
+ Sdf ratio 0.597692
  distance to modpoint 0.605871
+ closeness comparison 
+ ratio 1.70414
+1
  histogram diff 0.700906
  i 20 j 6
  is hks 0
@@ -4918,8 +6556,11 @@
  1 3 5.14198e-05
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.50834
+ Sdf ratio 0.526723
  distance to modpoint 0.388326
+ closeness comparison 
+ ratio 3.25919
+1
  histogram diff 0.435442
  i 20 j 7
  is hks 1
@@ -4927,8 +6568,11 @@
  1 3 0.000142471
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.920701
+ Sdf ratio 0.898576
  distance to modpoint 0.618122
+ closeness comparison 
+ ratio 2.53857
+1
  histogram diff 1.21138
  i 20 j 8
  is hks 0
@@ -4936,8 +6580,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.603557
+ Sdf ratio 0.523578
  distance to modpoint 0.603617
+ closeness comparison 
+ ratio 0.725275
+1
  histogram diff 0.474604
  i 20 j 9
  is hks 1
@@ -4945,8 +6592,11 @@
  1 3 9.48536e-05
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.685622
+ Sdf ratio 0.724231
  distance to modpoint 0.735546
+ closeness comparison 
+ ratio 1.46071
+1
  histogram diff 0.513587
  i 20 j 10
  is hks 1
@@ -4954,8 +6604,11 @@
  1 3 0
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.619205
+ Sdf ratio 0.614905
  distance to modpoint 0.727033
+ closeness comparison 
+ ratio 0.478033
+0
  histogram diff 0.335438
  i 20 j 11
  is hks 1
@@ -4963,8 +6616,11 @@
  1 3 8.95307e-05
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.709172
+ Sdf ratio 0.76601
  distance to modpoint 0.499539
+ closeness comparison 
+ ratio 1.86585
+1
  histogram diff 0.250313
  i 20 j 12
  is hks 0
@@ -4972,8 +6628,11 @@
  1 3 0.000385228
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.737683
+ Sdf ratio 0.837709
  distance to modpoint 0.968812
+ closeness comparison 
+ ratio 1.76287
+1
  histogram diff 0.324437
  i 20 j 13
  is hks 1
@@ -4981,8 +6640,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.68356
+ Sdf ratio 0.678959
  distance to modpoint 0.522953
+ closeness comparison 
+ ratio 0.962674
+1
  histogram diff 0.768825
  i 20 j 14
  is hks 0
@@ -4990,8 +6652,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.464834
+ Sdf ratio 0.395719
  distance to modpoint 0.543736
+ closeness comparison 
+ ratio 0.94316
+1
  histogram diff 0.337605
  i 20 j 15
  is hks 1
@@ -4999,8 +6664,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.734129
+ Sdf ratio 0.764431
  distance to modpoint 0.663936
+ closeness comparison 
+ ratio 2.32701
+1
  histogram diff 0.905018
  i 20 j 16
  is hks 1
@@ -5008,8 +6676,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.957852
+ Sdf ratio 0.858779
  distance to modpoint 0.796815
+ closeness comparison 
+ ratio 1.94073
+1
  histogram diff 1.05582
  i 20 j 17
  is hks 1
@@ -5017,8 +6688,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.994107
+ Sdf ratio 0.962211
  distance to modpoint 0.911708
+ closeness comparison 
+ ratio 1.14247
+1
  histogram diff 0.151643
  i 20 j 18
  is hks 1
@@ -5026,8 +6700,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.939818
+ Sdf ratio 0.913015
  distance to modpoint 0.97807
+ closeness comparison 
+ ratio 1.02867
+1
  histogram diff 0.102445
  i 20 j 19
  is hks 1
@@ -5035,8 +6712,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.979779
+ Sdf ratio 0.914511
  distance to modpoint 0.926122
+ closeness comparison 
+ ratio 0.289306
+0
  histogram diff 0.205312
  i 20 j 21
  is hks 1
@@ -5044,8 +6724,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.467639
+ Sdf ratio 0.329448
  distance to modpoint 0.96629
+ closeness comparison 
+ ratio 1.93936
+1
  histogram diff 1.39616
  i 20 j 22
  is hks 0
@@ -5053,8 +6736,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.0978271
+ Sdf ratio 0.114728
  distance to modpoint 0.556185
+ closeness comparison 
+ ratio 1.88836
+1
  histogram diff 0.81157
  i 20 j 23
  is hks 0
@@ -5062,8 +6748,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.144866
+ Sdf ratio 0.184251
  distance to modpoint 0.545855
+ closeness comparison 
+ ratio 0.930292
+1
  histogram diff 0.465771
  i 20 j 24
  is hks 0
@@ -5071,8 +6760,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.319745
+ Sdf ratio 0.750961
  distance to modpoint 0.714401
+ closeness comparison 
+ ratio 2.13534
+1
  histogram diff 0.447482
  i 20 j 25
  is hks 0
@@ -5080,8 +6772,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.301556
+ Sdf ratio 0.270469
  distance to modpoint 0.772752
+ closeness comparison 
+ ratio 2.17513
+1
  histogram diff 1.80199
  i 20 j 26
  is hks 0
@@ -5089,8 +6784,11 @@
  1 3 0.00167443
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.661027
+ Sdf ratio 0.644167
  distance to modpoint 0.567296
+ closeness comparison 
+ ratio 1.62898
+1
  histogram diff 0.585892
  i 20 j 27
  is hks 0
@@ -5098,8 +6796,11 @@
  1 3 0.000714704
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.634869
+ Sdf ratio 0.620943
  distance to modpoint 0.0237257
+ closeness comparison 
+ ratio 41.2638
+1
  histogram diff 0.599676
  i 21 j 0
  is hks 0
@@ -5107,8 +6808,11 @@
  1 3 0.000316548
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.839385
+ Sdf ratio 0.881895
  distance to modpoint 0.339932
+ closeness comparison 
+ ratio 2.67793
+1
  histogram diff 1.5079
  i 21 j 1
  is hks 0
@@ -5116,8 +6820,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.244077
+ Sdf ratio 0.156734
  distance to modpoint 0.977511
+ closeness comparison 
+ ratio 1.19105
+1
  histogram diff 1.7367
  i 21 j 2
  is hks 1
@@ -5125,8 +6832,11 @@
  1 3 1.04175e-06
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.280493
+ Sdf ratio 0.211896
  distance to modpoint 0.997206
+ closeness comparison 
+ ratio 0.941355
+1
  histogram diff 0.897864
  i 21 j 3
  is hks 0
@@ -5134,8 +6844,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.930126
+ Sdf ratio 0.645817
  distance to modpoint 0.592211
+ closeness comparison 
+ ratio 1.21332
+1
  histogram diff 1.62698
  i 21 j 4
  is hks 0
@@ -5143,8 +6856,11 @@
  1 3 0.000316548
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.777832
+ Sdf ratio 0.653145
  distance to modpoint 0.735269
+ closeness comparison 
+ ratio 0.723509
+1
  histogram diff 1.94374
  i 21 j 5
  is hks 0
@@ -5152,8 +6868,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.646654
+ Sdf ratio 0.551201
  distance to modpoint 0.627007
+ closeness comparison 
+ ratio 2.54957
+1
  histogram diff 1.05319
  i 21 j 6
  is hks 0
@@ -5161,8 +6880,11 @@
  1 3 0.000193891
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.919935
+ Sdf ratio 0.625468
  distance to modpoint 0.375235
+ closeness comparison 
+ ratio 1.77727
+1
  histogram diff 1.41234
  i 21 j 7
  is hks 0
@@ -5170,8 +6892,11 @@
  1 3 0
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.430556
+ Sdf ratio 0.296034
  distance to modpoint 0.597286
+ closeness comparison 
+ ratio 0.684859
+1
  histogram diff 1.3583
  i 21 j 8
  is hks 0
@@ -5179,8 +6904,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.774805
+ Sdf ratio 0.629224
  distance to modpoint 0.624675
+ closeness comparison 
+ ratio 2.54186
+1
  histogram diff 0.747189
  i 21 j 9
  is hks 1
@@ -5188,8 +6916,11 @@
  1 3 4.76178e-05
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.320624
+ Sdf ratio 0.238596
  distance to modpoint 0.761206
+ closeness comparison 
+ ratio 2.27919
+1
  histogram diff 1.22969
  i 21 j 10
  is hks 1
@@ -5197,8 +6928,11 @@
  1 3 0.000142471
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.289565
+ Sdf ratio 0.202579
  distance to modpoint 0.752396
+ closeness comparison 
+ ratio 2.28355
+1
  histogram diff 1.01254
  i 21 j 11
  is hks 0
@@ -5206,8 +6940,11 @@
  1 3 0.000232002
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.659416
+ Sdf ratio 0.430083
  distance to modpoint 0.4827
+ closeness comparison 
+ ratio 2.92737
+1
  histogram diff 1.71503
  i 21 j 12
  is hks 1
@@ -5215,8 +6952,11 @@
  1 3 0.000242757
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.63393
+ Sdf ratio 0.393273
  distance to modpoint 0.997397
+ closeness comparison 
+ ratio 1.00613
+1
  histogram diff 0.95225
  i 21 j 13
  is hks 0
@@ -5224,8 +6964,11 @@
  1 3 3.15028e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.684123
+ Sdf ratio 0.485225
  distance to modpoint 0.505324
+ closeness comparison 
+ ratio 2.7927
+1
  histogram diff 1.2343
  i 21 j 14
  is hks 0
@@ -5233,8 +6976,11 @@
  1 3 3.15028e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.994001
+ Sdf ratio 0.832529
  distance to modpoint 0.525407
+ closeness comparison 
+ ratio 2.89762
+1
  histogram diff 1.88887
  i 21 j 15
  is hks 1
@@ -5242,8 +6988,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.343308
+ Sdf ratio 0.25184
  distance to modpoint 0.641555
+ closeness comparison 
+ ratio 1.27996
+1
  histogram diff 1.39606
  i 21 j 16
  is hks 0
@@ -5251,8 +7000,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.488216
+ Sdf ratio 0.282923
  distance to modpoint 0.769955
+ closeness comparison 
+ ratio 0.74116
+1
  histogram diff 1.5228
  i 21 j 17
  is hks 1
@@ -5260,8 +7012,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.464883
+ Sdf ratio 0.316998
  distance to modpoint 0.880975
+ closeness comparison 
+ ratio 2.09592
+1
  histogram diff 1.18193
  i 21 j 18
  is hks 1
@@ -5269,8 +7024,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.439496
+ Sdf ratio 0.300791
  distance to modpoint 0.9451
+ closeness comparison 
+ ratio 1.97305
+1
  histogram diff 1.17458
  i 21 j 19
  is hks 1
@@ -5278,8 +7036,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.47729
+ Sdf ratio 0.360245
  distance to modpoint 0.894903
+ closeness comparison 
+ ratio 2.07133
+1
  histogram diff 1.14993
  i 21 j 20
  is hks 1
@@ -5287,8 +7048,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.467639
+ Sdf ratio 0.329448
  distance to modpoint 0.96629
+ closeness comparison 
+ ratio 1.93936
+1
  histogram diff 1.39616
  i 21 j 22
  is hks 0
@@ -5296,8 +7060,11 @@
  1 3 2.16838e-05
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0457478
+ Sdf ratio 0.0377968
  distance to modpoint 0.575588
+ closeness comparison 
+ ratio 2.70283
+1
  histogram diff 0.442511
  i 21 j 23
  is hks 0
@@ -5305,8 +7072,11 @@
  1 3 0.000298836
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.0677452
+ Sdf ratio 0.0607011
  distance to modpoint 0.564898
+ closeness comparison 
+ ratio 2.71537
+1
  histogram diff 0.801593
  i 21 j 24
  is hks 0
@@ -5314,8 +7084,11 @@
  1 3 1.04175e-06
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.683742
+ Sdf ratio 0.438702
  distance to modpoint 0.739324
+ closeness comparison 
+ ratio 1.29117
+1
  histogram diff 0.789989
  i 21 j 25
  is hks 0
@@ -5323,8 +7096,11 @@
  1 3 0.000805263
  2 3 0
  is area dif 1
- Sdf ratio 0.141019
+ Sdf ratio 0.0891053
  distance to modpoint 0.79971
+ closeness comparison 
+ ratio 1.44085
+1
  histogram diff 1.86313
  i 21 j 26
  is hks 0
@@ -5332,8 +7108,11 @@
  1 3 0.00153196
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.707443
+ Sdf ratio 0.511432
  distance to modpoint 0.548173
+ closeness comparison 
+ ratio 1.88722
+1
  histogram diff 0.812669
  i 21 j 27
  is hks 0
@@ -5341,8 +7120,11 @@
  1 3 0.000572233
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.736592
+ Sdf ratio 0.53056
  distance to modpoint 0.0229259
+ closeness comparison 
+ ratio 44.489
+1
  histogram diff 0.967333
  i 22 j 0
  is hks 0
@@ -5350,8 +7132,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.0384
+ Sdf ratio 0.0428586
  distance to modpoint 0.195661
+ closeness comparison 
+ ratio 5.41937
+1
  histogram diff 0.984252
  i 22 j 1
  is hks 0
@@ -5359,8 +7144,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.187432
+ Sdf ratio 0.241153
  distance to modpoint 0.562644
+ closeness comparison 
+ ratio 2.5659
+1
  histogram diff 1.40391
  i 22 j 2
  is hks 0
@@ -5368,8 +7156,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.163098
+ Sdf ratio 0.178374
  distance to modpoint 0.577201
+ closeness comparison 
+ ratio 2.72814
+1
  histogram diff 0.483789
  i 22 j 3
  is hks 0
@@ -5377,8 +7168,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0491845
+ Sdf ratio 0.0585256
  distance to modpoint 0.34087
+ closeness comparison 
+ ratio 3.58732
+1
  histogram diff 0.955066
  i 22 j 4
  is hks 0
@@ -5386,8 +7180,11 @@
  1 3 0.000364166
  2 3 0.000294864
  is area dif 1
- Sdf ratio 0.0588145
+ Sdf ratio 0.0578689
  distance to modpoint 0.423212
+ closeness comparison 
+ ratio 2.98609
+1
  histogram diff 1.28821
  i 22 j 5
  is hks 0
@@ -5395,8 +7192,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.0707454
+ Sdf ratio 0.0685718
  distance to modpoint 0.917993
+ closeness comparison 
+ ratio 0.240098
+0
  histogram diff 0.500019
  i 22 j 6
  is hks 0
@@ -5404,8 +7204,11 @@
  1 3 0.000146273
  2 3 0.000215575
  is area dif 1
- Sdf ratio 0.0497294
+ Sdf ratio 0.0604297
  distance to modpoint 0.215981
+ closeness comparison 
+ ratio 5.62019
+1
  histogram diff 0.750964
  i 22 j 7
  is hks 0
@@ -5413,8 +7216,11 @@
  1 3 4.76178e-05
  2 3 2.16838e-05
  is area dif 1
- Sdf ratio 0.106253
+ Sdf ratio 0.127677
  distance to modpoint 0.34379
+ closeness comparison 
+ ratio 3.84347
+1
  histogram diff 0.709691
  i 22 j 8
  is hks 0
@@ -5422,8 +7228,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.0590443
+ Sdf ratio 0.0600689
  distance to modpoint 0.92142
+ closeness comparison 
+ ratio 1.56128
+1
  histogram diff 0.393403
  i 22 j 9
  is hks 0
@@ -5431,8 +7240,11 @@
  1 3 0
  2 3 6.93016e-05
  is area dif 1
- Sdf ratio 0.142684
+ Sdf ratio 0.158413
  distance to modpoint 0.756153
+ closeness comparison 
+ ratio 0.330566
+0
  histogram diff 0.612482
  i 22 j 10
  is hks 0
@@ -5440,8 +7252,11 @@
  1 3 9.48536e-05
  2 3 0.000164155
  is area dif 1
- Sdf ratio 0.157988
+ Sdf ratio 0.186578
  distance to modpoint 0.765007
+ closeness comparison 
+ ratio 1.68315
+1
  histogram diff 0.562605
  i 22 j 11
  is hks 0
@@ -5449,8 +7264,11 @@
  1 3 0.000184384
  2 3 0.000253686
  is area dif 1
- Sdf ratio 0.0693762
+ Sdf ratio 0.0878826
  distance to modpoint 0.277836
+ closeness comparison 
+ ratio 2.69697
+1
  histogram diff 0.978844
  i 22 j 12
  is hks 0
@@ -5458,8 +7276,11 @@
  1 3 0.000290374
  2 3 0.000221073
  is area dif 1
- Sdf ratio 0.0721654
+ Sdf ratio 0.0961084
  distance to modpoint 0.57409
+ closeness comparison 
+ ratio 2.73055
+1
  histogram diff 0.524239
  i 22 j 13
  is hks 0
@@ -5467,8 +7288,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.0668707
+ Sdf ratio 0.0778954
  distance to modpoint 0.290859
+ closeness comparison 
+ ratio 3.49257
+1
  histogram diff 0.728053
  i 22 j 14
  is hks 0
@@ -5476,8 +7300,11 @@
  1 3 1.6115e-05
  2 3 5.31866e-05
  is area dif 1
- Sdf ratio 0.0454734
+ Sdf ratio 0.0453999
  distance to modpoint 0.302418
+ closeness comparison 
+ ratio 2.57779
+1
  histogram diff 1.13266
  i 22 j 15
  is hks 0
@@ -5485,8 +7312,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.133256
+ Sdf ratio 0.150083
  distance to modpoint 0.369271
+ closeness comparison 
+ ratio 3.3859
+1
  histogram diff 0.862875
  i 22 j 16
  is hks 0
@@ -5494,8 +7324,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0937039
+ Sdf ratio 0.133594
  distance to modpoint 0.443177
+ closeness comparison 
+ ratio 3.21391
+1
  histogram diff 0.9672
  i 22 j 17
  is hks 0
@@ -5503,8 +7336,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.0984071
+ Sdf ratio 0.119233
  distance to modpoint 0.507078
+ closeness comparison 
+ ratio 0.972081
+1
  histogram diff 0.664996
  i 22 j 18
  is hks 0
@@ -5512,8 +7348,11 @@
  1 3 6.93016e-05
  2 3 0
  is area dif 1
- Sdf ratio 0.104092
+ Sdf ratio 0.125658
  distance to modpoint 0.543988
+ closeness comparison 
+ ratio 0.944513
+1
  histogram diff 0.67341
  i 22 j 19
  is hks 0
@@ -5521,8 +7360,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.095849
+ Sdf ratio 0.10492
  distance to modpoint 0.515095
+ closeness comparison 
+ ratio 2.04428
+1
  histogram diff 0.595671
  i 22 j 20
  is hks 0
@@ -5530,8 +7372,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.0978271
+ Sdf ratio 0.114728
  distance to modpoint 0.556185
+ closeness comparison 
+ ratio 1.88836
+1
  histogram diff 0.81157
  i 22 j 21
  is hks 0
@@ -5539,8 +7384,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.0457478
+ Sdf ratio 0.0377968
  distance to modpoint 0.575588
+ closeness comparison 
+ ratio 2.70283
+1
  histogram diff 0.442511
  i 22 j 23
  is hks 1
@@ -5548,8 +7396,11 @@
  1 3 0.000346454
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.675292
+ Sdf ratio 0.622671
  distance to modpoint 0.981428
+ closeness comparison 
+ ratio 1.54154
+1
  histogram diff 0.280407
  i 22 j 24
  is hks 1
@@ -5557,8 +7408,11 @@
  1 3 4.86596e-05
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.0312797
+ Sdf ratio 0.086156
  distance to modpoint 0.778533
+ closeness comparison 
+ ratio 2.28123
+1
  histogram diff 0.35147
  i 22 j 25
  is hks 1
@@ -5566,8 +7420,11 @@
  1 3 0.000852881
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.324408
+ Sdf ratio 0.424181
  distance to modpoint 0.719746
+ closeness comparison 
+ ratio 2.2241
+1
  histogram diff 1.26513
  i 22 j 26
  is hks 0
@@ -5575,8 +7432,11 @@
  1 3 0.00157957
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.0646664
+ Sdf ratio 0.0739038
  distance to modpoint 0.315521
+ closeness comparison 
+ ratio 3.20172
+1
  histogram diff 0.304733
  i 22 j 27
  is hks 0
@@ -5584,8 +7444,11 @@
  1 3 0.00061985
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.0621074
+ Sdf ratio 0.0712394
  distance to modpoint 0.0131959
+ closeness comparison 
+ ratio 74.7813
+1
  histogram diff 0.501163
  i 23 j 0
  is hks 0
@@ -5593,8 +7456,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.0568643
+ Sdf ratio 0.0688303
  distance to modpoint 0.192027
+ closeness comparison 
+ ratio 6.04586
+1
  histogram diff 0.825851
  i 23 j 1
  is hks 0
@@ -5602,8 +7468,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.277556
+ Sdf ratio 0.387288
  distance to modpoint 0.552194
+ closeness comparison 
+ ratio 2.77695
+1
  histogram diff 1.59071
  i 23 j 2
  is hks 0
@@ -5611,8 +7480,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.241522
+ Sdf ratio 0.286466
  distance to modpoint 0.566481
+ closeness comparison 
+ ratio 2.55637
+1
  histogram diff 0.584003
  i 23 j 3
  is hks 0
@@ -5620,8 +7492,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.0728345
+ Sdf ratio 0.0939912
  distance to modpoint 0.334539
+ closeness comparison 
+ ratio 3.43352
+1
  histogram diff 0.859012
  i 23 j 4
  is hks 0
@@ -5629,8 +7504,11 @@
  1 3 0.00045902
  2 3 1.77119e-05
  is area dif 1
- Sdf ratio 0.087095
+ Sdf ratio 0.0929366
  distance to modpoint 0.415352
+ closeness comparison 
+ ratio 3.09479
+1
  histogram diff 1.27685
  i 23 j 5
  is hks 0
@@ -5638,8 +7516,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.104763
+ Sdf ratio 0.110125
  distance to modpoint 0.900943
+ closeness comparison 
+ ratio 1.56763
+1
  histogram diff 0.393403
  i 23 j 6
  is hks 0
@@ -5647,8 +7528,11 @@
  1 3 5.14198e-05
  2 3 0.000492728
  is area dif 1
- Sdf ratio 0.0736413
+ Sdf ratio 0.0970491
  distance to modpoint 0.21197
+ closeness comparison 
+ ratio 5.48045
+1
  histogram diff 0.509503
  i 23 j 7
  is hks 0
@@ -5656,8 +7540,11 @@
  1 3 0.000142471
  2 3 0.000298836
  is area dif 1
- Sdf ratio 0.157344
+ Sdf ratio 0.205048
  distance to modpoint 0.337405
+ closeness comparison 
+ ratio 3.93133
+1
  histogram diff 0.712919
  i 23 j 8
  is hks 0
@@ -5665,8 +7552,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.0874352
+ Sdf ratio 0.0964698
  distance to modpoint 0.904307
+ closeness comparison 
+ ratio 0.264414
+0
  histogram diff 0.506363
  i 23 j 9
  is hks 0
@@ -5674,8 +7564,11 @@
  1 3 9.48536e-05
  2 3 0.000346454
  is area dif 1
- Sdf ratio 0.211292
+ Sdf ratio 0.254409
  distance to modpoint 0.742109
+ closeness comparison 
+ ratio 1.7241
+1
  histogram diff 0.376627
  i 23 j 10
  is hks 0
@@ -5683,8 +7576,11 @@
  1 3 0
  2 3 0.000441308
  is area dif 1
- Sdf ratio 0.233956
+ Sdf ratio 0.299641
  distance to modpoint 0.750799
+ closeness comparison 
+ ratio 0.335289
+0
  histogram diff 0.518807
  i 23 j 11
  is hks 0
@@ -5692,8 +7588,11 @@
  1 3 8.95307e-05
  2 3 0.000530839
  is area dif 1
- Sdf ratio 0.102735
+ Sdf ratio 0.141138
  distance to modpoint 0.272676
+ closeness comparison 
+ ratio 3.63401
+1
  histogram diff 0.500948
  i 23 j 12
  is hks 0
@@ -5701,8 +7600,11 @@
  1 3 0.000385228
  2 3 5.60796e-05
  is area dif 1
- Sdf ratio 0.106865
+ Sdf ratio 0.154349
  distance to modpoint 0.563428
+ closeness comparison 
+ ratio 2.55147
+1
  histogram diff 0.540873
  i 23 j 13
  is hks 0
@@ -5710,8 +7612,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.0990249
+ Sdf ratio 0.125099
  distance to modpoint 0.285457
+ closeness comparison 
+ ratio 2.59004
+1
  histogram diff 0.589573
  i 23 j 14
  is hks 0
@@ -5719,8 +7624,11 @@
  1 3 0.000110969
  2 3 0.000330339
  is area dif 1
- Sdf ratio 0.0673388
+ Sdf ratio 0.0729116
  distance to modpoint 0.296801
+ closeness comparison 
+ ratio 2.55503
+1
  histogram diff 0.635645
  i 23 j 15
  is hks 0
@@ -5728,8 +7636,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.197331
+ Sdf ratio 0.24103
  distance to modpoint 0.362413
+ closeness comparison 
+ ratio 3.70747
+1
  histogram diff 0.710876
  i 23 j 16
  is hks 0
@@ -5737,8 +7648,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.138761
+ Sdf ratio 0.21455
  distance to modpoint 0.434946
+ closeness comparison 
+ ratio 3.04854
+1
  histogram diff 0.787729
  i 23 j 17
  is hks 0
@@ -5746,8 +7660,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.145725
+ Sdf ratio 0.191487
  distance to modpoint 0.497661
+ closeness comparison 
+ ratio 2.11127
+1
  histogram diff 0.389304
  i 23 j 18
  is hks 0
@@ -5755,8 +7672,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.154143
+ Sdf ratio 0.201805
  distance to modpoint 0.533885
+ closeness comparison 
+ ratio 1.93174
+1
  histogram diff 0.407186
  i 23 j 19
  is hks 0
@@ -5764,8 +7684,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.141937
+ Sdf ratio 0.1685
  distance to modpoint 0.505529
+ closeness comparison 
+ ratio 0.980082
+1
  histogram diff 0.365467
  i 23 j 20
  is hks 0
@@ -5773,8 +7696,11 @@
  1 3 0.000441308
  2 3 0
  is area dif 1
- Sdf ratio 0.144866
+ Sdf ratio 0.184251
  distance to modpoint 0.545855
+ closeness comparison 
+ ratio 0.930292
+1
  histogram diff 0.465771
  i 23 j 21
  is hks 0
@@ -5782,8 +7708,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.0677452
+ Sdf ratio 0.0607011
  distance to modpoint 0.564898
+ closeness comparison 
+ ratio 2.71537
+1
  histogram diff 0.801593
  i 23 j 22
  is hks 1
@@ -5791,8 +7720,11 @@
  1 3 0.000164155
  2 3 0.000277152
  is area dif 1
- Sdf ratio 0.675292
+ Sdf ratio 0.622671
  distance to modpoint 0.981428
+ closeness comparison 
+ ratio 1.54154
+1
  histogram diff 0.280407
  i 23 j 24
  is hks 1
@@ -5800,8 +7732,11 @@
  1 3 0.000143513
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.0463203
+ Sdf ratio 0.138365
  distance to modpoint 0.764074
+ closeness comparison 
+ ratio 2.1539
+1
  histogram diff 0.21837
  i 23 j 25
  is hks 1
@@ -5809,8 +7744,11 @@
  1 3 0.000947734
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.480397
+ Sdf ratio 0.681228
  distance to modpoint 0.706379
+ closeness comparison 
+ ratio 2.38909
+1
  histogram diff 1.35687
  i 23 j 26
  is hks 0
@@ -5818,8 +7756,11 @@
  1 3 0.00167443
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.0957606
+ Sdf ratio 0.118688
  distance to modpoint 0.309662
+ closeness comparison 
+ ratio 3.24461
+1
  histogram diff 0.233301
  i 23 j 27
  is hks 0
@@ -5827,8 +7768,11 @@
  1 3 0.000714704
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.0919712
+ Sdf ratio 0.114409
  distance to modpoint 0.0129508
+ closeness comparison 
+ ratio 76.8051
+1
  histogram diff 0.427505
  i 24 j 0
  is hks 0
@@ -5836,8 +7780,11 @@
  1 3 7.37915e-05
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.814575
+ Sdf ratio 0.497454
  distance to modpoint 0.25132
+ closeness comparison 
+ ratio 4.27294
+1
  histogram diff 0.861272
  i 24 j 1
  is hks 0
@@ -5845,8 +7792,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.166886
+ Sdf ratio 0.357267
  distance to modpoint 0.722697
+ closeness comparison 
+ ratio 1.84644
+1
  histogram diff 1.43431
  i 24 j 2
  is hks 0
@@ -5854,8 +7804,11 @@
  1 3 0.000241715
  2 3 0
  is area dif 1
- Sdf ratio 0.191785
+ Sdf ratio 0.483007
  distance to modpoint 0.741395
+ closeness comparison 
+ ratio 0.35688
+0
  histogram diff 0.575561
  i 24 j 3
  is hks 0
@@ -5863,8 +7816,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.635966
+ Sdf ratio 0.679298
  distance to modpoint 0.437836
+ closeness comparison 
+ ratio 1.64642
+1
  histogram diff 0.922014
  i 24 j 4
  is hks 0
@@ -5872,8 +7828,11 @@
  1 3 7.37915e-05
  2 3 0.000315506
  is area dif 1
- Sdf ratio 0.531836
+ Sdf ratio 0.671676
  distance to modpoint 0.543602
+ closeness comparison 
+ ratio 1.48629
+1
  histogram diff 1.12348
  i 24 j 5
  is hks 0
@@ -5881,8 +7840,11 @@
  1 3 0.000221073
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.442144
+ Sdf ratio 0.795903
  distance to modpoint 0.848082
+ closeness comparison 
+ ratio 2.14241
+1
  histogram diff 0.483789
  i 24 j 6
  is hks 0
@@ -5890,8 +7852,11 @@
  1 3 0.000436648
  2 3 0.000194933
  is area dif 1
- Sdf ratio 0.628998
+ Sdf ratio 0.701398
  distance to modpoint 0.27742
+ closeness comparison 
+ ratio 2.66507
+1
  histogram diff 0.710187
  i 24 j 7
  is hks 0
@@ -5899,8 +7864,11 @@
  1 3 0.000242757
  2 3 1.04175e-06
  is area dif 1
- Sdf ratio 0.294389
+ Sdf ratio 0.674795
  distance to modpoint 0.441587
+ closeness comparison 
+ ratio 1.82541
+1
  histogram diff 0.899085
  i 24 j 8
  is hks 0
@@ -5908,8 +7876,11 @@
  1 3 5.60796e-05
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.529767
+ Sdf ratio 0.697211
  distance to modpoint 0.844927
+ closeness comparison 
+ ratio 2.02562
+1
  histogram diff 0.584003
  i 24 j 9
  is hks 0
@@ -5917,8 +7888,11 @@
  1 3 0.000290374
  2 3 4.86596e-05
  is area dif 1
- Sdf ratio 0.219224
+ Sdf ratio 0.543869
  distance to modpoint 0.971254
+ closeness comparison 
+ ratio 2.02352
+1
  histogram diff 0.502566
  i 24 j 10
  is hks 0
@@ -5926,8 +7900,11 @@
  1 3 0.000385228
  2 3 0.000143513
  is area dif 1
- Sdf ratio 0.197987
+ Sdf ratio 0.461769
  distance to modpoint 0.982626
+ closeness comparison 
+ ratio 1.86709
+1
  histogram diff 0.612367
  i 24 j 11
  is hks 0
@@ -5935,8 +7912,11 @@
  1 3 0.000474759
  2 3 0.000233044
  is area dif 1
- Sdf ratio 0.450871
+ Sdf ratio 0.980353
  distance to modpoint 0.356871
+ closeness comparison 
+ ratio 3.74173
+1
  histogram diff 0.634696
  i 24 j 12
  is hks 0
@@ -5944,8 +7924,11 @@
  1 3 0
  2 3 0.000241715
  is area dif 1
- Sdf ratio 0.433445
+ Sdf ratio 0.896446
  distance to modpoint 0.7374
+ closeness comparison 
+ ratio 0.561072
+1
  histogram diff 0.572459
  i 24 j 13
  is hks 0
@@ -5953,8 +7936,11 @@
  1 3 0.000274259
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.467764
+ Sdf ratio 0.904121
  distance to modpoint 0.373598
+ closeness comparison 
+ ratio 3.19101
+1
  histogram diff 0.628415
  i 24 j 14
  is hks 0
@@ -5962,8 +7948,11 @@
  1 3 0.000274259
  2 3 3.25446e-05
  is area dif 1
- Sdf ratio 0.687869
+ Sdf ratio 0.526951
  distance to modpoint 0.388446
+ closeness comparison 
+ ratio 3.44029
+1
  histogram diff 0.755881
  i 24 j 15
  is hks 0
@@ -5971,8 +7960,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.234734
+ Sdf ratio 0.574057
  distance to modpoint 0.474317
+ closeness comparison 
+ ratio 2.27856
+1
  histogram diff 0.684806
  i 24 j 16
  is hks 0
@@ -5980,8 +7972,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.333814
+ Sdf ratio 0.644909
  distance to modpoint 0.569246
+ closeness comparison 
+ ratio 0.940152
+1
  histogram diff 0.797567
  i 24 j 17
  is hks 0
@@ -5989,8 +7984,11 @@
  1 3 0.000221073
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.31786
+ Sdf ratio 0.722582
  distance to modpoint 0.651326
+ closeness comparison 
+ ratio 2.53037
+1
  histogram diff 0.406965
  i 24 j 18
  is hks 0
@@ -5998,8 +7996,11 @@
  1 3 0.000221073
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.300502
+ Sdf ratio 0.685638
  distance to modpoint 0.698735
+ closeness comparison 
+ ratio 2.34126
+1
  histogram diff 0.429593
  i 24 j 19
  is hks 0
@@ -6007,8 +8008,11 @@
  1 3 5.60796e-05
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.326344
+ Sdf ratio 0.821161
  distance to modpoint 0.661623
+ closeness comparison 
+ ratio 2.30951
+1
  histogram diff 0.367456
  i 24 j 20
  is hks 0
@@ -6016,8 +8020,11 @@
  1 3 5.60796e-05
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.319745
+ Sdf ratio 0.750961
  distance to modpoint 0.714401
+ closeness comparison 
+ ratio 2.13534
+1
  histogram diff 0.447482
  i 24 j 21
  is hks 0
@@ -6025,8 +8032,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.683742
+ Sdf ratio 0.438702
  distance to modpoint 0.739324
+ closeness comparison 
+ ratio 1.29117
+1
  histogram diff 0.789989
  i 24 j 22
  is hks 1
@@ -6034,8 +8044,11 @@
  1 3 0.000221073
  2 3 2.0642e-05
  is area dif 1
- Sdf ratio 0.0312797
+ Sdf ratio 0.086156
  distance to modpoint 0.778533
+ closeness comparison 
+ ratio 2.28123
+1
  histogram diff 0.35147
  i 24 j 23
  is hks 1
@@ -6043,8 +8056,11 @@
  1 3 5.60796e-05
  2 3 0.000297795
  is area dif 1
- Sdf ratio 0.0463203
+ Sdf ratio 0.138365
  distance to modpoint 0.764074
+ closeness comparison 
+ ratio 2.1539
+1
  histogram diff 0.21837
  i 24 j 25
  is hks 1
@@ -6052,8 +8068,11 @@
  1 3 0.000562506
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.0964209
+ Sdf ratio 0.203111
  distance to modpoint 0.92449
+ closeness comparison 
+ ratio 1.6646
+1
  histogram diff 1.10323
  i 24 j 26
  is hks 0
@@ -6061,8 +8080,11 @@
  1 3 0.0012892
  2 3 0.00153091
  is area dif 1
- Sdf ratio 0.483709
+ Sdf ratio 0.857791
  distance to modpoint 0.405277
+ closeness comparison 
+ ratio 2.44422
+1
  histogram diff 0.26474
  i 24 j 27
  is hks 0
@@ -6070,8 +8092,11 @@
  1 3 0.000329476
  2 3 0.000571191
  is area dif 1
- Sdf ratio 0.503639
+ Sdf ratio 0.826865
  distance to modpoint 0.0169497
+ closeness comparison 
+ ratio 59.9982
+1
  histogram diff 0.593471
  i 25 j 0
  is hks 0
@@ -6079,8 +8104,11 @@
  1 3 0.000423971
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.11837
+ Sdf ratio 0.101038
  distance to modpoint 0.271847
+ closeness comparison 
+ ratio 2.78048
+1
  histogram diff 2.61224
  i 25 j 1
  is hks 0
@@ -6088,8 +8116,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.577765
+ Sdf ratio 0.568514
  distance to modpoint 0.781725
+ closeness comparison 
+ ratio 0.344279
+0
  histogram diff 0.962505
  i 25 j 2
  is hks 0
@@ -6097,8 +8128,11 @@
  1 3 0.000108465
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.502756
+ Sdf ratio 0.420514
  distance to modpoint 0.80195
+ closeness comparison 
+ ratio 1.72686
+1
  histogram diff 1.43431
  i 25 j 3
  is hks 0
@@ -6106,8 +8140,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.151613
+ Sdf ratio 0.137973
  distance to modpoint 0.473597
+ closeness comparison 
+ ratio 2.01522
+1
  histogram diff 1.65339
  i 25 j 4
  is hks 0
@@ -6115,8 +8152,11 @@
  1 3 0.000423971
  2 3 0.000488715
  is area dif 1
- Sdf ratio 0.181298
+ Sdf ratio 0.136425
  distance to modpoint 0.588002
+ closeness comparison 
+ ratio 1.35051
+1
  histogram diff 2.41646
  i 25 j 5
  is hks 0
@@ -6124,8 +8164,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.218075
+ Sdf ratio 0.161657
  distance to modpoint 0.784043
+ closeness comparison 
+ ratio 2.09403
+1
  histogram diff 1.40391
  i 25 j 6
  is hks 0
@@ -6133,8 +8176,11 @@
  1 3 8.64683e-05
  2 3 0.000999154
  is area dif 1
- Sdf ratio 0.153293
+ Sdf ratio 0.142462
  distance to modpoint 0.300079
+ closeness comparison 
+ ratio 3.19595
+1
  histogram diff 1.94513
  i 25 j 7
  is hks 0
@@ -6142,8 +8188,11 @@
  1 3 0.000107423
  2 3 0.000805263
  is area dif 1
- Sdf ratio 0.327529
+ Sdf ratio 0.300997
  distance to modpoint 0.477655
+ closeness comparison 
+ ratio 1.83779
+1
  histogram diff 1.46603
  i 25 j 8
  is hks 0
@@ -6151,8 +8200,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.182006
+ Sdf ratio 0.141612
  distance to modpoint 0.781127
+ closeness comparison 
+ ratio 2.23087
+1
  histogram diff 1.59071
  i 25 j 9
  is hks 0
@@ -6160,8 +8212,11 @@
  1 3 5.98051e-05
  2 3 0.000852881
  is area dif 1
- Sdf ratio 0.439828
+ Sdf ratio 0.373456
  distance to modpoint 0.951852
+ closeness comparison 
+ ratio 1.88531
+1
  histogram diff 1.59898
  i 25 j 10
  is hks 0
@@ -6169,8 +8224,11 @@
  1 3 3.50485e-05
  2 3 0.000947734
  is area dif 1
- Sdf ratio 0.487005
+ Sdf ratio 0.439854
  distance to modpoint 0.940836
+ closeness comparison 
+ ratio 2.03731
+1
  histogram diff 1.80293
  i 25 j 11
  is hks 0
@@ -6178,8 +8236,11 @@
  1 3 0.000124579
  2 3 0.00103727
  is area dif 1
- Sdf ratio 0.213855
+ Sdf ratio 0.207182
  distance to modpoint 0.38602
+ closeness comparison 
+ ratio 3.0686
+1
  histogram diff 2.05234
  i 25 j 12
  is hks 0
@@ -6187,8 +8248,11 @@
  1 3 0.00035018
  2 3 0.000562506
  is area dif 1
- Sdf ratio 0.222453
+ Sdf ratio 0.226574
  distance to modpoint 0.797628
+ closeness comparison 
+ ratio 1.78171
+1
  histogram diff 1.53412
  i 25 j 13
  is hks 0
@@ -6196,8 +8260,11 @@
  1 3 7.59201e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.206132
+ Sdf ratio 0.183637
  distance to modpoint 0.404113
+ closeness comparison 
+ ratio 3.46243
+1
  histogram diff 1.89096
  i 25 j 14
  is hks 0
@@ -6205,8 +8272,11 @@
  1 3 7.59201e-05
  2 3 0.000836766
  is area dif 1
- Sdf ratio 0.140173
+ Sdf ratio 0.10703
  distance to modpoint 0.420173
+ closeness comparison 
+ ratio 3.19117
+1
  histogram diff 2.12954
  i 25 j 15
  is hks 0
@@ -6214,8 +8284,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.410767
+ Sdf ratio 0.353817
  distance to modpoint 0.513058
+ closeness comparison 
+ ratio 0.965913
+1
  histogram diff 0.997697
  i 25 j 16
  is hks 0
@@ -6223,8 +8296,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.288846
+ Sdf ratio 0.314946
  distance to modpoint 0.61574
+ closeness comparison 
+ ratio 1.77416
+1
  histogram diff 1.11835
  i 25 j 17
  is hks 0
@@ -6232,8 +8308,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.303344
+ Sdf ratio 0.281091
  distance to modpoint 0.704524
+ closeness comparison 
+ ratio 2.19283
+1
  histogram diff 1.6882
  i 25 j 18
  is hks 0
@@ -6241,8 +8320,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.320866
+ Sdf ratio 0.296237
  distance to modpoint 0.755805
+ closeness comparison 
+ ratio 2.04871
+1
  histogram diff 1.77855
  i 25 j 19
  is hks 0
@@ -6250,8 +8332,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.295458
+ Sdf ratio 0.247347
  distance to modpoint 0.715663
+ closeness comparison 
+ ratio 2.37287
+1
  histogram diff 1.56747
  i 25 j 20
  is hks 0
@@ -6259,8 +8344,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.301556
+ Sdf ratio 0.270469
  distance to modpoint 0.772752
+ closeness comparison 
+ ratio 2.17513
+1
  histogram diff 1.80199
  i 25 j 21
  is hks 0
@@ -6268,8 +8356,11 @@
  1 3 0.000912686
  2 3 0
  is area dif 1
- Sdf ratio 0.141019
+ Sdf ratio 0.0891053
  distance to modpoint 0.79971
+ closeness comparison 
+ ratio 1.44085
+1
  histogram diff 1.86313
  i 25 j 22
  is hks 1
@@ -6277,8 +8368,11 @@
  1 3 0.000129107
  2 3 0.000783579
  is area dif 1
- Sdf ratio 0.324408
+ Sdf ratio 0.424181
  distance to modpoint 0.719746
+ closeness comparison 
+ ratio 2.22411
+1
  histogram diff 1.26513
  i 25 j 23
  is hks 1
@@ -6286,8 +8380,11 @@
  1 3 0.000406259
  2 3 0.000506427
  is area dif 1
- Sdf ratio 0.480397
+ Sdf ratio 0.681228
  distance to modpoint 0.706379
+ closeness comparison 
+ ratio 2.38909
+1
  histogram diff 1.35687
  i 25 j 24
  is hks 1
@@ -6295,8 +8392,11 @@
  1 3 0.000108465
  2 3 0.000804221
  is area dif 1
- Sdf ratio 0.0964209
+ Sdf ratio 0.203111
  distance to modpoint 0.92449
+ closeness comparison 
+ ratio 1.6646
+1
  histogram diff 1.10323
  i 25 j 26
  is hks 0
@@ -6304,8 +8404,11 @@
  1 3 0.00163938
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.199337
+ Sdf ratio 0.174227
  distance to modpoint 0.438379
+ closeness comparison 
+ ratio 2.24757
+1
  histogram diff 1.37408
  i 25 j 27
  is hks 0
@@ -6313,8 +8416,11 @@
  1 3 0.000679656
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.191448
+ Sdf ratio 0.167946
  distance to modpoint 0.0183341
+ closeness comparison 
+ ratio 54.5698
+1
  histogram diff 1.87546
  i 26 j 0
  is hks 1
@@ -6322,8 +8428,11 @@
  1 3 0.000488715
  2 3 0.00121541
  is area dif 1
- Sdf ratio 0.593817
+ Sdf ratio 0.579924
  distance to modpoint 0.620118
+ closeness comparison 
+ ratio 1.02301
+1
  histogram diff 0.943461
  i 26 j 1
  is hks 0
@@ -6331,8 +8440,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.345013
+ Sdf ratio 0.30646
  distance to modpoint 0.560784
+ closeness comparison 
+ ratio 1.74965
+1
  histogram diff 1.4498
  i 26 j 2
  is hks 0
@@ -6340,8 +8452,11 @@
  1 3 0.000804221
  2 3 0.00153091
  is area dif 1
- Sdf ratio 0.396488
+ Sdf ratio 0.414319
  distance to modpoint 0.546641
+ closeness comparison 
+ ratio 1.80608
+1
  histogram diff 0.443335
  i 26 j 3
  is hks 1
@@ -6349,8 +8464,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.760589
+ Sdf ratio 0.791915
  distance to modpoint 0.925637
+ closeness comparison 
+ ratio 0.673903
+1
  histogram diff 0.721688
  i 26 j 4
  is hks 1
@@ -6358,8 +8476,11 @@
  1 3 0.000488715
  2 3 0.00121541
  is area dif 1
- Sdf ratio 0.909507
+ Sdf ratio 0.78303
  distance to modpoint 0.74554
+ closeness comparison 
+ ratio 0.963871
+1
  histogram diff 0.963031
  i 26 j 5
  is hks 0
@@ -6367,8 +8488,11 @@
  1 3 0.000783579
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.914071
+ Sdf ratio 0.927852
  distance to modpoint 0.343708
+ closeness comparison 
+ ratio 2.84829
+1
  histogram diff 0.43608
  i 26 j 6
  is hks 1
@@ -6376,8 +8500,11 @@
  1 3 0.000999154
  2 3 0.00172585
  is area dif 1
- Sdf ratio 0.769015
+ Sdf ratio 0.81768
  distance to modpoint 0.684521
+ closeness comparison 
+ ratio 1.66488
+1
  histogram diff 0.535845
  i 26 j 7
  is hks 1
@@ -6385,8 +8512,11 @@
  1 3 0.000805263
  2 3 0.00153196
  is area dif 1
- Sdf ratio 0.608608
+ Sdf ratio 0.578833
  distance to modpoint 0.917773
+ closeness comparison 
+ ratio 1.47587
+1
  histogram diff 0.875712
  i 26 j 8
  is hks 0
@@ -6394,8 +8524,11 @@
  1 3 0.000506427
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.91306
+ Sdf ratio 0.812799
  distance to modpoint 0.34243
+ closeness comparison 
+ ratio 2.88369
+1
  histogram diff 0.400999
  i 26 j 9
  is hks 0
@@ -6403,8 +8536,11 @@
  1 3 0.000852881
  2 3 0.00157957
  is area dif 1
- Sdf ratio 0.453215
+ Sdf ratio 0.466526
  distance to modpoint 0.417272
+ closeness comparison 
+ ratio 2.41141
+1
  histogram diff 0.463532
  i 26 j 10
  is hks 0
@@ -6412,8 +8548,11 @@
  1 3 0.000947734
  2 3 0.00167443
  is area dif 1
- Sdf ratio 0.409311
+ Sdf ratio 0.396101
  distance to modpoint 0.412443
+ closeness comparison 
+ ratio 2.4433
+1
  histogram diff 0.46088
  i 26 j 11
  is hks 1
@@ -6421,8 +8560,11 @@
  1 3 0.00103727
  2 3 0.00176396
  is area dif 1
- Sdf ratio 0.932112
+ Sdf ratio 0.840938
  distance to modpoint 0.880562
+ closeness comparison 
+ ratio 0.998159
+1
  histogram diff 0.729784
  i 26 j 12
  is hks 0
@@ -6430,8 +8572,11 @@
  1 3 0.000562506
  2 3 0.0012892
  is area dif 1
- Sdf ratio 0.896086
+ Sdf ratio 0.768963
  distance to modpoint 0.549603
+ closeness comparison 
+ ratio 1.79423
+1
  histogram diff 0.418904
  i 26 j 13
  is hks 1
@@ -6439,8 +8584,11 @@
  1 3 0.000836766
  2 3 0.00156346
  is area dif 1
- Sdf ratio 0.967036
+ Sdf ratio 0.948756
  distance to modpoint 0.921834
+ closeness comparison 
+ ratio 1.02921
+1
  histogram diff 0.604554
  i 26 j 14
  is hks 1
@@ -6448,8 +8596,11 @@
  1 3 0.000836766
  2 3 0.00156346
  is area dif 1
- Sdf ratio 0.703199
+ Sdf ratio 0.614312
  distance to modpoint 0.95847
+ closeness comparison 
+ ratio 1.14787
+1
  histogram diff 0.855967
  i 26 j 15
  is hks 0
@@ -6457,8 +8608,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.485279
+ Sdf ratio 0.492421
  distance to modpoint 0.854443
+ closeness comparison 
+ ratio 1.13679
+1
  histogram diff 0.684755
  i 26 j 16
  is hks 1
@@ -6466,8 +8620,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.690114
+ Sdf ratio 0.553197
  distance to modpoint 0.711954
+ closeness comparison 
+ ratio 1.32123
+1
  histogram diff 0.733778
  i 26 j 17
  is hks 0
@@ -6475,8 +8632,11 @@
  1 3 0.000783579
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.657131
+ Sdf ratio 0.619824
  distance to modpoint 0.622234
+ closeness comparison 
+ ratio 1.68633
+1
  histogram diff 0.438574
  i 26 j 18
  is hks 0
@@ -6484,8 +8644,11 @@
  1 3 0.000783579
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.621245
+ Sdf ratio 0.588134
  distance to modpoint 0.580016
+ closeness comparison 
+ ratio 1.59855
+1
  histogram diff 0.514789
  i 26 j 19
  is hks 0
@@ -6493,8 +8656,11 @@
  1 3 0.000506427
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.674669
+ Sdf ratio 0.704384
  distance to modpoint 0.61255
+ closeness comparison 
+ ratio 1.74749
+1
  histogram diff 0.319185
  i 26 j 20
  is hks 0
@@ -6502,8 +8668,11 @@
  1 3 0.000506427
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.661027
+ Sdf ratio 0.644167
  distance to modpoint 0.567296
+ closeness comparison 
+ ratio 1.62898
+1
  histogram diff 0.585892
  i 26 j 21
  is hks 0
@@ -6511,8 +8680,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.707443
+ Sdf ratio 0.511432
  distance to modpoint 0.548173
+ closeness comparison 
+ ratio 1.88722
+1
  histogram diff 0.812669
  i 26 j 22
  is hks 0
@@ -6520,8 +8692,11 @@
  1 3 0.000783579
  2 3 0.00151027
  is area dif 1
- Sdf ratio 0.0646664
+ Sdf ratio 0.0739038
  distance to modpoint 0.315521
+ closeness comparison 
+ ratio 3.20172
+1
  histogram diff 0.304733
  i 26 j 23
  is hks 0
@@ -6529,8 +8704,11 @@
  1 3 0.000506427
  2 3 0.00123312
  is area dif 1
- Sdf ratio 0.0957606
+ Sdf ratio 0.118688
  distance to modpoint 0.309662
+ closeness comparison 
+ ratio 3.24461
+1
  histogram diff 0.233301
  i 26 j 24
  is hks 0
@@ -6538,8 +8716,11 @@
  1 3 0.000804221
  2 3 0.00153091
  is area dif 1
- Sdf ratio 0.483709
+ Sdf ratio 0.857791
  distance to modpoint 0.405277
+ closeness comparison 
+ ratio 2.44422
+1
  histogram diff 0.26474
  i 26 j 25
  is hks 0
@@ -6547,8 +8728,11 @@
  1 3 0
  2 3 0.000726693
  is area dif 1
- Sdf ratio 0.199337
+ Sdf ratio 0.174227
  distance to modpoint 0.438379
+ closeness comparison 
+ ratio 2.24756
+1
  histogram diff 1.37408
  i 26 j 27
  is hks 1
@@ -6556,8 +8740,11 @@
  1 3 0.00023303
  2 3 0.000959723
  is area dif 1
- Sdf ratio 0.960428
+ Sdf ratio 0.963948
  distance to modpoint 0.0418224
+ closeness comparison 
+ ratio 23.5048
+1
  histogram diff 0.675189
  i 27 j 0
  is hks 1
@@ -6565,8 +8752,11 @@
  1 3 0.000296145
  2 3 0.000255684
  is area dif 1
- Sdf ratio 0.618284
+ Sdf ratio 0.601614
  distance to modpoint 0.0674427
+ closeness comparison 
+ ratio 14.7691
+1
  histogram diff 0.591008
  i 27 j 1
  is hks 0
@@ -6574,8 +8764,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.33136
+ Sdf ratio 0.295412
  distance to modpoint 0.0234533
+ closeness comparison 
+ ratio 42.6644
+1
  histogram diff 1.85562
  i 27 j 2
  is hks 0
@@ -6583,8 +8776,11 @@
  1 3 1.93614e-05
  2 3 0.000571191
  is area dif 1
- Sdf ratio 0.380798
+ Sdf ratio 0.399382
  distance to modpoint 0.0228618
+ closeness comparison 
+ ratio 44.741
+1
  histogram diff 0.603163
  i 27 j 3
  is hks 1
@@ -6592,8 +8788,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.791927
+ Sdf ratio 0.821534
  distance to modpoint 0.0387124
+ closeness comparison 
+ ratio 26.8316
+1
  histogram diff 0.821054
  i 27 j 4
  is hks 1
@@ -6601,8 +8800,11 @@
  1 3 0.000296145
  2 3 0.000255684
  is area dif 1
- Sdf ratio 0.946981
+ Sdf ratio 0.812316
  distance to modpoint 0.0311803
+ closeness comparison 
+ ratio 32.0133
+1
  histogram diff 1.43144
  i 27 j 5
  is hks 0
@@ -6610,8 +8812,11 @@
  1 3 1.28069e-06
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.8779
+ Sdf ratio 0.962554
  distance to modpoint 0.0143747
+ closeness comparison 
+ ratio 68.5667
+1
  histogram diff 0.390457
  i 27 j 6
  is hks 1
@@ -6619,8 +8824,11 @@
  1 3 0.000214294
  2 3 0.000766124
  is area dif 1
- Sdf ratio 0.8007
+ Sdf ratio 0.848262
  distance to modpoint 0.0610974
+ closeness comparison 
+ ratio 17.3673
+1
  histogram diff 0.361841
  i 27 j 7
  is hks 1
@@ -6628,8 +8836,11 @@
  1 3 2.04031e-05
  2 3 0.000572233
  is area dif 1
- Sdf ratio 0.584525
+ Sdf ratio 0.557965
  distance to modpoint 0.0383835
+ closeness comparison 
+ ratio 26.9231
+1
  histogram diff 0.501779
  i 27 j 8
  is hks 0
@@ -6637,8 +8848,11 @@
  1 3 0.000278433
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.95068
+ Sdf ratio 0.843198
  distance to modpoint 0.0143212
+ closeness comparison 
+ ratio 69.4162
+1
  histogram diff 0.463578
  i 27 j 9
  is hks 0
@@ -6646,8 +8860,11 @@
  1 3 6.80209e-05
  2 3 0.00061985
  is area dif 1
- Sdf ratio 0.43528
+ Sdf ratio 0.449706
  distance to modpoint 0.0174513
+ closeness comparison 
+ ratio 56.3023
+1
  histogram diff 0.381991
  i 27 j 10
  is hks 0
@@ -6655,8 +8872,11 @@
  1 3 0.000162875
  2 3 0.000714704
  is area dif 1
- Sdf ratio 0.393114
+ Sdf ratio 0.381821
  distance to modpoint 0.0172493
+ closeness comparison 
+ ratio 57.563
+1
  histogram diff 0.450473
  i 27 j 11
  is hks 1
@@ -6664,8 +8884,11 @@
  1 3 0.000252405
  2 3 0.000804235
  is area dif 1
- Sdf ratio 0.895226
+ Sdf ratio 0.81062
  distance to modpoint 0.0474951
+ closeness comparison 
+ ratio 20.0548
+1
  histogram diff 0.627341
  i 27 j 12
  is hks 0
@@ -6673,8 +8896,11 @@
  1 3 0.000222354
  2 3 0.000329476
  is area dif 1
- Sdf ratio 0.860626
+ Sdf ratio 0.74124
  distance to modpoint 0.0229857
+ closeness comparison 
+ ratio 44.5053
+1
  histogram diff 0.611179
  i 27 j 13
  is hks 1
@@ -6682,8 +8908,11 @@
  1 3 5.19059e-05
  2 3 0.000603735
  is area dif 1
- Sdf ratio 0.928768
+ Sdf ratio 0.914551
  distance to modpoint 0.0453687
+ closeness comparison 
+ ratio 22.4032
+1
  histogram diff 0.554649
  i 27 j 14
  is hks 1
@@ -6691,8 +8920,11 @@
  1 3 5.19059e-05
  2 3 0.000603735
  is area dif 1
- Sdf ratio 0.732173
+ Sdf ratio 0.637287
  distance to modpoint 0.0436346
+ closeness comparison 
+ ratio 21.9176
+1
  histogram diff 0.724185
  i 27 j 15
  is hks 0
@@ -6700,8 +8932,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.466076
+ Sdf ratio 0.474668
  distance to modpoint 0.0357349
+ closeness comparison 
+ ratio 28.0104
+1
  histogram diff 0.886111
  i 27 j 16
  is hks 1
@@ -6709,8 +8944,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.662805
+ Sdf ratio 0.533253
  distance to modpoint 0.0297756
+ closeness comparison 
+ ratio 34.5845
+1
  histogram diff 1.00185
  i 27 j 17
  is hks 0
@@ -6718,8 +8956,11 @@
  1 3 1.28069e-06
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.631127
+ Sdf ratio 0.597478
  distance to modpoint 0.0260233
+ closeness comparison 
+ ratio 37.4271
+1
  histogram diff 0.545681
  i 27 j 18
  is hks 0
@@ -6727,8 +8968,11 @@
  1 3 1.28069e-06
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.596661
+ Sdf ratio 0.566931
  distance to modpoint 0.0242576
+ closeness comparison 
+ ratio 40.2241
+1
  histogram diff 0.461532
  i 27 j 19
  is hks 0
@@ -6736,8 +8980,11 @@
  1 3 0.000278433
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.647971
+ Sdf ratio 0.678989
  distance to modpoint 0.0256183
+ closeness comparison 
+ ratio 38.6244
+1
  histogram diff 0.64165
  i 27 j 20
  is hks 0
@@ -6745,8 +8992,11 @@
  1 3 0.000278433
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.634869
+ Sdf ratio 0.620943
  distance to modpoint 0.0237257
+ closeness comparison 
+ ratio 41.2638
+1
  histogram diff 0.599676
  i 27 j 21
  is hks 0
@@ -6754,8 +9004,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.736592
+ Sdf ratio 0.53056
  distance to modpoint 0.0229259
+ closeness comparison 
+ ratio 44.489
+1
  histogram diff 0.967333
  i 27 j 22
  is hks 0
@@ -6763,8 +9016,11 @@
  1 3 1.28069e-06
  2 3 0.000550549
  is area dif 1
- Sdf ratio 0.0621074
+ Sdf ratio 0.0712394
  distance to modpoint 0.0131959
+ closeness comparison 
+ ratio 74.7813
+1
  histogram diff 0.501163
  i 27 j 23
  is hks 0
@@ -6772,8 +9028,11 @@
  1 3 0.000278433
  2 3 0.000273396
  is area dif 1
- Sdf ratio 0.0919712
+ Sdf ratio 0.114409
  distance to modpoint 0.0129508
+ closeness comparison 
+ ratio 76.8051
+1
  histogram diff 0.427505
  i 27 j 24
  is hks 0
@@ -6781,8 +9040,11 @@
  1 3 1.93614e-05
  2 3 0.000571191
  is area dif 1
- Sdf ratio 0.503639
+ Sdf ratio 0.826865
  distance to modpoint 0.0169497
+ closeness comparison 
+ ratio 59.9982
+1
  histogram diff 0.593471
  i 27 j 25
  is hks 0
@@ -6790,8 +9052,11 @@
  1 3 0.00078486
  2 3 0.00023303
  is area dif 1
- Sdf ratio 0.191448
+ Sdf ratio 0.167946
  distance to modpoint 0.0183341
+ closeness comparison 
+ ratio 54.5698
+1
  histogram diff 1.87546
  i 27 j 26
  is hks 1
@@ -6799,6 +9064,9 @@
  1 3 0.00151155
  2 3 0.000959723
  is area dif 1
- Sdf ratio 0.960428
+ Sdf ratio 0.963948
  distance to modpoint 0.0418224
+ closeness comparison 
+ ratio 23.5048
+1
  histogram diff 0.675189

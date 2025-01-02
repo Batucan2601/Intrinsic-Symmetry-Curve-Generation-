@@ -1406,6 +1406,7 @@ void NLateralDescriptor_read(std::string filename, TrilateralMesh* m, std::vecto
 }
 void Nlateral_display_desc(TrilateralMesh* m , NLateralDescriptor& desc)
 {
+	m->color_all(LIGHTGRAY);
 	for (size_t i = 0; i < desc.paths.size(); i++)
 	{
 		for (size_t j = 0; j < desc.paths[i].size(); j++)
@@ -2089,6 +2090,27 @@ bool Nlateral_compare_angles(TrilateralMesh* m, NLateralDescriptor& desc1, NLate
 		return false; 
 	}
 	return true; 
+}
+bool Nlateral_compare_closeness(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpointIndex
+	, float closeness_param, std::ofstream& file )
+{
+	// compare points distance / distance to midpoint
+	std::vector<float> distances = Geodesic_dijkstra(*m, desc1.indices[0]);
+	std::vector<float> distances_midpoint = Geodesic_dijkstra(*m, midpointIndex);
+
+	float dist_p1_p2 = distances[desc2.indices[0]];
+	float dist = std::min(distances_midpoint[desc1.indices[0]], distances_midpoint[desc2.indices[0]]);
+	float ratio = (dist_p1_p2 / dist );
+	bool return_value = true; 
+	if ( ratio < closeness_param )
+	{
+		return_value = false;
+	}
+	file << " closeness comparison " << std::endl;
+	file << " ratio " <<  ratio << std::endl;
+	file << return_value << std::endl; 
+
+	return return_value;
 }
 bool NLateral_compare_HKS(TrilateralMesh* m,NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float hks_perc, std::ofstream& file)
 {

@@ -87,7 +87,7 @@ std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor> > nla
 std::vector<NodeAffinityParams> skeleton_params;
 float hks_dif_param = 0.1;
 float curv_param = 0.5;
-float norm_angle_param = 0.985;
+float closeness_param = 0.2;
 float skel_dist_param = 0.2;
 float skel_depth_param = 5;
 float ratio_dif_param= 0.2;
@@ -349,7 +349,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("Sweep distance", &dvorak_geodesic_dist_param);
         ImGui::InputFloat("hks difference ", &hks_dif_param);
         ImGui::InputFloat("curvature parameter", &curv_param);
-        ImGui::InputFloat("normal angle ", &norm_angle_param);
+        ImGui::InputFloat("closeness param ", &closeness_param);
         ImGui::InputFloat("ratio dif param ", &ratio_dif_param);
         ImGui::InputFloat("area param ", &area_dif_param);
         ImGui::InputFloat("fuzzy param ", &fuzzy_param);
@@ -361,7 +361,7 @@ static void Nlateral_functions(TrilateralMesh* m)
 
         ImGui::EndMenu();
     }
-    if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
+    /*if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points,
         dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param,skel_depth_param, proximity_param,N);
@@ -375,11 +375,11 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         nlateral_descriptors = NlateralMap_point_matching_with_FPS_and_endpoints(m, skeleton, dvorak_no_of_significant_points,
             dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, skel_depth_param, proximity_param, N);
-    }
+    }*/
     if (ImGui::MenuItem("avg min geo sampling with sym plane "))
     {
         nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param,  ratio_dif_param,
+            dvorak_geodesic_dist_param, hks_dif_param, curv_param, closeness_param,  ratio_dif_param,
            area_dif_param,fuzzy_param, min_geo_tau,avg_geo_N_ring, nlateral_tri_hist_param,
             distance_to_mid_param,sdf_param , N, avg_dijk_indices);
     }
@@ -561,6 +561,11 @@ static void curvature_creation(TrilateralMesh* m )
     {
         CurvatureGeneration_laplacian_smoothing(m, curvature, quality_param);
     }
+    if (ImGui::MenuItem("Add new matching"))
+    {
+        CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,quality_param ,hks_dif_param , distance_to_mid_param);
+    }
+
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
