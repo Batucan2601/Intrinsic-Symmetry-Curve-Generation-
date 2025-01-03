@@ -15,7 +15,8 @@ struct Curvature
 	std::vector<std::vector<unsigned int>> paths;
 	std::vector<float> curve_quality; // quality of the curve not the points 
 	unsigned int midpoint_index; 
-	unsigned int midpoint_inv_index; 
+	unsigned int midpoint_inv_index;
+	std::vector < std::pair<unsigned int, unsigned int>> removed_pairs; // cant pair these again. 
 	float get_avg_quality(TrilateralMesh* m );
 	std::vector<unsigned int> get_strong_points();
 	void add_strong_list(std::vector<unsigned int> strong_list);

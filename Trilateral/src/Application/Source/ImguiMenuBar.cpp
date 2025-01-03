@@ -348,14 +348,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputInt("gaussian points ", &dvorak_no_of_significant_points);
         ImGui::InputFloat("Sweep distance", &dvorak_geodesic_dist_param);
         ImGui::InputFloat("hks difference ", &hks_dif_param);
-        ImGui::InputFloat("curvature parameter", &curv_param);
         ImGui::InputFloat("closeness param ", &closeness_param);
-        ImGui::InputFloat("ratio dif param ", &ratio_dif_param);
         ImGui::InputFloat("area param ", &area_dif_param);
-        ImGui::InputFloat("fuzzy param ", &fuzzy_param);
         ImGui::InputFloat("min geo tau param", &min_geo_tau);
         ImGui::InputInt("N ring for geodesic", &avg_geo_N_ring);
-        ImGui::InputFloat("tri sym hist param", &nlateral_tri_hist_param);
         ImGui::InputFloat("distance to mid point", &distance_to_mid_param);
         ImGui::InputFloat("sdf param ", &sdf_param);
 
@@ -378,9 +374,9 @@ static void Nlateral_functions(TrilateralMesh* m)
     }*/
     if (ImGui::MenuItem("avg min geo sampling with sym plane "))
     {
-        nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, closeness_param,  ratio_dif_param,
-           area_dif_param,fuzzy_param, min_geo_tau,avg_geo_N_ring, nlateral_tri_hist_param,
+        nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, dvorak_no_of_significant_points,
+            dvorak_geodesic_dist_param, hks_dif_param,  closeness_param,
+           area_dif_param, min_geo_tau,avg_geo_N_ring,
             distance_to_mid_param,sdf_param , N, avg_dijk_indices);
     }
 
@@ -545,7 +541,6 @@ static void curvature_creation(TrilateralMesh* m )
     {
         CurvatureGeneration_update_w_quality(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
     }
-
     ImGui::InputInt(" point index", &curv_point_index );
     if (ImGui::MenuItem(" Show point with index "))
     {

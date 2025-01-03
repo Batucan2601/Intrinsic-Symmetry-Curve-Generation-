@@ -58,6 +58,10 @@ std::vector<unsigned int> Curvature::get_strong_points()
 }
 void Curvature::add_strong_list(std::vector<unsigned int> strong_list)
 {
+	for (size_t i = 0; i < this->curve_points.size(); i++)
+	{
+		this->curve_points[i].is_strong = false;
+	}
 	for (size_t i = 0; i < strong_list.size(); i++)
 	{
 		CurvePoints p;
@@ -146,6 +150,7 @@ static bool remove_index_w_correspon(TrilateralMesh* m, Curvature& c, unsigned i
 	if (no_of_normal > no_of_inv_normal)
 	{
 		c = curve_temp;
+		c.removed_pairs.push_back(temp.correspondence);
 		return true; 
 	}
 	return false;
@@ -935,8 +940,8 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 	build_curvature(m, curv_back);
 	//CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
 
-	while(CurvatureGeneration_curve_smoothing(m, curv_front, quality_param)); 
-	while(CurvatureGeneration_curve_smoothing(m, curv_back, quality_param)); 
+	//while(CurvatureGeneration_curve_smoothing(m, curv_front, quality_param)); 
+	//while(CurvatureGeneration_curve_smoothing(m, curv_back, quality_param)); 
 
 	Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
@@ -944,7 +949,7 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 
 	m->color_points(std::vector<unsigned int>{ strong_list }, RED);
 
-	return full_curvature;
+	return curv_front;
 }
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param )
@@ -1022,6 +1027,9 @@ std::vector<unsigned int>& agd_indices , float quality_param , float hks_param ,
 			currently_avaliable_indices.push_back(agd_indices[i]);
 		}
 	}
+	//descs = NLateral_select_farthest_to_midpoint(m, currently_avaliable_indices, 5, c.midpoint_index, 10);
+
+
 	glm::vec3 normal_midpoint = m->normals[c.midpoint_index];
 	glm::vec3 normal_inv_midpoint = m->normals[c.midpoint_inv_index];
 
@@ -1051,11 +1059,23 @@ std::vector<unsigned int>& agd_indices , float quality_param , float hks_param ,
 			Curvature temp = c; 
 
 			bool is_ok = check_parameters(m, c, index_i, index_j, hks_param, distance_to_midpoint_param);
+			
+			//check if removed pairs
+			for (size_t i = 0; i < c.removed_pairs.size(); i++)
+			{
+				if (c.removed_pairs[i].first == index_i ||
+					c.removed_pairs[i].second == index_j)
+				{
+					is_ok = false; 
+					break;
+				}
+			}
 
 			if (!is_ok)
 			{
-				continue; 
+				continue;
 			}
+
 			//add the new point
 			CurvePoints p; 
 			p.correspondence = std::make_pair(index_i, index_j);
@@ -1065,7 +1085,12 @@ std::vector<unsigned int>& agd_indices , float quality_param , float hks_param ,
 
 			build_curvature(m, temp);
 
-			float quality = temp.get_avg_quality(m);
+			float quality = 0;
+			for (size_t k = 0; k < temp.curve_quality.size(); k++)
+			{
+				quality += temp.curve_quality[k];
+			}
+			//float quality = temp.get_avg_quality(m);
 
 			if (quality > best_quality)
 			{

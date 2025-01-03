@@ -7,9 +7,9 @@
 #include "../Include/ShapeDiameter.h"
 #include "../Include/CurvatureGeneration.h"
 
-std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, Skeleton& skeleton, 
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float closeness_param, float ratio_dif_param,
-	float area_dif_param,float fuzzy_param,float min_geo_tau,int avg_n_ring,float tri_hist_param,
+std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m, 
+	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param,  float closeness_param, 
+	float area_dif_param,float min_geo_tau,int avg_n_ring,
 	float distance_to_mid_param , float sdf_param , int N , std::vector<unsigned int>& agd_point_indices)
 {
 	int size = m->vertices.size();
