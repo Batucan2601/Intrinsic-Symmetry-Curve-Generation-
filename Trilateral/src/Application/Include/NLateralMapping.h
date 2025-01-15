@@ -11,8 +11,10 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	 float distance_to_mid_param , float sdf_param ,int N, std::vector<unsigned int>& agd_point_indices);
 
 
-std::vector<NLateralDescriptor> NlateralMap_descriptor_generation(TrilateralMesh* m);
 
 void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
 	std::vector<std::pair<unsigned int, unsigned int>>& resemblance_pairs, unsigned int midpoint,
 	unsigned int midpoint_2, unsigned int histogram_size);
+
+std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m, std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau,float fuziness
+, float distance_to_mid_param, float hks_dif_param, float closeness_param);

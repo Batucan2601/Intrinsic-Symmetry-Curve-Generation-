@@ -33,7 +33,7 @@ struct Curve
 Curvature CurvatureGeneration_generate(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
 	float hks_param , float quality_param);
 Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<unsigned int>& agd_indices,
-	float hks_param, float quality_param);
+	float hks_param, float quality_param, float distance_param,float closeness_param);
 void CurvatureGeneration_update(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_indices,
 	float hks_param, float quality_param);
 void CurvatureGeneration_update_w_quality(TrilateralMesh* m, Curvature& c, std::vector<unsigned int>& agd_indices,
@@ -41,10 +41,9 @@ void CurvatureGeneration_update_w_quality(TrilateralMesh* m, Curvature& c, std::
 void CurvatureGeneration_curvature_quality(TrilateralMesh* m, Curvature& curv);
 std::vector<Curve> CurvatureGeneration_generate_curve_paths(TrilateralMesh* m);
 float  CurvatureGeneration_get_curve_length(TrilateralMesh* m, Curve& curv  );
-void CurvatureGeneration_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param  );
 bool CurvatureGeneration_curve_smoothing(TrilateralMesh* m, Curvature& c, float quality_dif_param);
 
-void CurvatureGeneration_add_new_matching(TrilateralMesh* m, Curvature& c,
-	std::vector<unsigned int>& agd_indices, float quality_param, float hks_param, float distance_to_midpoint_param);
+bool CurvatureGeneration_add_new_matching(TrilateralMesh* m, Curvature& c,
+	std::vector<unsigned int>& agd_indices, float quality_param, float hks_param, float distance_to_midpoint_param, float closeness_param);

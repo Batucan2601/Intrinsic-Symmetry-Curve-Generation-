@@ -57,13 +57,13 @@ static bool is_draw_plane = false;
 static bool is_draw_skeleton = false;
 static bool is_draw_curvature = false;
 static bool is_draw_curvature_index = false;
-static bool is_draw_curves = false;
 static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
 static bool is_draw_normals = false; 
 static bool is_draw_agd = false; 
 static bool is_draw_desc = false; 
 static bool is_draw_hist = false; 
+static bool is_draw_curves = false; 
 static float agd_sphere_radius = 1; 
 static float line_thickness_3d = 0.01; 
 static int descriptor_no = 0;
@@ -94,7 +94,7 @@ float ratio_dif_param= 0.2;
 float proximity_param = 1;
 float area_dif_param = 0.2;
 float skel_point_dist_param = 0.2; 
-float fuzzy_param = 0.2;
+float fuzzy_param = 0.1;
 float min_geo_tau = 0.7;
 int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
@@ -354,6 +354,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputInt("N ring for geodesic", &avg_geo_N_ring);
         ImGui::InputFloat("distance to mid point", &distance_to_mid_param);
         ImGui::InputFloat("sdf param ", &sdf_param);
+        ImGui::InputFloat("fuzzy param ", &fuzzy_param);
 
         ImGui::EndMenu();
     }
@@ -378,6 +379,11 @@ static void Nlateral_functions(TrilateralMesh* m)
             dvorak_geodesic_dist_param, hks_dif_param,  closeness_param,
            area_dif_param, min_geo_tau,avg_geo_N_ring,
             distance_to_mid_param,sdf_param , N, avg_dijk_indices);
+    }
+    if (ImGui::MenuItem("generate descriptors with midpoint "))
+    {
+        nlateral_descriptors = NLateralMapping_generate_via_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
+        , distance_to_mid_param, hks_dif_param, closeness_param);
     }
 
     if (ImGui::BeginMenu("NLateral Descriptor"))
@@ -495,7 +501,8 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("average geodesic Function modified"))
     {
-        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
+        float biggest; 
+        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, dvorak_geodesic_dist_param, avg_geo_N_ring, true, biggest);
     }
     if (ImGui::MenuItem("average geodesic Function modified with points "))
     {
@@ -518,6 +525,11 @@ static void geodesic(TrilateralMesh* m)
     {
         Geodesic_read_sampled_points(m, avg_dijk_indices);
     }
+    if(ImGui::MenuItem("Geodesic sampling via midpoints "))
+    {
+        unsigned int m1, m2;
+        Geodesic_sampling_w_midpoint(m, m1, m2);
+    }
 }
 static void curvature_creation(TrilateralMesh* m )
 {
@@ -530,7 +542,7 @@ static void curvature_creation(TrilateralMesh* m )
     }
     if (ImGui::MenuItem(" Create curvature full with updates "))
     {
-        curvature  =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param);
+        curvature  =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param, distance_to_mid_param,closeness_param);
         is_draw_curvature = true; 
     }
     if (ImGui::MenuItem(" curvature update once  "))
@@ -550,7 +562,7 @@ static void curvature_creation(TrilateralMesh* m )
     {
         unsigned int p1; 
         unsigned int p2; 
-        CurvatureGeneration_mid_point_w_AGD(m, p1, p2);
+        Geodesic_mid_point_w_AGD(m, p1, p2);
     }
     if (ImGui::MenuItem("Laplacian smoothing"))
     {
@@ -562,9 +574,13 @@ static void curvature_creation(TrilateralMesh* m )
     }
     if (ImGui::MenuItem("Add new matching"))
     {
-        CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,quality_param ,hks_dif_param , distance_to_mid_param);
+        CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,quality_param ,hks_dif_param , distance_to_mid_param,closeness_param);
     }
-
+    if (ImGui::MenuItem("Display matching points midpoints"))
+    {
+        curves = CurvatureGeneration_generate_curve_paths(m);
+        is_draw_curves = true; 
+    }
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
@@ -640,6 +656,7 @@ static void draw_curves(TrilateralMesh* m)
     {
         for (size_t i = 0; i < curves.size(); i++)
         {
+            
             for (size_t j = 0; j < curves[i].curve_path.size() - 1; j++)
             {
                 int index_j = curves[i].curve_path[j];
@@ -647,8 +664,11 @@ static void draw_curves(TrilateralMesh* m)
                 /*DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[index_j]),
                     CoreType_conv_glm_raylib_vec3(m->vertices[index_j_1]), YELLOW);*/
                 DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index_j]),
-                    CoreType_conv_glm_raylib_vec3(m->vertices[index_j_1]), line_thickness_3d, line_thickness_3d, 8, YELLOW);
+                    CoreType_conv_glm_raylib_vec3(m->vertices[index_j_1]), line_thickness_3d, line_thickness_3d, 8, GREEN);
             }
+            //draw midpoints
+            unsigned int index = curves[i].curve_path[curves[i].curve_path.size()/2];
+            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01, RED);
         }
     }
     
@@ -709,10 +729,14 @@ static void draw_normals(TrilateralMesh* m)
             glm::vec3 p1(m->normals_display[i], m->normals_display[i +1], m->normals_display[i + 2]);
             glm::vec3 p2(m->normals_display[i + 6 ], m->normals_display[i + 7], m->normals_display[i + 8]);
             glm::vec3 dir = p2 - p1; 
-            dir = dir * 1e-2f;
+            dir = dir ;
             p2 = p1 + dir; 
-            DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(p2) 
+            glm::vec3 mid = (p2 + p1) / 2.0f;
+            DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(mid) 
+                , RED);
+            DrawLine3D(CoreType_conv_glm_raylib_vec3(mid), CoreType_conv_glm_raylib_vec3(p2)
                 , GREEN);
+
         }
     }
 }
@@ -726,8 +750,8 @@ static void draw_curvature(TrilateralMesh* m )
             {
                 unsigned int p1 = curvature.paths[i][j];
                 unsigned int p2 = curvature.paths[i][j + 1];
-                DrawLine3D(CoreType_conv_glm_raylib_vec3(m->vertices[p1]), CoreType_conv_glm_raylib_vec3(m->vertices[p2])
-                    , YELLOW);
+                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[p1]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[p2]), line_thickness_3d, line_thickness_3d, 8, YELLOW);
             }
         }
         for (size_t i = 0; i < curvature.curve_points.size(); i++)
@@ -751,6 +775,7 @@ static void draw_curvature(TrilateralMesh* m )
         DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[first]), CoreType_conv_glm_raylib_vec3(m->vertices[second]),
             line_thickness_3d, line_thickness_3d, 8,WHITE );
     }
+
 }
 static void draw_resemblance_pairs(TrilateralMesh* m )
 {

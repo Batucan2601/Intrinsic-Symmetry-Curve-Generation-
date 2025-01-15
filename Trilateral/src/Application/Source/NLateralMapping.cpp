@@ -30,10 +30,11 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	//m->calculate_sdf();
 	if (agd_point_indices.size() == 0)
 	{
-		agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, true);
+		float biggest_num = 0;
+		agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, avg_n_ring, false, biggest_num);
 		for (size_t i = 0; i < 3; i++)
 		{
-			agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, true);
+			agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, false);
 		}
 	}
 	
@@ -51,7 +52,7 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 	//descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
 	unsigned int mid_point_index = -1;
 	unsigned int mid_point_index_2 = -1;
-	CurvatureGeneration_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
+	Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
 	descs = NLateral_select_farthest_to_midpoint(m, agd_point_indices,5, mid_point_index, 10);
 
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
@@ -86,6 +87,8 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 			{
 				dif_area_arr[k] = Histogram_ChiSquareDistance(descs[i].area_histogram[k], descs[j].area_histogram[k]);
 				dif_hks_arr[k] = Histogram_ChiSquareDistance(descs[i].hks_histogram[k], descs[j].hks_histogram[k]);
+				dif_hks_arr[k] = 0; 
+				dif_area_arr[k] = VarianceMin_compare(m, descs[i], descs[j], true, 10, 1);
 			}
 			glm::vec3 dif_area_arr_vec = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]);
 			glm::vec3 dif_hks_arr_vec = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]);
@@ -316,32 +319,6 @@ std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(Tr
 }
 
 
-std::vector<NLateralDescriptor> NlateralMap_descriptor_generation(TrilateralMesh* m , float sweep_distance )
-{
-	std::vector<NLateralDescriptor> descs;
-	// 1 - sample points with agd and mgd
-	std::vector<unsigned int> point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, 1, true);
-	// coloring agd 
-	m->color_points(point_indices, GREEN);
-	for (size_t i = 0; i < 3; i++)
-	{
-		point_indices = Geodesic_min_dijkstra(m,  point_indices, sweep_distance, 0.7, true);
-	}
-
-	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
-	for (size_t i = 0; i < point_indices.size(); i++)
-	{
-		int index = point_indices[i];
-		m->raylib_mesh.colors[index * 4] = 0;
-		m->raylib_mesh.colors[index * 4 + 1] = 255;
-		m->raylib_mesh.colors[index * 4 + 2] = 255;
-		m->raylib_mesh.colors[index * 4 + 3] = 255;
-	}
-	m->update_raylib_mesh();
-	descs = NLateral_generate_closest_points(m, point_indices, 3, 10);
-	return descs;
-
-}
 
 
 
@@ -406,5 +383,113 @@ void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescr
 			new_pairs.push_back(std::make_pair(index, hist_values[0].second));
 		}
 	}
+
+
+
 	resemblance_pairs = new_pairs;
+}
+
+
+std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m , std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau
+,float fuziness , float distance_to_mid_param , float hks_dif_param , float closeness_param )
+{
+	std::vector<NLateralDescriptor> descs;
+	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
+	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	float biggest_dijkstra = -INFINITY;
+	if (agd_point_indices.size() == 0)
+	{
+		agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, 1, false, biggest_dijkstra);
+		for (size_t i = 0; i < 3; i++)
+		{
+			agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, false);
+		}
+	}
+
+	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
+	for (size_t i = 0; i < agd_point_indices.size(); i++)
+	{
+		int index = agd_point_indices[i];
+		m->raylib_mesh.colors[index * 4] = 0;
+		m->raylib_mesh.colors[index * 4 + 1] = 255;
+		m->raylib_mesh.colors[index * 4 + 2] = 0;
+		m->raylib_mesh.colors[index * 4 + 3] = 255;
+	}
+	int hist_size = 5;
+	//descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
+	unsigned int mid_point_index = -1;
+	unsigned int mid_point_index_2 = -1;
+	Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
+
+	//generate trilateral descriptors from midpoints
+	descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra);
+
+	std::vector<std::vector<float>> hist_diffs;
+	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
+	for (size_t i = 0; i < descs.size(); i++)
+	{
+		std::vector<float> hist_i;
+		for (size_t j = 0; j < 3; j++)
+		{
+			descs[i].area_histogram[j].normalize(1);
+			descs[i].hks_histogram[j].normalize(1);
+		}
+		for (size_t j = 0; j < descs.size(); j++)
+		{
+			if (i == j)
+			{
+				continue; 
+			}
+			for (size_t k = 0; k < 3; k++)
+			{
+				descs[j].area_histogram[k].normalize(1);
+				descs[j].hks_histogram[k].normalize(1);
+			}
+			float dif_area_arr[3] = { 0,0,0 };
+			float dif_hks_arr[3] = { 0,0,0 };
+			for (size_t k = 0; k < 3; k++)
+			{
+				dif_area_arr[k] = Histogram_ChiSquareDistance(descs[i].area_histogram[k], descs[j].area_histogram[k]);
+				dif_hks_arr[k] = Histogram_ChiSquareDistance(descs[i].hks_histogram[k], descs[j].hks_histogram[k]);
+			}
+			glm::vec3 dif_area_arr_vec = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]);
+			glm::vec3 dif_hks_arr_vec = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]);
+			float dif_area = glm::length(dif_area_arr_vec);
+			float dif_hks = glm::length(dif_hks_arr_vec);
+
+
+			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
+			//is_hks = NLateral_compare_HKS(m , descs[i] , descs[j] , hks_dif_param);
+			bool is_hks = hks_dif < hks_dif_param;
+
+			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
+			bool is_points_far_from_each_other = Nlateral_compare_closeness(m, descs[i], descs[j], mid_point_index, closeness_param, file);
+			//bool is_ratio = NLateral_compare_path_ratio(m, descs[i], descs[j], ratio_dif_param, file);
+			//file << " is depth " << is_depth << std::endl;
+			//file << " histogram diff " << hist_diffs[i][j] << std::endl;
+			if (is_hks && is_points_close_to_midpoint  && is_points_far_from_each_other) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
+			{
+				std::pair<float, std::pair<unsigned int, unsigned int>> res;
+				compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
+
+			}
+
+
+		}
+		hist_diffs.push_back(hist_i);
+	}
+	std::vector<bool> used(descs.size(), false);
+	std::sort(compare_results.begin(), compare_results.end());
+	// Greedily select pairs with smallest compare() result
+	for (const auto& entry : compare_results) {
+		int i = entry.second.first;
+		int j = entry.second.second;
+		if (!used[i] && !used[j]) {
+			resemblance_pairs.push_back({ descs[i].indices[0], descs[j].indices[0] });
+			used[i] = true;  // Mark these objects as used
+			//used[j] = true;  // Mark these objects as used
+		}
+	}
+	m->calculated_symmetry_pairs = resemblance_pairs;
+	return descs;
 }

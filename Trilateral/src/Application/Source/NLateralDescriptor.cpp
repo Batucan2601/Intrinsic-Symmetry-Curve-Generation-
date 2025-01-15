@@ -2555,20 +2555,158 @@ void Nlateral_display_histogram(TrilateralMesh* m, std::vector<NLateralDescripto
 {
 	NLateralDescriptor* d = &descs[descriptor_no];
 	ImGui::Begin("Histogram");
-	if (ImPlot::BeginPlot("Plot for point 1")) {
+	if (ImPlot::BeginPlot("Area Plot for point 1")) {
 		ImPlot::PlotBars("Area histogram", &(d->area_histogram[0].histogram[0]), d->area_histogram[0].size());
+		ImPlot::EndPlot();
+	}
+	if (ImPlot::BeginPlot("HKS Plot for point 1")) {
 		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[0].histogram[0]), d->hks_histogram[0].size());
 		ImPlot::EndPlot();
 	}
-	if (ImPlot::BeginPlot("Plot for point 2")) {
-		ImPlot::PlotBars("Area histogram",&(d->area_histogram[1].histogram[0]), d->area_histogram[1].size());
+	if (ImPlot::BeginPlot("Area Plot for point 2")) {
+		ImPlot::PlotBars("Area histogram", &(d->area_histogram[1].histogram[0]), d->area_histogram[1].size());
+		ImPlot::EndPlot();
+	}
+	if (ImPlot::BeginPlot("HKS Plot for point 2")) {
 		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[1].histogram[0]), d->hks_histogram[1].size());
 		ImPlot::EndPlot();
 	}
-	if (ImPlot::BeginPlot("Plot for point 1")) {
+	if (ImPlot::BeginPlot("Area Plot for point 3")) {
 		ImPlot::PlotBars("Area histogram", &(d->area_histogram[2].histogram[0]), d->area_histogram[2].size());
+		ImPlot::EndPlot();
+	}
+	if (ImPlot::BeginPlot("HKS Plot for point 3")) {
 		ImPlot::PlotBars("HKS histogram", &(d->hks_histogram[2].histogram[0]), d->hks_histogram[2].size());
 		ImPlot::EndPlot();
 	}
+
 	ImGui::End();
+}
+
+std::vector<NLateralDescriptor> NLateral_generate_with_midpoints(TrilateralMesh* m, std::vector<unsigned int> agd_point_indices, unsigned int mid_point_index, unsigned int mid_point_index_2
+, float fuziness, float longest_distance )
+{
+	std::vector<NLateralDescriptor> descs; 
+	for (size_t i = 0; i < agd_point_indices.size(); i++)
+	{
+		std::vector<unsigned int> nlateral_indices;
+		nlateral_indices.push_back(agd_point_indices[i]);
+		nlateral_indices.push_back(mid_point_index);
+		nlateral_indices.push_back(mid_point_index_2);
+
+
+		NLateralDescriptor desc;
+		desc = NLateral_generate_descriptor_w_midpoints(m, nlateral_indices, fuziness, longest_distance);
+
+		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
+		for (size_t i = 0; i < 3; i++)
+		{
+			desc.create_histogram_area(m, 10, i);
+		}
+		for (size_t i = 0; i < 3; i++)
+		{
+			desc.create_histogram_HKS(m, 10, i);
+		}
+		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
+		std::vector<float> distances_from0 = Geodesic_dijkstra(*m, desc.indices[0]);
+		desc.max_distance = -INFINITY; 
+		for (size_t j = 0; j < desc.vertices_inside.size(); j++)
+		{
+			int index = desc.vertices_inside[j];
+			if (distances_from0[index] > desc.max_distance)
+			{
+				desc.max_distance = distances_from0[index];
+			}
+		}
+		descs.push_back(desc);
+
+	}
+
+	return descs; 
+}
+
+
+NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices, float fuzziness, float biggest_dist)
+{
+
+	NLateralDescriptor desc;
+	int N = mesh_indices.size();
+
+	std::vector<std::vector<std::vector<int>>> paths(N, std::vector<std::vector<int>>(N));
+	desc.paths = paths;
+	//generate paths
+	for (size_t i = 0; i < N; i++)
+	{
+		for (size_t j = 0; j < N; j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			std::vector<int> path_i_j = Geodesic_between_two_points(*m, mesh_indices[i], mesh_indices[j]);
+			desc.paths[i][j] = path_i_j;
+		}
+	}
+
+	desc.indices = mesh_indices;
+
+	std::vector<std::pair<float, unsigned int>> points;
+	std::vector<bool> is_point_exist(m->vertices.size() , false );
+	//check visited vertices
+	desc.N = N;
+	for (size_t i = 0; i < desc.paths.size(); i++)
+	{
+		for (size_t j = 0; j < desc.paths[i].size(); j++)
+		{
+			for (size_t k = 0; k < desc.paths[i][j].size(); k++)
+			{
+				unsigned int index = desc.paths[i][j][k];
+				std::cout << " index" << index << std::endl;
+				//get the points
+				std::vector<float> distances = Geodesic_dijkstra(*m, index);
+				std::cout << " distances " << distances.size() << std::endl;
+				for (size_t t = 0; t < distances.size(); t++)
+				{
+					if (distances[t] / biggest_dist < fuzziness)
+					{
+						points.push_back(std::make_pair(distances[t], t));
+					}
+				}
+			}
+		}
+	}
+	std::vector<unsigned int> unique_points; 
+	//now we should make them unique
+	for (size_t i = 0; i < points.size(); i++)
+	{	
+		bool is_add = true; 
+		for (size_t j = 0; j < unique_points.size(); j++)
+		{
+			if (unique_points[j] == points[i].second)
+			{
+				is_add = false; 
+				break; 
+			}
+		}
+		if (is_add)
+		{
+			unique_points.push_back(points[i].second);
+			is_point_exist[points[i].second] = true; 
+		}
+
+	}
+	desc.vertices_inside = unique_points;
+
+
+	//get triangles
+	for (size_t i = 0; i < m->triangles.size(); i+=3)
+	{
+		if (is_point_exist[m->triangles[i]] || is_point_exist[m->triangles[i+1]] || is_point_exist[m->triangles[i+2]])
+		{
+			desc.triangles_inside.push_back(m->triangles[i]);
+			desc.triangles_inside.push_back(m->triangles[i + 1]);
+			desc.triangles_inside.push_back(m->triangles[i + 2]);
+		}
+	}
+	return desc;
 }

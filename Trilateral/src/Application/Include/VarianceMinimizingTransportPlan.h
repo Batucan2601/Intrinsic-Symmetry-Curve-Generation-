@@ -11,3 +11,4 @@ std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::
 	bool is_normalize, int division_no, int N_ring_no);
 std::vector<std::vector<float>> VarianceMin_compare_all(TrilateralMesh* m, std::vector<NLateralDescriptor>& descriptors,
 	bool is_normalize, int division_no, int N_ring_no);
+float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2, bool is_normalize, int division_no, int N_ring_no);
