@@ -134,7 +134,7 @@ void HKS_read_kernel_signature(TrilateralMesh* m , std::string& path )
 			m->normalized_heat_kernel_signature[i] += 1e-3; // dont make them 0 
 		}
 	}
-	for (size_t i = 0; i < m->vertices.size(); i++)
+	/*for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		glm::vec3 color = CoreType_getColor(m->normalized_heat_kernel_signature[i],0,1);
 		m->raylib_mesh.colors[i * 4] = color[0] * 255; 
@@ -142,7 +142,7 @@ void HKS_read_kernel_signature(TrilateralMesh* m , std::string& path )
 		m->raylib_mesh.colors[i * 4 + 2] = color[2] * 255 ; 
 		m->raylib_mesh.colors[i * 4 + 3] = 255; 
 	}
-	m->update_raylib_mesh();
+	m->update_raylib_mesh();*/
 	file.close();  // Close the file after reading
 	return;
 }

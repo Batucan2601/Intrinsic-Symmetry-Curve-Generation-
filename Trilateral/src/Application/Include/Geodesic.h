@@ -22,5 +22,7 @@ unsigned int Geodesic_find_midpoint(TrilateralMesh* m, unsigned int index1, unsi
 void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2);
 
 
+std::vector<unsigned int> conv_int_to_unsigned(std::vector<int> vec);
+std::vector<unsigned int> Geodesic_generate_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2);
 
-std::vector<unsigned int> Geodesic_sampling_w_midpoint(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2);
+bool Geodesic_path_intersection(TrilateralMesh* m, std::vector<unsigned int>& path1, std::vector<unsigned int>& path2, unsigned int& no_of_times);

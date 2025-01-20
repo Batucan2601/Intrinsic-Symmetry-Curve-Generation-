@@ -173,4 +173,4 @@ void Nlateral_read_matching_points(TrilateralMesh* m);
 NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices,float fuziness,float biggest_dist);
 
 std::vector<NLateralDescriptor>  NLateral_generate_with_midpoints(TrilateralMesh* m, std::vector<unsigned int> agd_point_indices, unsigned int mid_point_index, unsigned int mid_point_index_2
-	, float fuziness, float longest_distance);
+	, float fuziness, float longest_distance, int hist_no );

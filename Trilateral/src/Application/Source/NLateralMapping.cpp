@@ -391,21 +391,21 @@ void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescr
 
 
 std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m , std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau
-,float fuziness , float distance_to_mid_param , float hks_dif_param , float closeness_param )
+,float fuziness , float distance_to_mid_param , float hks_dif_param , float closeness_param , int hist_no , int min_agd_param)
 {
 	std::vector<NLateralDescriptor> descs;
 	std::vector<std::pair<float, std::pair<unsigned int, unsigned int> >> compare_results;
 	std::vector<std::pair<unsigned int, unsigned int>> resemblance_pairs;
+	std::vector<unsigned int> secondary_curve; 
 	float biggest_dijkstra = -INFINITY;
 	if (agd_point_indices.size() == 0)
 	{
 		agd_point_indices = Geodesic_avg_dijkstra_modified(m, sweep_distance, 1, false, biggest_dijkstra);
-		for (size_t i = 0; i < 3; i++)
+		for (size_t i = 0; i < min_agd_param; i++)
 		{
 			agd_point_indices = Geodesic_min_dijkstra(m, agd_point_indices, sweep_distance, min_geo_tau, false);
 		}
 	}
-
 	//point_indices = NLateral_sweepDistance(m, point_indices, sweep_distance);
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
@@ -419,10 +419,11 @@ std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(Trilatera
 	//descs = NLateral_generate_closest_points(m, agd_point_indices,  N, hist_size);
 	unsigned int mid_point_index = -1;
 	unsigned int mid_point_index_2 = -1;
-	Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
+	//Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2);
+	secondary_curve = Geodesic_generate_secondary_curve(m,mid_point_index , mid_point_index_2 );
 
 	//generate trilateral descriptors from midpoints
-	descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra);
+	descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra, hist_no);
 
 	std::vector<std::vector<float>> hist_diffs;
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
@@ -457,21 +458,34 @@ std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(Trilatera
 			float dif_area = glm::length(dif_area_arr_vec);
 			float dif_hks = glm::length(dif_hks_arr_vec);
 
+			file << " i " << i << " j " << j << std::endl;
+
+			float dif = VarianceMin_compare(m, descs[i], descs[j], true, hist_no, 1);
+			file << " dif " << dif << std::endl;
 
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
-			//is_hks = NLateral_compare_HKS(m , descs[i] , descs[j] , hks_dif_param);
 			bool is_hks = hks_dif < hks_dif_param;
 
 			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
 			bool is_points_far_from_each_other = Nlateral_compare_closeness(m, descs[i], descs[j], mid_point_index, closeness_param, file);
+
+			std::vector<unsigned int> path_i_j = conv_int_to_unsigned(Geodesic_between_two_points(*m, descs[i].indices[0], descs[j].indices[0]));
+			unsigned int no_of_hit = 0;
+			bool is_hit = Geodesic_path_intersection(m, secondary_curve, path_i_j, no_of_hit);
+			if (no_of_hit % 2 == 0)
+			{
+				is_hit = false; 
+			}
+			file <<  " no of hit to midpath " << no_of_hit << " is hit " << is_hit << std::endl;
+
 			//bool is_ratio = NLateral_compare_path_ratio(m, descs[i], descs[j], ratio_dif_param, file);
 			//file << " is depth " << is_depth << std::endl;
 			//file << " histogram diff " << hist_diffs[i][j] << std::endl;
-			if (is_hks && is_points_close_to_midpoint  && is_points_far_from_each_other) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
+			if (is_hks && is_points_close_to_midpoint  && is_points_far_from_each_other && !is_hit ) /* && is_hks  && is_gaussian && && is_points_close && is_area_dif*/
 			{
 				std::pair<float, std::pair<unsigned int, unsigned int>> res;
-				compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
-
+				//compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
+				compare_results.push_back(std::make_pair(dif, std::make_pair(i, j)));
 			}
 
 

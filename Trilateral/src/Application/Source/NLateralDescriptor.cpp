@@ -2584,7 +2584,7 @@ void Nlateral_display_histogram(TrilateralMesh* m, std::vector<NLateralDescripto
 }
 
 std::vector<NLateralDescriptor> NLateral_generate_with_midpoints(TrilateralMesh* m, std::vector<unsigned int> agd_point_indices, unsigned int mid_point_index, unsigned int mid_point_index_2
-, float fuziness, float longest_distance )
+, float fuziness, float longest_distance , int hist_no  )
 {
 	std::vector<NLateralDescriptor> descs; 
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
@@ -2601,11 +2601,11 @@ std::vector<NLateralDescriptor> NLateral_generate_with_midpoints(TrilateralMesh*
 		desc.n_ring_area = get_N_ring_area(m, desc.indices[0], 1);
 		for (size_t i = 0; i < 3; i++)
 		{
-			desc.create_histogram_area(m, 10, i);
+			desc.create_histogram_area(m, hist_no, i);
 		}
 		for (size_t i = 0; i < 3; i++)
 		{
-			desc.create_histogram_HKS(m, 10, i);
+			desc.create_histogram_HKS(m, hist_no, i);
 		}
 		desc.paths_ratio = NLateral_get_paths_ratio(m, desc);
 		std::vector<float> distances_from0 = Geodesic_dijkstra(*m, desc.indices[0]);
@@ -2650,7 +2650,12 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 
 	desc.indices = mesh_indices;
 
-	std::vector<std::pair<float, unsigned int>> points;
+	std::vector<std::pair<float, unsigned int>> points( m->vertices.size());
+	for (size_t i = 0; i < points.size(); i++)
+	{
+		points[i] = std::make_pair(-1, 0);
+	}
+
 	std::vector<bool> is_point_exist(m->vertices.size() , false );
 	//check visited vertices
 	desc.N = N;
@@ -2669,33 +2674,36 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 				{
 					if (distances[t] / biggest_dist < fuzziness)
 					{
-						points.push_back(std::make_pair(distances[t], t));
+						points[i] = std::make_pair(distances[t], t);
 					}
 				}
 			}
 		}
 	}
-	std::vector<unsigned int> unique_points; 
+	std::vector<unsigned int> removed_points; 
 	//now we should make them unique
 	for (size_t i = 0; i < points.size(); i++)
-	{	
-		bool is_add = true; 
-		for (size_t j = 0; j < unique_points.size(); j++)
-		{
-			if (unique_points[j] == points[i].second)
-			{
-				is_add = false; 
-				break; 
-			}
+	{
+		if(! (points[i].first > 0) )
+		{ 
+			removed_points.push_back(i);
 		}
-		if (is_add)
+		else
 		{
-			unique_points.push_back(points[i].second);
-			is_point_exist[points[i].second] = true; 
+			is_point_exist[points[i].second] = true;
 		}
 
 	}
-	desc.vertices_inside = unique_points;
+	for (size_t i = removed_points.size()-1; i > 0 ; i--)
+	{
+		int index = removed_points[i];
+		points.erase(points.begin() + index);
+	}
+	desc.vertices_inside.clear();
+	for (size_t i = 0; i < points.size(); i++)
+	{
+		desc.vertices_inside.push_back(points[i].second);
+	}
 
 
 	//get triangles

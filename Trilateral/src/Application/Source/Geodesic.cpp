@@ -846,20 +846,49 @@ void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int&
 	int N = m->vertices.size();
 	float smallest_val = INFINITY;
 	unsigned int smallest_index = -1;
+	/*std::vector<float> minimum_of_maximums;
 	for (size_t i = 0; i < N; i++)
 	{
 		std::vector<float> distances = Geodesic_dijkstra(*m, i);
 		float sum = 0;
+		float biggest = -INFINITY; 
 		for (size_t j = 0; j < N; j++)
 		{
 			sum += distances[j];
+			if (distances[j] > biggest)
+			{
+				biggest = distances[j];
+			}
 		}
 		if (sum < smallest_val)
 		{
 			smallest_val = sum;
 			smallest_index = i;
 		}
+
+		minimum_of_maximums.push_back(biggest);
+	} */
+	glm::vec3 p(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		p = p + m->vertices[i];
 	}
+	p /= m->vertices.size();
+	float closest = INFINITY; 
+	int closest_index = -1;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dist = glm::distance(m->vertices[i], p);
+		if (dist < closest)
+		{
+			closest = dist; 
+			closest_index = i; 
+		}
+	}
+	smallest_index = closest_index;
+	/*auto smallest_auto = std::min_element(minimum_of_maximums.begin(), minimum_of_maximums.end());
+	smallest_index = std::distance(minimum_of_maximums.begin(), smallest_auto);*/
+
 	// that is the smallest index 
 	//find the counterpart by using a ray
 	TrilateralRay ray;
@@ -868,6 +897,7 @@ void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int&
 	glm::vec3 vec2(m->normals_display[smallest_index * 12 + 6], m->normals_display[smallest_index * 12 + 7], m->normals_display[smallest_index * 12 + 8]);
 	glm::vec3 dir = vec2 - vec1;
 	dir = dir * -1.0f;
+	dir = glm::normalize(dir);
 	ray.direction = dir;
 	float smallest_dist = INFINITY;
 	unsigned int smallest_hit_index = -1;
@@ -905,59 +935,10 @@ void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int&
 		}
 
 	}
-
-	if (smallest_dist == INFINITY) // not hit
-	{
-		ray.direction = ray.direction * -1.0f;
-		for (size_t i = 0; i < m->triangles.size(); i += 3)
-		{
-			glm::vec3 hit_point;
-			int index1 = m->triangles[i];
-			int index2 = m->triangles[i + 1];
-			int index3 = m->triangles[i + 2];
-			bool is_hit = ray_triangle_intersection(ray, m->vertices[index1], m->vertices[index2], m->vertices[index3], hit_point);
-			bool is_same_point = (index1 == smallest_index) || (index2 == smallest_index) || (index3 == smallest_index);
-			if (is_hit && !is_same_point)
-			{
-				float dist = glm::distance(m->vertices[smallest_index], hit_point);
-				if (smallest_dist > dist)
-				{
-					dist = smallest_dist;
-					//get the closest dist on triangle 
-					float disti = glm::distance(hit_point, m->vertices[index1]);
-					float disti1 = glm::distance(hit_point, m->vertices[index2]);
-					float disti2 = glm::distance(hit_point, m->vertices[index3]);
-					if (disti < disti1 && disti < disti2)
-					{
-						smallest_hit_index = index1;
-					}
-					else if (disti1 < disti && disti1 < disti2)
-					{
-						smallest_hit_index = index2;
-					}
-					else
-					{
-						smallest_hit_index = index3;
-					}
-				}
-			}
-
-		}
-	}
-
 	p1 = smallest_index;
 	p2 = smallest_hit_index;
 }
-static std::vector<unsigned int> conv_int_to_unsigned(std::vector<int> vec)
-{
-	std::vector<unsigned int> u_vec;
-	for (size_t i = 0; i < vec.size(); i++)
-	{
-		u_vec.push_back(vec[i]);
-	}
-	return u_vec; 
-}
-std::vector<unsigned int> Geodesic_sampling_w_midpoint(TrilateralMesh* m, unsigned int& midpoint1 , unsigned int& midpoint2 )
+std::vector<unsigned int> Geodesic_generate_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1 , unsigned int& midpoint2 )
 {
 	//get the two midpoint 
 	Geodesic_mid_point_w_AGD(m,midpoint1,midpoint2);
@@ -1027,9 +1008,55 @@ std::vector<unsigned int> Geodesic_sampling_w_midpoint(TrilateralMesh* m, unsign
 
 	std::vector<unsigned int> path_m1_to_m = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint1, smallest_hit_index));
 	std::vector<unsigned int> path_m_to_m2 = conv_int_to_unsigned(Geodesic_between_two_points(*m, smallest_hit_index, midpoint2));
+
+	for (size_t i = path_m1_to_m.size()-1; i > 0; i--)
+	{
+		path.push_back(path_m1_to_m[i]);
+	}
+	for (size_t i = path_m_to_m2.size() - 1; i > 0; i--)
+	{
+		path.push_back(path_m_to_m2[i]);
+	}
 	m->color_points(path, YELLOW);
-	m->color_points(path_m1_to_m, YELLOW);
-	m->color_points(path_m_to_m2, YELLOW);
+
+	std::vector<unsigned int> midpoints = { midpoint1  };
+	m->color_points(midpoints, RED);
+	midpoints.clear();
+	midpoints.push_back(midpoint2);
+	m->color_points(midpoints, GREEN);
+	midpoints.clear();
+	midpoints.push_back(smallest_hit_index);
+	m->color_points(midpoints, BLUE);
 
 	return path;
+}
+
+bool Geodesic_path_intersection(TrilateralMesh* m, std::vector<unsigned int>& path1, std::vector<unsigned int>& path2, unsigned int& no_of_times)
+{
+	bool is_hit = false; 
+	no_of_times = 0; 
+	for (size_t i = 0; i < path1.size(); i++)
+	{
+		int index_i1 = path1[i];
+		for (size_t j = 0; j < path2.size(); j++)
+		{
+			int index_j1 = path2[j];
+			if (index_i1 == index_j1)
+			{
+				is_hit = true; 
+				no_of_times++; 
+			}
+		}
+	}
+	return is_hit; 
+}
+
+std::vector<unsigned int> conv_int_to_unsigned(std::vector<int> vec)
+{
+	std::vector<unsigned int> u_vec;
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		u_vec.push_back(vec[i]);
+	}
+	return u_vec;
 }

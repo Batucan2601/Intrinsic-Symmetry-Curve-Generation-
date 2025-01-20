@@ -4,38 +4,42 @@
 
 bool ray_triangle_intersection(TrilateralRay& ray, glm::vec3 vertex0, glm::vec3 vertex1, glm::vec3 vertex2, glm::vec3& hitpoint)
 {
-    glm::vec3 edge1, edge2, h, s, q;
-    float a, f, u, v;
+    const float EPSILON = 1e-6f; // Adjusted for better numerical precision
+    glm::vec3 edge1 = vertex1 - vertex0;
+    glm::vec3 edge2 = vertex2 - vertex0;
 
-    edge1 = vertex1 - vertex0;
-    edge2 = vertex2 - vertex0;
+    glm::vec3 h = glm::cross(ray.direction, edge2);
+    float a = glm::dot(edge1, h);
 
-    h = glm::cross(ray.direction, edge2);
-    a = glm::dot(edge1, h);
-
-    if (a > -0.00001 && a < 0.00001)
+    // Check if the ray is parallel to the triangle
+    if (std::abs(a) < EPSILON) {
         return false;
+    }
 
-    f = 1.0 / a;
-    s = ray.origin - vertex0;
-    u = f * glm::dot(s, h);
+    float f = 1.0f / a;
+    glm::vec3 s = ray.origin - vertex0;
+    float u = f * glm::dot(s, h);
 
-    if (u < 0.0 || u > 1.0)
+    // Check if the intersection is outside the triangle
+    if (u < 0.0f || u > 1.0f) {
         return false;
+    }
 
-    q = glm::cross(s, edge1);
-    v = f * glm::dot(ray.direction, q);
+    glm::vec3 q = glm::cross(s, edge1);
+    float v = f * glm::dot(ray.direction, q);
 
-    if (v < 0.0 || u + v > 1.0)
+    // Check if the intersection is outside the triangle
+    if (v < 0.0f || u + v > 1.0f) {
         return false;
+    }
 
+    // Calculate the distance to the intersection point
     float t = f * glm::dot(edge2, q);
-    if (t > 0) { // ray intersection
-        hitpoint.x = ray.origin.x + ray.direction.x * t;
-        hitpoint.y = ray.origin.y + ray.direction.y * t;
-        hitpoint.z = ray.origin.z + ray.direction.z * t;
+
+    if (t > EPSILON) { // Intersection exists in the positive ray direction
+        hitpoint = ray.origin + t * ray.direction;
         return true;
     }
 
-    return false;
+    return false; // Intersection behind the ray origin or too close
 }

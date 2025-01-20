@@ -36,7 +36,6 @@ int main(void)
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(1024, 768, " Trialteral");
-
     // build and compile our shader program
     //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.12.off");
     TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off");
@@ -55,7 +54,7 @@ int main(void)
     while (!WindowShouldClose())
     {
         BeginDrawing();
-            ClearBackground(LIGHTGRAY);
+            ClearBackground(WHITE);
             camera.update();
             BeginMode3D(camera.camera);
                 BeginShaderMode(shader);

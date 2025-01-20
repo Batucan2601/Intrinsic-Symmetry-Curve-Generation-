@@ -17,4 +17,4 @@ void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescr
 	unsigned int midpoint_2, unsigned int histogram_size);
 
 std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m, std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau,float fuziness
-, float distance_to_mid_param, float hks_dif_param, float closeness_param);
+, float distance_to_mid_param, float hks_dif_param, float closeness_param, int hist_no , int min_agd_param);

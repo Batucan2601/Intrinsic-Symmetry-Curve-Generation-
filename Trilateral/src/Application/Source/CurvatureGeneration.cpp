@@ -674,14 +674,14 @@ float hks_param , float quality_param)
 	}*/
 	CurvatureGeneration_curvature_quality(m, curv_back);
 
-	//Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
+	Curvature full_curvature = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, WHITE);
 	m->color_points(std::vector<unsigned int>{ midpoint_back }, WHITE);
 
 	
 
 
-	return curv_back;
+	return full_curvature;
 }
 // the quality is the measure of 
 // the following
@@ -869,12 +869,12 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 	build_curvature(m, curv_back);
 	//CurvatureGeneration_update_w_quality(m, curv_back, agd_indices, hks_param, quality_param);
 
-	//while(CurvatureGeneration_curve_smoothing(m, curv_front, quality_param)); 
-	//while(CurvatureGeneration_curve_smoothing(m, curv_back, quality_param)); 
+	while(CurvatureGeneration_curve_smoothing(m, curv_front, quality_param)); 
+	while(CurvatureGeneration_curve_smoothing(m, curv_back, quality_param)); 
 
 
-	//while (CurvatureGeneration_add_new_matching(m, curv_front, agd_indices, quality_param, hks_param, distance_param,closeness_param));
-	//while (CurvatureGeneration_add_new_matching(m, curv_back, agd_indices, quality_param, hks_param, distance_param, closeness_param));
+	while (CurvatureGeneration_add_new_matching(m, curv_front, agd_indices, quality_param, hks_param, distance_param,closeness_param));
+	while (CurvatureGeneration_add_new_matching(m, curv_back, agd_indices, quality_param, hks_param, distance_param, closeness_param));
 	
 	Curvature full_curv = connect_front_and_back(m, curv_front, curv_back);
 	m->color_points(std::vector<unsigned int>{ midpoint_front }, RED);
@@ -882,7 +882,7 @@ Curvature CurvatureGeneration_generate_full_curv(TrilateralMesh* m, std::vector<
 
 	m->color_points(std::vector<unsigned int>{ strong_list }, RED);
 
-	return curv_back;
+	return full_curv;
 }
 
 void CurvatureGeneration_laplacian_smoothing(TrilateralMesh* m, Curvature& c, float quality_param )

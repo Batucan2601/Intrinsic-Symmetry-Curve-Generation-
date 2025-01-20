@@ -100,6 +100,8 @@ int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
 float distance_to_mid_param = 0.7; 
 float sdf_param = 0.2;
+int hist_param = 5;
+int min_agd_param  = 3;
 std::vector<unsigned int> avg_dijk_indices;
 std::vector<unsigned int> min_dijk_indices;
 //curvature
@@ -355,6 +357,8 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputFloat("distance to mid point", &distance_to_mid_param);
         ImGui::InputFloat("sdf param ", &sdf_param);
         ImGui::InputFloat("fuzzy param ", &fuzzy_param);
+        ImGui::InputInt("hist no ", &hist_param);
+        ImGui::InputInt("min agd no ", &min_agd_param);
 
         ImGui::EndMenu();
     }
@@ -383,7 +387,7 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("generate descriptors with midpoint "))
     {
         nlateral_descriptors = NLateralMapping_generate_via_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
-        , distance_to_mid_param, hks_dif_param, closeness_param);
+        , distance_to_mid_param, hks_dif_param, closeness_param, hist_param , min_agd_param);
     }
 
     if (ImGui::BeginMenu("NLateral Descriptor"))
@@ -528,7 +532,7 @@ static void geodesic(TrilateralMesh* m)
     if(ImGui::MenuItem("Geodesic sampling via midpoints "))
     {
         unsigned int m1, m2;
-        Geodesic_sampling_w_midpoint(m, m1, m2);
+        Geodesic_generate_secondary_curve(m, m1, m2);
     }
 }
 static void curvature_creation(TrilateralMesh* m )
@@ -729,7 +733,7 @@ static void draw_normals(TrilateralMesh* m)
             glm::vec3 p1(m->normals_display[i], m->normals_display[i +1], m->normals_display[i + 2]);
             glm::vec3 p2(m->normals_display[i + 6 ], m->normals_display[i + 7], m->normals_display[i + 8]);
             glm::vec3 dir = p2 - p1; 
-            dir = dir ;
+            dir = dir  * 1e-2f;
             p2 = p1 + dir; 
             glm::vec3 mid = (p2 + p1) / 2.0f;
             DrawLine3D(CoreType_conv_glm_raylib_vec3(p1), CoreType_conv_glm_raylib_vec3(mid) 
