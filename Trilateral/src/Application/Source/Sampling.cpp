@@ -227,3 +227,72 @@ std::vector<unsigned int>  uniform_point_sampling(TrilateralMesh* m, int no_of_s
 	
 	return samples;
 }
+std::vector<unsigned int>  midpoint_sampling(TrilateralMesh* m, float no_of_samples_percentage , float& biggest,
+unsigned int mid1 , unsigned int mid2) //sampling from midpoint
+{
+	//get the mid points
+	unsigned int no_of_samples = m->vertices.size() * no_of_samples_percentage; 
+	std::vector<unsigned int> sampled_points = { mid1 , mid2  };
+	for (size_t i = 0; i < no_of_samples ; i++)
+	{
+		float max_distance = 0; 
+		int index = -1;
+		std::vector < std::vector<float>> distances_of_distances; 
+		for (size_t j = 0; j < sampled_points.size(); j++)
+		{
+			std::vector<float> distances = Geodesic_dijkstra(*m, sampled_points[j]);
+			distances_of_distances.push_back(distances);
+		}
+		std::vector<float> total_distances(m->vertices.size(), 0);
+		for (size_t j = 0; j < sampled_points.size(); j++)
+		{
+			for (size_t k = 0; k < m->vertices.size(); k++)
+			{
+				total_distances[k] += distances_of_distances[j][k];
+			}
+		}
+		unsigned int index_max_elem = sampled_points[0];
+		while (std::find(sampled_points.begin(), sampled_points.end(), index_max_elem) != sampled_points.end())
+		{
+			auto max_elem = std::max_element(total_distances.begin(), total_distances.end());
+			index_max_elem = std::distance(total_distances.begin(), max_elem);
+			total_distances.erase(total_distances.begin() + index_max_elem);
+		}
+
+		sampled_points.push_back(index_max_elem);
+	}
+
+	/*for (size_t i = 0; i < no_of_samples * 3; i++)
+	{
+		float max_distance = 0;
+		int index = -1;
+		std::vector < std::vector<float>> distances_of_distances;
+		for (size_t j = 0; j < sampled_points.size(); j++)
+		{
+			std::vector<float> distances = Geodesic_dijkstra(*m, sampled_points[j]);
+			distances_of_distances.push_back(distances);
+		}
+		std::vector<float> total_distances(m->vertices.size(), 0);
+		for (size_t j = 0; j < sampled_points.size(); j++)
+		{
+			for (size_t k = 0; k < m->vertices.size(); k++)
+			{
+				total_distances[k] += distances_of_distances[j][k];
+			}
+		}
+
+		unsigned int index_min_elem = sampled_points[0];
+		while (std::find(sampled_points.begin(), sampled_points.end(), index_min_elem) != sampled_points.end())
+		{
+			auto min_elem = std::max_element(total_distances.begin(), total_distances.end());
+			index_min_elem = std::distance(total_distances.begin(), min_elem);
+			total_distances.erase(total_distances.begin() + index_min_elem);
+		}
+		sampled_points.push_back(index_min_elem);
+	}*/
+
+	//get another for minimum
+	m->color_points(sampled_points, GREEN);
+	return sampled_points;
+
+}

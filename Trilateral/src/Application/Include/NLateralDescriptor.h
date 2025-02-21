@@ -162,15 +162,34 @@ bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor
 	float distances_from_mid, float distances_between_desc , std::ofstream& file);
 bool Nlateral_compare_closeness(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpointIndex
 	, float closeness_param, std::ofstream& file);
+bool Nlateral_compare_closest_AGD(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<unsigned int>& agd_vertices,
+std::ofstream& file);
+bool  NLateral_compare_divergence(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2 , unsigned int mid , unsigned int mid_inv, std::ofstream& file );
+bool NLateral_check_parameters(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2,
+	unsigned int midpoint_index, float hks_param, float distance_to_midpoint_param, float closeness_param, std::vector<unsigned int> original_agd_vertices);
+
 bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_param);
 std::vector<NLateralDescriptor> NLateral_select_farthest_to_midpoint(TrilateralMesh* m, std::vector<unsigned int>& indices,
 	int no_of_points, unsigned int smallest_agd_index, int histogram_size);
 
 void NLateral_calculate_fuzzyGeodesics(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs);
-void Nlateral_write_matching_points(TrilateralMesh* m);
-void Nlateral_read_matching_points(TrilateralMesh* m);
+void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor>& descs);
+void Nlateral_read_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor>& descs);
 
 NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices,float fuziness,float biggest_dist);
 
 std::vector<NLateralDescriptor>  NLateral_generate_with_midpoints(TrilateralMesh* m, std::vector<unsigned int> agd_point_indices, unsigned int mid_point_index, unsigned int mid_point_index_2
 	, float fuziness, float longest_distance, int hist_no );
+
+bool NLateral_compare_voronoi(TrilateralMesh* m, NLateralDescriptor& descs1, NLateralDescriptor& descs2,unsigned int mid_point_index, float dist_param , std::ofstream&file);
+std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2);
+std::vector<unsigned int> NLateral_show_voronoi_midpoints(TrilateralMesh* m);
+std::vector<unsigned int> NLateral_generate_voronoi_curve(TrilateralMesh* m, std::vector<unsigned int> unconnected_voronoi_set, bool is_color);
+
+bool NLateral_check_far_away(TrilateralMesh* m, NLateralDescriptor& descs1, NLateralDescriptor& descs2, float far_away_param);
+glm::vec3 NLateral_get_pca_of_points(TrilateralMesh* m, std::vector<unsigned int>& voronoi_set);
+
+bool NLateral_compare_distance_to_midpoint_reverse(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
+	, unsigned int midpoint_index_2, float distance_to_mid_param, std::ofstream& file);
+
+float NLateral_get_voronoi_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float voronoi_param);

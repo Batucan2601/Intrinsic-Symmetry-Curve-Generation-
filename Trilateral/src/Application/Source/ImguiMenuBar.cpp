@@ -67,6 +67,8 @@ static bool is_draw_curves = false;
 static float agd_sphere_radius = 1; 
 static float line_thickness_3d = 0.01; 
 static int descriptor_no = 0;
+static int descriptor_no_voronoi1 = 0;
+static int descriptor_no_voronoi2 = 0;
 static Plane plane;
 static Skeleton skeleton;
 static BackBone backbone;
@@ -76,6 +78,8 @@ static std::vector<Curve> curves;
 static int dvorak_no_of_significant_points = 0;
 static int no_of_dist_points = 0;
 static float dvorak_geodesic_dist_param = 0;
+static float max_geodesic_param = 0;
+static float longest_distance = 0;
 static int mesh_index = 0;
 std::vector<TrilateralDescriptor> positive_desc; 
 std::vector<TrilateralDescriptor> negative_desc; 
@@ -99,11 +103,14 @@ float min_geo_tau = 0.7;
 int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
 float distance_to_mid_param = 0.7; 
+float voronoi_param =  1e-2; 
 float sdf_param = 0.2;
 int hist_param = 5;
 int min_agd_param  = 3;
+std::vector<unsigned int> original_agd_vertices; 
 std::vector<unsigned int> avg_dijk_indices;
 std::vector<unsigned int> min_dijk_indices;
+std::vector<unsigned int> voronoi_set; 
 //curvature
 float quality_param = 0.7; 
 int curv_point_index = 0;
@@ -377,19 +384,21 @@ static void Nlateral_functions(TrilateralMesh* m)
         nlateral_descriptors = NlateralMap_point_matching_with_FPS_and_endpoints(m, skeleton, dvorak_no_of_significant_points,
             dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, skel_depth_param, proximity_param, N);
     }*/
-    if (ImGui::MenuItem("avg min geo sampling with sym plane "))
-    {
-        nlateral_descriptors = NlateralMap_point_matching_w_average_geodesic(m, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param,  closeness_param,
-           area_dif_param, min_geo_tau,avg_geo_N_ring,
-            distance_to_mid_param,sdf_param , N, avg_dijk_indices);
-    }
     if (ImGui::MenuItem("generate descriptors with midpoint "))
     {
         nlateral_descriptors = NLateralMapping_generate_via_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
-        , distance_to_mid_param, hks_dif_param, closeness_param, hist_param , min_agd_param);
+        , distance_to_mid_param, hks_dif_param, closeness_param,sdf_param, hist_param , min_agd_param, longest_distance, original_agd_vertices,
+            voronoi_param);
     }
-
+    if (ImGui::MenuItem("get extra matches with curvature "))
+    {
+       // NLateralMapping_get_new_matchings(m, curvature, nlateral_descriptors , distance_to_mid_param , sdf_param , hks_dif_param , hist_param);
+       NLateralMapping_get_new_matchings(m, curvature, nlateral_descriptors , distance_to_mid_param , hks_dif_param );
+    }
+    if (ImGui::MenuItem("Color distance from unmathced "))
+    {
+        NLateralMapping_get_unmathced_areas(m, curvature, 0.1 , true);
+    }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
         if (ImGui::MenuItem("Save nlateral descriptors"))
@@ -419,20 +428,36 @@ static void Nlateral_functions(TrilateralMesh* m)
         }
         if (ImGui::MenuItem("Write matching points"))
         {
-            Nlateral_write_matching_points(m);
+            Nlateral_write_matching_points(m , nlateral_descriptors);
         }
         if (ImGui::MenuItem("Read matching points"))
         {
-            Nlateral_read_matching_points(m);
+            Nlateral_read_matching_points(m, nlateral_descriptors);
         }
         ImGui::EndMenu();
 
     }
-    if (ImGui::MenuItem("Backbone generation with Nlaterla descriptors"))
+    if (ImGui::BeginMenu("Voronoi test"))
     {
-        std::vector<unsigned int > best_left;
-        std::vector<unsigned int > best_right;
-        skeleton_params = skeleton_generate_backbone_w_NLateral(m, skeleton,backbone,best_left,best_right, nlateral_descriptors);
+        if (ImGui::InputInt("descriptor 1 no ", &descriptor_no_voronoi1))
+        {
+        }
+        if (ImGui::InputInt("descriptor 2 no ", &descriptor_no_voronoi2))
+        {
+        }
+        if (ImGui::MenuItem("show voronoi"))
+        {
+            voronoi_set = NLateral_show_voronoi(m, nlateral_descriptors[descriptor_no_voronoi1], nlateral_descriptors[descriptor_no_voronoi2]);
+        }
+        if (ImGui::MenuItem("Voronoi of midpoints"))
+        {
+            voronoi_set = NLateral_show_voronoi_midpoints(m);
+        }
+        if (ImGui::MenuItem("show connected voronoi set "))
+        {
+            NLateral_generate_voronoi_curve(m, voronoi_set, true);
+        }
+        ImGui::EndMenu();
     }
   
 }
@@ -499,6 +524,7 @@ static void geodesic(TrilateralMesh* m)
 {
     ImGui::InputInt("No of points" , &no_of_dist_points);
     ImGui::InputFloat("Sweep distance" , &dvorak_geodesic_dist_param);
+    ImGui::InputFloat("max geodesic param" , &max_geodesic_param);
     if (ImGui::MenuItem("average geodesic Function"))
     {
         avg_dijk_indices = Geodesic_avg_dijkstra(m, no_of_dist_points, dvorak_geodesic_dist_param, avg_geo_N_ring, true);
@@ -519,7 +545,7 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("Biggest Geodesics "))
     {
-        avg_dijk_indices = Geodesic_find_biggest_AGD(m, dvorak_geodesic_dist_param, 100 );
+        avg_dijk_indices = Geodesic_find_biggest_AGD(m, dvorak_geodesic_dist_param, max_geodesic_param);
     }
     if (ImGui::MenuItem("Write Sampled points "))
     {
@@ -529,12 +555,36 @@ static void geodesic(TrilateralMesh* m)
     {
         Geodesic_read_sampled_points(m, avg_dijk_indices);
     }
-    if(ImGui::MenuItem("Geodesic sampling via midpoints "))
+    if (ImGui::MenuItem("FPS with midpoint sampling"))
+    {
+        float biggest; 
+        unsigned int mid1, mid2; 
+        avg_dijk_indices = midpoint_sampling(m,0.01 ,biggest,mid1 , mid2);
+    }
+    if(ImGui::MenuItem("Geodesic crete curve with midpoints "))
     {
         unsigned int m1, m2;
-        Geodesic_generate_secondary_curve(m, m1, m2);
+        Geodesic_generate_secondary_curve_w_midpoints(m, m1, m2);
+    }
+    if (ImGui::MenuItem("Generate multiple curves "))
+    {
+        unsigned int m1, m2;
+        Geodesic_generate_multiple_secondary_curve(m, m1, m2);
+    }
+    static int path_p1;
+    static int path_p2;
+    ImGui::InputInt("point 1 ", &path_p1);
+    ImGui::InputInt("point 2 ", &path_p2);
+    if (ImGui::MenuItem("Show path "))
+    {
+        Geodesic_color_path(m , path_p1, path_p2);
+    }
+    if (ImGui::MenuItem("Color according to midpoints"))
+    {
+        Geodesic_color_according_to_midpoints(m);
     }
 }
+
 static void curvature_creation(TrilateralMesh* m )
 {
     ImGui::InputFloat(" normal degree dif", &quality_param);
@@ -546,16 +596,26 @@ static void curvature_creation(TrilateralMesh* m )
     }
     if (ImGui::MenuItem(" Create curvature full with updates "))
     {
-        curvature  =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param, distance_to_mid_param,closeness_param);
+        curvature_front_and_back =  CurvatureGeneration_generate_full_curv(m, avg_dijk_indices, hks_dif_param, quality_param, distance_to_mid_param
+        ,closeness_param,fuzzy_param ,longest_distance, original_agd_vertices);
         is_draw_curvature = true; 
+    }
+    if (ImGui::MenuItem(" Color each side "))
+    {
+        Curvature_color_sides(m, curvature);
     }
     if (ImGui::MenuItem(" curvature update once  "))
     {
-        CurvatureGeneration_update(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
+        CurvatureGeneration_update(m, curvature_front_and_back.first, avg_dijk_indices, hks_dif_param, quality_param);
+    }
+    if (ImGui::MenuItem(" get new curve point with PCA "))
+    {
+        curvature = CurvatureGeneration_move_PCA_and_connect(m, curvature_front_and_back.first,
+        curvature_front_and_back.second);
     }
     if (ImGui::MenuItem(" curvature update multiple times  "))
     {
-        CurvatureGeneration_update_w_quality(m, curvature, avg_dijk_indices, hks_dif_param, quality_param);
+        CurvatureGeneration_update_w_quality(m, curvature_front_and_back.first, avg_dijk_indices, hks_dif_param, quality_param);
     }
     ImGui::InputInt(" point index", &curv_point_index );
     if (ImGui::MenuItem(" Show point with index "))
@@ -566,25 +626,40 @@ static void curvature_creation(TrilateralMesh* m )
     {
         unsigned int p1; 
         unsigned int p2; 
-        Geodesic_mid_point_w_AGD(m, p1, p2);
+        float biggest;
+        Geodesic_mid_point_w_AGD(m, p1, p2,biggest);
     }
     if (ImGui::MenuItem("Laplacian smoothing"))
     {
         CurvatureGeneration_laplacian_smoothing(m, curvature, quality_param);
     }
-    if (ImGui::MenuItem("Curve smoothing"))
+    if (ImGui::MenuItem("Curve smoothing single "))
     {
         CurvatureGeneration_curve_smoothing(m, curvature, quality_param);
     }
+    if (ImGui::MenuItem("Curve smooth all "))
+    {
+        while(CurvatureGeneration_curve_smoothing(m, curvature, quality_param));
+    }
     if (ImGui::MenuItem("Add new matching"))
     {
-        CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,quality_param ,hks_dif_param , distance_to_mid_param,closeness_param);
+        CurvatureGeneration_add_new_matching( m, curvature,avg_dijk_indices,curvature.midpoint_index,curvature.midpoint_inv_index, 
+        quality_param ,hks_dif_param , distance_to_mid_param,sdf_param,fuzzy_param,longest_distance ,original_agd_vertices);
     }
     if (ImGui::MenuItem("Display matching points midpoints"))
     {
         curves = CurvatureGeneration_generate_curve_paths(m);
         is_draw_curves = true; 
     }
+    if (ImGui::MenuItem("Curve prune front"))
+    {
+        curve_prune(m, curvature, true, false);
+    }
+    if (ImGui::MenuItem("Curve prune back"))
+    {
+        curve_prune(m, curvature, false, true);
+    }
+
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;
@@ -748,26 +823,49 @@ static void draw_curvature(TrilateralMesh* m )
 {
     if (is_draw_curvature)
     {
+       
+
+
+        for (size_t i = 0; i < curvature_front_and_back.first.paths.size(); i++)
+        {
+            curvature_front_and_back.first;
+            for (size_t j = 0; j < curvature_front_and_back.first.paths[i].size() - 1; j++)
+            {
+                unsigned int p1 = curvature_front_and_back.first.paths[i][j];
+                unsigned int p2 = curvature_front_and_back.first.paths[i][j + 1];
+                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[p1]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[p2]), line_thickness_3d, line_thickness_3d, 8, YELLOW);
+            }
+        }
+        for (size_t i = 0; i < curvature_front_and_back.second.paths.size(); i++)
+        {
+            for (size_t j = 0; j < curvature_front_and_back.second.paths[i].size() - 1; j++)
+            {
+                unsigned int p1 = curvature_front_and_back.second.paths[i][j];
+                unsigned int p2 = curvature_front_and_back.second.paths[i][j + 1];
+                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[p1]),
+                    CoreType_conv_glm_raylib_vec3(m->vertices[p2]), line_thickness_3d, line_thickness_3d, 8, YELLOW);
+            }
+        }
+
         for (size_t i = 0; i < curvature.paths.size(); i++)
         {
-            for (size_t j = 0; j < curvature.paths[i].size()-1; j++)
+            for (size_t j = 0; j < curvature.paths[i].size() - 1; j++)
             {
                 unsigned int p1 = curvature.paths[i][j];
                 unsigned int p2 = curvature.paths[i][j + 1];
                 DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[p1]),
-                    CoreType_conv_glm_raylib_vec3(m->vertices[p2]), line_thickness_3d, line_thickness_3d, 8, YELLOW);
+                    CoreType_conv_glm_raylib_vec3(m->vertices[p2]), line_thickness_3d, line_thickness_3d, 8, RED);
             }
         }
         for (size_t i = 0; i < curvature.curve_points.size(); i++)
         {
             int index = curvature.curve_points[i].mid_point;
-            Color c = RED; 
-            c.r = c.r - (curvature.curve_points.size() * 255.0 / i );
-            c.b = c.b + (curvature.curve_points.size() * 255.0 / i );
-            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01 , c );
+            Color c = RED;
+            c.r = c.r - (curvature.curve_points.size() * 255.0 / i);
+            c.b = c.b + (curvature.curve_points.size() * 255.0 / i);
+            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), 0.01, c);
         }
-
-
  
     }
     if (is_draw_curvature_index)

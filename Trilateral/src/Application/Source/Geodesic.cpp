@@ -5,6 +5,9 @@
 #include "../Include/CoreTypeDefs.h"
 #include "raylib.h"
 #include "../Include/Ray.h"
+#include <stack>
+#include <random>
+#include "../Include/Sampling.h"
 // Function to find n-ring neighbors for a specific point
 static std::vector<unsigned int> findNRingNeighbors(TrilateralMesh* m, int startPointId, int n) {
 	std::unordered_set<int> visited; // Track visited points
@@ -764,7 +767,7 @@ void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& 
 }
 
 
-std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float sweep_percentage , int sample_size )
+std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float sweep_percentage , float stop_param  )
 {
 	std::vector<unsigned int> biggest_agd_indices; 
 	int vertex_size = m->vertices.size();
@@ -792,12 +795,16 @@ std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float swe
 		}
 	}
 
-	for (size_t i = 0; i < sample_size; i++)
+	//while( true )
+	for (size_t i = 0; i < stop_param; i++)
 	{
 		auto max_auto= std::max_element(avg_geodesic_distances.begin(), avg_geodesic_distances.end());
 		int max_index = std::distance(avg_geodesic_distances.begin() , max_auto);
 		float max_val = *max_auto;
-
+		/*if (max_val < (biggest * stop_param))
+		{
+			break; 
+		}*/
 		std::vector<float> distances = Geodesic_dijkstra(*m , max_index);
 		bool is_new_point_added = true; 
 		for (size_t j = 0; j < biggest_agd_indices.size(); j++)
@@ -840,13 +847,13 @@ unsigned int Geodesic_find_midpoint(TrilateralMesh* m, unsigned int index1, unsi
 	}
 }
 
-void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2)
+void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2, float& biggest_dijkstra)
 {
 	//find agd for all
 	int N = m->vertices.size();
 	float smallest_val = INFINITY;
 	unsigned int smallest_index = -1;
-	/*std::vector<float> minimum_of_maximums;
+	std::vector<float> minimum_of_maximums;
 	for (size_t i = 0; i < N; i++)
 	{
 		std::vector<float> distances = Geodesic_dijkstra(*m, i);
@@ -867,8 +874,10 @@ void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int&
 		}
 
 		minimum_of_maximums.push_back(biggest);
-	} */
-	glm::vec3 p(0, 0, 0);
+	} 
+	auto smallest_auto = std::min_element(minimum_of_maximums.begin(), minimum_of_maximums.end());
+	smallest_index = std::distance(minimum_of_maximums.begin(), smallest_auto);
+	/*glm::vec3 p(0, 0, 0);
 	for (size_t i = 0; i < m->vertices.size(); i++)
 	{
 		p = p + m->vertices[i];
@@ -885,150 +894,43 @@ void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int&
 			closest_index = i; 
 		}
 	}
-	smallest_index = closest_index;
-	/*auto smallest_auto = std::min_element(minimum_of_maximums.begin(), minimum_of_maximums.end());
-	smallest_index = std::distance(minimum_of_maximums.begin(), smallest_auto);*/
-
+	smallest_index = closest_index;*/
+	auto best_biggest = std::max_element(minimum_of_maximums.begin(), minimum_of_maximums.end());
+	biggest_dijkstra = *best_biggest;
 	// that is the smallest index 
 	//find the counterpart by using a ray
-	TrilateralRay ray;
-	ray.origin = m->vertices[smallest_index];
-	glm::vec3 vec1(m->normals_display[smallest_index * 12], m->normals_display[smallest_index * 12 + 1], m->normals_display[smallest_index * 12 + 2]);
-	glm::vec3 vec2(m->normals_display[smallest_index * 12 + 6], m->normals_display[smallest_index * 12 + 7], m->normals_display[smallest_index * 12 + 8]);
-	glm::vec3 dir = vec2 - vec1;
-	dir = dir * -1.0f;
-	dir = glm::normalize(dir);
-	ray.direction = dir;
-	float smallest_dist = INFINITY;
-	unsigned int smallest_hit_index = -1;
-	for (size_t i = 0; i < m->triangles.size(); i += 3)
-	{
-		glm::vec3 hit_point;
-		int index1 = m->triangles[i];
-		int index2 = m->triangles[i + 1];
-		int index3 = m->triangles[i + 2];
-		bool is_hit = ray_triangle_intersection(ray, m->vertices[index1], m->vertices[index2], m->vertices[index3], hit_point);
-		bool is_same_point = (index1 == smallest_index) || (index2 == smallest_index) || (index3 == smallest_index);
-		if (is_hit && !is_same_point)
-		{
-			float dist = glm::distance(m->vertices[smallest_index], hit_point);
-			if (smallest_dist > dist)
-			{
-				dist = smallest_dist;
-				//get the closest dist on triangle 
-				float disti = glm::distance(hit_point, m->vertices[index1]);
-				float disti1 = glm::distance(hit_point, m->vertices[index2]);
-				float disti2 = glm::distance(hit_point, m->vertices[index3]);
-				if (disti < disti1 && disti < disti2)
-				{
-					smallest_hit_index = index1;
-				}
-				else if (disti1 < disti && disti1 < disti2)
-				{
-					smallest_hit_index = index2;
-				}
-				else
-				{
-					smallest_hit_index = index3;
-				}
-			}
-		}
-
-	}
+	p2 = Geodesic_send_ray_get_counterpart(m, smallest_index);
 	p1 = smallest_index;
-	p2 = smallest_hit_index;
+
+	std::vector<unsigned int> mid_points = {p1,p2};
+	m->color_points(mid_points, BLACK);
 }
-std::vector<unsigned int> Geodesic_generate_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1 , unsigned int& midpoint2 )
+std::vector<unsigned int> Geodesic_generate_secondary_curve_w_midpoints(TrilateralMesh* m, unsigned int& midpoint1 , unsigned int& midpoint2 )
 {
-	//get the two midpoint 
-	Geodesic_mid_point_w_AGD(m,midpoint1,midpoint2);
-	std::vector<unsigned int> path = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint1, midpoint2));
-	unsigned int midpoint_of_midpoints; 
-	float total_length = 0;
-	for (size_t i = 0; i < path.size()-1; i++)
+	float biggest; 
+	Geodesic_mid_point_w_AGD(m, midpoint1, midpoint2, biggest);
+	std::vector<unsigned int> points = midpoint_sampling(m, 0.02,biggest,midpoint1 , midpoint2);
+	
+	std::vector<float> distances_from_midpoint = Geodesic_dijkstra(*m, midpoint1);
+
+	std::vector<std::pair<float,int> > points_curvature; 
+	for (size_t i = 0; i < points.size(); i++)
 	{
-		total_length += glm::distance(m->vertices[path[i]] , m->vertices[path[i+1]]);
-	}
-	float half_length = 0;
-	for (size_t i = 0; i < path.size() - 1; i++)
-	{
-		half_length += glm::distance(m->vertices[path[i]], m->vertices[path[i + 1]]);
-		if (half_length >= total_length / 2)
+		float dist_from_mid = distances_from_midpoint[i];
+		if (dist_from_mid / biggest < 0.4)
 		{
-			midpoint_of_midpoints = path[i];
-			break;
+			points_curvature.push_back(std::make_pair( dist_from_mid, points[i] ) );
 		}
 	}
-	//cast a ray from that point
-	// that is the smallest index 
-	//find the counterpart by using a ray
-	TrilateralRay ray;
-	ray.origin = m->vertices[midpoint_of_midpoints];
-	glm::vec3 vec1(m->normals_display[midpoint_of_midpoints * 12], m->normals_display[midpoint_of_midpoints * 12 + 1], m->normals_display[midpoint_of_midpoints * 12 + 2]);
-	glm::vec3 vec2(m->normals_display[midpoint_of_midpoints * 12 + 6], m->normals_display[midpoint_of_midpoints * 12 + 7], m->normals_display[midpoint_of_midpoints * 12 + 8]);
-	glm::vec3 dir = vec2 - vec1;
-	dir = dir * -1.0f;
-	ray.direction = dir;
-	float smallest_dist = INFINITY;
-	unsigned int smallest_hit_index = -1;
-	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	std::vector<unsigned int> paths; 
+	std::sort(points_curvature.begin(), points_curvature.end());
+	for (size_t i = 0; i < points_curvature.size()-1; i++)
 	{
-		glm::vec3 hit_point;
-		int index1 = m->triangles[i];
-		int index2 = m->triangles[i + 1];
-		int index3 = m->triangles[i + 2];
-		bool is_hit = ray_triangle_intersection(ray, m->vertices[index1], m->vertices[index2], m->vertices[index3], hit_point);
-		bool is_same_point = (index1 == midpoint_of_midpoints) || (index2 == midpoint_of_midpoints) || (index3 == midpoint_of_midpoints);
-		if (is_hit && !is_same_point)
-		{
-			float dist = glm::distance(m->vertices[midpoint_of_midpoints], hit_point);
-			if (smallest_dist > dist)
-			{
-				dist = smallest_dist;
-				//get the closest dist on triangle 
-				float disti = glm::distance(hit_point, m->vertices[index1]);
-				float disti1 = glm::distance(hit_point, m->vertices[index2]);
-				float disti2 = glm::distance(hit_point, m->vertices[index3]);
-				if (disti < disti1 && disti < disti2)
-				{
-					smallest_hit_index = index1;
-				}
-				else if (disti1 < disti && disti1 < disti2)
-				{
-					smallest_hit_index = index2;
-				}
-				else
-				{
-					smallest_hit_index = index3;
-				}
-			}
-		}
-
+		std::vector<int> path = Geodesic_between_two_points(*m, points_curvature[i].second, points_curvature[i + 1].second);
+		paths.insert(paths.end(), path.begin(), path.end());
 	}
-
-	std::vector<unsigned int> path_m1_to_m = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint1, smallest_hit_index));
-	std::vector<unsigned int> path_m_to_m2 = conv_int_to_unsigned(Geodesic_between_two_points(*m, smallest_hit_index, midpoint2));
-
-	for (size_t i = path_m1_to_m.size()-1; i > 0; i--)
-	{
-		path.push_back(path_m1_to_m[i]);
-	}
-	for (size_t i = path_m_to_m2.size() - 1; i > 0; i--)
-	{
-		path.push_back(path_m_to_m2[i]);
-	}
-	m->color_points(path, YELLOW);
-
-	std::vector<unsigned int> midpoints = { midpoint1  };
-	m->color_points(midpoints, RED);
-	midpoints.clear();
-	midpoints.push_back(midpoint2);
-	m->color_points(midpoints, GREEN);
-	midpoints.clear();
-	midpoints.push_back(smallest_hit_index);
-	m->color_points(midpoints, BLUE);
-
-	return path;
+	//m->color_points(paths, YELLOW);
+	return paths;
 }
 
 bool Geodesic_path_intersection(TrilateralMesh* m, std::vector<unsigned int>& path1, std::vector<unsigned int>& path2, unsigned int& no_of_times)
@@ -1059,4 +961,222 @@ std::vector<unsigned int> conv_int_to_unsigned(std::vector<int> vec)
 		u_vec.push_back(vec[i]);
 	}
 	return u_vec;
+}
+
+// give the first point and fect the second 
+std::vector<unsigned int> Geodesic_generate_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2)
+{
+	midpoint2 = Geodesic_send_ray_get_counterpart(m, midpoint1);
+	std::vector<unsigned int> path = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint1, midpoint2));
+	unsigned int midpoint_of_midpoints;
+	float total_length = 0;
+	for (size_t i = 0; i < path.size() - 1; i++)
+	{
+		total_length += glm::distance(m->vertices[path[i]], m->vertices[path[i + 1]]);
+	}
+	float half_length = 0;
+	for (size_t i = 0; i < path.size() - 1; i++)
+	{
+		half_length += glm::distance(m->vertices[path[i]], m->vertices[path[i + 1]]);
+		if (half_length >= total_length / 2)
+		{
+			midpoint_of_midpoints = path[i];
+			break;
+		}
+	}
+	unsigned int midpoint_of_midpoint_2 = Geodesic_send_ray_get_counterpart(m, midpoint_of_midpoints);
+	std::vector<unsigned int> path_m1_to_m = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint1, midpoint_of_midpoint_2));
+	std::vector<unsigned int> path_m_to_m2 = conv_int_to_unsigned(Geodesic_between_two_points(*m, midpoint_of_midpoint_2, midpoint2));
+
+	for (size_t i = path_m1_to_m.size() - 1; i > 0; i--)
+	{
+		path.push_back(path_m1_to_m[i]);
+	}
+	for (size_t i = path_m_to_m2.size() - 1; i > 0; i--)
+	{
+		path.push_back(path_m_to_m2[i]);
+	}
+	m->color_points(path, YELLOW);
+
+	std::vector<unsigned int> midpoints = { midpoint1 };
+	m->color_points(midpoints, RED);
+	midpoints.clear();
+	midpoints.push_back(midpoint2);
+	m->color_points(midpoints, GREEN);
+	midpoints.clear();
+	midpoints.push_back(midpoint_of_midpoint_2);
+	m->color_points(midpoints, BLUE);
+
+	return path;
+}
+std::vector<unsigned int> Geodesic_generate_multiple_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2)
+{
+
+	std::vector<unsigned int> mid_curve = Geodesic_generate_secondary_curve_w_midpoints(m, midpoint1, midpoint2);
+
+	glm::vec3 dif = m->vertices[mid_curve[1]] - m->vertices[mid_curve[0]];
+	dif = glm::normalize(dif);
+
+	glm::vec3 new_dir = glm::normalize( glm::cross(m->normals[midpoint2], dif));
+	glm::vec3 mid_point1 = m->vertices[midpoint2];
+
+	// lets do bfs 
+	std::stack<int> stack;  // a stack consisting of indices
+	// get the adjacencies
+	std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
+	//lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
+	std::vector<unsigned int> visited_points;
+	std::vector<int> is_visited(m->vertices.size(), 0);
+	for (size_t i = 0; i < mid_curve.size(); i++)
+	{
+		is_visited[mid_curve[i]] = -1;
+	}
+	//push our point to stack
+	stack.push(0); // random index 0 chosen 
+	while (!stack.empty())
+	{
+		int index = stack.top();
+		stack.pop(); //vertex index popped from stack
+		visited_points.push_back(index);
+		if (is_visited[index] == 0) //not visited
+		{
+			is_visited[index] = 1; // now te vertex has been visited
+
+			// this region of loop assumes index is not edge, therefore add the adjacencies
+			for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
+			{
+				stack.push(mesh_adjacencies[index][i].first);
+			}
+		}
+		if (is_visited[index] == -1) //do nothing 
+		{
+			;
+		}
+	}
+
+	//now get a new average on stack
+	glm::vec3 avg(0, 0, 0);
+	for (size_t i = 0; i < visited_points.size(); i++)
+	{
+		avg = avg + m->vertices[visited_points[i]];
+	}
+	
+	avg = avg / (float)visited_points.size();
+	unsigned int closest_index = mesh_get_closest_index(m, avg);
+
+	std::vector<unsigned int> vertices = { closest_index };
+	m->color_points(visited_points, RED);
+	m->color_points(vertices, BLACK);
+
+	return mid_curve;
+}
+
+unsigned int Geodesic_send_ray_get_counterpart(TrilateralMesh* m, unsigned int& midpoint1)
+{
+	TrilateralRay ray;
+	ray.origin = m->vertices[midpoint1];
+	glm::vec3 vec1(m->normals_display[midpoint1 * 12], m->normals_display[midpoint1 * 12 + 1], m->normals_display[midpoint1 * 12 + 2]);
+	glm::vec3 vec2(m->normals_display[midpoint1 * 12 + 6], m->normals_display[midpoint1 * 12 + 7], m->normals_display[midpoint1 * 12 + 8]);
+	glm::vec3 dir = vec2 - vec1;
+	dir = dir * -1.0f;
+	dir = glm::normalize(dir);
+	ray.direction = dir;
+	float smallest_dist = INFINITY;
+	unsigned int smallest_hit_index = -1;
+	for (size_t i = 0; i < m->triangles.size(); i += 3)
+	{
+		glm::vec3 hit_point;
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i + 1];
+		int index3 = m->triangles[i + 2];
+		bool is_hit = ray_triangle_intersection(ray, m->vertices[index1], m->vertices[index2], m->vertices[index3], hit_point);
+		bool is_same_point = (index1 == midpoint1) || (index2 == midpoint1) || (index3 == midpoint1);
+		if (is_hit && !is_same_point)
+		{
+			float dist = glm::distance(m->vertices[midpoint1], hit_point);
+			if (smallest_dist > dist)
+			{
+				dist = smallest_dist;
+				//get the closest dist on triangle 
+				float disti = glm::distance(hit_point, m->vertices[index1]);
+				float disti1 = glm::distance(hit_point, m->vertices[index2]);
+				float disti2 = glm::distance(hit_point, m->vertices[index3]);
+				if (disti < disti1 && disti < disti2)
+				{
+					smallest_hit_index = index1;
+				}
+				else if (disti1 < disti && disti1 < disti2)
+				{
+					smallest_hit_index = index2;
+				}
+				else
+				{
+					smallest_hit_index = index3;
+				}
+			}
+		}
+
+	}
+	return smallest_hit_index; 
+}
+
+void Geodesic_color_path(TrilateralMesh * m , unsigned int p1 , unsigned int p2 )
+{
+	std::vector<int> path = Geodesic_between_two_points(*m, p1, p2);
+	m->color_points(conv_int_to_unsigned(path), YELLOW);
+}
+
+void Geodesic_color_according_to_midpoints(TrilateralMesh* m)
+{
+	unsigned int mid1, mid2;
+	float dijkstra_biggest;
+	Geodesic_mid_point_w_AGD(m, mid1, mid2, dijkstra_biggest);
+	std::vector<unsigned int> closer_to_1;
+	std::vector<unsigned int> closer_to_2;
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dot1 = glm::dot(m->normals[i], m->normals[mid1]);
+		float dot2 = glm::dot(m->normals[i], m->normals[mid2]);
+		if (dot1 > dot2)
+		{
+			closer_to_1.push_back(i);
+		}
+		else
+		{
+			closer_to_2.push_back(i);
+		}
+	}
+
+	m->color_points(closer_to_1, RED);
+	m->color_points(closer_to_2, BLUE);
+
+	std::vector<unsigned int> mid = { mid1,  mid2 };
+	m->color_points(mid, BLACK);
+}
+unsigned int Geodesic_get_midpoint_from_path(TrilateralMesh* m, unsigned int p1, unsigned int p2)
+{
+	// get mid point of newly added 
+	std::vector<int> point_list = Geodesic_between_two_points(*m, p1, p2);
+	float total_length = 0;
+	for (size_t j = 0; j < point_list.size() - 1; j++)
+	{
+		int index1 = point_list[j];
+		int index2 = point_list[j + 1];
+		total_length += glm::distance(m->vertices[index1], m->vertices[index2]);
+	}
+	int halfway_index = -1;
+	float dist = 0;
+	for (size_t j = 0; j < point_list.size()-1; j++)
+	{
+		int index1 = point_list[j];
+		int index2 = point_list[j + 1];
+
+		dist += glm::distance(m->vertices[index1], m->vertices[index2]);
+		if (dist >= total_length / 2)
+		{
+			halfway_index = point_list[j];
+			break;
+		}
+	}
+	return halfway_index;
 }

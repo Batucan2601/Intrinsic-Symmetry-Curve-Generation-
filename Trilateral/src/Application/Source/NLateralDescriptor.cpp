@@ -1599,7 +1599,14 @@ void Nlateral_display_desc(TrilateralMesh* m, std::vector<NLateralDescriptor>& d
 		m->raylib_mesh.colors[index * 4 + 2] = 0;
 		m->raylib_mesh.colors[index * 4 + 3] = 255;
 	}
-
+	for (size_t i = 0; i < desc->triangles_inside.size(); i++)
+	{
+		int triangle_index = desc->triangles_inside[i];
+		m->raylib_mesh.colors[triangle_index * 4] = 0;
+		m->raylib_mesh.colors[triangle_index * 4 + 1] = 255;
+		m->raylib_mesh.colors[triangle_index * 4 + 2] = 255;
+		m->raylib_mesh.colors[triangle_index * 4 + 3] = 255;
+	}
 	for (size_t i = 0; i < desc->indices.size(); i++)
 	{
 		m->raylib_mesh.colors[desc->indices[i] * 4] = 0;
@@ -1767,6 +1774,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 			}
 		}
 	}
+	hist.normalize(1);
 	this->hks_histogram[descriptor_point_index] = hist;
 }
 void NLateralDescriptor::create_histogram_area_HKS_combined(TrilateralMesh* m, int hist_no)
@@ -1874,25 +1882,12 @@ void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no ,i
 	hist.init(hist_no);
 	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[descriptor_point_index]);
 	float longest_path = -INFINITY; 
-	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	for (size_t i = 0; i < this->triangles_inside.size(); i++)
 	{
-		if (longest_path < distances[this->vertices_inside[i]])
+		int index = this->triangles_inside[i];
+		if (longest_path < distances[index])
 		{
-			longest_path = distances[this->vertices_inside[i]];
-		}
-	}
-	
-	for (size_t i = 0; i < this->paths.size(); i++)
-	{
-		for (size_t j = 0; j < this->paths[i].size(); j++)
-		{
-			for (size_t k = 0; k < this->paths[i][j].size(); k++)
-			{
-				if (longest_path < distances[this->paths[i][j][k]])
-				{
-					longest_path = distances[this->paths[i][j][k]];
-				}
-			}
+			longest_path = distances[index];
 		}
 	}
 
@@ -1931,22 +1926,17 @@ void NLateralDescriptor::create_histogram_area(TrilateralMesh* m, int hist_no ,i
 		}
 	}
 
-	for (size_t i = 0; i < this->paths.size(); i++)
+	for (size_t i = 0; i < this->paths[0][1].size(); i++)
 	{
-		for (size_t j = 0; j < this->paths[i].size(); j++)
+		int step_i = distances[this->paths[0][1][i]] / step_size;
+		if (step_i == hist_no)
 		{
-			for (size_t k = 0; k < this->paths[i][j].size(); k++)
-			{
-				int step_i = distances[this->paths[i][j][k]] / step_size;
-
-				if (step_i == hist_no)
-				{
-					step_i--;
-				}
-
-				hist.histogram[step_i] += m->areas[this->paths[i][j][k]];
-			}
+			step_i--;
 		}
+		std::cout << " Step i " << step_i << std::endl;
+		hist.histogram[step_i] += m->areas[this->paths[0][1][i]];
+		std::cout << " after crash "  << std::endl;
+
 	}
 	this->area_histogram[descriptor_point_index] = hist;
 }
@@ -2345,7 +2335,39 @@ bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor
 	}
 	return true; 
 }
+bool NLateral_compare_distance_to_midpoint_reverse(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
+, unsigned int midpoint_index_2, float distance_to_mid_param, std::ofstream& file)
+{
+	std::vector<float> distances = Geodesic_dijkstra(*m, midpoint_index);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m, midpoint_index_2);
+	float dist1 = distances[desc1.indices[0]];
+	float dist2 = distances[desc2.indices[0]];
+	float dist2_1 = distances_2[desc1.indices[0]];
+	float dist2_2 = distances_2[desc2.indices[0]];
 
+	if (dist1 == 0 || dist2 == 0)
+	{
+		return true;
+	}
+	float ratio = dist1 / dist2_2;
+	if (ratio > 1)
+	{
+		ratio = 1 / ratio;
+	}
+	float ratio2 = dist2 / dist2_1;
+	if (ratio2 > 1)
+	{
+		ratio2 = 1 / ratio;
+	}
+	file << " distance to midpoint reverse 1 " << ratio << std::endl;
+	file << " distance to midpoint reverse 2 " << ratio2 << std::endl;
+
+	if (ratio < distance_to_mid_param && ratio2  < distance_to_mid_param)
+	{
+		return false;
+	}
+	return true;
+}
 bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescriptor& desc1, NLateralDescriptor& desc2)
 {
 	std::vector<unsigned int> mesh_endpoints;
@@ -2432,7 +2454,7 @@ bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor
 
 }
 
-void Nlateral_write_matching_points(TrilateralMesh* m)
+void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor> & descs)
 {
 	std::ofstream file("matching_points.txt");
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
@@ -2442,9 +2464,24 @@ void Nlateral_write_matching_points(TrilateralMesh* m)
 		file << " " << first << " " << second << "\n";
 	}
 	file.close();
-
+	std::ofstream new_file("descriptors.txt");
+	for (size_t i = 0; i < descs.size(); i++)
+	{
+		new_file << " " << descs[i].indices[0] << " " << descs[i].indices[1] << " " << descs[i].indices[2] << " " << std::endl;
+		for (size_t j = 0; j < descs[i].area_histogram[0].size(); j++)
+		{
+			new_file << " " << descs[i].area_histogram[0].histogram[j];
+		}
+		new_file << std::endl;
+		for (size_t j = 0; j < descs[i].hks_histogram[0].size(); j++)
+		{
+			new_file << " " << descs[i].hks_histogram[0].histogram[j];
+		}
+		new_file << std::endl;
+	}
+	
 }
-void Nlateral_read_matching_points(TrilateralMesh* m)
+void Nlateral_read_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor>& descs)
 {
 	std::ifstream file("matching_points.txt");
 	// Read the file line by line
@@ -2461,6 +2498,45 @@ void Nlateral_read_matching_points(TrilateralMesh* m)
 		sym_pair.push_back(std::make_pair(nums[0] ,nums[1]));
 	}
 	m->calculated_symmetry_pairs = sym_pair; 
+
+
+	std::ifstream new_file("descriptors.txt" );
+	unsigned int index = 0; 
+	NLateralDescriptor desc; 
+	while (std::getline(new_file, line)) {
+		std::stringstream ss(line); // Use stringstream to parse the line
+		int number;
+		std::vector<int> nums;
+		// Extract numbers from the line
+		while (ss >> number) {
+			nums.push_back(number);
+		}
+		if (index % 3 == 0)
+		{
+			for (size_t i = 0; i < nums.size(); i++)
+			{
+				desc.indices.push_back(nums[i]);
+			}
+		}
+		if (index % 3 == 1)
+		{
+			for (size_t i = 0; i < nums.size(); i++)
+			{
+				desc.area_histogram[0].histogram.push_back(nums[i]);
+			}
+		}
+		if (index % 3 == 2)
+		{
+			for (size_t i = 0; i < nums.size(); i++)
+			{
+				desc.hks_histogram[0].histogram.push_back(nums[i]);
+			}
+			descs.push_back(desc);
+			desc = {};
+		}
+		index++;
+	}
+
 }
 
 bool NLateral_compare_HKS(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float hks_param)
@@ -2650,71 +2726,503 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 
 	desc.indices = mesh_indices;
 
-	std::vector<std::pair<float, unsigned int>> points( m->vertices.size());
-	for (size_t i = 0; i < points.size(); i++)
-	{
-		points[i] = std::make_pair(-1, 0);
-	}
 
 	std::vector<bool> is_point_exist(m->vertices.size() , false );
+	std::vector<unsigned int> points_fuzzy; 
 	//check visited vertices
 	desc.N = N;
-	for (size_t i = 0; i < desc.paths.size(); i++)
+	for (size_t i = 0; i < desc.paths[0][1].size(); i++)
 	{
-		for (size_t j = 0; j < desc.paths[i].size(); j++)
+		unsigned int index = desc.paths[0][1][i];
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		auto max_elem_auto = std::max_element(distances.begin(), distances.end());
+		float max_elem = *max_elem_auto;
+		for (size_t t = 0; t < distances.size(); t++)
 		{
-			for (size_t k = 0; k < desc.paths[i][j].size(); k++)
+			if ( (distances[t] / max_elem ) < fuzziness)
 			{
-				unsigned int index = desc.paths[i][j][k];
-				std::cout << " index" << index << std::endl;
-				//get the points
-				std::vector<float> distances = Geodesic_dijkstra(*m, index);
-				std::cout << " distances " << distances.size() << std::endl;
-				for (size_t t = 0; t < distances.size(); t++)
-				{
-					if (distances[t] / biggest_dist < fuzziness)
-					{
-						points[i] = std::make_pair(distances[t], t);
-					}
-				}
+				is_point_exist[t] = true; 
 			}
 		}
 	}
-	std::vector<unsigned int> removed_points; 
-	//now we should make them unique
-	for (size_t i = 0; i < points.size(); i++)
+	for (size_t i = 0; i < desc.paths[0][2].size(); i++)
 	{
-		if(! (points[i].first > 0) )
-		{ 
-			removed_points.push_back(i);
-		}
-		else
+		unsigned int index = desc.paths[0][2][i];
+		std::vector<float> distances = Geodesic_dijkstra(*m, index);
+		auto max_elem_auto = std::max_element(distances.begin(), distances.end());
+		float max_elem = *max_elem_auto;
+		for (size_t t = 0; t < distances.size(); t++)
 		{
-			is_point_exist[points[i].second] = true;
+			if ((distances[t] / max_elem) < fuzziness)
+			{
+				is_point_exist[t] = true;
+			}
 		}
-
 	}
-	for (size_t i = removed_points.size()-1; i > 0 ; i--)
-	{
-		int index = removed_points[i];
-		points.erase(points.begin() + index);
-	}
-	desc.vertices_inside.clear();
-	for (size_t i = 0; i < points.size(); i++)
-	{
-		desc.vertices_inside.push_back(points[i].second);
-	}
-
-
-	//get triangles
+	std::vector<bool> is_point_exist_triangles(m->vertices.size(), false);
 	for (size_t i = 0; i < m->triangles.size(); i+=3)
 	{
-		if (is_point_exist[m->triangles[i]] || is_point_exist[m->triangles[i+1]] || is_point_exist[m->triangles[i+2]])
+		if (is_point_exist[m->triangles[i]] || is_point_exist[m->triangles[i + 1]] || is_point_exist[m->triangles[i + 2]])
 		{
+			is_point_exist_triangles[m->triangles[i]] = true; 
+			is_point_exist_triangles[m->triangles[i + 1]] = true; 
+			is_point_exist_triangles[m->triangles[i + 2]] = true; 
 			desc.triangles_inside.push_back(m->triangles[i]);
-			desc.triangles_inside.push_back(m->triangles[i + 1]);
-			desc.triangles_inside.push_back(m->triangles[i + 2]);
+			desc.triangles_inside.push_back(m->triangles[i+1]);
+			desc.triangles_inside.push_back(m->triangles[i+2]);
 		}
 	}
+
 	return desc;
+}
+
+bool Nlateral_compare_closest_AGD(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<unsigned int>& agd_vertices,
+	std::ofstream& file)
+{
+	unsigned int p1 = desc1.indices[0];
+	unsigned int p2 = desc2.indices[0];
+	
+	std::vector<float> distances_p1 = Geodesic_dijkstra(*m, p1);
+	std::vector<float> distances_p2 = Geodesic_dijkstra(*m, p2);
+	
+	unsigned int closest_agd_index_p1 = -1;
+	unsigned int closest_agd_index_p2 = -1;
+	float closest = INFINITY;
+	for (size_t i = 0; i < agd_vertices.size(); i++)
+	{
+		float dist = distances_p1[agd_vertices[i]];
+		if (dist < closest)
+		{
+			closest = dist; 
+			closest_agd_index_p1 = i;
+		}
+	}
+	closest = INFINITY;
+	for (size_t i = 0; i < agd_vertices.size(); i++)
+	{
+		float dist = distances_p2[agd_vertices[i]];
+		if (dist < closest)
+		{
+			closest = dist;
+			closest_agd_index_p2 = i;
+		}
+	}
+
+	if (closest_agd_index_p1 == closest_agd_index_p2)
+	{
+		return false; 
+	}
+
+	return true; 
+}
+
+bool NLateral_check_parameters(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2,
+	unsigned int midpoint_index,  float hks_param, float distance_to_midpoint_param, float closeness_param ,std::vector<unsigned int> original_agd_vertices)
+{
+	int index1 = desc1.indices[0];
+	int index2 = desc2.indices[0];
+	float hks_dif = std::abs(m->normalized_heat_kernel_signature[index1] - m->normalized_heat_kernel_signature[index2]);
+	bool is_hks = hks_dif < hks_param;
+	std::ofstream temp_file; 
+
+	bool is_dist_to_midpoint =  NLateral_compare_distance_to_midpoint(m, desc1, desc2, midpoint_index, distance_to_midpoint_param, temp_file);
+	//closeness
+	bool is_close = Nlateral_compare_closeness(m, desc1, desc2, midpoint_index, closeness_param, temp_file);
+	bool is_different_agd = Nlateral_compare_closest_AGD(m, desc1, desc2, original_agd_vertices, temp_file);
+
+	if (is_dist_to_midpoint && is_hks /* && is_close */ && is_different_agd)
+	{
+		return true;
+	}
+	return false;
+
+}
+
+std::vector<unsigned int> NLateral_show_voronoi_midpoints(TrilateralMesh* m)
+{
+	float best_distance;
+	unsigned int mid_point_index, mid_point_index_2;
+	Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2, best_distance);
+	NLateralDescriptor d1,d2;
+	d1.indices.push_back(mid_point_index);
+	d2.indices.push_back(mid_point_index_2);
+	return NLateral_show_voronoi(m, d1, d2);
+}
+
+std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2)
+{
+	std::vector<float> distances_1 = Geodesic_dijkstra(*m, desc1.indices[0]);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m, desc2.indices[0]);
+
+	// lets normalzie boundary
+	auto dist_1_max_auto = std::max_element(distances_1.begin(), distances_1.end());
+	auto dist_2_max_auto = std::max_element(distances_2.begin(), distances_2.end());
+	float dist_1_max = *dist_1_max_auto;
+	float dist_2_max = *dist_2_max_auto;
+	for (size_t i = 0; i < distances_1.size(); i++)
+	{
+		distances_1[i] = distances_1[i] / dist_1_max;
+		distances_2[i] = distances_2[i] / dist_2_max;
+	}
+
+	std::vector<unsigned int> same_point_set;
+	m->color_all(WHITE);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dif = std::abs(distances_1[i] - distances_2[i]);
+		if (dif < 3*1e-2)
+		{
+			same_point_set.push_back(i);
+		}
+	}
+	m->color_points(same_point_set, ORANGE);
+	
+	return same_point_set;
+}
+
+std::vector<unsigned int> NLateral_generate_voronoi_curve(TrilateralMesh* m, std::vector<unsigned int> unconnected_voronoi_set , bool is_color )
+{
+	std::vector<unsigned int> ordered_voronoi; 
+	std::vector<unsigned int> points_total; 
+	ordered_voronoi.push_back(unconnected_voronoi_set[0]);
+	for (size_t i = 0; i < unconnected_voronoi_set.size(); i++)
+	{
+		std::vector<float> distances = Geodesic_dijkstra(*m, unconnected_voronoi_set[i]);
+		float min_dist = INFINITY; 
+		unsigned int min_index = -1;
+		for (size_t j = i; j < unconnected_voronoi_set.size(); j++)
+		{
+			if (i == j)
+			{
+				continue; 
+			}
+			float dist = distances[unconnected_voronoi_set[j]];
+			if (dist < min_dist)
+			{
+				min_dist = dist; 
+				min_index = unconnected_voronoi_set[j];
+			}
+		}
+		if (min_index != -1)
+		{
+			ordered_voronoi.push_back(min_index);
+		}
+	}
+	for (size_t i = 0; i < ordered_voronoi.size()-1; i++)
+	{
+		std::vector<int> points = Geodesic_between_two_points(*m, ordered_voronoi[i], ordered_voronoi[i + 1]);
+		for (size_t j = 0; j < points.size(); j++)
+		{
+			points_total.push_back(points[j]);
+		}
+	}
+	std::sort(points_total.begin(), points_total.end());
+	auto last = std::unique(points_total.begin(), points_total.end());
+	// Step 3: Erase the duplicated elements
+	points_total.erase(last, points_total.end());
+
+	if (is_color)
+	{
+		m->color_points(points_total, GREEN);
+	}
+	return points_total;
+}
+static std::vector<int> breadth_first_search(TrilateralMesh* m, std::vector<unsigned int>& voronoi_set )
+{
+	std::stack<int> stack;  // a stack consisting of indices
+	// get the adjacencies
+	std::vector<std::vector<std::pair<int, float>>> mesh_adjacencies = m->adjacenies;
+	//lastly get a int array with  size of vertices in order to check if the vertex has been visited ( -1 edge , 0 not visisted , 1 visited) 
+	std::vector<int>is_visited(m->vertices.size(), 0);
+	for (size_t i = 0; i < voronoi_set.size(); i++)
+	{
+		is_visited[voronoi_set[i]] = -1;
+	}
+	//push our point to stack
+	unsigned int random_vertex_index = 0;
+	stack.push(random_vertex_index);
+	while (!stack.empty())
+	{
+		int index = stack.top();
+		stack.pop(); //vertex index popped from stack
+		if (is_visited[index] == 0) //not visited
+		{
+			is_visited[index] = 1; // now te vertex has been visited
+
+			// this region of loop assumes index is not edge, therefore add the adjacencies
+			for (size_t i = 0; i < mesh_adjacencies[index].size(); i++) //process pairs 
+			{
+				stack.push(mesh_adjacencies[index][i].first);
+			}
+		}
+		if (is_visited[index] == -1) //do nothing 
+		{
+			;
+		}
+	}
+	return is_visited; 
+}
+static bool check_bfs_points(TrilateralMesh* m,  std::vector<int>& is_visited )
+{
+	unsigned int num_points = 0;
+	for (size_t i = 0; i < is_visited.size(); i++)
+	{
+		if (is_visited[i] == 1)
+		{
+			num_points++; 
+		}
+	}
+	std::cout << " ratio is " << (float)num_points / (float)m->vertices.size() << std::endl;
+	if (num_points < (m->vertices.size() * 6.0 / 10.0) && num_points > (m->vertices.size() * 3.0/10.0) )
+	{
+		return true; 
+	}
+
+	return false; 
+}
+glm::vec3 NLateral_get_pca_of_points(TrilateralMesh* m, std::vector<unsigned int>& voronoi_set)
+{
+	// generate PCA weights are same and 1 for now 
+	float s = voronoi_set.size();
+	int N = voronoi_set.size();
+	
+	glm::vec3 mid(0,0,0);
+	for (size_t i = 0; i < voronoi_set.size(); i++)
+	{
+		mid = mid + m->vertices[voronoi_set[i]];
+	}
+	mid = mid / (float)voronoi_set.size();
+
+	Eigen::MatrixXd Co(3, 3);
+
+	Co(0, 0) = 0;
+	Co(0, 1) = 0;
+	Co(0, 2) = 0;
+	Co(1, 0) = 0;
+	Co(1, 1) = 0;
+	Co(1, 2) = 0;
+	Co(2, 0) = 0;
+	Co(2, 1) = 0;
+	Co(2, 2) = 0;
+	for (size_t i = 0; i < N; i++)
+	{
+		glm::vec3 pi_m;
+		pi_m = m->vertices[voronoi_set[i]] - mid;
+		Eigen::VectorXd pi(3);
+		pi(0) = pi_m.x;
+		pi(1) = pi_m.y;
+		pi(2) = pi_m.z;
+
+		Eigen::MatrixXd  Co_i = pi * pi.transpose();
+		Co = Co + Co_i;
+	}
+	Co = Co / s;
+
+	//// get the eigenvectors 
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(Co);
+	Eigen::MatrixXd eigen_vecs = es.eigenvectors().real();
+	Eigen::VectorXd eigen_values = es.eigenvalues().real();
+
+	double biggest_value = -INFINITY;
+	int biggest_index = -1;
+	//get the best eigen value
+	for (size_t i = 0; i < eigen_values.rows(); i++)
+	{
+		if (biggest_value < (float)eigen_values(i))
+		{
+			biggest_value = (float)eigen_values(i);
+			biggest_index = i;
+		}
+	}
+
+
+	// generate the 3 planes
+	glm::vec3 pca= glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+	pca = glm::normalize(pca);
+	return pca;
+}
+bool NLateral_compare_voronoi(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int mid_point_index, float dist_param, std::ofstream& file)
+{
+	// part 1 - voronoi boundary
+	std::vector<float> distances_1 = Geodesic_dijkstra(*m, desc1.indices[0]);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m, desc2.indices[0]);
+
+	// lets normalzie boundary
+	auto dist_1_max_auto = std::max_element(distances_1.begin(), distances_1.end());
+	auto dist_2_max_auto = std::max_element(distances_2.begin(), distances_2.end());
+	float dist_1_max = *dist_1_max_auto;
+	float dist_2_max = *dist_2_max_auto;
+	for (size_t i = 0; i < distances_1.size(); i++)
+	{
+		distances_1[i] = distances_1[i] / dist_1_max;
+		distances_2[i] = distances_2[i] / dist_2_max;
+	}
+	
+	std::vector<unsigned int> voronoi_point_set;
+	m->color_all(WHITE);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dif = std::abs(distances_1[i] - distances_2[i]);
+		if (dif < 3*1e-2)
+		{
+			voronoi_point_set.push_back(i);
+		}
+	}
+
+	std::vector<float> distances_from_midpoint = Geodesic_dijkstra(*m, mid_point_index);
+	auto max_elem = std::max_element(distances_from_midpoint.begin(), distances_from_midpoint.end());
+	float max_val = *max_elem;
+
+	bool is_voronoi_close_to_midpoint = false; 
+	for (size_t i = 0; i < voronoi_point_set.size(); i++)
+	{
+		float dist = distances_from_midpoint[voronoi_point_set[i]];
+		if (dist / max_val <  dist_param)
+		{
+			is_voronoi_close_to_midpoint = true; 
+			break;
+		}
+	}
+	/*if (!is_voronoi_close_to_midpoint)
+	{
+		file << " voronoi not close to midpoint " << std::endl;
+		return false;
+	}*/
+	//part 2 - breadth first search 
+	glm::vec3 pca = NLateral_get_pca_of_points(m , voronoi_point_set );
+
+	//get angle between them
+
+	float cos = glm::dot(pca, m->PCA);
+	cos = glm::clamp(cos, -1.0f, 1.0f);
+	cos = glm::degrees(glm::acos(cos));
+	file << pca.x << " " << pca.y << " " << pca.z << std::endl;
+	file << " PCA degree " << cos << std::endl; 
+	file << " difference between PCA 's degree " << cos  << std::endl;
+	if (cos > 0 && cos < 30)
+	{
+		file << "passed voronoi " << std::endl;
+		return true; 
+	}
+	file << "failed voronoi " << std::endl;
+	return false; 
+	/*NLateral_generate_voronoi_curve(m, voronoi_point_set, false);
+	std::vector<int> bfs_res = breadth_first_search(m, voronoi_point_set);
+	bool is_area_balanced = check_bfs_points(m, bfs_res);
+	return is_area_balanced; */
+
+	
+}
+float NLateral_get_voronoi_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2 , float voronoi_param)
+{
+	// part 1 - voronoi boundary
+	std::vector<float> distances_1 = Geodesic_dijkstra(*m, desc1.indices[0]);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m, desc2.indices[0]);
+
+	// lets normalzie boundary
+	auto dist_1_max_auto = std::max_element(distances_1.begin(), distances_1.end());
+	auto dist_2_max_auto = std::max_element(distances_2.begin(), distances_2.end());
+	float dist_1_max = *dist_1_max_auto;
+	float dist_2_max = *dist_2_max_auto;
+	for (size_t i = 0; i < distances_1.size(); i++)
+	{
+		distances_1[i] = distances_1[i] / dist_1_max;
+		distances_2[i] = distances_2[i] / dist_2_max;
+	}
+
+	std::vector<unsigned int> voronoi_point_set;
+	m->color_all(WHITE);
+	std::vector<bool> is_in_set(m->vertices.size(), false);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dif = std::abs(distances_1[i] - distances_2[i]);
+		if (dif < voronoi_param)
+		{
+			voronoi_point_set.push_back(i);
+			is_in_set[i] = true;
+		}
+	}
+	float total_area = 0;
+	for (size_t i = 0; i < m->triangles.size(); i+=3)
+	{
+		int index1 = m->triangles[i];
+		int index2 = m->triangles[i+1];
+		int index3 = m->triangles[i+2];
+		if (index1 && index2 && index3 )
+		{
+			total_area = total_area + compute_triangle_area(m->vertices[index1], m->vertices[index2], m->vertices[index3]);
+		}
+	}
+
+	float normalized = total_area / m->mesh_area;
+	return normalized;
+}
+
+bool NLateral_compare_divergence(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint, unsigned int midpoint_inverse,
+std::ofstream& file)
+{
+	std::vector<int> distances_1 = Geodesic_between_two_points(*m, desc1.indices[0] , midpoint);
+	std::vector<int> distances_2 = Geodesic_between_two_points(*m, desc2.indices[0] , midpoint);
+
+	int closest_point = -1; 
+	//find the convergence 
+	for (size_t i = 0; i < distances_1.size(); i++)
+	{
+		for (size_t j = 0; j < distances_2.size(); j++)
+		{
+			if (distances_1[i] == distances_2[j] && distances_2[j] != midpoint)
+			{
+				closest_point = distances_1[i];
+				break; 
+			}
+		}
+		if (closest_point != -1)
+		{
+			break;
+		}
+	}
+	if (closest_point == -1)
+	{
+		return true; 
+		closest_point = midpoint;
+	}
+	std::vector<float> distances_from_mid = Geodesic_dijkstra(*m, midpoint);
+	//std::vector<float> distances_1_ = Geodesic_dijkstra(*m, desc1.indices[0]);
+	//std::vector<float> distances_2_ = Geodesic_dijkstra(*m, desc2.indices[0]);
+	float dist_to_conv_point = distances_from_mid[closest_point];
+	float dist_to_desc1 = distances_from_mid[desc1.indices[0]];
+	float dist_to_desc2 = distances_from_mid[desc2.indices[0]];
+
+	float ratio1 = dist_to_conv_point / dist_to_desc1;
+	float ratio2 = dist_to_conv_point / dist_to_desc2;
+
+	file << " convergence 1 " << ratio1 << "  convergence 2" << ratio2 << std::endl;
+	if ( ratio1 < 0.5 && ratio2 < 0.5)
+	{
+		return false; 
+	}
+	return true; 
+}
+
+bool NLateral_check_far_away(TrilateralMesh* m, NLateralDescriptor& descs1, NLateralDescriptor& descs2, float far_away_param)
+{
+	unsigned int p1 = descs1.indices[0];
+	unsigned int p2 = descs2.indices[0];
+	unsigned int p_mid = Geodesic_get_midpoint_from_path(m, p1, p2);
+	
+	std::vector<float> distances_p_mid = Geodesic_dijkstra(*m, p_mid);
+	auto max_elem_auto = std::max_element(distances_p_mid.begin(), distances_p_mid.end());
+	float max_elem = *max_elem_auto;
+
+	bool is_far = true;
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		unsigned int p_sym_mid = Geodesic_get_midpoint_from_path(m, m->calculated_symmetry_pairs[i].first, m->calculated_symmetry_pairs[i].second);
+		if (distances_p_mid[p_sym_mid] <  max_elem * far_away_param)
+		{
+			is_far = false; 
+			break; 
+		}
+	}
+	return is_far;
 }

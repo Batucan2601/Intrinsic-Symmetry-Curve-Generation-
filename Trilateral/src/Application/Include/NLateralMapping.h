@@ -1,20 +1,18 @@
 #include "../Include/NLateralDescriptor.h"
 #include "../Include/DominantSymmetry.h"
 #include "../Include/Skeleton.h"
-std::pair<std::vector<NLateralDescriptor>, std::vector<NLateralDescriptor>> NlateralMap_point_matching_copy_symmetric_points(TrilateralMesh* m, Skeleton& skeleton, Plane& plane,
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float curv_param, float norm_angle_param, float skel_dist_param, float n_ring_param,
-	float area_dif_param, float skel_point_dist_param, int N);
-
-std::vector<NLateralDescriptor> NlateralMap_point_matching_w_average_geodesic(TrilateralMesh* m,
-	int dvorak_enpoint_no, float sweep_distance, float hks_dif_param, float closeness_param,
-	float area_dif_param,float min_geo_tau, int avg_n_ring,
-	 float distance_to_mid_param , float sdf_param ,int N, std::vector<unsigned int>& agd_point_indices);
-
-
+#include "../Include/CurvatureGeneration.h"
 
 void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
 	std::vector<std::pair<unsigned int, unsigned int>>& resemblance_pairs, unsigned int midpoint,
 	unsigned int midpoint_2, unsigned int histogram_size);
 
-std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m, std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau,float fuziness
-, float distance_to_mid_param, float hks_dif_param, float closeness_param, int hist_no , int min_agd_param);
+std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m, std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau
+	, float fuziness, float distance_to_mid_param, float hks_dif_param, float closeness_param,float sdf_param ,  int hist_no, int min_agd_param, float& biggest_dijkstra, std::vector<unsigned int>&
+	original_agd_vertices,float voronoi_param);
+void NLateralMapping_get_new_matchings(TrilateralMesh* m, Curvature& c, std::vector<NLateralDescriptor>& descs, float distance_to_mid_param, float sdf_param,
+	float hks_dif_param, int hist_no);
+
+void NLateralMapping_get_new_matchings(TrilateralMesh* m, Curvature& c, std::vector<NLateralDescriptor>& descs, float distance_to_mid_param, float hks_dif_param);
+
+std::vector<unsigned int> NLateralMapping_get_unmathced_areas(TrilateralMesh* m, Curvature& c, float param, bool is_color);

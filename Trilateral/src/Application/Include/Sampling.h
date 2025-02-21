@@ -9,4 +9,6 @@ std::vector<unsigned int>  furthest_point_sampling_on_partial_points(TrilateralM
 std::vector<unsigned int>  uniform_point_sampling(TrilateralMesh* m, int no_of_samples, bool is_points_colored = false);
 
 std::vector<unsigned int>  random_symmetry_indices_sampling(TrilateralMesh* m, int no_of_samples);
+std::vector<unsigned int>  midpoint_sampling(TrilateralMesh* m, float no_of_samples_percentage,float& biggest
+,unsigned int mid1 , unsigned int mid2 ); //sampling from midpoint
 

@@ -44,6 +44,7 @@ TrilateralMesh::TrilateralMesh(char* filename)
 	calculate_areas(this);
 	calculate_mesh_area(this);
 	this->generate_raylib_mesh();
+	this->calculate_PCA();
 }
 void TrilateralMesh::read_ply_format(char* filename)
 {
@@ -808,4 +809,71 @@ void TrilateralMesh::color_points(std::vector<unsigned int>& points , Color colo
 		this->raylib_mesh.colors[points[i] * 4 + 3] = color.a;
 	}
 	this->update_raylib_mesh();
+}
+
+void TrilateralMesh::calculate_PCA()
+{
+	// generate PCA weights are same and 1 for now 
+	float s = this->vertices.size();
+	glm::vec3 m(0.0f, 0.0f, 0.0f);
+	int N = this->vertices.size();
+	m = plane_point;
+
+	Eigen::MatrixXd Co(3, 3);
+
+	Co(0, 0) = 0;
+	Co(0, 1) = 0;
+	Co(0, 2) = 0;
+	Co(1, 0) = 0;
+	Co(1, 1) = 0;
+	Co(1, 2) = 0;
+	Co(2, 0) = 0;
+	Co(2, 1) = 0;
+	Co(2, 2) = 0;
+	for (size_t i = 0; i < N; i++)
+	{
+		glm::vec3 pi_m;
+		pi_m = this->vertices[i] - m;
+		Eigen::VectorXd pi(3);
+		pi(0) = pi_m.x;
+		pi(1) = pi_m.y;
+		pi(2) = pi_m.z;
+
+		Eigen::MatrixXd  Co_i = pi * pi.transpose();
+		Co = Co + Co_i;
+	}
+	Co = Co / s;
+
+	//// get the eigenvectors 
+	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(Co);
+	Eigen::MatrixXd eigen_vecs = es.eigenvectors().real();
+	Eigen::VectorXd eigen_values = es.eigenvalues().real();
+
+	double biggest_value = -INFINITY;
+	int biggest_index = -1;
+	//get the best eigen value
+	for (size_t i = 0; i < eigen_values.rows(); i++)
+	{
+		if (biggest_value < (float)eigen_values(i))
+		{
+			biggest_value = (float)eigen_values(i);
+			biggest_index = i;
+		}
+	}
+
+
+	// generate the 3 planes
+	//std::vector<float> eigenvalues = { eigen_values.col(0).row(0) , eigen_values.col(0).row(1) , eigen_values.col(0).row(2) };
+	this->PCA = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+	this->PCA = glm::normalize(PCA);
+	/*planes[0].point = m;
+	planes[1].normal = glm::vec3(eigen_vecs.col(1).real()(0), eigen_vecs.col(1).real()(1), eigen_vecs.col(1).real()(2));
+	planes[1].point = m;
+	planes[2].normal = glm::vec3(eigen_vecs.col(2).real()(0), eigen_vecs.col(2).real()(1), eigen_vecs.col(2).real()(2));
+	planes[2].point = m;*/
+}
+
+void TrilateralMesh::calculate_SDF(int num_rays , float angle )
+{
+	this->sdf = computeSDF(this, num_rays, angle);
 }

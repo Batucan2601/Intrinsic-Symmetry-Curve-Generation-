@@ -27,7 +27,6 @@ public:
 	std::vector<std::pair<unsigned int, unsigned int>> symmetry_pairs; // for ground truth 
 	std::vector<unsigned int> ground_truth_symmetry_pairs; // for ground truth hashmap for pairs
 	std::vector<std::pair<unsigned int, unsigned int>> calculated_symmetry_pairs; // for what we calculated
-	std::vector<float> sdf; // sdf for points
 	std::vector<glm::vec3> normals; // fil with constructor, actual vertices
 	std::vector<float> normals_display; // vertex information of normals
 	std::vector<float> areas; // vertex information of normals
@@ -49,6 +48,9 @@ public:
 	glm::mat4 MVP;
 	//area
 	float mesh_area; 
+	//pca
+	glm::vec3 PCA;
+	std::vector<float> sdf; 
 	TrilateralMesh();
 	TrilateralMesh(char* filename);
 	TrilateralMesh(glm::vec3 *p1 , glm::vec3* p2 , glm::vec3* p3 , glm::vec3* p4);
@@ -63,6 +65,8 @@ public:
 	void read_ply_format(char* filename);
 	void read_off_format(char* filename);
 	void generate_normals();
+	void calculate_PCA();
+	void calculate_SDF(int num_rays , float angle);
 };
 typedef struct
 {
