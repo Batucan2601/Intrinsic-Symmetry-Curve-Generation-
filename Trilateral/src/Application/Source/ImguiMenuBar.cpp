@@ -20,6 +20,7 @@
 #include "../Include/NLateralMapping.h"
 #include "../Include/Geodesic.h"
 #include "../Include/CurvatureGeneration.h"
+#include "../Include/Voronoi.h"
 
 
 static void imgui_menubar_save_mesh(TrilateralMesh* m );
@@ -103,14 +104,15 @@ float min_geo_tau = 0.7;
 int avg_geo_N_ring = 2;
 float nlateral_tri_hist_param = 0.2;
 float distance_to_mid_param = 0.7; 
-float voronoi_param =  1e-2; 
+float voronoi_param =  1 * 1e-2; 
 float sdf_param = 0.2;
 int hist_param = 5;
 int min_agd_param  = 3;
 std::vector<unsigned int> original_agd_vertices; 
 std::vector<unsigned int> avg_dijk_indices;
 std::vector<unsigned int> min_dijk_indices;
-std::vector<unsigned int> voronoi_set; 
+std::vector<unsigned int> voronoi_set;
+Voronoi voronoi; 
 //curvature
 float quality_param = 0.7; 
 int curv_point_index = 0;
@@ -386,7 +388,7 @@ static void Nlateral_functions(TrilateralMesh* m)
     }*/
     if (ImGui::MenuItem("generate descriptors with midpoint "))
     {
-        nlateral_descriptors = NLateralMapping_generate_via_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
+        nlateral_descriptors = NLateralMapping_generate_via_voronoi_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
         , distance_to_mid_param, hks_dif_param, closeness_param,sdf_param, hist_param , min_agd_param, longest_distance, original_agd_vertices,
             voronoi_param);
     }
@@ -445,13 +447,41 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::InputInt("descriptor 2 no ", &descriptor_no_voronoi2))
         {
         }
-        if (ImGui::MenuItem("show voronoi"))
+        if (ImGui::InputFloat("Voronoi", &voronoi_param))
         {
-            voronoi_set = NLateral_show_voronoi(m, nlateral_descriptors[descriptor_no_voronoi1], nlateral_descriptors[descriptor_no_voronoi2]);
+
+        }
+        if (ImGui::MenuItem("show voronoi w/agd index"))
+        {
+            voronoi = Voronoi(m, avg_dijk_indices[descriptor_no_voronoi1],
+                avg_dijk_indices[descriptor_no_voronoi2], voronoi_param);
+            //voronoi_set = NLateral_show_voronoi(m, nlateral_descriptors[descriptor_no_voronoi1].indices[0], nlateral_descriptors[descriptor_no_voronoi2].indices[0]);
+            voronoi.generate_voronoi_parts();
+            voronoi.color();
+        }
+        if (ImGui::MenuItem("show voronoi w/index"))
+        {
+            voronoi = Voronoi(m, descriptor_no_voronoi1,
+            descriptor_no_voronoi2, voronoi_param);
+            //voronoi_set = NLateral_show_voronoi(m, nlateral_descriptors[descriptor_no_voronoi1].indices[0], nlateral_descriptors[descriptor_no_voronoi2].indices[0]);
+            voronoi.generate_voronoi_parts();
+            voronoi.color();
         }
         if (ImGui::MenuItem("Voronoi of midpoints"))
         {
             voronoi_set = NLateral_show_voronoi_midpoints(m);
+        }
+        if (ImGui::MenuItem("Get closest curve  with matches "))
+        {
+            voronoi = Voronoi_get_closest_voronoi(m, voronoi_param);
+        }
+        if (ImGui::MenuItem("Recalculate with better matches"))
+        {
+            voronoi = Voronoi_destroy_wrong_matches_and_recalculate(m,voronoi_param , voronoi );
+        }
+        if (ImGui::MenuItem("recalculate with distances "))
+        {
+            voronoi = Voronoi_check_pair_closeness_and_recalculate(m, voronoi_param,  distance_to_mid_param, voronoi);
         }
         if (ImGui::MenuItem("show connected voronoi set "))
         {

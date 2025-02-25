@@ -400,15 +400,15 @@ float VarianceMin_compare(TrilateralMesh* m,TrilateralDescriptor desc1, Trilater
 float VarianceMin_compare(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2, bool is_normalize, int division_no, int N_ring_no)
 {
 	//convert histogram to weight 
-	desc1.weight = Eigen::VectorXd(desc1.area_histogram->histogram.size());
-	for (size_t i = 0; i < desc1.area_histogram->histogram.size(); i++)
+	desc1.weight = Eigen::VectorXd(desc1.hks_histogram->histogram.size());
+	for (size_t i = 0; i < desc1.hks_histogram[0].histogram.size(); i++)
 	{
-		desc1.weight[i] =  desc1.area_histogram->histogram[i];
+		desc1.weight[i] =  desc1.hks_histogram[0].histogram[i];
 	}
-	desc2.weight = Eigen::VectorXd(desc2.area_histogram->histogram.size());
-	for (size_t i = 0; i < desc2.area_histogram->histogram.size(); i++)
+	desc2.weight = Eigen::VectorXd(desc2.hks_histogram->histogram.size());
+	for (size_t i = 0; i < desc2.hks_histogram[0].histogram.size(); i++)
 	{
-		desc2.weight[i] = desc2.area_histogram->histogram[i];
+		desc2.weight[i] = desc2.hks_histogram[0].histogram[i];
 	}
 	if (is_normalize)
 	{

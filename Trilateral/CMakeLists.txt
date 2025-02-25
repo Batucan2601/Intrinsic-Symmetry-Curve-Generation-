@@ -46,7 +46,7 @@ set(Header_Files
     "src/Application/Include/SkeletonTypes.h"
     "src/Application/Include/CurvatureGeneration.h"
     "src/Application/Include/Camera.h"
-
+    "src/Application/Include/Voronoi.h"
 
     
     "src/External/Include/rlImGui/imgui_impl_raylib.h"
@@ -106,6 +106,7 @@ set(Source_Files
     "src/Application/Source/NLateralMapping.cpp"
     "src/Application/Source/CurvatureGeneration.cpp"
     "src/Application/Source/Camera.cpp"
+    "src/Application/Source/Voronoi.cpp"
 
 
 

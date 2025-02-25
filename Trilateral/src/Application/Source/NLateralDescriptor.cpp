@@ -1724,58 +1724,43 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 {
 	Histogram hist;
 	hist.init(hist_no);
-	std::vector<float> distances = Geodesic_dijkstra(*m, this->indices[descriptor_point_index]);
+	std::vector<float> distances = Geodesic_dijkstra(*m, descriptor_point_index);
 	float longest_path = -INFINITY;
-	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	for (size_t i = 0; i < this->triangles_inside.size(); i++)
 	{
-		if (longest_path < distances[this->vertices_inside[i]])
+		if (longest_path < distances[this->triangles_inside[i]])
 		{
-			longest_path = distances[this->vertices_inside[i]];
+			longest_path = distances[this->triangles_inside[i]];
 		}
 	}
-	for (size_t i = 0; i < this->paths.size(); i++)
-	{
-		for (size_t j = 0; j < this->paths[i].size(); j++)
-		{
-			for (size_t k = 0; k < this->paths[i][j].size(); k++)
-			{
-				if (longest_path < distances[this->paths[i][j][k]])
-				{
-					longest_path = distances[this->paths[i][j][k]];
-				}
-			}
-		}
-	}
+
 	float step_size = longest_path / hist_no;
-	for (size_t i = 0; i < this->vertices_inside.size(); i++)
+	for (size_t i = 0; i < this->triangles_inside.size(); i+=3)
 	{
-		int index = this->vertices_inside[i];
-		int step_1 = distances[index] / step_size; 
+		int index1 = this->triangles_inside[i];
+		int index2 = this->triangles_inside[i+1];
+		int index3 = this->triangles_inside[i+2];
+		int step_1 = distances[index1] / step_size;
+		int step_2 = distances[index2] / step_size;
+		int step_3 = distances[index3] / step_size;
 		if (step_1 == hist_no)
 		{
-			step_1--; 
+			step_1--;
 		}
-		hist.histogram[step_1] += m->normalized_heat_kernel_signature[index];
-	}
-	for (size_t i = 0; i < this->paths.size(); i++)
-	{
-		for (size_t j = 0; j < this->paths[i].size(); j++)
+		if (step_2 == hist_no)
 		{
-			for (size_t k = 0; k < this->paths[i][j].size(); k++)
-			{
-				int step_i = distances[this->paths[i][j][k]] / step_size;
-
-				if (step_i == hist_no)
-				{
-					step_i--;
-				}
-
-				hist.histogram[step_i] += m->normalized_heat_kernel_signature[this->paths[i][j][k]];
-			}
+			step_2--;
 		}
+		if (step_3 == hist_no)
+		{
+			step_3--;
+		}
+		hist.histogram[step_1] += m->normalized_heat_kernel_signature[index1];
+		hist.histogram[step_2] += m->normalized_heat_kernel_signature[index2];
+		hist.histogram[step_3] += m->normalized_heat_kernel_signature[index3];
 	}
 	hist.normalize(1);
-	this->hks_histogram[descriptor_point_index] = hist;
+	this->hks_histogram[0] = hist;
 }
 void NLateralDescriptor::create_histogram_area_HKS_combined(TrilateralMesh* m, int hist_no)
 {
@@ -2393,11 +2378,11 @@ bool Nlateral_check_endpoint(TrilateralMesh* m, Skeleton& skel, NLateralDescript
 	return false; 
 }
 
-bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<float>& sdf, 
+bool NLateral_compare_SDF(TrilateralMesh* m, unsigned int& index1, unsigned int& index2, std::vector<float>& sdf,
 float sdf_param , std::ofstream& file)
 {
-	float sdf_1 = sdf[desc1.indices[0]];
-	float sdf_2 = sdf[desc2.indices[0]];
+	float sdf_1 = sdf[index1];
+	float sdf_2 = sdf[index2];
 	
 	float ratio = sdf_1 / sdf_2;
 	if (ratio > 1 )
@@ -2704,10 +2689,8 @@ std::vector<NLateralDescriptor> NLateral_generate_with_midpoints(TrilateralMesh*
 
 NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, const std::vector<unsigned int>& mesh_indices, float fuzziness, float biggest_dist)
 {
-
 	NLateralDescriptor desc;
 	int N = mesh_indices.size();
-
 	std::vector<std::vector<std::vector<int>>> paths(N, std::vector<std::vector<int>>(N));
 	desc.paths = paths;
 	//generate paths
@@ -2745,7 +2728,7 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 			}
 		}
 	}
-	for (size_t i = 0; i < desc.paths[0][2].size(); i++)
+	/*for (size_t i = 0; i < desc.paths[0][2].size(); i++)
 	{
 		unsigned int index = desc.paths[0][2][i];
 		std::vector<float> distances = Geodesic_dijkstra(*m, index);
@@ -2758,7 +2741,7 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 				is_point_exist[t] = true;
 			}
 		}
-	}
+	}*/
 	std::vector<bool> is_point_exist_triangles(m->vertices.size(), false);
 	for (size_t i = 0; i < m->triangles.size(); i+=3)
 	{
@@ -2772,7 +2755,6 @@ NLateralDescriptor NLateral_generate_descriptor_w_midpoints(TrilateralMesh* m, c
 			desc.triangles_inside.push_back(m->triangles[i+2]);
 		}
 	}
-
 	return desc;
 }
 
@@ -2846,13 +2828,13 @@ std::vector<unsigned int> NLateral_show_voronoi_midpoints(TrilateralMesh* m)
 	NLateralDescriptor d1,d2;
 	d1.indices.push_back(mid_point_index);
 	d2.indices.push_back(mid_point_index_2);
-	return NLateral_show_voronoi(m, d1, d2);
+	return NLateral_show_voronoi(m, d1.indices[0], d2.indices[0]);
 }
 
-std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2)
+std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, unsigned int p1 , unsigned int p2)
 {
-	std::vector<float> distances_1 = Geodesic_dijkstra(*m, desc1.indices[0]);
-	std::vector<float> distances_2 = Geodesic_dijkstra(*m, desc2.indices[0]);
+	std::vector<float> distances_1 = Geodesic_dijkstra(*m, p1);
+	std::vector<float> distances_2 = Geodesic_dijkstra(*m, p2);
 
 	// lets normalzie boundary
 	auto dist_1_max_auto = std::max_element(distances_1.begin(), distances_1.end());
@@ -3225,4 +3207,31 @@ bool NLateral_check_far_away(TrilateralMesh* m, NLateralDescriptor& descs1, NLat
 		}
 	}
 	return is_far;
+}
+
+
+NLateralDescriptor NLateral_generate_symmetric_descriptor(TrilateralMesh* m, unsigned int p1, unsigned int p2, int hist_no , float fuzziness)
+{
+	/*std::vector<int> path_p1_p2 = Geodesic_between_two_points(*m, p1, p2);
+	float total_distance = 0;
+	for (size_t i = 0; i < path_p1_p2.size()-1; i++)
+	{
+		total_distance = total_distance + glm::distance(m->vertices[path_p1_p2[i]] , m->vertices[path_p1_p2[i + 1]]);
+	}
+	float half_distance = 0;
+	int index = -1;
+	for (size_t i = 0; i < path_p1_p2.size(); i++)
+	{
+		half_distance = half_distance + glm::distance(m->vertices[path_p1_p2[i]], m->vertices[path_p1_p2[i + 1]]);
+		if (half_distance >= total_distance / 2)
+		{
+			index = path_p1_p2[i];
+			break;
+		}
+	} */
+	std::vector<unsigned int> desc_points = {p1,p2};
+	float biggest_dist = 0; //useless
+	NLateralDescriptor desc = NLateral_generate_descriptor_w_midpoints(m, desc_points, fuzziness, biggest_dist);
+	desc.create_histogram_HKS(m, hist_no, p1);
+	return desc;
 }

@@ -992,7 +992,7 @@ float fuziness , float biggest_dijkstra , std::vector<unsigned int> original_agd
 			}
 			Curvature temp = c; 
 			bool is_hks = hks_param > std::abs(m->normalized_heat_kernel_signature[desc_i.indices[0]] - m->normalized_heat_kernel_signature[desc_j.indices[0]]);
-			bool is_sdf = NLateral_compare_SDF(m, desc_i, desc_j, m->sdf, sdf_param, temp_file);
+			bool is_sdf = NLateral_compare_SDF(m, desc_i.indices[0], desc_j.indices[0], m->sdf, sdf_param, temp_file);
 			bool is_dist_to_mid = NLateral_compare_distance_to_midpoint(m, desc_i, desc_j, mid_point_index , distance_to_midpoint_param,
 			temp_file);
 			bool is_cut = check_if_correspondece_cuts(m ,c , desc_i , desc_j );

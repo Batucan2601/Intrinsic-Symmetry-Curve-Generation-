@@ -6,6 +6,7 @@
 #include "../Include/Geodesic.h"
 #include "../Include/ShapeDiameter.h"
 #include "../Include/CurvatureGeneration.h"
+#include "../Include/Voronoi.h"
 
 //using the midpoints
 void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescriptor>& descs,
@@ -75,7 +76,7 @@ void NLateralMapping_get_best_pairs(TrilateralMesh* m, std::vector<NLateralDescr
 }
 
 
-std::vector<NLateralDescriptor> NLateralMapping_generate_via_midpoints(TrilateralMesh* m , std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau
+std::vector<NLateralDescriptor> NLateralMapping_generate_via_voronoi_midpoints(TrilateralMesh* m , std::vector<unsigned int>& agd_point_indices, float sweep_distance, float min_geo_tau
 ,float fuziness , float distance_to_mid_param , float hks_dif_param , float closeness_param ,float sdf_param ,  int hist_no , int min_agd_param , float& biggest_dijkstra, std::vector<unsigned int>&
 original_agd_vertices , float voronoi_param)
 {
@@ -110,91 +111,68 @@ original_agd_vertices , float voronoi_param)
 
 	//generate trilateral descriptors from midpoints
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
-	descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra, hist_no);
+	//descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra, hist_no);
 	m->sdf = computeSDF(m, 30, 15);
-	std::vector<std::vector<float>> hist_diffs;
-	for (size_t i = 0; i < descs.size(); i++)
+	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
-		std::vector<float> hist_i;
-		for (size_t j = 0; j < 3; j++)
-		{
-			descs[i].area_histogram[j].normalize(1);
-			descs[i].hks_histogram[j].normalize(1);
-		}
-		for (size_t j = 0; j < descs.size(); j++)
+		
+		for (size_t j = 0; j < agd_point_indices.size(); j++)
 		{
 			if (i == j)
 			{
 				continue; 
 			}
-			for (size_t k = 0; k < 3; k++)
-			{
-				descs[j].area_histogram[k].normalize(1);
-				descs[j].hks_histogram[k].normalize(1);
-			}
-			float dif_area_arr[3] = { 0,0,0 };
-			float dif_hks_arr[3] = { 0,0,0 };
-			for (size_t k = 0; k < 3; k++)
-			{
-				dif_area_arr[k] = Histogram_ChiSquareDistance(descs[i].area_histogram[k], descs[j].area_histogram[k]);
-				dif_hks_arr[k] = Histogram_ChiSquareDistance(descs[i].hks_histogram[k], descs[j].hks_histogram[k]);
-			}
-			glm::vec3 dif_area_arr_vec = glm::vec3(dif_area_arr[0], dif_area_arr[1], dif_area_arr[2]);
-			glm::vec3 dif_hks_arr_vec = glm::vec3(dif_hks_arr[0], dif_hks_arr[1], dif_hks_arr[2]);
-			float dif_area = glm::length(dif_area_arr_vec);
-	
-			float dif_hks = glm::length(dif_hks_arr_vec);
-
 			file << " i " << i << " j " << j << std::endl;
+			float hks_dif = std::abs(m->normalized_heat_kernel_signature[agd_point_indices[i]] - m->normalized_heat_kernel_signature[agd_point_indices[j]]);
+			bool is_hks = hks_dif < hks_dif_param;
+			bool is_sdf = NLateral_compare_SDF(m, agd_point_indices[i], agd_point_indices[j], m->sdf, sdf_param, file);
+			NLateralDescriptor d1, d2;
+			d1.indices.push_back(agd_point_indices[i]);
+			d2.indices.push_back(agd_point_indices[j]);
+			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, d1, d2, mid_point_index, distance_to_mid_param, file);
+			bool is_area_close =  NLateral_check_voronoi_area(m, agd_point_indices[i],
+				agd_point_indices[j], voronoi_param, 0.95);
+			bool is_close = Nlateral_compare_closeness(m, d1, d2, mid_point_index, closeness_param, file);
+			if (!(is_hks && is_sdf && is_points_close_to_midpoint && is_close))
+			{
+				continue; 
+			}
 
-			float dif = VarianceMin_compare(m, descs[i], descs[j], true, hist_no, 1);
+			//bool is_points_close_to_midpoint_2 = NLateral_compare_distance_to_midpoint(m, desc_i_j, desc_j_i, mid_point_index_2, distance_to_mid_param, file);
+			//bool is_points_close_to_midpoint_reverse = NLateral_compare_distance_to_midpoint_reverse(m, desc_i_j, desc_j_i, mid_point_index, mid_point_index_2, distance_to_mid_param, file);
+			//bool is_points_far_from_each_other = Nlateral_compare_closeness(m, desc_i_j, desc_j_i, mid_point_index, closeness_param, file);
+
+			//NLateralDescriptor desc_j_i = NLateral_generate_symmetric_descriptor(m, agd_point_indices[j], agd_point_indices[i],hist_no, fuziness);
+			//NLateralDescriptor desc_i_j = NLateral_generate_symmetric_descriptor(m, agd_point_indices[i], agd_point_indices[j],hist_no, fuziness);
+
+
+			//float dif = VarianceMin_compare(m, desc_i_j, desc_j_i, true, hist_no, 1);
+			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
+				agd_point_indices[j], voronoi_param, fuziness, hist_no, 10);
 			file << " dif " << dif << std::endl;
 
-			float hks_dif = std::abs(m->normalized_heat_kernel_signature[descs[i].indices[0]] - m->normalized_heat_kernel_signature[descs[j].indices[0]]);
-			bool is_hks = hks_dif < hks_dif_param;
 
-			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index, distance_to_mid_param, file);
-			bool is_points_close_to_midpoint_2 = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], mid_point_index_2, distance_to_mid_param, file);
-			bool is_points_close_to_midpoint_reverse = NLateral_compare_distance_to_midpoint_reverse(m, descs[i], descs[j],mid_point_index, mid_point_index_2, distance_to_mid_param, file);
-			bool is_points_far_from_each_other = Nlateral_compare_closeness(m, descs[i], descs[j], mid_point_index, closeness_param, file);
-			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], m->sdf, sdf_param , file);
+			
+
 			//bool is_voronoi = NLateral_compare_voronoi(m, descs[i], descs[j], mid_point_index, 0.15, file);
 			//bool is_midpoint_conv = NLateral_compare_divergence(m, descs[i], descs[j], mid_point_index, mid_point_index_2, file);
 			//std::vector<unsigned int> path_i_j = conv_int_to_unsigned(Geodesic_between_two_points(*m, descs[i].indices[0], descs[j].indices[0]));
-			unsigned int no_of_hit = 0;
-			/*bool is_hit = Geodesic_path_intersection(m, secondary_curve, path_i_j, no_of_hit);
-			bool is_same_agd = Nlateral_compare_closest_AGD(m, descs[i], descs[j], original_agd_vertices, file);
-			if (no_of_hit % 2 == 0)
-			{
-				is_hit = false; 
-			}
-			file <<  " no of hit to midpath " << no_of_hit << " is hit " << is_hit << std::endl;
-			*/
-			//bool is_ratio = NLateral_compare_path_ratio(m, descs[i], descs[j], ratio_dif_param, file);
-			//file << " is depth " << is_depth << std::endl;
-			//file << " histogram diff " << hist_diffs[i][j] << std::endl;
-
-			if (is_hks  && is_sdf ) // && is_close //&& is_voronoi 
+			 // && is_close //&& is_voronoi 
 			//&& is_points_far_from_each_other &&  !is_hit  && is_same_agd*/)  
-			{
-				std::pair<float, std::pair<unsigned int, unsigned int>> res;
-				//compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
-				compare_results.push_back(std::make_pair(dif, std::make_pair(i, j)));
-			}
-
-
+			std::pair<float, std::pair<unsigned int, unsigned int>> res;
+			//compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
+			compare_results.push_back(std::make_pair(dif, std::make_pair(i, j)));
 		}
-		hist_diffs.push_back(hist_i);
 	}
 	bool first = false; 
-	std::vector<bool> used(descs.size(), false);
+	std::vector<bool> used(agd_point_indices.size(), false);
 	std::sort(compare_results.begin(), compare_results.end());
 	// Greedily select pairs with smallest compare() result
 	for (const auto& entry : compare_results) {
 		int i = entry.second.first;
 		int j = entry.second.second;
 		if (!used[i] && !used[j]) {
-			resemblance_pairs.push_back({ descs[i].indices[0], descs[j].indices[0] });
+			resemblance_pairs.push_back({ agd_point_indices[i], agd_point_indices[j]});
 			used[i] = true;  // Mark these objects as used
 			
 			if (!first)
@@ -207,35 +185,12 @@ original_agd_vertices , float voronoi_param)
 	}
 	m->calculated_symmetry_pairs = resemblance_pairs;
 	
-	std::vector<unsigned int> voronoi_point_set;
-	std::vector<unsigned int> points_that_every_curve_has(m->vertices.size(), 0);
-	for (size_t i = 0; i < resemblance_pairs.size(); i++)
-	{
-		// part 1 - voronoi boundary
-		std::vector<float> distances_1 = Geodesic_dijkstra(*m, resemblance_pairs[i].first);
-		std::vector<float> distances_2 = Geodesic_dijkstra(*m, resemblance_pairs[i].second);
-		for (size_t j = 0; j < m->vertices.size(); j++)
-		{
-			float dif = std::abs(distances_1[j] - distances_2[j]);
-			if (dif < 1e-2)
-			{
-				//voronoi_point_set.push_back(j);
-				points_that_every_curve_has[j] += 1;
-			}
-		}
-
-	}
-	for (size_t i = 0; i < m->vertices.size(); i++)
-	{
-		if (points_that_every_curve_has[i] == resemblance_pairs.size())
-		{
-			voronoi_point_set.push_back(i);
-		}
-	}
-	m->color_points(voronoi_point_set, YELLOW);
-	
 	
 	return descs;
+}
+std::vector<unsigned int> NLateralMapping_get_best_curve_by_matching(TrilateralMesh* m )
+{
+	return std::vector<unsigned int>();
 }
 // try to add a new one with the highest quality
 // quality here being the 
@@ -369,7 +324,7 @@ float hks_dif_param , int hist_no )
 			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], descs[0].indices[1], distance_to_mid_param, file);
 			bool is_points_close_to_midpoint_2 = NLateral_compare_distance_to_midpoint(m, descs[i], descs[j], descs[0].indices[2], distance_to_mid_param, file);
 			//bool is_new_curve_makes_sense = Curvature_compare_with_new_addition(m , c ,  descs[i], descs[j] );
-			bool is_sdf = NLateral_compare_SDF(m, descs[i], descs[j], m->sdf, sdf_param, file);
+			bool is_sdf = NLateral_compare_SDF(m, descs[i].indices[0], descs[j].indices[0], m->sdf, sdf_param, file);
 			//bool is_voronoi = NLateral_compare_voronoi(m, descs[i], descs[j], descs[0].indices[1], 0.25, file);
 
 			if (is_hks && is_points_close_to_midpoint && is_points_close_to_midpoint_2 && is_sdf )
@@ -440,4 +395,29 @@ std::vector<unsigned int> NLateralMapping_get_unmathced_areas(TrilateralMesh* m,
 		m->color_points(colored_points, RED);
 	}
 	return colored_points; 
+}
+
+bool NLateral_check_voronoi_area(TrilateralMesh* m, unsigned int p1, unsigned int p2,float voronoi_param, float area_dif_param)
+{
+	Voronoi v(m, p1, p2,voronoi_param);
+	v.generate_voronoi_parts();
+	float part1_area = 0;
+	float part2_area = 0;
+	for (size_t i = 0; i < v.status.size(); i++)
+	{
+		if (v.status[i] == 0)
+		{
+			part1_area += m->areas[i];
+		}
+		else if (v.status[i] == 1)
+		{
+			part2_area += m->areas[i];
+		}
+	}
+	if (part1_area == 0 && part2_area == 0)
+	{
+		return 0; 
+	}
+	float ratio = std::min(part1_area, part2_area) / std::max(part1_area, part2_area);
+	return ratio; 
 }

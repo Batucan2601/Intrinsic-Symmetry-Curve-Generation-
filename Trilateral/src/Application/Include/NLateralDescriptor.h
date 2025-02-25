@@ -153,7 +153,7 @@ bool NLateral_compare_trilateral_with_midpoint(TrilateralMesh* m, unsigned int p
 bool NLateral_compare_FuzzyGeodesics(TrilateralMesh* m ,  NLateralDescriptor& desc1 , NLateralDescriptor& desc2 , float fuzzy_param);
 bool NLateral_compare_distance_to_midpoint(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, unsigned int midpoint_index
 ,float distance_to_mid_param, std::ofstream& file);
-bool NLateral_compare_SDF(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, std::vector<float>& sdf,
+bool NLateral_compare_SDF(TrilateralMesh* m, unsigned int& index1, unsigned int& index2, std::vector<float>& sdf,
 	float sdf_param, std::ofstream& file);
 bool Nlateral_compare_angles(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float angle_param);
 bool NLateral_compare_path_ratio(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float ratio_param, std::ofstream& file);
@@ -182,7 +182,7 @@ std::vector<NLateralDescriptor>  NLateral_generate_with_midpoints(TrilateralMesh
 	, float fuziness, float longest_distance, int hist_no );
 
 bool NLateral_compare_voronoi(TrilateralMesh* m, NLateralDescriptor& descs1, NLateralDescriptor& descs2,unsigned int mid_point_index, float dist_param , std::ofstream&file);
-std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, NLateralDescriptor desc1, NLateralDescriptor desc2);
+std::vector<unsigned int> NLateral_show_voronoi(TrilateralMesh* m, unsigned int p1, unsigned int p2);
 std::vector<unsigned int> NLateral_show_voronoi_midpoints(TrilateralMesh* m);
 std::vector<unsigned int> NLateral_generate_voronoi_curve(TrilateralMesh* m, std::vector<unsigned int> unconnected_voronoi_set, bool is_color);
 
@@ -193,3 +193,5 @@ bool NLateral_compare_distance_to_midpoint_reverse(TrilateralMesh* m, NLateralDe
 	, unsigned int midpoint_index_2, float distance_to_mid_param, std::ofstream& file);
 
 float NLateral_get_voronoi_area(TrilateralMesh* m, NLateralDescriptor& desc1, NLateralDescriptor& desc2, float voronoi_param);
+
+NLateralDescriptor NLateral_generate_symmetric_descriptor(TrilateralMesh* m, unsigned int p1, unsigned int p2, int hist_no, float fuzziness);
