@@ -2441,7 +2441,7 @@ bool NLateral_compare_position_to_midpoint(TrilateralMesh* m, NLateralDescriptor
 
 void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor> & descs)
 {
-	std::ofstream file("matching_points.txt");
+	std::ofstream file(m->file_name + "matching_points.txt");
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
 	{
 		int first = m->calculated_symmetry_pairs[i].first;
@@ -2449,7 +2449,10 @@ void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDesc
 		file << " " << first << " " << second << "\n";
 	}
 	file.close();
-	std::ofstream new_file("descriptors.txt");
+	std::ofstream file_mid(m->file_name + "midpoint.txt");
+	file_mid << m->midpoint << "\n";
+	file_mid.close();
+	std::ofstream new_file( m->file_name + "descriptors.txt");
 	for (size_t i = 0; i < descs.size(); i++)
 	{
 		new_file << " " << descs[i].indices[0] << " " << descs[i].indices[1] << " " << descs[i].indices[2] << " " << std::endl;
@@ -2468,7 +2471,7 @@ void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDesc
 }
 void Nlateral_read_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor>& descs)
 {
-	std::ifstream file("matching_points.txt");
+	std::ifstream file(m->file_name + "matching_points.txt");
 	// Read the file line by line
 	std::vector<std::pair<unsigned int, unsigned int>> sym_pair; 
 	std::string line; 
@@ -2484,8 +2487,19 @@ void Nlateral_read_matching_points(TrilateralMesh* m , std::vector<NLateralDescr
 	}
 	m->calculated_symmetry_pairs = sym_pair; 
 
+	std::ifstream file_mid(m->file_name + "midpoint.txt");
+	while (std::getline(file_mid, line)) {
+		std::stringstream ss(line); // Use stringstream to parse the line
+		int number;
+		std::vector<int> nums;
+		// Extract numbers from the line
+		while (ss >> number) {
+			nums.push_back(number);
+		}
+		m->midpoint = nums[0];
+	}
 
-	std::ifstream new_file("descriptors.txt" );
+	std::ifstream new_file(m->file_name + "descriptors.txt" );
 	unsigned int index = 0; 
 	NLateralDescriptor desc; 
 	while (std::getline(new_file, line)) {
@@ -3234,4 +3248,25 @@ NLateralDescriptor NLateral_generate_symmetric_descriptor(TrilateralMesh* m, uns
 	NLateralDescriptor desc = NLateral_generate_descriptor_w_midpoints(m, desc_points, fuzziness, biggest_dist);
 	desc.create_histogram_HKS(m, hist_no, p1);
 	return desc;
+}
+
+unsigned int NLateral_get_midpoint_with_agd_points(TrilateralMesh* m, std::vector<unsigned int>& agd_indices)
+{
+	std::vector<float> total_distances_from_agd(m->vertices.size(), 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float total_dist = 0;
+		std::vector<float> distances = Geodesic_dijkstra(*m, i );
+		for (size_t j = 0; j < agd_indices.size(); j++)
+		{
+			int index = agd_indices[j];
+			total_dist = total_dist + distances[index];
+		}
+		total_distances_from_agd[i] = total_dist;
+	}
+
+	auto max_auto = std::min_element(total_distances_from_agd.begin() , total_distances_from_agd.end());
+	unsigned int index = distance(total_distances_from_agd.begin(), max_auto);
+	m->midpoint = index; 
+	return index; 
 }

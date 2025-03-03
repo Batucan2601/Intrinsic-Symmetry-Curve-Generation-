@@ -106,7 +106,8 @@ original_agd_vertices , float voronoi_param)
 	unsigned int mid_point_index = -1;
 	unsigned int mid_point_index_2 = -1;
 	float best_distance; 
-	Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2, best_distance);
+	//Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2, best_distance);
+	mid_point_index = NLateral_get_midpoint_with_agd_points(m, agd_point_indices);
 	//secondary_curve = Geodesic_generate_secondary_curve_w_midpoints(m,mid_point_index , mid_point_index_2 );
 
 	//generate trilateral descriptors from midpoints
@@ -130,10 +131,8 @@ original_agd_vertices , float voronoi_param)
 			d1.indices.push_back(agd_point_indices[i]);
 			d2.indices.push_back(agd_point_indices[j]);
 			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, d1, d2, mid_point_index, distance_to_mid_param, file);
-			bool is_area_close =  NLateral_check_voronoi_area(m, agd_point_indices[i],
-				agd_point_indices[j], voronoi_param, 0.95);
 			bool is_close = Nlateral_compare_closeness(m, d1, d2, mid_point_index, closeness_param, file);
-			if (!(is_hks && is_sdf && is_points_close_to_midpoint && is_close))
+			if (!(is_hks && is_sdf && is_close && is_points_close_to_midpoint))
 			{
 				continue; 
 			}
@@ -142,13 +141,17 @@ original_agd_vertices , float voronoi_param)
 			//bool is_points_close_to_midpoint_reverse = NLateral_compare_distance_to_midpoint_reverse(m, desc_i_j, desc_j_i, mid_point_index, mid_point_index_2, distance_to_mid_param, file);
 			//bool is_points_far_from_each_other = Nlateral_compare_closeness(m, desc_i_j, desc_j_i, mid_point_index, closeness_param, file);
 
+			
+
+
+			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
+				agd_point_indices[j], voronoi_param, fuziness, hist_no, 10); 
+
 			//NLateralDescriptor desc_j_i = NLateral_generate_symmetric_descriptor(m, agd_point_indices[j], agd_point_indices[i],hist_no, fuziness);
 			//NLateralDescriptor desc_i_j = NLateral_generate_symmetric_descriptor(m, agd_point_indices[i], agd_point_indices[j],hist_no, fuziness);
-
-
 			//float dif = VarianceMin_compare(m, desc_i_j, desc_j_i, true, hist_no, 1);
-			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
-				agd_point_indices[j], voronoi_param, fuziness, hist_no, 10);
+
+
 			file << " dif " << dif << std::endl;
 
 

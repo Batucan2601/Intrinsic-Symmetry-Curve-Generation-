@@ -112,6 +112,8 @@ std::vector<unsigned int> original_agd_vertices;
 std::vector<unsigned int> avg_dijk_indices;
 std::vector<unsigned int> min_dijk_indices;
 std::vector<unsigned int> voronoi_set;
+int no_of_points_voronoi = 50;
+int voronoi_no = 0;
 Voronoi voronoi; 
 //curvature
 float quality_param = 0.7; 
@@ -371,21 +373,6 @@ static void Nlateral_functions(TrilateralMesh* m)
 
         ImGui::EndMenu();
     }
-    /*if (ImGui::MenuItem("End point matching with Dvorak significant poins Optimal transform without plane "))
-    {
-        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane(m, skeleton, dvorak_no_of_significant_points,
-        dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param,skel_depth_param, proximity_param,N);
-    }
-    if (ImGui::MenuItem("FPS matching with Dvorak significant poins Optimal transform without plane "))
-    {
-        nlateral_descriptors = NlateralMap_point_matching_with_skeleton_endpoints_and_OT_without_sym_plane_FPS(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, ratio_dif_param , area_dif_param ,N);
-    }
-    if (ImGui::MenuItem("End pointmatching with FPS "))
-    {
-        nlateral_descriptors = NlateralMap_point_matching_with_FPS_and_endpoints(m, skeleton, dvorak_no_of_significant_points,
-            dvorak_geodesic_dist_param, hks_dif_param, curv_param, norm_angle_param, skel_dist_param, skel_depth_param, proximity_param, N);
-    }*/
     if (ImGui::MenuItem("generate descriptors with midpoint "))
     {
         nlateral_descriptors = NLateralMapping_generate_via_voronoi_midpoints(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau,fuzzy_param
@@ -400,6 +387,10 @@ static void Nlateral_functions(TrilateralMesh* m)
     if (ImGui::MenuItem("Color distance from unmathced "))
     {
         NLateralMapping_get_unmathced_areas(m, curvature, 0.1 , true);
+    }
+    if (ImGui::MenuItem("Color midpoints of resemblances  "))
+    {
+        m->color_midpoints(ORANGE);
     }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
@@ -486,6 +477,20 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::MenuItem("show connected voronoi set "))
         {
             NLateral_generate_voronoi_curve(m, voronoi_set, true);
+        }
+        ImGui::InputInt("no of points added to voronoi ", &no_of_points_voronoi);
+        if (ImGui::MenuItem("Execute additive voronoi "))
+        {
+            Voronoi_algorithm_in_action(m, voronoi_param, hks_dif_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi , avg_dijk_indices);
+        }
+        if (ImGui::MenuItem("Color every pairs of voronoi  "))
+        {
+            Voronoi_color_every_pairs_voronoi(m, voronoi_param);
+        }
+        if (ImGui::InputInt("pair no  ", &voronoi_no))
+        {
+            Voronoi_show_voronoi(m, voronoi_no, voronoi_param);
+
         }
         ImGui::EndMenu();
     }
@@ -689,7 +694,12 @@ static void curvature_creation(TrilateralMesh* m )
     {
         curve_prune(m, curvature, false, true);
     }
+    if (ImGui::MenuItem("Generate curve with res pairs"))
+    {
+        curvature = CurvatureGeneration_generate_curve_w_sym_pairs(m);
+        is_draw_curvature = true; 
 
+    }
 }
 
 static std::pair<Eigen::VectorXd, Eigen::MatrixXd>  eigen_pairs;

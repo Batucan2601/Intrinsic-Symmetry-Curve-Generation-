@@ -39,6 +39,7 @@ public:
 	//plane properties
 	glm::vec3 plane_normal;
 	glm::vec3 plane_point;
+	unsigned int midpoint; 
 	//VAO object
 	unsigned int vao_normals; 
 	//project 
@@ -61,6 +62,7 @@ public:
 	void generate_raylib_mesh();
 	void update_raylib_mesh();
 	void calculate_sdf();
+	void color_midpoints(Color color);
 	private:
 	void read_ply_format(char* filename);
 	void read_off_format(char* filename);

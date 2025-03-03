@@ -67,3 +67,6 @@ void CurvatureGeneration_add_new_point_to_curve_PCA(TrilateralMesh* m, Curvature
 Curvature Curvature_generation_connect_front_and_back(TrilateralMesh* m, Curvature& front, Curvature& back);
 Curvature CurvatureGeneration_move_PCA_and_connect(TrilateralMesh* m, Curvature& front,
 	Curvature& back);
+
+
+Curvature CurvatureGeneration_generate_curve_w_sym_pairs(TrilateralMesh* m);

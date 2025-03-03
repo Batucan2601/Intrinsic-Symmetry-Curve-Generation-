@@ -1508,3 +1508,25 @@ Curvature CurvatureGeneration_move_PCA_and_connect(TrilateralMesh* m, Curvature&
 	build_curvature(m, other_curvature);
 	return other_curvature;
 }
+
+Curvature CurvatureGeneration_generate_curve_w_sym_pairs(TrilateralMesh* m)
+{
+	Curvature curvature;
+
+	Curvature other_curvature;
+	std::vector<unsigned int> midpoints; 
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index1 = m->calculated_symmetry_pairs[i].first;
+		int index2 = m->calculated_symmetry_pairs[i].second;
+		
+		int midpoint = Geodesic_find_midpoint(m, index1, index2);
+		CurvePoints p;
+		p.mid_point = midpoint;
+		curvature.curve_points.push_back(p);
+	}
+
+	build_curvature(m, curvature);
+
+	return curvature; 
+}

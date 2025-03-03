@@ -4,6 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../Include/CoreTypeDefs.h"
 #include "../Include/ShapeDiameter.h"
+#include "../Include/Geodesic.h"
 
 static void calculate_areas(TrilateralMesh* m);
 static float compute_triangle_area(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
@@ -876,4 +877,18 @@ void TrilateralMesh::calculate_PCA()
 void TrilateralMesh::calculate_SDF(int num_rays , float angle )
 {
 	this->sdf = computeSDF(this, num_rays, angle);
+}
+
+void TrilateralMesh::color_midpoints(Color color )
+{
+	std::vector<unsigned int>midpoints; 
+	for (size_t i = 0; i < this->calculated_symmetry_pairs.size(); i++)
+	{
+		int index1 = this->calculated_symmetry_pairs[i].first;
+		int index2 = this->calculated_symmetry_pairs[i].second;
+		int mid  = Geodesic_get_midpoint_from_path(this, index1, index2);
+		midpoints.push_back(mid);
+	}
+
+	this->color_points(midpoints, color);
 }
