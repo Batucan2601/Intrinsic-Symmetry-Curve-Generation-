@@ -13,7 +13,7 @@ struct Voronoi
 	std::vector<int> status; // if on right 0 if on voronoi -1 other part1 
 	void generate_voronoi_parts();
 	void color();
-
+	void connect_boundary();
 };
 
 float NLateral_generate_descriptors_with_random_voronoi_points(
@@ -24,11 +24,11 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param);
 
 Voronoi Voronoi_destroy_wrong_matches_and_recalculate(TrilateralMesh* m, float voronoi_param, Voronoi& v);
 Voronoi Voronoi_check_pair_closeness_and_recalculate(TrilateralMesh* m, float voronoi_param, float dist_to_voronoi_param, Voronoi& v);
-Voronoi Voronoi_algorithm_in_action(TrilateralMesh* m, float voronoi_param, float hks_param, float distance_param, int hist_no, float fuziness, int no_of_points, std::vector<unsigned int>& agd_points);
-void Voronoi_add_point(TrilateralMesh* m, Voronoi& voronoi, float voronoi_param, float hks_param, float dist_param, unsigned int midpoint, int hist_no, float fuziness
+Voronoi Voronoi_algorithm_in_action(TrilateralMesh* m, float voronoi_param, float hks_param, float sdf_param, float dist_param, int hist_no, float fuziness, int no_of_points, std::vector<unsigned int>& agd_points);
+void Voronoi_add_point(TrilateralMesh* m, Voronoi& voronoi, int selected_agd_index, float voronoi_param, float hks_param, float sdf_param , float dist_param, unsigned int midpoint, int hist_no, float fuziness
 	, std::vector<unsigned int>& agd_points);
 
-Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v, float voronoi_param, float hks_param, float distance_param, int hist_no, float fuziness, int no_of_points
+Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v, float voronoi_param, float hks_param,float sdf_param, float dist_param, int hist_no, float fuziness, int no_of_points
 	, std::vector<unsigned int>& agd_points);
 
 void Voronoi_color_every_pairs_voronoi(TrilateralMesh* m, float voronoi_param);

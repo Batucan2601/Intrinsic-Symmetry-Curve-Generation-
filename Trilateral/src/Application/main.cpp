@@ -31,7 +31,7 @@
 #define GLSL_VERSION            330
 
 static ModifiedCamera camera; 
-static void imgui_display_camera(Camera3D& camera);
+static void imgui_display_camera(Camera3D& camera, TrilateralMesh* m);
 int main(void) 
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
@@ -65,7 +65,7 @@ int main(void)
             EndMode3D();
             rlImGuiBegin();
             imgui_menu_bar(&m1);
-            imgui_display_camera(camera.camera);
+            imgui_display_camera(camera.camera , &m1 );
             rlImGuiEnd();
 
         EndDrawing();
@@ -77,7 +77,8 @@ int main(void)
     return 0;
 }
 static Camera3D temp;
-static void imgui_display_camera(Camera3D& camera)
+static int point_no;
+static void imgui_display_camera(Camera3D& camera , TrilateralMesh* m )
 {
     ImGui::Begin("Camera");
     ImGui::Text(" camera position X = %.6f", camera.position.x);
@@ -91,5 +92,11 @@ static void imgui_display_camera(Camera3D& camera)
     {
         camera.position = temp.position;
     }
+    if (ImGui::InputInt("teleport to point index" , &point_no))
+    {
+        Vector3 p = { m->vertices[point_no].x , m->vertices[point_no].y ,m->vertices[point_no].z };
+        camera.position = p;
+    }
+
     ImGui::End();
 }

@@ -481,7 +481,7 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputInt("no of points added to voronoi ", &no_of_points_voronoi);
         if (ImGui::MenuItem("Execute additive voronoi "))
         {
-            Voronoi_algorithm_in_action(m, voronoi_param, hks_dif_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi , avg_dijk_indices);
+            Voronoi_algorithm_in_action(m, voronoi_param, hks_dif_param, sdf_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi , avg_dijk_indices);
         }
         if (ImGui::MenuItem("Color every pairs of voronoi  "))
         {
@@ -491,6 +491,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
             Voronoi_show_voronoi(m, voronoi_no, voronoi_param);
 
+        }
+        if (ImGui::MenuItem("Voronoi connect boundary "))
+        {
+            voronoi.connect_boundary();
         }
         ImGui::EndMenu();
     }
