@@ -842,7 +842,7 @@ unsigned int Geodesic_find_midpoint(TrilateralMesh* m, unsigned int index1, unsi
 		half_dist = half_dist + glm::distance(m->vertices[paths[i]], m->vertices[paths[i + 1]]);
 		if (half_dist >= dist / 2)
 		{
-			return paths[i];
+			return paths[i+1];
 		}
 	}
 }
@@ -1117,6 +1117,7 @@ unsigned int Geodesic_send_ray_get_counterpart(TrilateralMesh* m, unsigned int& 
 		}
 
 	}
+	std::cout << " ray cast point " << smallest_hit_index<<  std::endl;
 	return smallest_hit_index; 
 }
 

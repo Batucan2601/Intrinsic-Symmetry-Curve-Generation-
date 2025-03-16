@@ -113,7 +113,7 @@ original_agd_vertices , float voronoi_param)
 	//generate trilateral descriptors from midpoints
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	//descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra, hist_no);
-	m->sdf = computeSDF(m, 30, 15);
+	//m->sdf = computeSDF(m, 30, 15);
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
 		
@@ -126,13 +126,36 @@ original_agd_vertices , float voronoi_param)
 			file << " i " << i << " j " << j << std::endl;
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[agd_point_indices[i]] - m->normalized_heat_kernel_signature[agd_point_indices[j]]);
 			bool is_hks = hks_dif < hks_dif_param;
-			bool is_sdf = NLateral_compare_SDF(m, agd_point_indices[i], agd_point_indices[j], m->sdf, sdf_param, file);
+			file << " hks dif " << hks_dif << std::endl; 
+			//bool is_sdf = NLateral_compare_SDF(m, agd_point_indices[i], agd_point_indices[j], m->sdf, sdf_param, file);
 			NLateralDescriptor d1, d2;
 			d1.indices.push_back(agd_point_indices[i]);
 			d2.indices.push_back(agd_point_indices[j]);
 			bool is_points_close_to_midpoint = NLateral_compare_distance_to_midpoint(m, d1, d2, mid_point_index, distance_to_mid_param, file);
 			bool is_close = Nlateral_compare_closeness(m, d1, d2, mid_point_index, closeness_param, file);
-			if (!(is_hks && is_sdf && is_close && is_points_close_to_midpoint))
+			bool is_voronoi_area = false;
+			Voronoi v(m, agd_point_indices[i], agd_point_indices[j], voronoi_param);
+			v.generate_voronoi_parts();
+			v.connect_boundary();
+			float area1 = 0;
+			float area2 = 0;
+			for (size_t i = 0; i < v.status.size(); i++)
+			{
+				if (v.status[i] == 1)
+				{
+					area1 += m->areas[i];
+				}
+				else if (v.status[i] == 2)
+				{
+					area2 += m->areas[i];
+				}
+			}
+			float ratio = std::min(area1,area2) / std::max(area1,area2);
+			std::vector<float> distances = Geodesic_dijkstra(*m, agd_point_indices[i]);
+			float dist = distances[agd_point_indices[j]];
+			bool is_dist = dist > 0.25; 
+			
+			if (!(is_hks && is_points_close_to_midpoint && is_dist))
 			{
 				continue; 
 			}
@@ -145,7 +168,7 @@ original_agd_vertices , float voronoi_param)
 
 
 			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
-				agd_point_indices[j], voronoi_param, fuziness, hist_no, 10); 
+				agd_point_indices[j], voronoi_param, fuziness, hist_no, 15); 
 
 			//NLateralDescriptor desc_j_i = NLateral_generate_symmetric_descriptor(m, agd_point_indices[j], agd_point_indices[i],hist_no, fuziness);
 			//NLateralDescriptor desc_i_j = NLateral_generate_symmetric_descriptor(m, agd_point_indices[i], agd_point_indices[j],hist_no, fuziness);

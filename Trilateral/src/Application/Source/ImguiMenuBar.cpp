@@ -110,6 +110,7 @@ int hist_param = 5;
 int min_agd_param  = 3;
 std::vector<unsigned int> original_agd_vertices; 
 std::vector<unsigned int> avg_dijk_indices;
+int geodesic_point_no = 0;
 std::vector<unsigned int> min_dijk_indices;
 std::vector<unsigned int> voronoi_set;
 int no_of_points_voronoi = 50;
@@ -466,6 +467,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
             voronoi = Voronoi_get_closest_voronoi(m, voronoi_param);
         }
+        if (ImGui::MenuItem("Prune voronoi "))
+        {
+           Voronoi_prune_voronoi(m, voronoi , voronoi_param);
+        }
         if (ImGui::MenuItem("Recalculate with better matches"))
         {
             voronoi = Voronoi_destroy_wrong_matches_and_recalculate(m,voronoi_param , voronoi );
@@ -593,6 +598,10 @@ static void geodesic(TrilateralMesh* m)
     if (ImGui::MenuItem("Read Sampled points "))
     {
         Geodesic_read_sampled_points(m, avg_dijk_indices);
+    }
+    if (ImGui::InputInt("Show the sampled point " , &geodesic_point_no))
+    {
+
     }
     if (ImGui::MenuItem("FPS with midpoint sampling"))
     {
@@ -799,11 +808,18 @@ static void draw_curves(TrilateralMesh* m)
 static void draw_spheres(TrilateralMesh* m, float radius)
 {
     if (is_draw_agd)
-    {
+    { 
         for (size_t i = 0; i < avg_dijk_indices.size(); i++)
         {
             int index = avg_dijk_indices[i];
-            DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+            if (i == geodesic_point_no)
+            {
+                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+            }
+            else
+            {
+                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+            }
         }
         if (!(avg_dijk_indices.size() == 0))
         {

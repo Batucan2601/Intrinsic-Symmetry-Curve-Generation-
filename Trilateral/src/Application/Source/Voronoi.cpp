@@ -11,6 +11,8 @@ Voronoi::Voronoi()
 Voronoi::Voronoi(TrilateralMesh* m, unsigned int p1, unsigned int p2 , float param )
 {
 	this->m = m;
+	this->p1 = p1;
+	this->p2 = p2;
 	//we have to build indices 
 	// part 1 - voronoi boundary
 	std::vector<float> distances_1 = Geodesic_dijkstra(*m, p1);
@@ -97,11 +99,11 @@ void Voronoi::color()
 	std::vector<unsigned int> half5;
 	for (  int i = 0; i < this->status.size();  i++)
 	{
-		if (this->status[i] == -1 )
+		/*if (this->status[i] == -1)
 		{
 			voronoi_part.push_back(i);
-		}
-		else if (this->status[i] == 1)
+		}*/
+		if (this->status[i] == 1)
 		{
 			half1.push_back(i);
 		}
@@ -122,12 +124,11 @@ void Voronoi::color()
 			half5.push_back(i);
 		}
 	}
-
-	this->m->color_points(voronoi_part, YELLOW);
+	this->m->color_points(this->indices, YELLOW);
 	this->m->color_points(half1, GREEN);
 	this->m->color_points(half2, RED);
 	this->m->color_points(half3, BLUE);
-	this->m->color_points(half4, ORANGE);
+	this->m->color_points(half4, BLACK);
 	this->m->color_points(half5, PINK);
 }
 float Voronoi::distance_to_index(unsigned int index)
@@ -359,61 +360,101 @@ void Voronoi_add_point(TrilateralMesh* m, Voronoi& voronoi , int selected_agd_in
 }
 Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 {
+
 	std::vector<std::pair<float,unsigned int>> midpoints;
 	std::vector<float> total_distances(m->calculated_symmetry_pairs.size(),0);
 	std::vector<float> weights(m->calculated_symmetry_pairs.size(), 0);
 	std::vector<float> distances_from_mid = 	Geodesic_dijkstra(*m, m->midpoint);
+	std::vector<float> voronoi_lengths(m->calculated_symmetry_pairs.size(), 0);
+
+	std::vector<std::vector<int>> matching_paths; 
 
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
 	{
 		int index1 = m->calculated_symmetry_pairs[i].first;
 		int index2 = m->calculated_symmetry_pairs[i].second;
-		int midpoint = Geodesic_get_midpoint_from_path(m, index1, index2);
-		midpoints.push_back(std::make_pair(0,midpoint));
-		//weights 
-		std::vector<float> distances_from_mid = Geodesic_dijkstra(*m, midpoint);
-		//weights.push_back((distances_from_mid[index1] + distances_from_mid[index2]) / 2);
-		
-		float dif_midpoint = std::abs(distances_from_mid[index1] + distances_from_mid[index2]);
-		float dif_hks = std::abs(m->normalized_heat_kernel_signature[index1] - m->normalized_heat_kernel_signature[index2]);
-		float sigma = 0.02; // random
-		//float weight = std::exp(-(dif_midpoint * dif_midpoint) / (2 * sigma * sigma));
-		float weight = std::exp(-(dif_midpoint * dif_midpoint) / (2 * sigma * sigma));
-		//weights[i] = ( weight);
-		Voronoi v(m, index1, index2, voronoi_param);
-		std::vector<float> dist_index1 = Geodesic_dijkstra(*m, index1);
-		std::vector<float> dist_index2 = Geodesic_dijkstra(*m, index2);
-		weight = 0; 
-		for (size_t i = 0; i < v.indices.size(); i++)
-		{
-			float dist1 = dist_index1[v.indices[i]];
-			float dist2 = dist_index2[v.indices[i]];
-			weight = weight + std::min(dist1,dist2) / std::max(dist1,dist2);
-		}
-		weight = weight / v.indices.size();
-		weights[i] = weight ;
+		std::vector<int> path = Geodesic_between_two_points(*m, index1, index2);
+		matching_paths.push_back(path);
 	}
-	float max = *std::max_element(weights.begin() , weights.end());
-	/*for (size_t i = 0; i < weights.size(); i++)
+	float biggest_size = 0;
+	float smallest_size = INFINITY;
+	for (size_t i = 0; i < matching_paths.size(); i++)
 	{
-		weights[i] = weights[i] / max;
-	} */
+		if (matching_paths[i].size() > biggest_size)
+		{
+			biggest_size = matching_paths[i].size();
+		}
+		if (matching_paths[i].size() < smallest_size)
+		{
+			smallest_size = matching_paths[i].size();
+		}
+	}
+	for (size_t i = 0; i < weights.size(); i++)
+	{
+		float length_normalized = (matching_paths[i].size() - smallest_size) / (biggest_size - smallest_size);
+		weights[i] = length_normalized;
+		weights[i] = std::pow(weights[i],1);
+	}
+
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index1 = m->calculated_symmetry_pairs[i].first;
+		int index2 = m->calculated_symmetry_pairs[i].second;
+		unsigned int midpoint = Geodesic_find_midpoint(m ,index1,index2 );
+		midpoints.push_back(std::make_pair(0, midpoint));
+	}
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
 	{
 		int index1 = m->calculated_symmetry_pairs[i].first;
 		int index2 = m->calculated_symmetry_pairs[i].second;
 		Voronoi v(m, index1, index2, voronoi_param);
+		v.generate_voronoi_parts();
+		v.connect_boundary();
+		v.generate_voronoi_parts();
+
+		/*float voronoi_ratio = (float)v.indices.size() / m->vertices.size();
+		if (voronoi_ratio > 0.2)
+		{
+			total_distances[i] = INFINITY; 
+			continue; 
+		}*/
+
+		voronoi_lengths[i] = v.indices.size();
 		for (size_t j = 0; j < m->calculated_symmetry_pairs.size(); j++)
 		{
+			if (i == j)
+			{
+				continue; 
+			}
 			unsigned int midpoint = midpoints[j].second;
 			std::vector<float> distances = Geodesic_dijkstra(*m, midpoint);
 			float min_dist = INFINITY;
 			float dist_to_voronoi_1 = v.distance_to_index(m->calculated_symmetry_pairs[j].first);
 			float dist_to_voronoi_2 = v.distance_to_index(m->calculated_symmetry_pairs[j].second);
 			float ratio = std::min(dist_to_voronoi_1, dist_to_voronoi_2) / std::max(dist_to_voronoi_1, dist_to_voronoi_2);
-			/*float sigma = 0.02; // random
-			float weight = std::exp(-(1.0/ratio * 1.0/ratio) / (2 * sigma * sigma));
-			weights[j] = weight;*/
+
+			//check the best path voronoi intersects this
+			std::vector<float> distances1 = Geodesic_dijkstra(*m, m->calculated_symmetry_pairs[j].first);
+			std::vector<float> distances2 = Geodesic_dijkstra(*m, m->calculated_symmetry_pairs[j].second);
+
+			float best_ratio = 0; 
+			for (size_t k = 0; k < v.indices.size(); k++)
+			{
+				for (size_t t = 0; t < matching_paths[j].size(); t++)
+				{
+					if (v.indices[k] == matching_paths[j][t])
+					{
+						float dist_to_index1 = distances1[v.indices[k]];
+						float dist_to_index2 = distances2[v.indices[k]];
+						float ratio = std::min(dist_to_index1 , dist_to_index2) / std::max(dist_to_index1, dist_to_index2);
+						if (ratio > best_ratio)
+						{
+							best_ratio = ratio; 
+						}
+					}
+				}
+			}
+
 			for (size_t k = 0; k < v.indices.size(); k++)
 			{
 				int voronoi_index = v.indices[k];
@@ -423,9 +464,26 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 					min_dist =  voronoi_dist;
 				}
 			}
-			total_distances[i] += min_dist * std::pow(weights[j] , 4 );
+			total_distances[i] += min_dist * weights[j];
+			//total_distances[i] += best_ratio; //* weights[j];
 		}
+		/*for (size_t j = 0; j < v.status.size(); j++)
+		{
+			if (v.status[j] > 2)
+			{
+				total_distances[i] = INFINITY; 
+				break;
+			}
+		}*/
 	}
+	/*auto most_voronoi_length = std::max_element(voronoi_lengths.begin(), voronoi_lengths.end());
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		voronoi_lengths[i] = voronoi_lengths[i] / *most_voronoi_length;
+		float epsilon = 5 * 1e-2; 
+		float weight = epsilon + (1 - epsilon) * std::pow((1 - voronoi_lengths[i]),2);
+		total_distances[i] = total_distances[i] * weight;
+	} */
 	auto least_elem_auto = std::min_element(total_distances.begin(), total_distances.end());
 	int minIndex = std::distance(total_distances.begin(), least_elem_auto);
 	std::cout << " selected voronoi pair " << m->calculated_symmetry_pairs[minIndex].first << " "
@@ -439,6 +497,264 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 	v.generate_voronoi_parts();
 	v.color();
 	return v;
+}
+
+void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_param)
+{
+	unsigned int midpoint = Geodesic_get_midpoint_from_path(m, voronoi.p1, voronoi.p2);
+	std::vector<float> distances_from_mid = Geodesic_dijkstra(*m, midpoint);
+
+	float distance_to_mesh_midpoint = distances_from_mid[m->midpoint];
+
+	std::vector<unsigned int> to_removed; 
+	for (int i = voronoi.indices.size()-1; i >= 0  ; i--)
+	{
+		int index = voronoi.indices[i];
+		if (distances_from_mid[index] > distance_to_mesh_midpoint)
+		{
+			to_removed.push_back(i);
+		}
+	}
+	std::vector<unsigned int> re_colored;
+	for (size_t i = 0; i < to_removed.size(); i++)
+	{
+		re_colored.push_back(voronoi.indices[to_removed[i]]);
+		voronoi.indices.erase(voronoi.indices.begin() + to_removed[i]);
+	}
+	//midpoints
+	std::vector<unsigned int> correspondence_midpoints;
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index1 = m->calculated_symmetry_pairs[i].first;
+		int index2 = m->calculated_symmetry_pairs[i].second;
+		unsigned int midpoint = Geodesic_get_midpoint_from_path(m, index1, index2);
+		correspondence_midpoints.push_back(midpoint);
+	}
+
+	std::vector<unsigned int> voronoi_front;
+	std::vector<unsigned int> voronoi_back;
+	unsigned int normal_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, m->midpoint);
+	glm::vec3 normal_midpoint_inv = m->normals[normal_midpoint_inverse];
+	glm::vec3 normal_midpoint = m->normals[m->midpoint];
+	for (size_t i = 0; i < voronoi.indices.size(); i++)
+	{
+		int index = voronoi.indices[i];
+		glm::vec3 normal = m->normals[index];
+		float dotfront = glm::dot(normal, normal_midpoint);
+		float dotback = glm::dot(normal, normal_midpoint_inv);
+		if (dotfront > dotback)
+		{
+			voronoi_front.push_back(index);
+		}
+		else
+		{
+			voronoi_back.push_back(index);
+		}
+	}
+
+	float farthest_distance_front = 0;
+	int farthest_midpoint_front = -1;
+	for (size_t i = 0; i < correspondence_midpoints.size(); i++)
+	{
+		glm::vec3 normal = m->normals[correspondence_midpoints[i]];
+		float dotfront = glm::dot(normal, normal_midpoint);
+		float dotback = glm::dot(normal, normal_midpoint_inv);
+		if (!(dotfront > dotback))
+		{
+			continue; 
+		}
+		float distance = 0;
+		std::vector<float> distances = Geodesic_dijkstra(*m, correspondence_midpoints[i]);
+		for (size_t j = 0; j < voronoi_front.size(); j++)
+		{
+			int index = voronoi_front[j];
+			distance = distance + distances[index];
+		}
+
+		if (distance > farthest_distance_front)
+		{
+			farthest_distance_front = distance;
+			farthest_midpoint_front = i;
+		}
+	}
+	/*std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], m->midpoint);
+	std::vector<unsigned int> path_us;
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		path_us.push_back(path[i]);
+	}
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+	} */
+
+	float farthest_distance_back = 0;
+	int farthest_midpoint_back = -1;
+	for (size_t i = 0; i < correspondence_midpoints.size(); i++)
+	{
+		glm::vec3 normal = m->normals[correspondence_midpoints[i]];
+		float dotfront = glm::dot(normal, normal_midpoint);
+		float dotback = glm::dot(normal, normal_midpoint_inv);
+		if (!(dotback > dotfront))
+		{
+			continue;
+		}
+
+		float distance = 0;
+		std::vector<float> distances = Geodesic_dijkstra(*m, correspondence_midpoints[i]);
+		for (size_t j = 0; j < voronoi_back.size(); j++)
+		{
+			int index = voronoi_back[j];
+			distance = distance + distances[index];
+		}
+
+		if (distance > farthest_distance_back)
+		{
+			farthest_distance_back = distance;
+			farthest_midpoint_back = i;
+		}
+	}
+
+	m->color_points(re_colored, WHITE);
+	m->color_points(voronoi_back, BLACK);
+	m->color_points(voronoi_front, BLUE);
+
+	/*  if (farthest_distance_front < farthest_distance_back)
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], m->midpoint);
+		m->color_points(conv_int_to_unsigned(path), DARKBLUE);
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			voronoi.indices.push_back(path[i]);
+		}
+
+		std::vector<float> distances = Geodesic_dijkstra(*m, m->midpoint);
+		int smallest = -1; 
+		float smallets_dist = INFINITY;
+		for (size_t i = 0; i < voronoi_back.size(); i++)
+		{
+			if (distances[voronoi_back[i]] < smallets_dist)
+			{
+				smallets_dist = distances[voronoi_back[i]];
+				smallest = voronoi_back[i];
+			}
+		}
+		path = Geodesic_between_two_points(*m, normal_midpoint_inverse, correspondence_midpoints[farthest_midpoint_front]);
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			voronoi.indices.push_back(path[i]);
+		}
+
+		
+		m->color_points(conv_int_to_unsigned(path), PURPLE);
+	}
+	else */
+
+	unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
+	float closest_dist = INFINITY;
+	int closest_index = -1;
+	std::vector<float> distances_from_inverse_voronoi = Geodesic_dijkstra(*m , voronoi_midpoint_inverse); 
+	for (size_t i = 0; i < voronoi.indices.size(); i++)
+	{
+		int index = voronoi.indices[i];
+		float dist = distances_from_inverse_voronoi[index];
+		if (closest_dist > dist)
+		{
+			closest_dist = dist; 
+			closest_index = voronoi.indices[i];
+		}
+	}
+	voronoi_midpoint_inverse = closest_index;
+
+	std::vector<float> distances_from_voroni_midpoint = Geodesic_dijkstra(*m, midpoint);
+
+
+	std::vector<unsigned int > path = voronoi.get_closest_path(midpoint, voronoi_midpoint_inverse);
+
+	//std::vector<int> path1 = Geodesic_between_two_points(*m, closest_index, midpoint );
+	//std::vector<int> path2 = Geodesic_between_two_points(*m, closest_index, voronoi_midpoint_inverse);
+
+	//m->color_points(conv_int_to_unsigned(path1), ORANGE);
+	//m->color_points(conv_int_to_unsigned(path2), ORANGE);
+	m->color_points(path , ORANGE);
+	return; 
+	
+	bool is_midpoint_front_bad = true; 
+	if (distances_from_mid[correspondence_midpoints[farthest_midpoint_back]] > distances_from_mid[normal_midpoint_inverse])
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_back], normal_midpoint_inverse);
+
+		m->color_points(conv_int_to_unsigned(path), DARKBLUE);
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			voronoi.indices.push_back(path[i]);
+		}
+		is_midpoint_front_bad = false; 
+	}
+
+	bool is_midpoint_back_bad = true;
+	if (distances_from_mid[correspondence_midpoints[farthest_midpoint_front]] > distances_from_mid[m->midpoint])
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], m->midpoint);
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			voronoi.indices.push_back(path[i]);
+		}
+		m->color_points(conv_int_to_unsigned(path), PURPLE);
+		is_midpoint_back_bad = false;
+	}
+	
+	if (!is_midpoint_front_bad && !is_midpoint_back_bad)
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], correspondence_midpoints[2]);
+		m->color_points(conv_int_to_unsigned(path), YELLOW);
+	}
+	else if (!is_midpoint_front_bad)
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, m->midpoint, correspondence_midpoints[farthest_midpoint_back]);
+		m->color_points(conv_int_to_unsigned(path), YELLOW);
+	}
+	else if (!is_midpoint_back_bad)
+	{
+		std::vector<int> path = Geodesic_between_two_points(*m, normal_midpoint_inverse, correspondence_midpoints[farthest_midpoint_front]);
+		m->color_points(conv_int_to_unsigned(path), YELLOW);
+	}
+
+
+	/*std::vector<int> path1 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_front]);
+	std::vector<int> path2 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_back]);
+	std::vector<int> path3 = Geodesic_between_two_points(*m, midpoint, m->midpoint);
+	std::vector<int> path4 = Geodesic_between_two_points(*m, midpoint, normal_midpoint_inverse);
+
+
+	std::vector<int> path2 = Geodesic_between_two_points(*m, m->midpoint, correspondence_midpoints[farthest_midpoint_front]);
+	std::vector<int> path3 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_front]);*/
+	/*std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_back], normal_midpoint_inverse);
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+	}
+	path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], midpoint);
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+	}
+	path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], correspondence_midpoints[farthest_midpoint_back]);
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+	} 
+
+	voronoi.generate_voronoi_parts(); */
+	//voronoi.connect_boundary();
+	//voronoi.color();
+
+
+	//m->color_points(path_us, ORANGE);
+	//m->color_points(path_us, ORANGE);
+
+
+	//m->color_points(voronoi.indices, YELLOW);
 }
 Voronoi Voronoi_destroy_wrong_matches_and_recalculate(TrilateralMesh* m, float voronoi_param, Voronoi& v)
 {
@@ -506,6 +822,7 @@ void Voronoi_color_every_pairs_voronoi(TrilateralMesh* m, float voronoi_param)
 		Voronoi v(m, index1, index2, voronoi_param);
 		v.generate_voronoi_parts();
 		vec_v.push_back(v);
+
 	}
 	std::vector<unsigned int> points_mentioned(m->vertices.size(), 0);
 	for (size_t i = 0; i < vec_v.size(); i++)
@@ -564,6 +881,13 @@ void Voronoi_show_voronoi(TrilateralMesh* m,  unsigned int pair_no , float voron
 	Voronoi v(m, index1, index2, voronoi_param);
 	v.generate_voronoi_parts();
 	v.color();
+	std::vector<unsigned int> pairs; 
+	pairs.push_back(index1);
+	pairs.push_back(index2);
+	std::vector<float> distance = Geodesic_dijkstra(*m, index1);
+	std::cout << " distance " << distance[index2] << std::endl;
+	std::cout << index1 << " " << index2 << std::endl; 
+	m->color_points(pairs, PURPLE);
 }
 int Voronoi_get_closest_unvisited_index(TrilateralMesh* m, Voronoi& v, std::vector<int>& is_visited , int index)
 {
@@ -672,4 +996,47 @@ void Voronoi::connect_boundary()
 		this->indices.push_back(end_result[i]);
 	}
 	m->color_points(end_result, ORANGE);
+}
+
+//index1 , index2 mesh indices not voronoi indices 
+std::vector<unsigned int> Voronoi::get_closest_path(unsigned int index1, unsigned int index2)
+{
+	std::vector<int> vector_of_indices(this->m->vertices.size(), -1);
+	std::vector<int> vector_of_indices_inverse(this->indices.size(), -1);
+	TrilateralMesh temp;
+	for (size_t i = 0; i < this->indices.size(); i++)
+	{
+		temp.vertices.push_back(this->m->vertices[this->indices[i]]);
+		vector_of_indices[this->indices[i]] = i;
+		vector_of_indices_inverse[i] = this->indices[i];
+	}
+	temp.adjacenies = std::vector<std::vector<std::pair<int, float>>>(this->indices.size());
+	for (size_t i = 0; i < this->indices.size(); i++)
+	{
+		int index = this->indices[i];
+		std::vector<std::pair<int, float>> adjacency = this->m->adjacenies[index];
+		std::vector<std::pair<int, float>> new_adjacency;
+		for (size_t j = 0; j < adjacency.size(); j++)
+		{
+			int adjacent_index = adjacency[j].first;
+			float distance = adjacency[j].second;
+			if (vector_of_indices[adjacent_index] != -1)
+			{
+				std::pair<int, float> pair = std::make_pair(vector_of_indices[adjacent_index],distance);
+				new_adjacency.push_back(pair);
+			}
+		}
+		temp.adjacenies[i] = new_adjacency;
+	}
+
+	std::vector<unsigned int> path = conv_int_to_unsigned(Geodesic_between_two_points(temp, vector_of_indices[index1], vector_of_indices[index2]));
+
+	std::vector<unsigned int> converted_path;
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		int index = path[i];
+		int converted_back = vector_of_indices_inverse[index];
+		converted_path.push_back(converted_back);
+	}
+	return converted_path;
 }

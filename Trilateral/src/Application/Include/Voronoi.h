@@ -14,6 +14,9 @@ struct Voronoi
 	void generate_voronoi_parts();
 	void color();
 	void connect_boundary();
+	int p1, p2;
+
+	std::vector<unsigned int> get_closest_path(unsigned int index1, unsigned int index2);
 };
 
 float NLateral_generate_descriptors_with_random_voronoi_points(
@@ -33,3 +36,5 @@ Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v, float 
 
 void Voronoi_color_every_pairs_voronoi(TrilateralMesh* m, float voronoi_param);
 void Voronoi_show_voronoi(TrilateralMesh* m, unsigned int pair_no, float voronoi_param);
+
+void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_param);
