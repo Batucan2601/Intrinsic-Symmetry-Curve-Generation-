@@ -225,11 +225,12 @@ Voronoi Voronoi_algorithm_in_action(TrilateralMesh* m, float voronoi_param, floa
 	std::vector<unsigned int>& agd_indices)
 {
 	Voronoi v = Voronoi_get_closest_voronoi(m, voronoi_param);
+	Voronoi_prune_voronoi(m, v, voronoi_param);
 	v = Voronoi_destroy_wrong_matches_and_recalculate(m, voronoi_param, v);
 	v = Voronoi_check_pair_closeness_and_recalculate(m, voronoi_param, dist_param, v);
 
 	v = Voronoi_add_points_and_recalculate(m, v, voronoi_param, hks_param, sdf_param, dist_param, hist_no, fuziness, no_of_points, agd_indices);
-	v = Voronoi_get_closest_voronoi(m, voronoi_param);
+	//v = Voronoi_get_closest_voronoi(m, voronoi_param);
 	return v; 
 }
 Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v,float voronoi_param, float hks_param, float sdf_param,float dist_param, int hist_no, float fuziness, int no_of_points
@@ -272,7 +273,7 @@ Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v,float v
 		}
 		Voronoi_add_point(m, v, selected_agd_index, voronoi_param,  hks_param, sdf_param,dist_param, m->midpoint, hist_no, fuziness , agd_points);
 	}
-	v = Voronoi_get_closest_voronoi(m, voronoi_param);
+	//v = Voronoi_get_closest_voronoi(m, voronoi_param);
 	return v; 
 }
 void Voronoi_add_point(TrilateralMesh* m, Voronoi& voronoi , int selected_agd_index,  float voronoi_param , float hks_param , float sdf_param , float dist_param, unsigned int midpoint , int hist_no, float fuziness
@@ -502,6 +503,7 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_param)
 {
 	unsigned int midpoint = Geodesic_get_midpoint_from_path(m, voronoi.p1, voronoi.p2);
+	unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
 	std::vector<float> distances_from_mid = Geodesic_dijkstra(*m, midpoint);
 
 	float distance_to_mesh_midpoint = distances_from_mid[m->midpoint];
@@ -619,38 +621,8 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 	m->color_points(voronoi_back, BLACK);
 	m->color_points(voronoi_front, BLUE);
 
-	/*  if (farthest_distance_front < farthest_distance_back)
-	{
-		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], m->midpoint);
-		m->color_points(conv_int_to_unsigned(path), DARKBLUE);
-		for (size_t i = 0; i < path.size(); i++)
-		{
-			voronoi.indices.push_back(path[i]);
-		}
 
-		std::vector<float> distances = Geodesic_dijkstra(*m, m->midpoint);
-		int smallest = -1; 
-		float smallets_dist = INFINITY;
-		for (size_t i = 0; i < voronoi_back.size(); i++)
-		{
-			if (distances[voronoi_back[i]] < smallets_dist)
-			{
-				smallets_dist = distances[voronoi_back[i]];
-				smallest = voronoi_back[i];
-			}
-		}
-		path = Geodesic_between_two_points(*m, normal_midpoint_inverse, correspondence_midpoints[farthest_midpoint_front]);
-		for (size_t i = 0; i < path.size(); i++)
-		{
-			voronoi.indices.push_back(path[i]);
-		}
 
-		
-		m->color_points(conv_int_to_unsigned(path), PURPLE);
-	}
-	else */
-
-	unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
 	float closest_dist = INFINITY;
 	int closest_index = -1;
 	std::vector<float> distances_from_inverse_voronoi = Geodesic_dijkstra(*m , voronoi_midpoint_inverse); 
@@ -669,18 +641,11 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 	std::vector<float> distances_from_voroni_midpoint = Geodesic_dijkstra(*m, midpoint);
 
 
-	std::vector<unsigned int > path = voronoi.get_closest_path(midpoint, voronoi_midpoint_inverse);
-
-	//std::vector<int> path1 = Geodesic_between_two_points(*m, closest_index, midpoint );
-	//std::vector<int> path2 = Geodesic_between_two_points(*m, closest_index, voronoi_midpoint_inverse);
-
-	//m->color_points(conv_int_to_unsigned(path1), ORANGE);
-	//m->color_points(conv_int_to_unsigned(path2), ORANGE);
-	m->color_points(path , ORANGE);
-	return; 
-	
+	m->color_all(WHITE);
+	std::vector<unsigned int > new_path = voronoi.get_closest_path(midpoint, voronoi_midpoint_inverse);
+	m->color_points(new_path, YELLOW);
 	bool is_midpoint_front_bad = true; 
-	if (distances_from_mid[correspondence_midpoints[farthest_midpoint_back]] > distances_from_mid[normal_midpoint_inverse])
+	//if (distances_from_mid[correspondence_midpoints[farthest_midpoint_back]] > distances_from_mid[normal_midpoint_inverse])
 	{
 		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_back], normal_midpoint_inverse);
 
@@ -688,38 +653,54 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 		for (size_t i = 0; i < path.size(); i++)
 		{
 			voronoi.indices.push_back(path[i]);
+			new_path.push_back(path[i]);
 		}
 		is_midpoint_front_bad = false; 
 	}
 
 	bool is_midpoint_back_bad = true;
-	if (distances_from_mid[correspondence_midpoints[farthest_midpoint_front]] > distances_from_mid[m->midpoint])
+	//if (distances_from_mid[correspondence_midpoints[farthest_midpoint_front]] > distances_from_mid[m->midpoint])
 	{
 		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], m->midpoint);
 		for (size_t i = 0; i < path.size(); i++)
 		{
 			voronoi.indices.push_back(path[i]);
+			new_path.push_back(path[i]);
 		}
 		m->color_points(conv_int_to_unsigned(path), PURPLE);
 		is_midpoint_back_bad = false;
 	}
 	
-	if (!is_midpoint_front_bad && !is_midpoint_back_bad)
+	std::vector<int> path = Geodesic_between_two_points(*m, voronoi_midpoint_inverse, m->midpoint);
+	for (size_t i = 0; i < path.size(); i++)
 	{
-		std::vector<int> path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], correspondence_midpoints[2]);
-		m->color_points(conv_int_to_unsigned(path), YELLOW);
-	}
-	else if (!is_midpoint_front_bad)
-	{
-		std::vector<int> path = Geodesic_between_two_points(*m, m->midpoint, correspondence_midpoints[farthest_midpoint_back]);
-		m->color_points(conv_int_to_unsigned(path), YELLOW);
-	}
-	else if (!is_midpoint_back_bad)
-	{
-		std::vector<int> path = Geodesic_between_two_points(*m, normal_midpoint_inverse, correspondence_midpoints[farthest_midpoint_front]);
-		m->color_points(conv_int_to_unsigned(path), YELLOW);
-	}
+		voronoi.indices.push_back(path[i]);
+		new_path.push_back(path[i]);
+		m->color_points(conv_int_to_unsigned(path), GREEN);
 
+	}
+	path = Geodesic_between_two_points(*m, midpoint, normal_midpoint_inverse);
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+		new_path.push_back(path[i]);
+		m->color_points(conv_int_to_unsigned(path), RED);
+
+	}
+	path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], normal_midpoint_inverse);
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		voronoi.indices.push_back(path[i]);
+		new_path.push_back(path[i]);
+		m->color_points(conv_int_to_unsigned(path), BLUE);
+
+	}
+	
+	voronoi.indices.clear();
+	voronoi.indices = new_path;
+	voronoi.generate_voronoi_parts();
+	voronoi.color();
+	//m->color_points(new_path, ORANGE);
 
 	/*std::vector<int> path1 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_front]);
 	std::vector<int> path2 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_back]);
@@ -772,7 +753,7 @@ Voronoi Voronoi_destroy_wrong_matches_and_recalculate(TrilateralMesh* m, float v
 	{
 		m->calculated_symmetry_pairs.erase(m->calculated_symmetry_pairs.begin() + to_removed[i]);
 	}
-	v = Voronoi_get_closest_voronoi(m, voronoi_param);
+	//v = Voronoi_get_closest_voronoi(m, voronoi_param);
 	return v; 
 }
 Voronoi Voronoi_check_pair_closeness_and_recalculate(TrilateralMesh* m, float voronoi_param, float dist_to_voronoi_param, Voronoi& v)
@@ -808,7 +789,7 @@ Voronoi Voronoi_check_pair_closeness_and_recalculate(TrilateralMesh* m, float vo
 	{
 		m->calculated_symmetry_pairs.erase(m->calculated_symmetry_pairs.begin() + to_removed[i]);
 	}
-	v = Voronoi_get_closest_voronoi(m, voronoi_param);
+	//v = Voronoi_get_closest_voronoi(m, voronoi_param);
 	return v;
 }
 
