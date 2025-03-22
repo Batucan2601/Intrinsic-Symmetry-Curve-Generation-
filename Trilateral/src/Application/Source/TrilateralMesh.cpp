@@ -861,7 +861,7 @@ void TrilateralMesh::calculate_PCA()
 			biggest_index = i;
 		}
 	}
-
+	
 
 	// generate the 3 planes
 	//std::vector<float> eigenvalues = { eigen_values.col(0).row(0) , eigen_values.col(0).row(1) , eigen_values.col(0).row(2) };

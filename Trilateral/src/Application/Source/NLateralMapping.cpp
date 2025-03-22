@@ -153,7 +153,7 @@ original_agd_vertices , float voronoi_param)
 			float ratio = std::min(area1,area2) / std::max(area1,area2);
 			std::vector<float> distances = Geodesic_dijkstra(*m, agd_point_indices[i]);
 			float dist = distances[agd_point_indices[j]];
-			bool is_dist = dist > 0.25; 
+			bool is_dist = dist > 0.2; 
 			
 			if (!(is_hks && is_points_close_to_midpoint && is_dist))
 			{
@@ -168,7 +168,7 @@ original_agd_vertices , float voronoi_param)
 
 
 			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
-				agd_point_indices[j], voronoi_param, fuziness, hist_no, 15); 
+				agd_point_indices[j], voronoi_param, fuziness, hist_no, 5); 
 
 			//NLateralDescriptor desc_j_i = NLateral_generate_symmetric_descriptor(m, agd_point_indices[j], agd_point_indices[i],hist_no, fuziness);
 			//NLateralDescriptor desc_i_j = NLateral_generate_symmetric_descriptor(m, agd_point_indices[i], agd_point_indices[j],hist_no, fuziness);

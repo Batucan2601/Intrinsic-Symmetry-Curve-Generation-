@@ -34,6 +34,7 @@ static void shape_diameter(TrilateralMesh* m);
 static void SCAPE_dataset(TrilateralMesh* m);
 static void KIDS_dataset(TrilateralMesh* m);
 static void TOSCA_dataset(TrilateralMesh* m);
+static void Princeton_dataset(TrilateralMesh* m);
 static void geodesic(TrilateralMesh* m);
 static void curvature_creation(TrilateralMesh* m);
 
@@ -115,6 +116,7 @@ std::vector<unsigned int> min_dijk_indices;
 std::vector<unsigned int> voronoi_set;
 int no_of_points_voronoi = 50;
 int voronoi_no = 0;
+int voronoi_division_no = 0;
 Voronoi voronoi; 
 //curvature
 float quality_param = 0.7; 
@@ -205,6 +207,7 @@ void imgui_menu_bar(TrilateralMesh* m)
                 SCAPE_dataset(m);
                 TOSCA_dataset(m);
                 KIDS_dataset(m);
+                Princeton_dataset(m);
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Geodesic distances"))
@@ -486,7 +489,11 @@ static void Nlateral_functions(TrilateralMesh* m)
         ImGui::InputInt("no of points added to voronoi ", &no_of_points_voronoi);
         if (ImGui::MenuItem("Execute additive voronoi "))
         {
-            Voronoi_algorithm_in_action(m, voronoi_param, hks_dif_param, sdf_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi , avg_dijk_indices);
+            voronoi = Voronoi_algorithm_in_action(m, voronoi_param, hks_dif_param, sdf_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi , avg_dijk_indices);
+        }
+        if (ImGui::MenuItem("Execute additive voronoi w/ selected voronoi"))
+        {
+            voronoi = Voronoi_algorithm_in_action(m,voronoi, voronoi_param, hks_dif_param, sdf_param, distance_to_mid_param, hist_param, fuzzy_param, no_of_points_voronoi, avg_dijk_indices);
         }
         if (ImGui::MenuItem("Color every pairs of voronoi  "))
         {
@@ -494,12 +501,20 @@ static void Nlateral_functions(TrilateralMesh* m)
         }
         if (ImGui::InputInt("pair no  ", &voronoi_no))
         {
-            Voronoi_show_voronoi(m, voronoi_no, voronoi_param);
-
+            voronoi = Voronoi_show_voronoi(m, voronoi_no, voronoi_param);
         }
         if (ImGui::MenuItem("Voronoi connect boundary "))
         {
             voronoi.connect_boundary();
+        }
+        ImGui::InputInt("division no  ", &voronoi_division_no);
+        if(ImGui::MenuItem("Generate a path from first  "))
+        {
+            Voronoi_get_two_pair_and_generate_a_path(m, voronoi, voronoi.p1, fuzzy_param , voronoi_division_no);
+        }
+        if (ImGui::MenuItem("Generate a path from second "))
+        {
+            Voronoi_get_two_pair_and_generate_a_path(m, voronoi, voronoi.p2, fuzzy_param , voronoi_division_no);
         }
         ImGui::EndMenu();
     }
@@ -523,12 +538,10 @@ static void dataset(TrilateralMesh* m)
         }
         ImGui::EndMenu();
     }
-    ImGui::InputInt("Mesh Index", &mesh_index);
-    if (ImGui::MenuItem("display mesh "))
+    if (ImGui::InputInt("Mesh Index", &mesh_index))
     {
         SCB_select_mesh(*m, mesh_index, skeleton);
     }
-
 }
 static void shape_diameter(TrilateralMesh* m)
 {
@@ -555,6 +568,14 @@ static void SCAPE_dataset(TrilateralMesh* m)
         SCB_read_SCAPE();
     }
     
+}
+static void Princeton_dataset(TrilateralMesh* m)
+{
+    if (ImGui::MenuItem("read princeton"))
+    {
+        SCB_read_Princeton();
+    }
+
 }
 static void TOSCA_dataset(TrilateralMesh* m)
 {
@@ -812,14 +833,24 @@ static void draw_spheres(TrilateralMesh* m, float radius)
         for (size_t i = 0; i < avg_dijk_indices.size(); i++)
         {
             int index = avg_dijk_indices[i];
-            if (i == geodesic_point_no)
+            /*if (i == geodesic_point_no)
             {
                 DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
             }
-            else
+            else*/
             {
                 DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
             }
+            /*if (i == descriptor_no_voronoi1)
+            {
+                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+            }
+            if (i == descriptor_no_voronoi2)
+            {
+                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+            } */
+
+            
         }
         if (!(avg_dijk_indices.size() == 0))
         {
@@ -947,16 +978,8 @@ static void draw_resemblance_pairs(TrilateralMesh* m )
         {
             int index1 = m->calculated_symmetry_pairs[i].first;
             int index2 = m->calculated_symmetry_pairs[i].second;
-            if (descriptor_no == i)
-            {
-                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
-                    CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, RED);
-            }
-            else
-            {
-                DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
-                    CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
-            }
+            DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+            CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
         }
     }
    

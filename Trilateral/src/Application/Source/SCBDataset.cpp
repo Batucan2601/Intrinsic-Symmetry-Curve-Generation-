@@ -5,6 +5,9 @@ std::vector<TrilateralMesh> SCB_mesh;
 
 #define SCAPE_DATA_SIZE 20
 #define TOSCA_CAT_SIZE 11
+#define TOSCA_CENTAUR_SIZE 6
+#define TOSCA_DOG_SIZE 8
+#define PRINCETON_DATASET_SIZE 260
 static DATASET dataset; 
 
 void SCB_select_dataset(DATASET cur_dataset)
@@ -44,6 +47,40 @@ void SCB_read_TOSCA()
 		std::string i_name = std::to_string(i);
 	
 		mesh_name = TOSCA_PATH + mesh_name + i_name + ".off";
+		TrilateralMesh m((char*)mesh_name.c_str());
+		SCB_mesh.push_back(m);
+
+	}
+	for (size_t i = 0; i < TOSCA_CENTAUR_SIZE; i++)
+	{
+		std::string mesh_name = "/centaur";
+		std::string i_name = std::to_string(i);
+
+		mesh_name = TOSCA_PATH + mesh_name + i_name + ".off";
+		TrilateralMesh m((char*)mesh_name.c_str());
+		SCB_mesh.push_back(m);
+	}
+	for (size_t i = 0; i < TOSCA_DOG_SIZE; i++)
+	{
+		std::string mesh_name = "/dog";
+		std::string i_name = std::to_string(i);
+
+		mesh_name = TOSCA_PATH + mesh_name + i_name + ".off";
+		TrilateralMesh m((char*)mesh_name.c_str());
+		SCB_mesh.push_back(m);
+	}
+}
+void SCB_read_Princeton()
+{
+	SCB_mesh.clear();
+	dataset = PRINCETON;
+	for (size_t i = 1; i < PRINCETON_DATASET_SIZE; i++)
+	{
+		std::string mesh_name;
+		std::string i_name = std::to_string(i);
+		std::string tab = "/";
+		mesh_name = PRINCETON_PATH  +  tab + i_name + ".off";
+		std::cout << mesh_name << std::endl; 
 		TrilateralMesh m((char*)mesh_name.c_str());
 		SCB_mesh.push_back(m);
 
@@ -89,6 +126,10 @@ void SCB_select_mesh(TrilateralMesh& m , int meshNo, Skeleton& skeleton)
 		skeleton_path = "../../Trilateral/Mesh/off/KIDS_skeleton/";
 		read_symmetry_format((char*)"../../Trilateral/TrilateralMesh/off/sym.txt", &m);
 
+	}
+	else if (dataset == PRINCETON)
+	{
+		hks_path = "../../Trilateral/Mesh/SCB/Data/Princeton/HKS/";
 	}
 	m = SCB_mesh[meshNo];
 	skeleton_path = skeleton_path + m.file_name.substr(0,m.file_name.size() - 3) + "swc";

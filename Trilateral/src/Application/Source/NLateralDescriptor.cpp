@@ -1735,6 +1735,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 	}
 
 	float step_size = longest_path / hist_no;
+	std::vector < std::vector<unsigned int> > colored_vecs(hist_no);
 	for (size_t i = 0; i < this->triangles_inside.size(); i+=3)
 	{
 		int index1 = this->triangles_inside[i];
@@ -1758,7 +1759,23 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 		hist.histogram[step_1] += m->normalized_heat_kernel_signature[index1];
 		hist.histogram[step_2] += m->normalized_heat_kernel_signature[index2];
 		hist.histogram[step_3] += m->normalized_heat_kernel_signature[index3];
+
+		colored_vecs[step_1].push_back(index1);
+		colored_vecs[step_2].push_back(index2);
+		colored_vecs[step_3].push_back(index3);
 	}
+	/*for (size_t i = 0; i < colored_vecs.size(); i++)
+	{
+		if (i % 2 == 0)
+		{
+			m->color_points(colored_vecs[i], LIGHTGRAY);
+		}
+		else
+		{
+			m->color_points(colored_vecs[i], BLUE);
+		}
+
+	}*/
 	hist.normalize(1);
 	this->hks_histogram[0] = hist;
 }

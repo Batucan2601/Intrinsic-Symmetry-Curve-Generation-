@@ -225,14 +225,29 @@ Voronoi Voronoi_algorithm_in_action(TrilateralMesh* m, float voronoi_param, floa
 	std::vector<unsigned int>& agd_indices)
 {
 	Voronoi v = Voronoi_get_closest_voronoi(m, voronoi_param);
-	Voronoi_prune_voronoi(m, v, voronoi_param);
+	//Voronoi_prune_voronoi(m, v, voronoi_param);
 	v = Voronoi_destroy_wrong_matches_and_recalculate(m, voronoi_param, v);
 	v = Voronoi_check_pair_closeness_and_recalculate(m, voronoi_param, dist_param, v);
 
 	v = Voronoi_add_points_and_recalculate(m, v, voronoi_param, hks_param, sdf_param, dist_param, hist_no, fuziness, no_of_points, agd_indices);
+	v = Voronoi_destroy_wrong_matches_and_recalculate(m, voronoi_param, v);
 	//v = Voronoi_get_closest_voronoi(m, voronoi_param);
 	return v; 
 }
+Voronoi Voronoi_algorithm_in_action(TrilateralMesh* m,Voronoi& v, float voronoi_param, float hks_param, float sdf_param, float dist_param, int hist_no, float fuziness, int no_of_points,
+	std::vector<unsigned int>& agd_indices)
+{
+
+	v.generate_voronoi_parts();
+	v = Voronoi_destroy_wrong_matches_and_recalculate(m, voronoi_param, v);
+	v = Voronoi_check_pair_closeness_and_recalculate(m, voronoi_param, dist_param, v);
+
+	v = Voronoi_add_points_and_recalculate(m, v, voronoi_param, hks_param, sdf_param, dist_param, hist_no, fuziness, no_of_points, agd_indices);
+	v = Voronoi_destroy_wrong_matches_and_recalculate(m, voronoi_param, v);
+	return v;
+}
+
+
 Voronoi Voronoi_add_points_and_recalculate(TrilateralMesh* m, Voronoi& v,float voronoi_param, float hks_param, float sdf_param,float dist_param, int hist_no, float fuziness, int no_of_points
 ,std::vector<unsigned int>& agd_points)
 {
@@ -322,18 +337,17 @@ void Voronoi_add_point(TrilateralMesh* m, Voronoi& voronoi , int selected_agd_in
 			{
 				continue;
 			}
+			std::vector<float> distances_index_j = Geodesic_dijkstra(*m, index_j);
+			std::vector<float> distances_agd_index = Geodesic_dijkstra(*m , selected_agd_index);
 			for (size_t k = 0; k < voronoi.indices.size(); k++) // get 10 distances from indcies
 			{
-				std::vector<float> distances = Geodesic_dijkstra(*m, voronoi.indices[k]);
-				float dist1 = distances[selected_agd_index];
-				float dist2 = distances[index_j];
+				float dist1 = distances_index_j[voronoi.indices[k]];
+				float dist2 = distances_agd_index[voronoi.indices[k]];
 				float ratio = std::min(dist1, dist2) / std::max(dist1, dist2);
 				ratios.push_back(ratio);
-
 			}
 			/*float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, random_index,
 				agd_points[j], voronoi_param, fuziness, hist_no, 10);*/
-
 			float dif = 0;
 			for (size_t i = 0; i < ratios.size(); i++)
 			{
@@ -397,6 +411,16 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 		weights[i] = std::pow(weights[i],1);
 	}
 
+	//trying new length 
+	std::vector<float> distances_from_midpoint = Geodesic_dijkstra(*m, m->midpoint);
+	std::vector<float> midpoint_distances_from(m->calculated_symmetry_pairs.size(), 0);
+	for (size_t i = 0; i < weights.size(); i++)
+	{
+		unsigned int midpoint = Geodesic_find_midpoint(m,m->calculated_symmetry_pairs[i].first, m->calculated_symmetry_pairs[i].second);
+		float distance = distances_from_midpoint[midpoint];
+		midpoint_distances_from[i] = distance; 
+	}
+	
 	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
 	{
 		int index1 = m->calculated_symmetry_pairs[i].first;
@@ -412,9 +436,34 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 		v.generate_voronoi_parts();
 		v.connect_boundary();
 		v.generate_voronoi_parts();
-
+		float part1 = 0;
+		float part2 = 0;
+		bool is_bad_voronoi = false; 
+		for (size_t i = 0; i < v.status.size(); i++)
+		{
+			if (v.status[i] == 1)
+			{
+				part1 = part1 + m->areas[i];
+			}
+			if (v.status[i] == 2)
+			{
+				part2 = part2 + m->areas[i];
+			}
+			/*if (v.status[i] == 3)
+			{
+				is_bad_voronoi = true; 
+			}*/ 
+			
+		}
+		float area_ratio = std::min(part1, part2) / std::max(part1, part2);
+		std::cout << i << " area ratio  " << area_ratio << std::endl;
+		if (is_bad_voronoi || area_ratio < 0.85)
+		{
+			total_distances[i] = INFINITY;
+			continue; 
+		}
 		/*float voronoi_ratio = (float)v.indices.size() / m->vertices.size();
-		if (voronoi_ratio > 0.2)
+		if (voronoi_ratio > 0.1)
 		{
 			total_distances[i] = INFINITY; 
 			continue; 
@@ -465,8 +514,8 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 					min_dist =  voronoi_dist;
 				}
 			}
-			total_distances[i] += min_dist * weights[j];
-			//total_distances[i] += best_ratio; //* weights[j];
+			//total_distances[i] += min_dist * weights[j];
+			total_distances[i] += best_ratio * (1 - area_ratio); //* weights[j];
 		}
 		/*for (size_t j = 0; j < v.status.size(); j++)
 		{
@@ -487,6 +536,11 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 	} */
 	auto least_elem_auto = std::min_element(total_distances.begin(), total_distances.end());
 	int minIndex = std::distance(total_distances.begin(), least_elem_auto);
+
+	for (size_t i = 0; i < total_distances.size(); i++)
+	{
+		std::cout << i << " " << total_distances[i] << std::endl;
+	}
 	std::cout << " selected voronoi pair " << m->calculated_symmetry_pairs[minIndex].first << " "
     << m->calculated_symmetry_pairs[minIndex].second << " " << std::endl;
 
@@ -744,7 +798,7 @@ Voronoi Voronoi_destroy_wrong_matches_and_recalculate(TrilateralMesh* m, float v
 	{
 		int index1 = m->calculated_symmetry_pairs[i].first;
 		int index2 = m->calculated_symmetry_pairs[i].second;
-		if (v.status[index1] == v.status[index2] || v.status[index2] == -1 || v.status[index1] == -1)
+		if (v.status[index1] == v.status[index2] && v.status[index1] != -1)
 		{
 			to_removed.push_back(i);
 		}
@@ -765,11 +819,14 @@ Voronoi Voronoi_check_pair_closeness_and_recalculate(TrilateralMesh* m, float vo
 		int index2 = m->calculated_symmetry_pairs[i].second;
 
 		std::vector<float> ratios; 
+
+		std::vector<float> distances1 = Geodesic_dijkstra(*m, index1);
+		std::vector<float> distances2 = Geodesic_dijkstra(*m, index2);
+
 		for (size_t j = 0; j <  v.indices.size(); j++) // get 10 distances from indcies
 		{
-			std::vector<float> distances = Geodesic_dijkstra(*m, v.indices[j]);
-			float dist1 = distances[index1];
-			float dist2 = distances[index2];
+			float dist1 = distances1[v.indices[j]];
+			float dist2 = distances2[v.indices[j]];
 			float ratio = std::min(dist1, dist2) / std::max(dist1, dist2);
 			ratios.push_back(ratio);
 			
@@ -855,7 +912,7 @@ void Voronoi_color_every_pairs_voronoi(TrilateralMesh* m, float voronoi_param)
 	m->color_points(colored_vec, BLUE);
 }
 
-void Voronoi_show_voronoi(TrilateralMesh* m,  unsigned int pair_no , float voronoi_param)
+Voronoi Voronoi_show_voronoi(TrilateralMesh* m,  unsigned int pair_no , float voronoi_param)
 {
 	int index1 = m->calculated_symmetry_pairs[pair_no].first;
 	int index2 = m->calculated_symmetry_pairs[pair_no].second;
@@ -869,6 +926,7 @@ void Voronoi_show_voronoi(TrilateralMesh* m,  unsigned int pair_no , float voron
 	std::cout << " distance " << distance[index2] << std::endl;
 	std::cout << index1 << " " << index2 << std::endl; 
 	m->color_points(pairs, PURPLE);
+	return v;
 }
 int Voronoi_get_closest_unvisited_index(TrilateralMesh* m, Voronoi& v, std::vector<int>& is_visited , int index)
 {
@@ -1020,4 +1078,42 @@ std::vector<unsigned int> Voronoi::get_closest_path(unsigned int index1, unsigne
 		converted_path.push_back(converted_back);
 	}
 	return converted_path;
+}
+
+void Voronoi_get_two_pair_and_generate_a_path(TrilateralMesh* m, Voronoi& voronoi, int voronoi_p1, float fuzziness , int voronoi_division_no)
+{
+	
+	std::vector<float> distances = Geodesic_dijkstra(*m, voronoi_p1);
+	std::vector<float> distances_among_voronoi;
+	for (size_t i = 0; i < voronoi.indices.size(); i++)
+	{
+		int index = voronoi.indices[i];
+		distances_among_voronoi.push_back(distances[index]);
+	}
+	float step = (*std::max_element(distances_among_voronoi.begin(), distances_among_voronoi.end()) - *std::min_element(distances_among_voronoi.begin(), distances_among_voronoi.end())) / 5; // default 
+	std::cout << " step " << step << std::endl; 
+	std::cout << " max " << *std::max_element(distances_among_voronoi.begin(), distances_among_voronoi.end()) << std::endl;
+	std::cout << " min " << *std::min_element(distances_among_voronoi.begin(), distances_among_voronoi.end()) << std::endl;
+
+	int index = -1; 
+	for (size_t i = 0; i < voronoi.indices.size(); i++)
+	{
+		float distance = distances_among_voronoi[i];
+		std::cout << "distance " << distance << std::endl;
+		distance = distance - *std::min_element(distances_among_voronoi.begin(), distances_among_voronoi.end()); //normalized
+		distance = distance / step; 
+		if ( distance < voronoi_division_no + 1 && distance > voronoi_division_no - 1)
+		{
+			index = voronoi.indices[i];
+			break; 
+		}
+	}
+
+	float biggest_dist = 0; //useless
+	std::vector<unsigned int> indices = { (unsigned int)voronoi_p1 , (unsigned int)index };
+	NLateralDescriptor desc = NLateral_generate_descriptor_w_midpoints(m, indices, fuzziness, biggest_dist);
+	desc.create_histogram_HKS(m , 5 ,voronoi_p1 );
+	m->color_points(desc.triangles_inside, BLUE);
+
+
 }

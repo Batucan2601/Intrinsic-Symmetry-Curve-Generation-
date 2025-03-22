@@ -1,5 +1,0 @@
-Normalize geodesic cost === -nan(ind)
-correspondance rate === -nan(ind)
- gaussian point size == 1000
- gaussian sweep distance == 3.000000
- N == 3
