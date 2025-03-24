@@ -63,6 +63,7 @@ static bool is_draw_resemblance_pairs = true;
 static bool is_draw_mesh = true;
 static bool is_draw_normals = false; 
 static bool is_draw_agd = false; 
+static bool is_draw_voronoi_midpoints = false;
 static bool is_draw_desc = false; 
 static bool is_draw_hist = false; 
 static bool is_draw_curves = false; 
@@ -474,6 +475,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
            Voronoi_prune_voronoi(m, voronoi , voronoi_param);
         }
+        if (ImGui::MenuItem("Voronoi midpoint of pair"))
+        {
+            is_draw_voronoi_midpoints = true; 
+        }
         if (ImGui::MenuItem("Recalculate with better matches"))
         {
             voronoi = Voronoi_destroy_wrong_matches_and_recalculate(m,voronoi_param , voronoi );
@@ -786,7 +791,7 @@ static void draw_curves(TrilateralMesh* m);
 static void draw_normals(TrilateralMesh* m);
 static void draw_spheres(TrilateralMesh* m, float radius);
 static void draw_descriptor(TrilateralMesh* m);
-
+static void draw_voronoi_midpoints(TrilateralMesh* m, float radius);
 
 void draw_all_shader(TrilateralMesh* m , Shader& shader )
 {
@@ -800,8 +805,21 @@ void draw_all(TrilateralMesh* m)
     draw_curvature(m);
     draw_normals(m);
     draw_spheres(m, agd_sphere_radius);
+    draw_voronoi_midpoints(m ,agd_sphere_radius);
     draw_curves(m);
     draw_descriptor(m);
+}
+static void draw_voronoi_midpoints(TrilateralMesh* m, float radius)
+{
+    if (is_draw_voronoi_midpoints)
+    {
+        int index1 = avg_dijk_indices[descriptor_no_voronoi1];
+        int index2 = avg_dijk_indices[descriptor_no_voronoi2];
+        unsigned int midpoint = Geodesic_get_midpoint_from_path(m, index1 , index2 );
+        unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
+        DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[midpoint]),radius, ORANGE);
+        DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[voronoi_midpoint_inverse]),radius, ORANGE);
+    }
 }
 static void draw_curves(TrilateralMesh* m)
 {
@@ -841,14 +859,14 @@ static void draw_spheres(TrilateralMesh* m, float radius)
             {
                 DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
             }
-            /*if (i == descriptor_no_voronoi1)
+            if (i == descriptor_no_voronoi1)
             {
                 DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
             }
             if (i == descriptor_no_voronoi2)
             {
                 DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
-            } */
+            }
 
             
         }

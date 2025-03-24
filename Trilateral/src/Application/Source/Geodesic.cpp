@@ -762,7 +762,10 @@ void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& 
 		while (ss >> number) {
 			nums.push_back(number);
 		}
-		sampled_points.push_back(nums[0]);
+		if (m->vertices.size() > nums[0])
+		{
+			sampled_points.push_back(nums[0]);
+		}
 	}
 }
 

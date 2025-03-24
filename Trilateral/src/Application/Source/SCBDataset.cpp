@@ -3,11 +3,11 @@
 #include "../Include/HeatKernelSignature.h"
 std::vector<TrilateralMesh> SCB_mesh; 
 
-#define SCAPE_DATA_SIZE 20
-#define TOSCA_CAT_SIZE 11
-#define TOSCA_CENTAUR_SIZE 6
+#define SCAPE_DATA_SIZE 74
+#define TOSCA_CAT_SIZE 13
+#define TOSCA_CENTAUR_SIZE 7
 #define TOSCA_DOG_SIZE 8
-#define PRINCETON_DATASET_SIZE 260
+#define PRINCETON_DATASET_SIZE 262
 static DATASET dataset; 
 
 void SCB_select_dataset(DATASET cur_dataset)
