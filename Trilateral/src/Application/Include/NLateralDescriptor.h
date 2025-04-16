@@ -197,3 +197,5 @@ float NLateral_get_voronoi_area(TrilateralMesh* m, NLateralDescriptor& desc1, NL
 NLateralDescriptor NLateral_generate_symmetric_descriptor(TrilateralMesh* m, unsigned int p1, unsigned int p2, int hist_no, float fuzziness);
 
 unsigned int NLateral_get_midpoint_with_agd_points(TrilateralMesh* m, std::vector<unsigned int>& agd_indices);
+
+void Nlateral_read_matching_points_IGLICT_SCAPE(TrilateralMesh* m);

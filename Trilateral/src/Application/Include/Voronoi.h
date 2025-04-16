@@ -17,6 +17,7 @@ struct Voronoi
 	int p1, p2;
 
 	std::vector<unsigned int> get_closest_path(unsigned int index1, unsigned int index2);
+	void area_compare();
 };
 
 float NLateral_generate_descriptors_with_random_voronoi_points(
@@ -42,3 +43,5 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 
 
 void Voronoi_get_two_pair_and_generate_a_path(TrilateralMesh* m, Voronoi& voronoi, int voronoi_p1 ,  float fuzziness, int voronoi_division_no);
+
+void Voronoi_connect_midpoints(TrilateralMesh* m, Voronoi& voronoi);

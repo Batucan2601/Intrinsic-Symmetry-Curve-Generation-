@@ -1764,7 +1764,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 		colored_vecs[step_2].push_back(index2);
 		colored_vecs[step_3].push_back(index3);
 	}
-	/*for (size_t i = 0; i < colored_vecs.size(); i++)
+	for (size_t i = 0; i < colored_vecs.size(); i++)
 	{
 		if (i % 2 == 0)
 		{
@@ -1775,7 +1775,7 @@ void NLateralDescriptor::create_histogram_HKS(TrilateralMesh* m, int hist_no, in
 			m->color_points(colored_vecs[i], BLUE);
 		}
 
-	}*/
+	}
 	hist.normalize(1);
 	this->hks_histogram[0] = hist;
 }
@@ -2485,6 +2485,25 @@ void Nlateral_write_matching_points(TrilateralMesh* m , std::vector<NLateralDesc
 		new_file << std::endl;
 	}
 	
+}
+
+void Nlateral_read_matching_points_IGLICT_SCAPE(TrilateralMesh* m)
+{
+	std::ifstream file("../../Results/IGLICT_RESULTS_SCAPE/" + m->file_name + "matching_points.txt");
+	std::vector<std::pair<unsigned int, unsigned int>> sym_pair;
+	std::string line;
+	while (std::getline(file, line)) {
+		std::stringstream ss(line); // Use stringstream to parse the line
+		int number;
+		std::vector<int> nums;
+		// Extract numbers from the line
+		while (ss >> number) {
+			nums.push_back(number);
+		}
+		sym_pair.push_back(std::make_pair(nums[0], nums[1]));
+	}
+	m->calculated_symmetry_pairs = sym_pair;
+
 }
 void Nlateral_read_matching_points(TrilateralMesh* m , std::vector<NLateralDescriptor>& descs)
 {

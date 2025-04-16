@@ -112,6 +112,7 @@ int hist_param = 5;
 int min_agd_param  = 3;
 std::vector<unsigned int> original_agd_vertices; 
 std::vector<unsigned int> avg_dijk_indices;
+std::vector<Model> avg_dijk_spheres;
 int geodesic_point_no = 0;
 std::vector<unsigned int> min_dijk_indices;
 std::vector<unsigned int> voronoi_set;
@@ -119,9 +120,11 @@ int no_of_points_voronoi = 50;
 int voronoi_no = 0;
 int voronoi_division_no = 0;
 Voronoi voronoi; 
+static Shader shader; 
 //curvature
 float quality_param = 0.7; 
 int curv_point_index = 0;
+float alpha = 1.0f; 
 void imgui_menu_bar(TrilateralMesh* m)
 {
     if (ImGui::BeginMainMenuBar())
@@ -157,7 +160,14 @@ void imgui_menu_bar(TrilateralMesh* m)
 
                     }
                 }
-          
+                if (ImGui::InputFloat("ALpha " , &alpha))
+                {
+                    for (size_t i = 0; i < m->vertices.size(); i++)
+                    {
+                        m->raylib_mesh.colors[i * 4 + 3] = alpha * 256;
+                    }
+                    m->update_raylib_mesh();
+                }
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Skeleton "))
@@ -397,6 +407,10 @@ static void Nlateral_functions(TrilateralMesh* m)
     {
         m->color_midpoints(ORANGE);
     }
+    if (ImGui::MenuItem("Geodesic generate all points"))
+    {
+        Geodesic_generate_all_points(m);
+    }
     if (ImGui::BeginMenu("NLateral Descriptor"))
     {
         if (ImGui::MenuItem("Save nlateral descriptors"))
@@ -431,6 +445,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         if (ImGui::MenuItem("Read matching points"))
         {
             Nlateral_read_matching_points(m, nlateral_descriptors);
+        }
+        if (ImGui::MenuItem("Read matching points IGLICT SCAPE"))
+        {
+            Nlateral_read_matching_points_IGLICT_SCAPE(m);
         }
         ImGui::EndMenu();
 
@@ -521,6 +539,10 @@ static void Nlateral_functions(TrilateralMesh* m)
         {
             Voronoi_get_two_pair_and_generate_a_path(m, voronoi, voronoi.p2, fuzzy_param , voronoi_division_no);
         }
+        if (ImGui::MenuItem("Generate paths w midpoints "))
+        {
+            Voronoi_connect_midpoints(m, voronoi);
+        }
         ImGui::EndMenu();
     }
   
@@ -602,7 +624,8 @@ static void geodesic(TrilateralMesh* m)
     if (ImGui::MenuItem("average geodesic Function modified"))
     {
         float biggest; 
-        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, dvorak_geodesic_dist_param, avg_geo_N_ring, true, biggest);
+        avg_dijk_indices = Geodesic_avg_dijkstra_modified(m, dvorak_geodesic_dist_param, avg_geo_N_ring, true, biggest  );
+        avg_dijk_spheres =  Geodesic_sampled_to_spheres(m, avg_dijk_indices, shader);
     }
     if (ImGui::MenuItem("average geodesic Function modified with points "))
     {
@@ -612,6 +635,7 @@ static void geodesic(TrilateralMesh* m)
     if (ImGui::MenuItem("minimum geodesic Function"))
     {
         avg_dijk_indices = Geodesic_min_dijkstra(m, avg_dijk_indices, dvorak_geodesic_dist_param, min_geo_tau, true);
+        avg_dijk_spheres = Geodesic_sampled_to_spheres(m, avg_dijk_indices, shader);
     }
     if (ImGui::MenuItem("Biggest Geodesics "))
     {
@@ -623,7 +647,7 @@ static void geodesic(TrilateralMesh* m)
     }
     if (ImGui::MenuItem("Read Sampled points "))
     {
-        Geodesic_read_sampled_points(m, avg_dijk_indices);
+        Geodesic_read_sampled_points(m, avg_dijk_indices , avg_dijk_spheres ,shader);
     }
     if (ImGui::InputInt("Show the sampled point " , &geodesic_point_no))
     {
@@ -784,28 +808,35 @@ static void laplace_beltrami_operations(TrilateralMesh* m)
 #pragma region draw section
 static void draw_dom_sym();
 static void draw_skeleton();
-static void draw_resemblance_pairs(TrilateralMesh* m );
+static void draw_resemblance_pairs(TrilateralMesh* m, float radius, Shader& shader);
+static void draw_resemblance_spheres(TrilateralMesh* m, float radius, Shader& shader);
 static void draw_mesh(TrilateralMesh* m, Shader& shader);
 static void draw_curvature(TrilateralMesh* m );
 static void draw_curves(TrilateralMesh* m);
 static void draw_normals(TrilateralMesh* m);
-static void draw_spheres(TrilateralMesh* m, float radius);
+static void draw_spheres(TrilateralMesh* m, float radius , Shader& shader);
 static void draw_descriptor(TrilateralMesh* m);
 static void draw_voronoi_midpoints(TrilateralMesh* m, float radius);
+static void draw_midpoints(TrilateralMesh* m, float radius);
 
-void draw_all_shader(TrilateralMesh* m , Shader& shader )
+
+void draw_all_shader(TrilateralMesh* m , Shader& shader_param )
 {
+    shader = shader_param;
     draw_mesh(m , shader);
+    draw_spheres(m, agd_sphere_radius ,shader);
+    //draw_resemblance_spheres(m, agd_sphere_radius, shader);
+    draw_midpoints(m, agd_sphere_radius);
 }
 void draw_all(TrilateralMesh* m)
 {
     draw_dom_sym();
     draw_skeleton();
-    draw_resemblance_pairs(m);
     draw_curvature(m);
     draw_normals(m);
-    draw_spheres(m, agd_sphere_radius);
-    draw_voronoi_midpoints(m ,agd_sphere_radius);
+    //draw_spheres(m, agd_sphere_radius);
+    draw_resemblance_pairs(m, agd_sphere_radius, shader);
+   // draw_voronoi_midpoints(m ,agd_sphere_radius);
     draw_curves(m);
     draw_descriptor(m);
 }
@@ -819,6 +850,42 @@ static void draw_voronoi_midpoints(TrilateralMesh* m, float radius)
         unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
         DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[midpoint]),radius, ORANGE);
         DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[voronoi_midpoint_inverse]),radius, ORANGE);
+    }
+}
+std::vector<Model> midpoint_spheres;
+std::vector<unsigned int> midpoint_spheres_midpoints;
+static void draw_midpoints( TrilateralMesh* m , float radius )
+{
+    if (m->calculated_symmetry_pairs.size() > 0)
+    {
+        if (midpoint_spheres.size() == 0)
+        {
+            for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+            {
+                int index1 = m->calculated_symmetry_pairs[i].first;
+                int index2 = m->calculated_symmetry_pairs[i].second;
+                unsigned int midpoint = Geodesic_get_midpoint_from_path(m, index1, index2);
+                Mesh sphereMesh = GenMeshSphere(1, 20, 20);
+                sphereMesh.normals = (float*)malloc(sphereMesh.vertexCount * 3 * sizeof(float));
+                for (size_t j = 0; j < sphereMesh.vertexCount; j++)
+                {
+                    Vector3 vertex = { sphereMesh.vertices[0],sphereMesh.vertices[1] ,sphereMesh.vertices[2] };
+                    Vector3 normal = Vector3Normalize(vertex);
+                }
+                Model sphereModel = LoadModelFromMesh(sphereMesh);
+                sphereModel.materials[0].shader = shader;
+                sphereModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+                midpoint_spheres.push_back(sphereModel);
+                midpoint_spheres_midpoints.push_back(midpoint);
+            }
+        }
+        else
+        {
+            for (size_t i = 0; i < midpoint_spheres.size(); i++)
+            {
+                DrawModel(midpoint_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[midpoint_spheres_midpoints[i]]), radius, ORANGE);
+            }
+        }
     }
 }
 static void draw_curves(TrilateralMesh* m)
@@ -844,10 +911,12 @@ static void draw_curves(TrilateralMesh* m)
     }
     
 }
-static void draw_spheres(TrilateralMesh* m, float radius)
+static void draw_spheres(TrilateralMesh* m, float radius , Shader& shader )
 {
     if (is_draw_agd)
     { 
+        Material mat = LoadMaterialDefault();
+        mat.shader = shader;
         for (size_t i = 0; i < avg_dijk_indices.size(); i++)
         {
             int index = avg_dijk_indices[i];
@@ -857,18 +926,45 @@ static void draw_spheres(TrilateralMesh* m, float radius)
             }
             else*/
             {
-                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+                /*if (avg_dijk_spheres.size() == 0)
+                {
+                    Mesh sphereMesh = GenMeshSphere(1, 20, 20);
+                    sphereMesh.normals = (float*)malloc(sphereMesh.vertexCount * 3 * sizeof(float));
+                    for (size_t j = 0; j < sphereMesh.vertexCount; j++)
+                    {
+                        Vector3 vertex = { sphereMesh.vertices[0],sphereMesh.vertices[1] ,sphereMesh.vertices[2] };
+                        Vector3 normal = Vector3Normalize(vertex);
+                    }
+                    Model sphereModel = LoadModelFromMesh(sphereMesh);
+                    sphereModel.materials[0].shader = shader;
+                    sphereModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+                    avg_dijk_spheres.push_back(sphereModel);
+                    DrawModel(avg_dijk_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+                    avg_dijk_spheres.clear();
+                    UnloadModel(sphereModel);
+                }*/
+                {
+                    //DrawModel(avg_dijk_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+                }
+                
+                //DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
             }
             if (i == descriptor_no_voronoi1)
             {
-                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+                //DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+                DrawModel(avg_dijk_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
             }
-            if (i == descriptor_no_voronoi2)
+            else if (i  == descriptor_no_voronoi2)
             {
-                DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+                //DrawSphere(CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+                DrawModel(avg_dijk_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, BLUE);
+            }
+            else
+            {
+                DrawModel(avg_dijk_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index]), radius, RED);
+
             }
 
-            
         }
         if (!(avg_dijk_indices.size() == 0))
         {
@@ -988,7 +1084,7 @@ static void draw_curvature(TrilateralMesh* m )
     }
 
 }
-static void draw_resemblance_pairs(TrilateralMesh* m )
+static void draw_resemblance_pairs(TrilateralMesh* m, float radius, Shader& shader)
 {
     if (is_draw_resemblance_pairs)
     {
@@ -997,8 +1093,88 @@ static void draw_resemblance_pairs(TrilateralMesh* m )
             int index1 = m->calculated_symmetry_pairs[i].first;
             int index2 = m->calculated_symmetry_pairs[i].second;
             DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
-            CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
+                CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
         }
+    }
+}
+static void draw_resemblance_spheres(TrilateralMesh* m , float radius , Shader& shader  )
+{
+    std::vector<Color> colors = { MAGENTA, BLACK, YELLOW, RED , BLUE, ORANGE , PURPLE , MAROON,  LIGHTGRAY ,  GOLD , PINK , LIME , BEIGE , BROWN , DARKBROWN };
+    int color_index = 0; 
+    
+    if (is_draw_resemblance_pairs)
+    {
+        if (midpoint_spheres.size() == 0)
+        {
+            for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+            {
+                int index1 = m->calculated_symmetry_pairs[i].first;
+                int index2 = m->calculated_symmetry_pairs[i].second;
+                Mesh sphereMesh1 = GenMeshSphere(radius, 20, 20);
+                Model sphereModel1 = LoadModelFromMesh(sphereMesh1);
+                sphereModel1.materials[0].shader = shader;
+                sphereModel1.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+
+                if (color_index == colors.size())
+                {
+                    color_index = 0;
+                }
+                DrawModel(sphereModel1, CoreType_conv_glm_raylib_vec3(m->vertices[index1]), radius, colors[color_index]);
+                midpoint_spheres.push_back(sphereModel1);
+                DrawModel(sphereModel1, CoreType_conv_glm_raylib_vec3(m->vertices[index2]), radius, colors[color_index]);
+                midpoint_spheres.push_back(sphereModel1);
+                color_index++;
+            }
+        }
+        else
+        {
+            for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+            {
+                int index1 = m->calculated_symmetry_pairs[i].first;
+                int index2 = m->calculated_symmetry_pairs[i].second;
+
+                DrawModel(midpoint_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index1]), radius, colors[color_index]);
+                DrawModel(midpoint_spheres[i], CoreType_conv_glm_raylib_vec3(m->vertices[index2]), radius, colors[color_index]);
+
+                color_index++;
+                if (color_index == colors.size())
+                {
+                    color_index = 0;
+                }
+            }
+        }
+        /*for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+        {
+            int index1 = m->calculated_symmetry_pairs[i].first;
+            int index2 = m->calculated_symmetry_pairs[i].second;
+
+            Mesh sphereMesh1 = GenMeshSphere(radius, 20, 20);
+            Model sphereModel1 = LoadModelFromMesh(sphereMesh1);
+            sphereModel1.materials[0].shader = shader;
+            sphereModel1.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+
+            if (color_index == colors.size())
+            {
+                color_index = 0;
+            }
+            DrawModel(sphereModel1, CoreType_conv_glm_raylib_vec3(m->vertices[index1]), radius, colors[color_index]);
+            DrawModel(sphereModel1, CoreType_conv_glm_raylib_vec3(m->vertices[index2]), radius, colors[color_index]);
+            color_index++; 
+
+            DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+            CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
+
+            UnloadModel(sphereModel1);
+        }*/
+        /*for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+        {
+            int index1 = m->calculated_symmetry_pairs[i].first;
+            int index2 = m->calculated_symmetry_pairs[i].second;
+
+            DrawCylinderEx(CoreType_conv_glm_raylib_vec3(m->vertices[index1]),
+                CoreType_conv_glm_raylib_vec3(m->vertices[index2]), line_thickness_3d, line_thickness_3d, 8, BLUE);
+        }*/
+
     }
    
 }

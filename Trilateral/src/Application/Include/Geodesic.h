@@ -16,9 +16,12 @@ std::vector<unsigned int> Geodesic_avg_dijkstra_modified_to_points(TrilateralMes
 int& no_of_points, float sweep_percentage, int N_ring, bool is_color);
 
 std::vector<unsigned int> Geodesic_find_biggest_AGD(TrilateralMesh* m, float sweep_percentage, float stop_param);
+std::vector<Model> Geodesic_sampled_to_spheres(TrilateralMesh* m, std::vector<unsigned int>& avg_dist_dijksta, Shader& shader);
 
 void Geodesic_write_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& agd_points);
 void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points);
+void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points, std::vector<Model>& sampled_mesh, Shader& shader);
+
 unsigned int Geodesic_find_midpoint(TrilateralMesh* m, unsigned int index1, unsigned int index2);
 void Geodesic_mid_point_w_AGD(TrilateralMesh* m, unsigned int& p1, unsigned int& p2 , float& biggest_dijkstra);
 
@@ -29,6 +32,7 @@ std::vector<unsigned int> conv_int_to_unsigned(std::vector<int> vec);
 std::vector<unsigned int> Geodesic_generate_secondary_curve_w_midpoints(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2);
 std::vector<unsigned int> Geodesic_generate_multiple_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2);
 
+
 std::vector<unsigned int> Geodesic_generate_secondary_curve(TrilateralMesh* m, unsigned int& midpoint1, unsigned int& midpoint2);
 unsigned int Geodesic_send_ray_get_counterpart(TrilateralMesh* m, unsigned int& midpoint1);
 
@@ -37,4 +41,5 @@ bool Geodesic_path_intersection(TrilateralMesh* m, std::vector<unsigned int>& pa
 void Geodesic_color_path(TrilateralMesh* m, unsigned int p1, unsigned int p2);
 void Geodesic_color_midpoints(TrilateralMesh* m);
 void Geodesic_color_according_to_midpoints(TrilateralMesh* m);
+void Geodesic_generate_all_points(TrilateralMesh* m);
 unsigned int Geodesic_get_midpoint_from_path(TrilateralMesh* m, unsigned int p1, unsigned int p2);

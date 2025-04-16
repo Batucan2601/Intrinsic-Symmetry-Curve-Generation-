@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "../Include/CoreTypeDefs.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "../Include/Ray.h"
 #include <stack>
 #include <random>
@@ -238,6 +239,25 @@ bool Geodesic_proximity(TrilateralMesh& m , NLateralDescriptor& desc1, NLateralD
 	return distances[desc2.indices[0]] < proximity;
 }
 
+std::vector<Model> Geodesic_sampled_to_spheres(TrilateralMesh* m, std::vector<unsigned int>& avg_dist_dijksta , Shader& shader)
+{
+	std::vector<Model> spheres;
+	for (size_t i = 0; i < avg_dist_dijksta.size(); i++)
+	{
+		Mesh sphereMesh = GenMeshSphere(1, 20, 20);
+		sphereMesh.normals = (float*)malloc(sphereMesh.vertexCount * 3 * sizeof(float));
+		for (size_t j = 0; j < sphereMesh.vertexCount; j++)
+		{
+			Vector3 vertex = { sphereMesh.vertices[0],sphereMesh.vertices[1] ,sphereMesh.vertices[2] };
+			Vector3 normal = Vector3Normalize(vertex);
+		}
+		Model sphereModel = LoadModelFromMesh(sphereMesh);
+		sphereModel.materials[0].shader = shader;
+		sphereModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+		spheres.push_back(sphereModel);
+	}
+	return spheres; 
+}
 std::vector<unsigned int> Geodesic_avg_dijkstra_modified(TrilateralMesh* m, float sweep_percentage, int N_ring, bool is_color , float& biggest_dijkstra)
 {
 	std::vector<std::pair<float, unsigned int>> gradient_indices;
@@ -749,11 +769,12 @@ void Geodesic_write_sampled_points(TrilateralMesh* m, std::vector<unsigned int>&
 	file.close();
 
 }
-void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points)
+void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& sampled_points , std::vector<Model>& sampled_mesh , Shader& shader)
 {
 	std::ifstream file("sampled_points.txt");
 	// Read the file line by line
 	std::string line;
+	sampled_points.clear();
 	while (std::getline(file, line)) {
 		std::stringstream ss(line); // Use stringstream to parse the line
 		int number;
@@ -766,6 +787,21 @@ void Geodesic_read_sampled_points(TrilateralMesh* m, std::vector<unsigned int>& 
 		{
 			sampled_points.push_back(nums[0]);
 		}
+	}
+	sampled_mesh.clear();
+	for (size_t i = 0; i < sampled_points.size(); i++)
+	{
+		Mesh sphereMesh = GenMeshSphere(1, 20, 20);
+		sphereMesh.normals = (float*)malloc(sphereMesh.vertexCount * 3 * sizeof(float));
+		for (size_t j = 0; j < sphereMesh.vertexCount; j++)
+		{
+			Vector3 vertex = { sphereMesh.vertices[0],sphereMesh.vertices[1] ,sphereMesh.vertices[2] };
+			Vector3 normal = Vector3Normalize(vertex);
+		}
+		Model sphereModel = LoadModelFromMesh(sphereMesh);
+		sphereModel.materials[0].shader = shader;
+		sphereModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+		sampled_mesh.push_back(sphereModel);
 	}
 }
 
@@ -1183,4 +1219,51 @@ unsigned int Geodesic_get_midpoint_from_path(TrilateralMesh* m, unsigned int p1,
 		}
 	}
 	return halfway_index;
+}
+
+void Geodesic_generate_all_points(TrilateralMesh* m)
+{
+	glm::vec3 mid(0, 0, 0);
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		mid = mid + m->vertices[i];
+	}
+	mid = mid / (float)m->vertices.size();
+	
+	float closest = INFINITY;
+	int closest_index = -1; 
+	for (size_t i = 0; i < m->vertices.size(); i++)
+	{
+		float dist = glm::distance(m->vertices[i], mid);
+		if (dist < closest)
+		{
+			closest = dist;
+			closest_index = i; 
+		}
+	}
+	mid = m->vertices[closest_index];
+
+	std::vector<float> distances = Geodesic_dijkstra(*m, closest_index);
+	for (size_t i = 0; i < distances.size(); i++)
+	{
+		float dist_i = distances[i];
+		float closest = INFINITY; 
+		int closest_index = INFINITY-1; 
+		for (size_t j = 0; j < distances.size(); j++)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			float dist_j = distances[j];
+			float distance_between = std::abs(dist_i - dist_j);
+			if (distance_between < closest && glm::distance(m->vertices[i], m->vertices[j]) > 0.2)
+			{
+				closest = distance_between;
+				closest_index = j;
+			}
+		}
+		m->calculated_symmetry_pairs.push_back(std::make_pair(i,closest_index));
+	}
+	
 }

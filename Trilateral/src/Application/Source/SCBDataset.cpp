@@ -7,7 +7,7 @@ std::vector<TrilateralMesh> SCB_mesh;
 #define TOSCA_CAT_SIZE 13
 #define TOSCA_CENTAUR_SIZE 7
 #define TOSCA_DOG_SIZE 8
-#define PRINCETON_DATASET_SIZE 262
+#define PRINCETON_DATASET_SIZE 400
 static DATASET dataset; 
 
 void SCB_select_dataset(DATASET cur_dataset)
@@ -76,6 +76,10 @@ void SCB_read_Princeton()
 	dataset = PRINCETON;
 	for (size_t i = 1; i < PRINCETON_DATASET_SIZE; i++)
 	{
+		if (i == 262)
+		{
+			i = 281;
+		}
 		std::string mesh_name;
 		std::string i_name = std::to_string(i);
 		std::string tab = "/";

@@ -12,6 +12,7 @@
 #include <string>
 #include <map>
 #include "Include/Sampling.h"
+#include "Include/Geodesic.h"
 #include "Include/Mesh_imgui.h"
 #include "Include/ImguiMenuBar.h"
 #include "Include/Ray.h"
@@ -57,11 +58,11 @@ int main(void)
             ClearBackground(WHITE);
             camera.update();
             BeginMode3D(camera.camera);
+                draw_all(&m1);
                 BeginShaderMode(shader);
                     SetShaderValue(shader, ambientLoc, ambient, SHADER_UNIFORM_VEC4);
                     draw_all_shader(&m1, camera.shader);
                 EndShaderMode();
-                draw_all(&m1);
             EndMode3D();
             rlImGuiBegin();
             imgui_menu_bar(&m1);
@@ -97,6 +98,21 @@ static void imgui_display_camera(Camera3D& camera , TrilateralMesh* m )
         Vector3 p = { m->vertices[point_no].x , m->vertices[point_no].y ,m->vertices[point_no].z };
         camera.position = p;
     }
-
+    if (ImGui::Button("Give Closest to Camera "))
+    {
+        glm::vec3 camPos = CoreType_conv_raylib_glm_vec3(camera.position);
+        float closest = INFINITY; 
+        int closest_index = -1;
+        for (size_t i = 0; i < m->vertices.size(); i++)
+        {
+            float distance = glm::distance(camPos, m->vertices[i]);
+            if (closest > distance)
+            {
+                closest = distance;
+                closest_index = i;
+            }
+        }
+        std::cout << " closest index " << closest_index << std::endl; 
+    }
     ImGui::End();
 }

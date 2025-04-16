@@ -3,6 +3,7 @@
 #include <stack>
 #include <random>
 #include "../Include/VarianceMinimizingTransportPlan.h"
+#include "../Include/ROI.h"
 
 Voronoi::Voronoi()
 {
@@ -89,6 +90,24 @@ void Voronoi::generate_voronoi_parts()
 	this->no_of_partition = current_partition_no;
 }
 
+void Voronoi::area_compare()
+{
+	float area_red = 0;
+	float area_green = 0;
+	for (size_t i = 0; i < this->status.size(); i++)
+	{
+		if (this->status[i] == 1)
+		{
+			area_red = area_red + this->m->areas[i];
+		}
+		else if (this->status[i] == 2)
+		{
+			area_green = area_green + this->m->areas[i];
+		}
+
+	}
+	std::cout << " area comp " << std::min(area_green, area_red) / std::max(area_green, area_red) << std::endl;
+}
 void Voronoi::color()
 {
 	std::vector<unsigned int> voronoi_part; 
@@ -551,6 +570,9 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 	v.connect_boundary();
 	v.generate_voronoi_parts();
 	v.color();
+
+	// area comparison
+	v.area_compare();
 	return v;
 }
 
@@ -674,7 +696,6 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 	m->color_points(re_colored, WHITE);
 	m->color_points(voronoi_back, BLACK);
 	m->color_points(voronoi_front, BLUE);
-
 	float closest_dist = INFINITY;
 	int closest_index = -1;
 	std::vector<float> distances_from_inverse_voronoi = Geodesic_dijkstra(*m , voronoi_midpoint_inverse); 
@@ -729,7 +750,6 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 		voronoi.indices.push_back(path[i]);
 		new_path.push_back(path[i]);
 		m->color_points(conv_int_to_unsigned(path), GREEN);
-
 	}
 	path = Geodesic_between_two_points(*m, midpoint, normal_midpoint_inverse);
 	for (size_t i = 0; i < path.size(); i++)
@@ -737,7 +757,6 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 		voronoi.indices.push_back(path[i]);
 		new_path.push_back(path[i]);
 		m->color_points(conv_int_to_unsigned(path), RED);
-
 	}
 	path = Geodesic_between_two_points(*m, correspondence_midpoints[farthest_midpoint_front], normal_midpoint_inverse);
 	for (size_t i = 0; i < path.size(); i++)
@@ -745,12 +764,13 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 		voronoi.indices.push_back(path[i]);
 		new_path.push_back(path[i]);
 		m->color_points(conv_int_to_unsigned(path), BLUE);
-
 	}
 	voronoi.indices.clear();
 	voronoi.indices = new_path;
 	voronoi.generate_voronoi_parts();
-	voronoi.color();
+	voronoi.color(); 
+	voronoi.area_compare();
+
 	//m->color_points(new_path, ORANGE);
 
 	/*std::vector<int> path1 = Geodesic_between_two_points(*m, midpoint, correspondence_midpoints[farthest_midpoint_front]);
@@ -923,6 +943,7 @@ Voronoi Voronoi_show_voronoi(TrilateralMesh* m,  unsigned int pair_no , float vo
 	std::cout << " distance " << distance[index2] << std::endl;
 	std::cout << index1 << " " << index2 << std::endl; 
 	m->color_points(pairs, PURPLE);
+	v.area_compare();
 	return v;
 }
 int Voronoi_get_closest_unvisited_index(TrilateralMesh* m, Voronoi& v, std::vector<int>& is_visited , int index)
@@ -1110,7 +1131,105 @@ void Voronoi_get_two_pair_and_generate_a_path(TrilateralMesh* m, Voronoi& vorono
 	std::vector<unsigned int> indices = { (unsigned int)voronoi_p1 , (unsigned int)index };
 	NLateralDescriptor desc = NLateral_generate_descriptor_w_midpoints(m, indices, fuzziness, biggest_dist);
 	desc.create_histogram_HKS(m , 5 ,voronoi_p1 );
-	m->color_points(desc.triangles_inside, BLUE);
+	//m->color_points(desc.triangles_inside, BLUE);
 
 
+}
+
+void Voronoi_connect_midpoints(TrilateralMesh* m, Voronoi& voronoi)
+{
+	std::vector<unsigned int> midpoints;
+	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
+	{
+		int index1 = m->calculated_symmetry_pairs[i].first;
+		int index2 = m->calculated_symmetry_pairs[i].second;
+		unsigned int midpoint = Geodesic_get_midpoint_from_path(m, index1, index2);
+		midpoints.push_back(midpoint);
+	}
+
+	std::vector<int> paths; 
+	//start from 0'th
+	std::vector<bool> is_used(midpoints.size(), false);
+	int no_of_used = 1; 
+	is_used[0] = true; 
+	unsigned int selected_index = 0;
+	int last_index = -1;
+	while (no_of_used < midpoints.size())
+	{
+		std::vector<float> distances = Geodesic_dijkstra(*m, midpoints[selected_index]);
+		int closest = -1; 
+		float closest_dist = INFINITY; 
+		for (size_t i = 0; i < midpoints.size(); i++)
+		{
+			if (!is_used[i])
+			{
+				if (closest_dist > distances[midpoints[i]])
+				{
+					closest_dist = distances[midpoints[i]];
+					closest = i;
+					last_index = i; 
+				}
+			}
+		}
+		std::vector<int> path = Geodesic_between_two_points(*m, midpoints[selected_index], midpoints[closest]);
+		is_used[closest] = true; 
+		no_of_used++;
+		selected_index = closest;
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			paths.push_back(path[i]);
+		}
+	}
+	std::vector<int> last_path = Geodesic_between_two_points(*m, midpoints[0], midpoints[last_index]);
+	for (size_t i = 0; i < last_path.size(); i++)
+	{
+		paths.push_back(last_path[i]);
+	}
+
+	std::vector<bool> selected_points(m->vertices.size(), false);
+	for (size_t i = 0; i < paths.size(); i++)
+	{
+		selected_points[paths[i]] = true; 
+	}
+	unsigned int seed_point = 0;
+	while(selected_points[seed_point])
+	{
+		seed_point++;
+	}
+	std::vector<int> is_visited(m->vertices.size() , OUTSIDE );
+	for (size_t i = 0; i < paths.size(); i++)
+	{
+		is_visited[paths[i]] = EDGE;
+	}
+	std::vector<unsigned int> path1 = breadth_first_search(m,seed_point, is_visited);
+	//get other part
+	for (size_t i = 0; i < path1.size(); i++)
+	{
+		selected_points[path1[i]] = true;
+	}
+	seed_point = 0;
+	while (selected_points[seed_point])
+	{
+		seed_point++;
+	}
+	std::vector<unsigned int> path2 = breadth_first_search(m, seed_point, is_visited);
+
+	m->color_points(path1, RED);
+	m->color_points(path2, GREEN);
+	m->color_points(conv_int_to_unsigned(paths), YELLOW);
+
+
+	float area_red = 0;
+	float area_green = 0;
+	for (size_t i = 0; i < path1.size(); i++)
+	{
+		int index = path1[i];
+		area_red += m->areas[index];
+	}
+	for (size_t i = 0; i < path2.size(); i++)
+	{
+		int index = path2[i];
+		area_green += m->areas[index];
+	}
+	std::cout << " area is == > " << std::min(area_green ,area_red) / std::max(area_green, area_red) << std::endl;
 }
