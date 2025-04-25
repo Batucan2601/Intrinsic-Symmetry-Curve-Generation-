@@ -692,10 +692,11 @@ void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_pa
 			farthest_midpoint_back = i;
 		}
 	}
-
+	m->color_all(WHITE);
 	m->color_points(re_colored, WHITE);
-	m->color_points(voronoi_back, BLACK);
+	m->color_points(voronoi_back, MAGENTA);
 	m->color_points(voronoi_front, BLUE);
+	return;
 	float closest_dist = INFINITY;
 	int closest_index = -1;
 	std::vector<float> distances_from_inverse_voronoi = Geodesic_dijkstra(*m , voronoi_midpoint_inverse); 

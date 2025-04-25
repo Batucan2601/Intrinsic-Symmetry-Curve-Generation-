@@ -1,1450 +1,2552 @@
  i 0 j 1
- hks dif 0.058823
- distance to modpoint 0.612309
+ hks dif 0.0588235
+ distance to modpoint 0.702593
  closeness comparison 
- ratio 2.37749
+ ratio 2.15903
 1
  i 0 j 2
- hks dif 0.274509
- distance to modpoint 0.659702
+ hks dif 0.0274509
+ distance to modpoint 0.725937
  closeness comparison 
- ratio 1.72301
+ ratio 2.18076
 1
  i 0 j 3
- hks dif 0.262745
- distance to modpoint 0.532646
+ hks dif 0.0274509
+ distance to modpoint 0.804803
  closeness comparison 
- ratio 1.99731
+ ratio 0.466716
 1
  i 0 j 4
- hks dif 0.282353
- distance to modpoint 0.702463
+ hks dif 0.0352941
+ distance to modpoint 0.863369
  closeness comparison 
- ratio 1.52466
+ ratio 0.822929
 1
  i 0 j 5
- hks dif 0.035294
- distance to modpoint 0.367041
+ hks dif 0.266666
+ distance to modpoint 0.474235
  closeness comparison 
- ratio 2.77569
+ ratio 1.23205
 1
  i 0 j 6
- hks dif 0.359784
- distance to modpoint 0.61704
+ hks dif 0.254902
+ distance to modpoint 0.520108
  closeness comparison 
- ratio 2.24101
+ ratio 1.19255
 1
  i 0 j 7
- hks dif 0.359784
- distance to modpoint 0.589263
+ hks dif 0.207843
+ distance to modpoint 0.671557
  closeness comparison 
- ratio 2.53401
+ ratio 2.48857
 1
  i 0 j 8
- hks dif 0.356862
+ hks dif 0.188235
+ distance to modpoint 0.492491
  closeness comparison 
- ratio inf
+ ratio 3.03049
 1
  i 0 j 9
- hks dif 0.619608
- distance to modpoint 0.40962
+ hks dif 0.180392
+ distance to modpoint 0.484894
  closeness comparison 
- ratio 3.29649
+ ratio 3.03191
 1
  i 0 j 10
- hks dif 0.639216
- distance to modpoint 0.571274
+ hks dif 0.184313
+ distance to modpoint 0.631495
  closeness comparison 
- ratio 1.00637
+ ratio 2.57856
 1
  i 0 j 11
  hks dif 0.231372
- distance to modpoint 0.60358
+ distance to modpoint 0.459526
  closeness comparison 
- ratio 2.65678
+ ratio 1.18742
 1
  i 0 j 12
- hks dif 0.231372
- distance to modpoint 0.735425
+ hks dif 0.235294
+ distance to modpoint 0.453972
  closeness comparison 
- ratio 2.34858
+ ratio 1.20278
 1
  i 0 j 13
- hks dif 0.14902
- distance to modpoint 0.382699
+ hks dif 0.654902
+ distance to modpoint 0.25126
  closeness comparison 
- ratio 3.58565
+ ratio 4.97994
 1
  i 0 j 14
- hks dif 0.133334
- distance to modpoint 0.388632
+ hks dif 0.627451
+ distance to modpoint 0.317342
  closeness comparison 
- ratio 3.54576
+ ratio 4.15117
 1
  i 0 j 15
- hks dif 0.078432
- distance to modpoint 0.393341
+ hks dif 0.882353
+ distance to modpoint 0.275957
  closeness comparison 
- ratio 3.51495
+ ratio 4.62376
+1
+ i 0 j 16
+ hks dif 0.933333
+ distance to modpoint 0.23348
+ closeness comparison 
+ ratio 5.28302
+1
+ i 0 j 17
+ hks dif 0.992156
+ distance to modpoint 0.265426
+ closeness comparison 
+ ratio 2.89092
+1
+ i 0 j 18
+ hks dif 0.988235
+ distance to modpoint 0.323167
+ closeness comparison 
+ ratio 2.38054
+1
+ i 0 j 19
+ hks dif 0.00784313
+ distance to modpoint 0.0948901
+ closeness comparison 
+ ratio 10.9102
+1
+ i 0 j 20
+ hks dif 0.0117647
+ distance to modpoint 0.677974
+ closeness comparison 
+ ratio 1.75382
 1
  i 1 j 0
- hks dif 0.058823
- distance to modpoint 0.612309
+ hks dif 0.0588235
+ distance to modpoint 0.702593
  closeness comparison 
- ratio 2.37749
+ ratio 2.15903
 1
  i 1 j 2
- hks dif 0.215687
- distance to modpoint 0.92816
+ hks dif 0.0313726
+ distance to modpoint 0.967842
  closeness comparison 
- ratio 1.04154
+ ratio 0.801107
 1
+ dif 0.651627
  i 1 j 3
- hks dif 0.203922
- distance to modpoint 0.869897
+ hks dif 0.0313726
+ distance to modpoint 0.873001
  closeness comparison 
- ratio 0.998985
+ ratio 1.71224
 1
  i 1 j 4
- hks dif 0.22353
- distance to modpoint 0.87166
+ hks dif 0.0235294
+ distance to modpoint 0.81378
  closeness comparison 
- ratio 1.41333
+ ratio 2.10123
 1
  i 1 j 5
- hks dif 0.023529
- distance to modpoint 0.599437
+ hks dif 0.207843
+ distance to modpoint 0.674978
  closeness comparison 
- ratio 1.66163
+ ratio 2.03424
 1
  i 1 j 6
- hks dif 0.300961
- distance to modpoint 0.377819
+ hks dif 0.196079
+ distance to modpoint 0.740269
  closeness comparison 
- ratio 2.32915
+ ratio 2.27995
 1
  i 1 j 7
- hks dif 0.300961
- distance to modpoint 0.360811
+ hks dif 0.14902
+ distance to modpoint 0.955826
  closeness comparison 
- ratio 1.79632
+ ratio 1.62385
 1
  i 1 j 8
- hks dif 0.298039
+ hks dif 0.129412
+ distance to modpoint 0.700962
  closeness comparison 
- ratio inf
+ ratio 0.946805
 1
  i 1 j 9
- hks dif 0.678431
- distance to modpoint 0.668975
+ hks dif 0.121569
+ distance to modpoint 0.690149
  closeness comparison 
- ratio 0.654139
+ ratio 0.768615
 1
  i 1 j 10
- hks dif 0.698039
- distance to modpoint 0.932983
+ hks dif 0.12549
+ distance to modpoint 0.898806
  closeness comparison 
- ratio 2.01354
+ ratio 1.56043
 1
  i 1 j 11
  hks dif 0.172549
- distance to modpoint 0.985744
+ distance to modpoint 0.654043
  closeness comparison 
- ratio 1.40686
+ ratio 2.31278
 1
  i 1 j 12
- hks dif 0.172549
- distance to modpoint 0.832592
+ hks dif 0.176471
+ distance to modpoint 0.646138
  closeness comparison 
- ratio 1.94943
+ ratio 2.27981
 1
  i 1 j 13
- hks dif 0.207843
- distance to modpoint 0.62501
+ hks dif 0.596079
+ distance to modpoint 0.357618
  closeness comparison 
- ratio 2.12902
+ ratio 2.13003
 1
  i 1 j 14
- hks dif 0.192157
- distance to modpoint 0.634699
+ hks dif 0.568628
+ distance to modpoint 0.451673
  closeness comparison 
- ratio 2.15266
+ ratio 2.67863
 1
  i 1 j 15
- hks dif 0.137255
- distance to modpoint 0.642389
+ hks dif 0.82353
+ distance to modpoint 0.392769
  closeness comparison 
- ratio 2.10385
+ ratio 3.01067
 1
- i 2 j 0
- hks dif 0.274509
- distance to modpoint 0.659702
+ i 1 j 16
+ hks dif 0.87451
+ distance to modpoint 0.332312
  closeness comparison 
- ratio 1.72301
+ ratio 2.38162
+1
+ i 1 j 17
+ hks dif 0.933333
+ distance to modpoint 0.377781
+ closeness comparison 
+ ratio 3.19974
+1
+ i 1 j 18
+ hks dif 0.929412
+ distance to modpoint 0.459964
+ closeness comparison 
+ ratio 3.10707
+1
+ i 1 j 19
+ hks dif 0.0509804
+ distance to modpoint 0.0666692
+ closeness comparison 
+ ratio 14.012
+1
+ i 1 j 20
+ hks dif 0.0470588
+ distance to modpoint 0.96496
+ closeness comparison 
+ ratio 0.771844
+1
+ dif 0.47252
+ i 2 j 0
+ hks dif 0.0274509
+ distance to modpoint 0.725937
+ closeness comparison 
+ ratio 2.18076
 1
  i 2 j 1
- hks dif 0.215687
- distance to modpoint 0.92816
+ hks dif 0.0313726
+ distance to modpoint 0.967843
  closeness comparison 
- ratio 1.04154
+ ratio 0.801108
 1
+ dif 0.651186
  i 2 j 3
- hks dif 0.0117647
- distance to modpoint 0.807404
+ hks dif 0
+ distance to modpoint 0.902007
  closeness comparison 
- ratio 0.59701
+ ratio 2.03912
 1
- dif 0.706235
+ dif 0.545762
  i 2 j 4
- hks dif 0.0078431
- distance to modpoint 0.939126
+ hks dif 0.0078432
+ distance to modpoint 0.840819
  closeness comparison 
- ratio 0.388151
+ ratio 1.67615
 1
- dif 0.803324
  i 2 j 5
- hks dif 0.239215
- distance to modpoint 0.556374
+ hks dif 0.239216
+ distance to modpoint 0.653273
  closeness comparison 
- ratio 0.87219
+ ratio 2.45055
 1
  i 2 j 6
- hks dif 0.0852745
- distance to modpoint 0.407062
+ hks dif 0.227451
+ distance to modpoint 0.716464
  closeness comparison 
- ratio 3.00433
+ ratio 2.04616
 1
  i 2 j 7
- hks dif 0.0852745
- distance to modpoint 0.388738
+ hks dif 0.180393
+ distance to modpoint 0.925089
  closeness comparison 
- ratio 2.26502
+ ratio 1.18158
 1
  i 2 j 8
- hks dif 0.0823529
+ hks dif 0.160784
+ distance to modpoint 0.678421
  closeness comparison 
- ratio inf
+ ratio 1.01352
 1
- dif 1.03018
  i 2 j 9
- hks dif 0.894117
- distance to modpoint 0.620916
+ hks dif 0.152941
+ distance to modpoint 0.667956
  closeness comparison 
- ratio 1.70769
+ ratio 1.15467
 1
  i 2 j 10
- hks dif 0.913725
- distance to modpoint 0.865958
+ hks dif 0.156862
+ distance to modpoint 0.869903
  closeness comparison 
- ratio 1.7973
+ ratio 1.00511
 1
  i 2 j 11
- hks dif 0.0431375
- distance to modpoint 0.914928
+ hks dif 0.203921
+ distance to modpoint 0.633011
  closeness comparison 
- ratio 1.88693
+ ratio 2.3167
 1
- dif 0.883319
  i 2 j 12
- hks dif 0.0431375
- distance to modpoint 0.897035
+ hks dif 0.207843
+ distance to modpoint 0.62536
  closeness comparison 
- ratio 2.08772
+ ratio 2.39148
 1
- dif 0.790725
  i 2 j 13
- hks dif 0.42353
- distance to modpoint 0.58011
+ hks dif 0.627452
+ distance to modpoint 0.346118
  closeness comparison 
- ratio 2.67677
+ ratio 2.39416
 1
  i 2 j 14
- hks dif 0.407844
- distance to modpoint 0.589102
+ hks dif 0.600001
+ distance to modpoint 0.437148
  closeness comparison 
- ratio 2.65549
+ ratio 2.22542
 1
  i 2 j 15
- hks dif 0.352941
- distance to modpoint 0.59624
+ hks dif 0.854903
+ distance to modpoint 0.380138
  closeness comparison 
- ratio 2.53469
+ ratio 2.57293
 1
- i 3 j 0
- hks dif 0.262745
- distance to modpoint 0.532646
+ i 2 j 16
+ hks dif 0.905883
+ distance to modpoint 0.321626
  closeness comparison 
- ratio 1.99731
+ ratio 2.63745
+1
+ i 2 j 17
+ hks dif 0.964706
+ distance to modpoint 0.365633
+ closeness comparison 
+ ratio 3.65478
+1
+ i 2 j 18
+ hks dif 0.960784
+ distance to modpoint 0.445172
+ closeness comparison 
+ ratio 2.86337
+1
+ i 2 j 19
+ hks dif 0.0196078
+ distance to modpoint 0.0688843
+ closeness comparison 
+ ratio 15.5171
+1
+ i 2 j 20
+ hks dif 0.0156862
+ distance to modpoint 0.933929
+ closeness comparison 
+ ratio 0.96914
+1
+ dif 0.278138
+ i 3 j 0
+ hks dif 0.0274509
+ distance to modpoint 0.804803
+ closeness comparison 
+ ratio 0.466716
 1
  i 3 j 1
- hks dif 0.203922
- distance to modpoint 0.869897
+ hks dif 0.0313726
+ distance to modpoint 0.873001
  closeness comparison 
- ratio 0.998985
+ ratio 1.71224
 1
  i 3 j 2
- hks dif 0.0117647
- distance to modpoint 0.807404
+ hks dif 0
+ distance to modpoint 0.902007
  closeness comparison 
- ratio 0.59701
+ ratio 2.03912
 1
- dif 0.697719
+ dif 0.521117
  i 3 j 4
- hks dif 0.0196078
- distance to modpoint 0.758254
+ hks dif 0.0078432
+ distance to modpoint 0.932165
  closeness comparison 
- ratio 0.528102
+ ratio 1.09
 1
+ dif 0.620049
  i 3 j 5
- hks dif 0.227451
- distance to modpoint 0.68909
+ hks dif 0.239216
+ distance to modpoint 0.589256
  closeness comparison 
- ratio 0.738291
+ ratio 0.701616
 1
  i 3 j 6
- hks dif 0.0970392
- distance to modpoint 0.328664
+ hks dif 0.227451
+ distance to modpoint 0.646256
  closeness comparison 
- ratio 2.28657
+ ratio 1.25002
 1
  i 3 j 7
- hks dif 0.0970392
- distance to modpoint 0.313869
+ hks dif 0.180393
+ distance to modpoint 0.834436
  closeness comparison 
- ratio 2.79819
+ ratio 2.19841
 1
  i 3 j 8
- hks dif 0.0941176
+ hks dif 0.160784
+ distance to modpoint 0.61194
  closeness comparison 
- ratio inf
+ ratio 2.53261
 1
- dif 0.822875
  i 3 j 9
- hks dif 0.882353
- distance to modpoint 0.769028
+ hks dif 0.152941
+ distance to modpoint 0.6025
  closeness comparison 
- ratio 1.41756
+ ratio 2.49358
 1
  i 3 j 10
- hks dif 0.901961
- distance to modpoint 0.932382
+ hks dif 0.156862
+ distance to modpoint 0.784659
  closeness comparison 
- ratio 1.7004
+ ratio 2.27444
 1
  i 3 j 11
- hks dif 0.0313728
- distance to modpoint 0.882478
+ hks dif 0.203921
+ distance to modpoint 0.57098
  closeness comparison 
- ratio 1.61216
+ ratio 1.07957
 1
- dif 0.977269
  i 3 j 12
- hks dif 0.0313728
- distance to modpoint 0.724269
+ hks dif 0.207843
+ distance to modpoint 0.564079
  closeness comparison 
- ratio 2.12829
+ ratio 0.95945
 1
  i 3 j 13
- hks dif 0.411765
- distance to modpoint 0.718488
+ hks dif 0.627452
+ distance to modpoint 0.312201
  closeness comparison 
- ratio 2.00103
+ ratio 4.09932
 1
  i 3 j 14
- hks dif 0.396079
- distance to modpoint 0.729625
+ hks dif 0.600001
+ distance to modpoint 0.394311
  closeness comparison 
- ratio 2.01876
+ ratio 3.53607
 1
  i 3 j 15
- hks dif 0.341177
- distance to modpoint 0.738466
+ hks dif 0.854903
+ distance to modpoint 0.342887
  closeness comparison 
- ratio 1.98286
+ ratio 3.91641
+1
+ i 3 j 16
+ hks dif 0.905883
+ distance to modpoint 0.290109
+ closeness comparison 
+ ratio 4.34324
+1
+ i 3 j 17
+ hks dif 0.964706
+ distance to modpoint 0.329803
+ closeness comparison 
+ ratio 2.03667
+1
+ i 3 j 18
+ hks dif 0.960784
+ distance to modpoint 0.401549
+ closeness comparison 
+ ratio 2.20921
+1
+ i 3 j 19
+ hks dif 0.0196078
+ distance to modpoint 0.0763678
+ closeness comparison 
+ ratio 13.083
+1
+ i 3 j 20
+ hks dif 0.0156862
+ distance to modpoint 0.842411
+ closeness comparison 
+ ratio 1.23297
 1
  i 4 j 0
- hks dif 0.282353
- distance to modpoint 0.702463
+ hks dif 0.0352941
+ distance to modpoint 0.863369
  closeness comparison 
- ratio 1.52466
+ ratio 0.822929
 1
  i 4 j 1
- hks dif 0.22353
- distance to modpoint 0.87166
+ hks dif 0.0235294
+ distance to modpoint 0.81378
  closeness comparison 
- ratio 1.41333
+ ratio 2.10123
 1
  i 4 j 2
- hks dif 0.0078431
- distance to modpoint 0.939126
+ hks dif 0.0078432
+ distance to modpoint 0.840819
  closeness comparison 
- ratio 0.388151
+ ratio 1.67615
 1
- dif 0.795803
  i 4 j 3
- hks dif 0.0196078
- distance to modpoint 0.758254
+ hks dif 0.0078432
+ distance to modpoint 0.932165
  closeness comparison 
- ratio 0.528102
+ ratio 1.09
 1
+ dif 0.597514
  i 4 j 5
- hks dif 0.247059
- distance to modpoint 0.522505
+ hks dif 0.231372
+ distance to modpoint 0.549284
  closeness comparison 
- ratio 0.986519
+ ratio 1.70168
 1
  i 4 j 6
- hks dif 0.0774314
- distance to modpoint 0.433448
+ hks dif 0.219608
+ distance to modpoint 0.602417
  closeness comparison 
- ratio 2.30209
+ ratio 0.771327
 1
  i 4 j 7
- hks dif 0.0774314
- distance to modpoint 0.413936
+ hks dif 0.172549
+ distance to modpoint 0.777832
  closeness comparison 
- ratio 2.76611
+ ratio 2.1678
 1
  i 4 j 8
- hks dif 0.0745098
+ hks dif 0.152941
+ distance to modpoint 0.570429
  closeness comparison 
- ratio inf
+ ratio 2.71465
 1
- dif 0.999775
  i 4 j 9
- hks dif 0.901961
- distance to modpoint 0.583119
+ hks dif 0.145098
+ distance to modpoint 0.56163
  closeness comparison 
- ratio 2.12266
+ ratio 2.76297
 1
  i 4 j 10
- hks dif 0.921569
- distance to modpoint 0.813244
+ hks dif 0.149019
+ distance to modpoint 0.731431
  closeness comparison 
- ratio 1.759
+ ratio 2.13284
 1
  i 4 j 11
- hks dif 0.0509806
- distance to modpoint 0.859233
+ hks dif 0.196078
+ distance to modpoint 0.532247
  closeness comparison 
- ratio 2.10478
+ ratio 1.32265
 1
- dif 1.05428
  i 4 j 12
- hks dif 0.0509806
- distance to modpoint 0.95518
+ hks dif 0.2
+ distance to modpoint 0.525815
  closeness comparison 
- ratio 1.88904
+ ratio 1.49933
 1
- dif 0.984299
  i 4 j 13
- hks dif 0.431373
- distance to modpoint 0.544796
+ hks dif 0.619608
+ distance to modpoint 0.291023
  closeness comparison 
- ratio 2.64992
+ ratio 4.39774
 1
  i 4 j 14
- hks dif 0.415687
- distance to modpoint 0.553241
+ hks dif 0.592157
+ distance to modpoint 0.367563
  closeness comparison 
- ratio 2.62505
+ ratio 3.61613
 1
  i 4 j 15
- hks dif 0.360785
- distance to modpoint 0.559945
+ hks dif 0.847059
+ distance to modpoint 0.319628
  closeness comparison 
- ratio 2.60341
+ ratio 4.02415
+1
+ i 4 j 16
+ hks dif 0.898039
+ distance to modpoint 0.270429
+ closeness comparison 
+ ratio 4.65941
+1
+ i 4 j 17
+ hks dif 0.956862
+ distance to modpoint 0.307431
+ closeness comparison 
+ ratio 3.13103
+1
+ i 4 j 18
+ hks dif 0.952941
+ distance to modpoint 0.374309
+ closeness comparison 
+ ratio 1.76021
+1
+ i 4 j 19
+ hks dif 0.027451
+ distance to modpoint 0.0819253
+ closeness comparison 
+ ratio 13.0845
+1
+ i 4 j 20
+ hks dif 0.0235294
+ distance to modpoint 0.785266
+ closeness comparison 
+ ratio 1.19941
 1
  i 5 j 0
- hks dif 0.035294
- distance to modpoint 0.367041
+ hks dif 0.266666
+ distance to modpoint 0.474235
  closeness comparison 
- ratio 2.77569
+ ratio 1.23205
 1
  i 5 j 1
- hks dif 0.023529
- distance to modpoint 0.599437
+ hks dif 0.207843
+ distance to modpoint 0.674978
  closeness comparison 
- ratio 1.66163
+ ratio 2.03424
 1
  i 5 j 2
- hks dif 0.239215
- distance to modpoint 0.556374
+ hks dif 0.239216
+ distance to modpoint 0.653273
  closeness comparison 
- ratio 0.872191
+ ratio 2.45055
 1
  i 5 j 3
- hks dif 0.227451
- distance to modpoint 0.68909
+ hks dif 0.239216
+ distance to modpoint 0.589256
  closeness comparison 
- ratio 0.738291
+ ratio 0.701616
 1
  i 5 j 4
- hks dif 0.247059
- distance to modpoint 0.522505
+ hks dif 0.231372
+ distance to modpoint 0.549284
  closeness comparison 
- ratio 0.986519
+ ratio 1.70168
 1
  i 5 j 6
- hks dif 0.32449
- distance to modpoint 0.226479
+ hks dif 0.011764
+ distance to modpoint 0.911801
  closeness comparison 
- ratio 4.20146
+ ratio 1.15874
 1
+ dif 0.703797
  i 5 j 7
- hks dif 0.32449
- distance to modpoint 0.216284
+ hks dif 0.058823
+ distance to modpoint 0.706173
  closeness comparison 
- ratio 4.39945
+ ratio 2.41608
 1
  i 5 j 8
- hks dif 0.321568
+ hks dif 0.078431
+ distance to modpoint 0.962931
  closeness comparison 
- ratio inf
+ ratio 1.96478
 1
+ dif 1.17608
  i 5 j 9
- hks dif 0.654902
- distance to modpoint 0.896053
+ hks dif 0.086274
+ distance to modpoint 0.978018
  closeness comparison 
- ratio 1.52975
+ ratio 1.88244
 1
  i 5 j 10
- hks dif 0.67451
- distance to modpoint 0.642496
+ hks dif 0.082353
+ distance to modpoint 0.750972
  closeness comparison 
- ratio 2.15775
+ ratio 2.33161
 1
  i 5 j 11
- hks dif 0.196078
- distance to modpoint 0.608107
+ hks dif 0.035294
+ distance to modpoint 0.968984
  closeness comparison 
- ratio 2.43475
+ ratio 0.909214
 1
+ dif 0.703201
  i 5 j 12
- hks dif 0.196078
- distance to modpoint 0.499087
+ hks dif 0.031372
+ distance to modpoint 0.957273
  closeness comparison 
- ratio 2.92085
+ ratio 0.811749
 1
+ dif 0.662412
  i 5 j 13
- hks dif 0.184314
- distance to modpoint 0.959084
+ hks dif 0.388236
+ distance to modpoint 0.529822
  closeness comparison 
- ratio 1.92683
+ ratio 2.79534
 1
  i 5 j 14
- hks dif 0.168628
- distance to modpoint 0.944444
+ hks dif 0.360785
+ distance to modpoint 0.669167
  closeness comparison 
- ratio 1.96121
+ ratio 2.4944
 1
  i 5 j 15
- hks dif 0.113726
- distance to modpoint 0.933137
+ hks dif 0.615687
+ distance to modpoint 0.581899
  closeness comparison 
- ratio 1.96105
+ ratio 2.71851
 1
- dif 1.23494
- i 6 j 0
- hks dif 0.359784
- distance to modpoint 0.61704
+ i 5 j 16
+ hks dif 0.666667
+ distance to modpoint 0.49233
  closeness comparison 
- ratio 2.24101
+ ratio 2.94603
+1
+ i 5 j 17
+ hks dif 0.72549
+ distance to modpoint 0.559694
+ closeness comparison 
+ ratio 0.786691
+1
+ i 5 j 18
+ hks dif 0.721569
+ distance to modpoint 0.68145
+ closeness comparison 
+ ratio 1.62175
+1
+ i 5 j 19
+ hks dif 0.258823
+ distance to modpoint 0.0450002
+ closeness comparison 
+ ratio 22.2119
+1
+ i 5 j 20
+ hks dif 0.254902
+ distance to modpoint 0.699488
+ closeness comparison 
+ ratio 1.49752
+1
+ i 6 j 0
+ hks dif 0.254902
+ distance to modpoint 0.520108
+ closeness comparison 
+ ratio 1.19255
 1
  i 6 j 1
- hks dif 0.300961
- distance to modpoint 0.377819
+ hks dif 0.196079
+ distance to modpoint 0.740269
  closeness comparison 
- ratio 2.32915
+ ratio 2.27995
 1
  i 6 j 2
- hks dif 0.0852745
- distance to modpoint 0.407062
+ hks dif 0.227451
+ distance to modpoint 0.716464
  closeness comparison 
- ratio 3.00433
+ ratio 2.04616
 1
  i 6 j 3
- hks dif 0.0970392
- distance to modpoint 0.328664
+ hks dif 0.227451
+ distance to modpoint 0.646256
  closeness comparison 
- ratio 2.28657
+ ratio 1.25002
 1
  i 6 j 4
- hks dif 0.0774314
- distance to modpoint 0.433448
+ hks dif 0.219608
+ distance to modpoint 0.602417
  closeness comparison 
- ratio 2.30209
+ ratio 0.771327
 1
  i 6 j 5
- hks dif 0.32449
- distance to modpoint 0.226479
+ hks dif 0.011764
+ distance to modpoint 0.911801
  closeness comparison 
- ratio 4.20147
+ ratio 1.15874
 1
+ dif 0.708991
  i 6 j 7
- hks dif 0
- distance to modpoint 0.954984
+ hks dif 0.047059
+ distance to modpoint 0.774482
  closeness comparison 
- ratio 1.81311
+ ratio 2.26005
 1
- dif 0.70629
  i 6 j 8
- hks dif 0.00292157
+ hks dif 0.066667
+ distance to modpoint 0.946901
  closeness comparison 
- ratio inf
+ ratio 2.05608
 1
- dif 0.81778
+ dif 1.29357
  i 6 j 9
- hks dif 0.979392
- distance to modpoint 0.252752
+ hks dif 0.07451
+ distance to modpoint 0.932294
  closeness comparison 
- ratio 3.80755
+ ratio 2.07262
 1
+ dif 1.17492
  i 6 j 10
- hks dif 0.999
- distance to modpoint 0.352499
+ hks dif 0.070589
+ distance to modpoint 0.823614
  closeness comparison 
- ratio 3.46707
+ ratio 2.11399
 1
  i 6 j 11
- hks dif 0.128412
- distance to modpoint 0.372433
+ hks dif 0.02353
+ distance to modpoint 0.88352
  closeness comparison 
- ratio 2.65523
+ ratio 0.85221
 1
  i 6 j 12
- hks dif 0.128412
- distance to modpoint 0.453787
+ hks dif 0.019608
+ distance to modpoint 0.872842
  closeness comparison 
- ratio 2.44179
+ ratio 0.991127
 1
  i 6 j 13
- hks dif 0.508804
- distance to modpoint 0.236141
+ hks dif 0.4
+ distance to modpoint 0.483092
  closeness comparison 
- ratio 4.00212
+ ratio 3.07
 1
  i 6 j 14
- hks dif 0.493118
- distance to modpoint 0.239801
+ hks dif 0.372549
+ distance to modpoint 0.610147
  closeness comparison 
- ratio 4.01833
+ ratio 2.61693
 1
  i 6 j 15
- hks dif 0.438216
- distance to modpoint 0.242707
+ hks dif 0.627451
+ distance to modpoint 0.530576
  closeness comparison 
- ratio 3.92032
+ ratio 2.86273
+1
+ i 6 j 16
+ hks dif 0.678431
+ distance to modpoint 0.448907
+ closeness comparison 
+ ratio 3.22763
+1
+ i 6 j 17
+ hks dif 0.737254
+ distance to modpoint 0.510329
+ closeness comparison 
+ ratio 2.01344
+1
+ i 6 j 18
+ hks dif 0.733333
+ distance to modpoint 0.621346
+ closeness comparison 
+ ratio 0.687905
+1
+ i 6 j 19
+ hks dif 0.247059
+ distance to modpoint 0.0493531
+ closeness comparison 
+ ratio 20.8779
+1
+ i 6 j 20
+ hks dif 0.243138
+ distance to modpoint 0.76715
+ closeness comparison 
+ ratio 1.53286
 1
  i 7 j 0
- hks dif 0.359784
- distance to modpoint 0.589263
+ hks dif 0.207843
+ distance to modpoint 0.671557
  closeness comparison 
- ratio 2.53401
+ ratio 2.48857
 1
  i 7 j 1
- hks dif 0.300961
- distance to modpoint 0.360811
+ hks dif 0.14902
+ distance to modpoint 0.955826
  closeness comparison 
- ratio 1.79632
+ ratio 1.62385
 1
  i 7 j 2
- hks dif 0.0852745
- distance to modpoint 0.388738
+ hks dif 0.180393
+ distance to modpoint 0.925089
  closeness comparison 
- ratio 2.26502
+ ratio 1.18158
 1
  i 7 j 3
- hks dif 0.0970392
- distance to modpoint 0.313869
+ hks dif 0.180393
+ distance to modpoint 0.834436
  closeness comparison 
- ratio 2.79819
+ ratio 2.19841
 1
  i 7 j 4
- hks dif 0.0774314
- distance to modpoint 0.413936
+ hks dif 0.172549
+ distance to modpoint 0.777832
  closeness comparison 
- ratio 2.76611
+ ratio 2.1678
 1
  i 7 j 5
- hks dif 0.32449
- distance to modpoint 0.216284
+ hks dif 0.058823
+ distance to modpoint 0.706173
  closeness comparison 
- ratio 4.39945
+ ratio 2.41608
 1
  i 7 j 6
- hks dif 0
- distance to modpoint 0.954984
+ hks dif 0.047059
+ distance to modpoint 0.774482
  closeness comparison 
- ratio 1.81311
+ ratio 2.26005
 1
- dif 0.729525
  i 7 j 8
- hks dif 0.00292157
+ hks dif 0.019608
+ distance to modpoint 0.733358
  closeness comparison 
- ratio inf
+ ratio 1.55784
 1
- dif 0.923366
  i 7 j 9
- hks dif 0.979392
- distance to modpoint 0.241374
+ hks dif 0.027451
+ distance to modpoint 0.722045
  closeness comparison 
- ratio 3.16774
+ ratio 1.6548
 1
  i 7 j 10
- hks dif 0.999
- distance to modpoint 0.336631
+ hks dif 0.02353
+ distance to modpoint 0.940346
  closeness comparison 
- ratio 3.85572
+ ratio 0.405676
 1
  i 7 j 11
- hks dif 0.128412
- distance to modpoint 0.355667
+ hks dif 0.023529
+ distance to modpoint 0.68427
  closeness comparison 
- ratio 2.64036
+ ratio 2.45124
 1
  i 7 j 12
- hks dif 0.128412
- distance to modpoint 0.433359
+ hks dif 0.027451
+ distance to modpoint 0.676
  closeness comparison 
- ratio 2.93187
+ ratio 2.47895
 1
  i 7 j 13
- hks dif 0.508804
- distance to modpoint 0.225511
+ hks dif 0.447059
+ distance to modpoint 0.374146
  closeness comparison 
- ratio 4.69082
+ ratio 2.86618
 1
  i 7 j 14
- hks dif 0.493118
- distance to modpoint 0.229006
+ hks dif 0.419608
+ distance to modpoint 0.472547
  closeness comparison 
- ratio 4.75877
+ ratio 1.28456
 1
  i 7 j 15
- hks dif 0.438216
- distance to modpoint 0.231781
+ hks dif 0.67451
+ distance to modpoint 0.410921
  closeness comparison 
- ratio 4.46484
+ ratio 1.57261
+1
+ i 7 j 16
+ hks dif 0.72549
+ distance to modpoint 0.34767
+ closeness comparison 
+ ratio 3.06569
+1
+ i 7 j 17
+ hks dif 0.784313
+ distance to modpoint 0.395241
+ closeness comparison 
+ ratio 3.5301
+1
+ i 7 j 18
+ hks dif 0.780392
+ distance to modpoint 0.481221
+ closeness comparison 
+ ratio 3.01494
+1
+ i 7 j 19
+ hks dif 0.2
+ distance to modpoint 0.0637241
+ closeness comparison 
+ ratio 15.9726
+1
+ i 7 j 20
+ hks dif 0.196079
+ distance to modpoint 0.990534
+ closeness comparison 
+ ratio 1.76126
 1
  i 8 j 0
- hks dif 0.356862
+ hks dif 0.188235
+ distance to modpoint 0.492491
  closeness comparison 
- ratio inf
+ ratio 3.03049
 1
  i 8 j 1
- hks dif 0.298039
+ hks dif 0.129412
+ distance to modpoint 0.700962
  closeness comparison 
- ratio inf
+ ratio 0.946805
 1
  i 8 j 2
- hks dif 0.0823529
+ hks dif 0.160784
+ distance to modpoint 0.678421
  closeness comparison 
- ratio inf
+ ratio 1.01352
 1
- dif 1.10065
  i 8 j 3
- hks dif 0.0941176
+ hks dif 0.160784
+ distance to modpoint 0.61194
  closeness comparison 
- ratio inf
+ ratio 2.53261
 1
- dif 0.997056
  i 8 j 4
- hks dif 0.0745098
+ hks dif 0.152941
+ distance to modpoint 0.570429
  closeness comparison 
- ratio inf
+ ratio 2.71465
 1
- dif 0.959778
  i 8 j 5
- hks dif 0.321568
+ hks dif 0.078431
+ distance to modpoint 0.962931
  closeness comparison 
- ratio inf
+ ratio 1.96478
 1
+ dif 1.17545
  i 8 j 6
- hks dif 0.00292157
+ hks dif 0.066667
+ distance to modpoint 0.946901
  closeness comparison 
- ratio inf
+ ratio 2.05608
 1
- dif 0.770362
+ dif 1.28394
  i 8 j 7
- hks dif 0.00292157
+ hks dif 0.019608
+ distance to modpoint 0.733358
  closeness comparison 
- ratio inf
+ ratio 1.55784
 1
- dif 0.893294
  i 8 j 9
- hks dif 0.97647
+ hks dif 0.007843
+ distance to modpoint 0.984574
  closeness comparison 
- ratio inf
+ ratio 0.321544
 1
  i 8 j 10
- hks dif 0.996078
+ hks dif 0.003922
+ distance to modpoint 0.779881
  closeness comparison 
- ratio inf
+ ratio 1.41155
 1
  i 8 j 11
- hks dif 0.12549
+ hks dif 0.043137
+ distance to modpoint 0.933065
  closeness comparison 
- ratio inf
+ ratio 2.07174
 1
- dif 0.851472
+ dif 1.07456
  i 8 j 12
- hks dif 0.12549
+ hks dif 0.047059
+ distance to modpoint 0.921788
  closeness comparison 
- ratio inf
+ ratio 2.08316
 1
- dif 0.808194
+ dif 1.03394
  i 8 j 13
- hks dif 0.505882
+ hks dif 0.466667
+ distance to modpoint 0.510182
  closeness comparison 
- ratio inf
+ ratio 0.972272
 1
  i 8 j 14
- hks dif 0.490196
+ hks dif 0.439216
+ distance to modpoint 0.644361
  closeness comparison 
- ratio inf
+ ratio 1.88182
 1
  i 8 j 15
- hks dif 0.435294
+ hks dif 0.694118
+ distance to modpoint 0.560328
  closeness comparison 
- ratio inf
+ ratio 2.11456
+1
+ i 8 j 16
+ hks dif 0.745098
+ distance to modpoint 0.47408
+ closeness comparison 
+ ratio 1.11913
+1
+ i 8 j 17
+ hks dif 0.803921
+ distance to modpoint 0.538947
+ closeness comparison 
+ ratio 2.78175
+1
+ i 8 j 18
+ hks dif 0.8
+ distance to modpoint 0.656189
+ closeness comparison 
+ ratio 2.51445
+1
+ i 8 j 19
+ hks dif 0.180392
+ distance to modpoint 0.0467326
+ closeness comparison 
+ ratio 21.0751
+1
+ i 8 j 20
+ hks dif 0.176471
+ distance to modpoint 0.726416
+ closeness comparison 
+ ratio 1.5426
 1
  i 9 j 0
- hks dif 0.619608
- distance to modpoint 0.409619
+ hks dif 0.180392
+ distance to modpoint 0.484894
  closeness comparison 
- ratio 3.29649
+ ratio 3.03191
 1
  i 9 j 1
- hks dif 0.678431
- distance to modpoint 0.668975
+ hks dif 0.121569
+ distance to modpoint 0.690149
  closeness comparison 
- ratio 0.654139
+ ratio 0.768615
 1
  i 9 j 2
- hks dif 0.894117
- distance to modpoint 0.620916
+ hks dif 0.152941
+ distance to modpoint 0.667956
  closeness comparison 
- ratio 1.70769
+ ratio 1.15467
 1
  i 9 j 3
- hks dif 0.882353
- distance to modpoint 0.769028
+ hks dif 0.152941
+ distance to modpoint 0.6025
  closeness comparison 
- ratio 1.41756
+ ratio 2.49358
 1
  i 9 j 4
- hks dif 0.901961
- distance to modpoint 0.583119
+ hks dif 0.145098
+ distance to modpoint 0.56163
  closeness comparison 
- ratio 2.12266
+ ratio 2.76297
 1
  i 9 j 5
- hks dif 0.654902
- distance to modpoint 0.896053
+ hks dif 0.086274
+ distance to modpoint 0.978018
  closeness comparison 
- ratio 1.52975
+ ratio 1.88244
 1
  i 9 j 6
- hks dif 0.979392
- distance to modpoint 0.252752
+ hks dif 0.07451
+ distance to modpoint 0.932294
  closeness comparison 
- ratio 3.80755
+ ratio 2.07262
 1
+ dif 1.17066
  i 9 j 7
- hks dif 0.979392
- distance to modpoint 0.241374
+ hks dif 0.027451
+ distance to modpoint 0.722045
  closeness comparison 
- ratio 3.16774
+ ratio 1.6548
 1
  i 9 j 8
- hks dif 0.97647
+ hks dif 0.007843
+ distance to modpoint 0.984574
  closeness comparison 
- ratio inf
+ ratio 0.321544
 1
  i 9 j 10
- hks dif 0.019608
- distance to modpoint 0.717028
+ hks dif 0.003921
+ distance to modpoint 0.767851
  closeness comparison 
- ratio 2.3401
+ ratio 1.52046
 1
  i 9 j 11
- hks dif 0.85098
- distance to modpoint 0.67865
+ hks dif 0.05098
+ distance to modpoint 0.947684
  closeness comparison 
- ratio 1.89765
+ ratio 2.04571
 1
+ dif 1.08175
  i 9 j 12
- hks dif 0.85098
- distance to modpoint 0.556983
+ hks dif 0.054902
+ distance to modpoint 0.93623
  closeness comparison 
- ratio 2.55253
+ ratio 2.04741
 1
+ dif 0.985761
  i 9 j 13
- hks dif 0.470588
- distance to modpoint 0.93428
+ hks dif 0.47451
+ distance to modpoint 0.518175
  closeness comparison 
- ratio 1.77494
+ ratio 0.979448
 1
  i 9 j 14
- hks dif 0.486274
- distance to modpoint 0.948763
+ hks dif 0.447059
+ distance to modpoint 0.654457
  closeness comparison 
- ratio 1.79134
+ ratio 1.93642
 1
  i 9 j 15
- hks dif 0.541176
- distance to modpoint 0.960258
+ hks dif 0.701961
+ distance to modpoint 0.569107
  closeness comparison 
- ratio 1.751
+ ratio 2.16557
+1
+ i 9 j 16
+ hks dif 0.752941
+ distance to modpoint 0.481508
+ closeness comparison 
+ ratio 1.13352
+1
+ i 9 j 17
+ hks dif 0.811764
+ distance to modpoint 0.547391
+ closeness comparison 
+ ratio 2.68682
+1
+ i 9 j 18
+ hks dif 0.807843
+ distance to modpoint 0.66647
+ closeness comparison 
+ ratio 2.50044
+1
+ i 9 j 19
+ hks dif 0.172549
+ distance to modpoint 0.0460117
+ closeness comparison 
+ ratio 21.3152
+1
+ i 9 j 20
+ hks dif 0.168628
+ distance to modpoint 0.71521
+ closeness comparison 
+ ratio 1.45832
 1
  i 10 j 0
- hks dif 0.639216
- distance to modpoint 0.571274
+ hks dif 0.184313
+ distance to modpoint 0.631495
  closeness comparison 
- ratio 1.00637
+ ratio 2.57856
 1
  i 10 j 1
- hks dif 0.698039
- distance to modpoint 0.932983
+ hks dif 0.12549
+ distance to modpoint 0.898806
  closeness comparison 
- ratio 2.01354
+ ratio 1.56043
 1
  i 10 j 2
- hks dif 0.913725
- distance to modpoint 0.865958
+ hks dif 0.156862
+ distance to modpoint 0.869903
  closeness comparison 
- ratio 1.7973
+ ratio 1.00511
 1
  i 10 j 3
- hks dif 0.901961
- distance to modpoint 0.932382
+ hks dif 0.156862
+ distance to modpoint 0.784659
  closeness comparison 
- ratio 1.7004
+ ratio 2.27444
 1
  i 10 j 4
- hks dif 0.921569
- distance to modpoint 0.813244
+ hks dif 0.149019
+ distance to modpoint 0.731431
  closeness comparison 
- ratio 1.759
+ ratio 2.13284
 1
  i 10 j 5
- hks dif 0.67451
- distance to modpoint 0.642496
+ hks dif 0.082353
+ distance to modpoint 0.750972
  closeness comparison 
- ratio 2.15775
+ ratio 2.33161
 1
  i 10 j 6
- hks dif 0.999
- distance to modpoint 0.352499
+ hks dif 0.070589
+ distance to modpoint 0.823614
  closeness comparison 
- ratio 3.46707
+ ratio 2.11399
 1
  i 10 j 7
- hks dif 0.999
- distance to modpoint 0.336631
+ hks dif 0.02353
+ distance to modpoint 0.940346
  closeness comparison 
- ratio 3.85572
+ ratio 0.405676
 1
  i 10 j 8
- hks dif 0.996078
+ hks dif 0.003922
+ distance to modpoint 0.779881
  closeness comparison 
- ratio inf
+ ratio 1.41155
 1
  i 10 j 9
- hks dif 0.019608
- distance to modpoint 0.717028
+ hks dif 0.003921
+ distance to modpoint 0.767851
  closeness comparison 
- ratio 2.3401
+ ratio 1.52046
 1
  i 10 j 11
- hks dif 0.870588
- distance to modpoint 0.946476
+ hks dif 0.047059
+ distance to modpoint 0.727679
  closeness comparison 
- ratio 2.05589
+ ratio 2.34791
 1
  i 10 j 12
- hks dif 0.870588
- distance to modpoint 0.776794
+ hks dif 0.050981
+ distance to modpoint 0.718885
  closeness comparison 
- ratio 2.26542
+ ratio 2.3879
 1
  i 10 j 13
- hks dif 0.490196
- distance to modpoint 0.669905
+ hks dif 0.470589
+ distance to modpoint 0.397881
  closeness comparison 
- ratio 2.46646
+ ratio 2.64184
 1
  i 10 j 14
- hks dif 0.505882
- distance to modpoint 0.68029
+ hks dif 0.443138
+ distance to modpoint 0.502525
  closeness comparison 
- ratio 2.44368
+ ratio 1.16936
 1
  i 10 j 15
- hks dif 0.560784
- distance to modpoint 0.688533
+ hks dif 0.69804
+ distance to modpoint 0.436989
  closeness comparison 
- ratio 2.42608
+ ratio 1.44969
+1
+ i 10 j 16
+ hks dif 0.74902
+ distance to modpoint 0.369726
+ closeness comparison 
+ ratio 2.82945
+1
+ i 10 j 17
+ hks dif 0.807843
+ distance to modpoint 0.420314
+ closeness comparison 
+ ratio 3.37917
+1
+ i 10 j 18
+ hks dif 0.803922
+ distance to modpoint 0.511749
+ closeness comparison 
+ ratio 2.82488
+1
+ i 10 j 19
+ hks dif 0.17647
+ distance to modpoint 0.0599227
+ closeness comparison 
+ ratio 17.3253
+1
+ i 10 j 20
+ hks dif 0.172549
+ distance to modpoint 0.931444
+ closeness comparison 
+ ratio 1.64612
 1
  i 11 j 0
  hks dif 0.231372
- distance to modpoint 0.60358
+ distance to modpoint 0.459526
  closeness comparison 
- ratio 2.65678
+ ratio 1.18742
 1
  i 11 j 1
  hks dif 0.172549
- distance to modpoint 0.985744
+ distance to modpoint 0.654043
  closeness comparison 
- ratio 1.40686
+ ratio 2.31278
 1
  i 11 j 2
- hks dif 0.0431375
- distance to modpoint 0.914928
+ hks dif 0.203921
+ distance to modpoint 0.633011
  closeness comparison 
- ratio 1.88693
+ ratio 2.3167
 1
- dif 0.851461
  i 11 j 3
- hks dif 0.0313728
- distance to modpoint 0.882478
+ hks dif 0.203921
+ distance to modpoint 0.57098
  closeness comparison 
- ratio 1.61216
+ ratio 1.07957
 1
- dif 0.958079
  i 11 j 4
- hks dif 0.0509806
- distance to modpoint 0.859233
- closeness comparison 
- ratio 2.10478
-1
- dif 1.03079
- i 11 j 5
  hks dif 0.196078
- distance to modpoint 0.608107
+ distance to modpoint 0.532247
  closeness comparison 
- ratio 2.43475
+ ratio 1.32265
 1
- i 11 j 6
- hks dif 0.128412
- distance to modpoint 0.372433
+ i 11 j 5
+ hks dif 0.035294
+ distance to modpoint 0.968984
  closeness comparison 
- ratio 2.65523
+ ratio 0.909214
+1
+ dif 0.70283
+ i 11 j 6
+ hks dif 0.02353
+ distance to modpoint 0.88352
+ closeness comparison 
+ ratio 0.85221
 1
  i 11 j 7
- hks dif 0.128412
- distance to modpoint 0.355667
+ hks dif 0.023529
+ distance to modpoint 0.68427
  closeness comparison 
- ratio 2.64036
+ ratio 2.45124
 1
  i 11 j 8
- hks dif 0.12549
+ hks dif 0.043137
+ distance to modpoint 0.933065
  closeness comparison 
- ratio inf
+ ratio 2.07174
 1
- dif 0.855278
+ dif 1.07598
  i 11 j 9
- hks dif 0.85098
- distance to modpoint 0.67865
+ hks dif 0.05098
+ distance to modpoint 0.947684
  closeness comparison 
- ratio 1.89765
+ ratio 2.04571
 1
+ dif 1.10447
  i 11 j 10
- hks dif 0.870588
- distance to modpoint 0.946476
+ hks dif 0.047059
+ distance to modpoint 0.727679
  closeness comparison 
- ratio 2.05589
+ ratio 2.34791
 1
  i 11 j 12
- hks dif 0
- distance to modpoint 0.820722
+ hks dif 0.003922
+ distance to modpoint 0.987914
  closeness comparison 
- ratio 0.743764
+ ratio 0.432522
 1
- dif 0.847068
+ dif 0.653489
  i 11 j 13
- hks dif 0.380392
- distance to modpoint 0.63405
+ hks dif 0.42353
+ distance to modpoint 0.546781
  closeness comparison 
- ratio 0.913402
+ ratio 2.82889
 1
  i 11 j 14
- hks dif 0.364706
- distance to modpoint 0.643878
+ hks dif 0.396079
+ distance to modpoint 0.690586
  closeness comparison 
- ratio 0.988531
+ ratio 2.44294
 1
  i 11 j 15
- hks dif 0.309804
- distance to modpoint 0.65168
+ hks dif 0.650981
+ distance to modpoint 0.600524
  closeness comparison 
- ratio 0.817333
+ ratio 2.6601
+1
+ i 11 j 16
+ hks dif 0.701961
+ distance to modpoint 0.508089
+ closeness comparison 
+ ratio 2.96816
+1
+ i 11 j 17
+ hks dif 0.760784
+ distance to modpoint 0.577609
+ closeness comparison 
+ ratio 1.62798
+1
+ i 11 j 18
+ hks dif 0.756863
+ distance to modpoint 0.703262
+ closeness comparison 
+ ratio 1.32352
+1
+ i 11 j 19
+ hks dif 0.223529
+ distance to modpoint 0.0436045
+ closeness comparison 
+ ratio 23.3051
+1
+ i 11 j 20
+ hks dif 0.219608
+ distance to modpoint 0.677793
+ closeness comparison 
+ ratio 1.50418
 1
  i 12 j 0
- hks dif 0.231372
- distance to modpoint 0.735425
+ hks dif 0.235294
+ distance to modpoint 0.453972
  closeness comparison 
- ratio 2.34858
+ ratio 1.20278
 1
  i 12 j 1
- hks dif 0.172549
- distance to modpoint 0.832592
+ hks dif 0.176471
+ distance to modpoint 0.646138
  closeness comparison 
- ratio 1.94943
+ ratio 2.27981
 1
  i 12 j 2
- hks dif 0.0431375
- distance to modpoint 0.897035
+ hks dif 0.207843
+ distance to modpoint 0.62536
  closeness comparison 
- ratio 2.08772
+ ratio 2.39148
 1
- dif 0.779758
  i 12 j 3
- hks dif 0.0313728
- distance to modpoint 0.724269
+ hks dif 0.207843
+ distance to modpoint 0.564079
  closeness comparison 
- ratio 2.12829
+ ratio 0.95945
 1
  i 12 j 4
- hks dif 0.0509806
- distance to modpoint 0.95518
+ hks dif 0.2
+ distance to modpoint 0.525815
  closeness comparison 
- ratio 1.88904
+ ratio 1.49933
 1
- dif 0.950488
  i 12 j 5
- hks dif 0.196078
- distance to modpoint 0.499087
+ hks dif 0.031372
+ distance to modpoint 0.957273
  closeness comparison 
- ratio 2.92085
+ ratio 0.811749
 1
+ dif 0.660211
  i 12 j 6
- hks dif 0.128412
- distance to modpoint 0.453787
+ hks dif 0.019608
+ distance to modpoint 0.872842
  closeness comparison 
- ratio 2.44179
+ ratio 0.991127
 1
  i 12 j 7
- hks dif 0.128412
- distance to modpoint 0.433359
+ hks dif 0.027451
+ distance to modpoint 0.676
  closeness comparison 
- ratio 2.93187
+ ratio 2.47895
 1
  i 12 j 8
- hks dif 0.12549
+ hks dif 0.047059
+ distance to modpoint 0.921788
  closeness comparison 
- ratio inf
+ ratio 2.08316
 1
- dif 0.881233
+ dif 1.04867
  i 12 j 9
- hks dif 0.85098
- distance to modpoint 0.556983
+ hks dif 0.054902
+ distance to modpoint 0.93623
  closeness comparison 
- ratio 2.55253
+ ratio 2.04741
 1
+ dif 0.99413
  i 12 j 10
- hks dif 0.870588
- distance to modpoint 0.776794
+ hks dif 0.050981
+ distance to modpoint 0.718885
  closeness comparison 
- ratio 2.26542
+ ratio 2.3879
 1
  i 12 j 11
- hks dif 0
- distance to modpoint 0.820722
+ hks dif 0.003922
+ distance to modpoint 0.987914
  closeness comparison 
- ratio 0.743764
+ ratio 0.432522
 1
- dif 0.848192
+ dif 0.661181
  i 12 j 13
- hks dif 0.380392
- distance to modpoint 0.520379
+ hks dif 0.419608
+ distance to modpoint 0.55347
  closeness comparison 
- ratio 1.24742
+ ratio 2.80522
 1
  i 12 j 14
- hks dif 0.364706
- distance to modpoint 0.528445
+ hks dif 0.392157
+ distance to modpoint 0.699034
  closeness comparison 
- ratio 1.136
+ ratio 2.43054
 1
  i 12 j 15
- hks dif 0.309804
- distance to modpoint 0.534848
+ hks dif 0.647059
+ distance to modpoint 0.607871
  closeness comparison 
- ratio 1.07287
+ ratio 2.64508
+1
+ i 12 j 16
+ hks dif 0.698039
+ distance to modpoint 0.514305
+ closeness comparison 
+ ratio 2.94282
+1
+ i 12 j 17
+ hks dif 0.756862
+ distance to modpoint 0.584675
+ closeness comparison 
+ ratio 1.51064
+1
+ i 12 j 18
+ hks dif 0.752941
+ distance to modpoint 0.711866
+ closeness comparison 
+ ratio 1.40873
+1
+ i 12 j 19
+ hks dif 0.227451
+ distance to modpoint 0.0430775
+ closeness comparison 
+ ratio 23.501
+1
+ i 12 j 20
+ hks dif 0.22353
+ distance to modpoint 0.669601
+ closeness comparison 
+ ratio 1.49317
 1
  i 13 j 0
- hks dif 0.14902
- distance to modpoint 0.382699
+ hks dif 0.654902
+ distance to modpoint 0.25126
  closeness comparison 
- ratio 3.58564
+ ratio 4.97994
 1
  i 13 j 1
- hks dif 0.207843
- distance to modpoint 0.62501
+ hks dif 0.596079
+ distance to modpoint 0.357618
  closeness comparison 
- ratio 2.12902
+ ratio 2.13003
 1
  i 13 j 2
- hks dif 0.42353
- distance to modpoint 0.58011
+ hks dif 0.627452
+ distance to modpoint 0.346118
  closeness comparison 
- ratio 2.67677
+ ratio 2.39416
 1
  i 13 j 3
- hks dif 0.411765
- distance to modpoint 0.718488
+ hks dif 0.627452
+ distance to modpoint 0.312201
  closeness comparison 
- ratio 2.00103
+ ratio 4.09932
 1
  i 13 j 4
- hks dif 0.431373
- distance to modpoint 0.544796
+ hks dif 0.619608
+ distance to modpoint 0.291023
  closeness comparison 
- ratio 2.64992
+ ratio 4.39774
 1
  i 13 j 5
- hks dif 0.184314
- distance to modpoint 0.959084
+ hks dif 0.388236
+ distance to modpoint 0.529822
  closeness comparison 
- ratio 1.92683
+ ratio 2.79534
 1
  i 13 j 6
- hks dif 0.508804
- distance to modpoint 0.236141
+ hks dif 0.4
+ distance to modpoint 0.483092
  closeness comparison 
- ratio 4.00212
+ ratio 3.07
 1
  i 13 j 7
- hks dif 0.508804
- distance to modpoint 0.225511
+ hks dif 0.447059
+ distance to modpoint 0.374146
  closeness comparison 
- ratio 4.69081
+ ratio 2.86618
 1
  i 13 j 8
- hks dif 0.505882
+ hks dif 0.466667
+ distance to modpoint 0.510182
  closeness comparison 
- ratio inf
+ ratio 0.972272
 1
  i 13 j 9
- hks dif 0.470588
- distance to modpoint 0.93428
+ hks dif 0.47451
+ distance to modpoint 0.518175
  closeness comparison 
- ratio 1.77494
+ ratio 0.979448
 1
  i 13 j 10
- hks dif 0.490196
- distance to modpoint 0.669905
+ hks dif 0.470589
+ distance to modpoint 0.397881
  closeness comparison 
- ratio 2.46646
+ ratio 2.64184
 1
  i 13 j 11
- hks dif 0.380392
- distance to modpoint 0.63405
+ hks dif 0.42353
+ distance to modpoint 0.546781
  closeness comparison 
- ratio 0.913402
+ ratio 2.82888
 1
  i 13 j 12
- hks dif 0.380392
- distance to modpoint 0.520379
+ hks dif 0.419608
+ distance to modpoint 0.55347
  closeness comparison 
- ratio 1.24742
+ ratio 2.80522
 1
  i 13 j 14
- hks dif 0.015686
- distance to modpoint 0.984736
+ hks dif 0.027451
+ distance to modpoint 0.791764
  closeness comparison 
- ratio 0.429364
+ ratio 1.83082
 1
- dif 0.610969
  i 13 j 15
- hks dif 0.070588
- distance to modpoint 0.972947
+ hks dif 0.227451
+ distance to modpoint 0.910506
  closeness comparison 
- ratio 0.229985
+ ratio 1.72247
 1
- dif 1.02064
- i 14 j 0
- hks dif 0.133334
- distance to modpoint 0.388632
+ i 13 j 16
+ hks dif 0.278431
+ distance to modpoint 0.929236
  closeness comparison 
- ratio 3.54576
+ ratio 0.204445
+1
+ i 13 j 17
+ hks dif 0.337254
+ distance to modpoint 0.946628
+ closeness comparison 
+ ratio 2.00484
+1
+ i 13 j 18
+ hks dif 0.333333
+ distance to modpoint 0.777493
+ closeness comparison 
+ ratio 2.27995
+1
+ i 13 j 19
+ hks dif 0.647059
+ distance to modpoint 0.0238421
+ closeness comparison 
+ ratio 41.6194
+1
+ i 13 j 20
+ hks dif 0.643138
+ distance to modpoint 0.370604
+ closeness comparison 
+ ratio 2.76646
+1
+ i 14 j 0
+ hks dif 0.627451
+ distance to modpoint 0.317342
+ closeness comparison 
+ ratio 4.15117
 1
  i 14 j 1
- hks dif 0.192157
- distance to modpoint 0.634699
+ hks dif 0.568628
+ distance to modpoint 0.451673
  closeness comparison 
- ratio 2.15266
+ ratio 2.67863
 1
  i 14 j 2
- hks dif 0.407844
- distance to modpoint 0.589102
+ hks dif 0.600001
+ distance to modpoint 0.437148
  closeness comparison 
- ratio 2.65549
+ ratio 2.22542
 1
  i 14 j 3
- hks dif 0.396079
- distance to modpoint 0.729625
+ hks dif 0.600001
+ distance to modpoint 0.394311
  closeness comparison 
- ratio 2.01876
+ ratio 3.53607
 1
  i 14 j 4
- hks dif 0.415687
- distance to modpoint 0.553241
+ hks dif 0.592157
+ distance to modpoint 0.367563
  closeness comparison 
- ratio 2.62505
+ ratio 3.61613
 1
  i 14 j 5
- hks dif 0.168628
- distance to modpoint 0.944444
+ hks dif 0.360785
+ distance to modpoint 0.669167
  closeness comparison 
- ratio 1.96121
+ ratio 2.4944
 1
  i 14 j 6
- hks dif 0.493118
- distance to modpoint 0.239801
+ hks dif 0.372549
+ distance to modpoint 0.610147
  closeness comparison 
- ratio 4.01833
+ ratio 2.61693
 1
  i 14 j 7
- hks dif 0.493118
- distance to modpoint 0.229006
+ hks dif 0.419608
+ distance to modpoint 0.472547
  closeness comparison 
- ratio 4.75877
+ ratio 1.28456
 1
  i 14 j 8
- hks dif 0.490196
+ hks dif 0.439216
+ distance to modpoint 0.644361
  closeness comparison 
- ratio inf
+ ratio 1.88182
 1
  i 14 j 9
- hks dif 0.486274
- distance to modpoint 0.948763
+ hks dif 0.447059
+ distance to modpoint 0.654457
  closeness comparison 
- ratio 1.79134
+ ratio 1.93642
 1
  i 14 j 10
- hks dif 0.505882
- distance to modpoint 0.68029
+ hks dif 0.443138
+ distance to modpoint 0.502525
  closeness comparison 
- ratio 2.44368
+ ratio 1.16936
 1
  i 14 j 11
- hks dif 0.364706
- distance to modpoint 0.643878
+ hks dif 0.396079
+ distance to modpoint 0.690586
  closeness comparison 
- ratio 0.988531
+ ratio 2.44294
 1
  i 14 j 12
- hks dif 0.364706
- distance to modpoint 0.528445
+ hks dif 0.392157
+ distance to modpoint 0.699034
  closeness comparison 
- ratio 1.136
+ ratio 2.43054
 1
  i 14 j 13
- hks dif 0.015686
- distance to modpoint 0.984736
+ hks dif 0.027451
+ distance to modpoint 0.791764
  closeness comparison 
- ratio 0.429364
+ ratio 1.83082
 1
- dif 0.614418
  i 14 j 15
- hks dif 0.054902
- distance to modpoint 0.988028
+ hks dif 0.254902
+ distance to modpoint 0.869587
  closeness comparison 
- ratio 0.221583
+ ratio 0.225443
 1
- dif 1.04517
- i 15 j 0
- hks dif 0.078432
- distance to modpoint 0.393341
+ i 14 j 16
+ hks dif 0.305882
+ distance to modpoint 0.735736
  closeness comparison 
- ratio 3.51495
+ ratio 1.9251
+1
+ i 14 j 17
+ hks dif 0.364705
+ distance to modpoint 0.836404
+ closeness comparison 
+ ratio 2.19559
+1
+ i 14 j 18
+ hks dif 0.360784
+ distance to modpoint 0.981975
+ closeness comparison 
+ ratio 1.98929
+1
+ i 14 j 19
+ hks dif 0.619608
+ distance to modpoint 0.0301127
+ closeness comparison 
+ ratio 33.4886
+1
+ i 14 j 20
+ hks dif 0.615687
+ distance to modpoint 0.468074
+ closeness comparison 
+ ratio 2.85996
+1
+ i 15 j 0
+ hks dif 0.882353
+ distance to modpoint 0.275957
+ closeness comparison 
+ ratio 4.62376
 1
  i 15 j 1
- hks dif 0.137255
- distance to modpoint 0.642389
+ hks dif 0.82353
+ distance to modpoint 0.392769
  closeness comparison 
- ratio 2.10384
+ ratio 3.01067
 1
  i 15 j 2
- hks dif 0.352941
- distance to modpoint 0.59624
+ hks dif 0.854903
+ distance to modpoint 0.380138
  closeness comparison 
- ratio 2.53469
+ ratio 2.57293
 1
  i 15 j 3
- hks dif 0.341177
- distance to modpoint 0.738466
+ hks dif 0.854903
+ distance to modpoint 0.342887
  closeness comparison 
- ratio 1.98286
+ ratio 3.91641
 1
  i 15 j 4
- hks dif 0.360785
- distance to modpoint 0.559945
+ hks dif 0.847059
+ distance to modpoint 0.319628
  closeness comparison 
- ratio 2.60341
+ ratio 4.02415
 1
  i 15 j 5
- hks dif 0.113726
- distance to modpoint 0.933137
+ hks dif 0.615687
+ distance to modpoint 0.581899
  closeness comparison 
- ratio 1.96105
+ ratio 2.71851
 1
- dif 1.24983
  i 15 j 6
- hks dif 0.438216
- distance to modpoint 0.242707
+ hks dif 0.627451
+ distance to modpoint 0.530576
  closeness comparison 
- ratio 3.92032
+ ratio 2.86273
 1
  i 15 j 7
- hks dif 0.438216
- distance to modpoint 0.231781
+ hks dif 0.67451
+ distance to modpoint 0.410921
  closeness comparison 
- ratio 4.46484
+ ratio 1.57261
 1
  i 15 j 8
- hks dif 0.435294
+ hks dif 0.694118
+ distance to modpoint 0.560328
  closeness comparison 
- ratio inf
+ ratio 2.11456
 1
  i 15 j 9
- hks dif 0.541176
- distance to modpoint 0.960258
+ hks dif 0.701961
+ distance to modpoint 0.569107
  closeness comparison 
- ratio 1.751
+ ratio 2.16557
 1
  i 15 j 10
- hks dif 0.560784
- distance to modpoint 0.688533
+ hks dif 0.69804
+ distance to modpoint 0.436989
  closeness comparison 
- ratio 2.42608
+ ratio 1.44969
 1
  i 15 j 11
- hks dif 0.309804
- distance to modpoint 0.65168
+ hks dif 0.650981
+ distance to modpoint 0.600524
  closeness comparison 
- ratio 0.817333
+ ratio 2.6601
 1
  i 15 j 12
- hks dif 0.309804
- distance to modpoint 0.534848
+ hks dif 0.647059
+ distance to modpoint 0.607871
  closeness comparison 
- ratio 1.07287
+ ratio 2.64508
 1
  i 15 j 13
- hks dif 0.070588
- distance to modpoint 0.972947
+ hks dif 0.227451
+ distance to modpoint 0.910506
  closeness comparison 
- ratio 0.229985
+ ratio 1.72247
 1
- dif 1.01805
  i 15 j 14
- hks dif 0.054902
- distance to modpoint 0.988028
+ hks dif 0.254902
+ distance to modpoint 0.869587
  closeness comparison 
- ratio 0.221583
+ ratio 0.225443
 1
- dif 1.0414
+ i 15 j 16
+ hks dif 0.05098
+ distance to modpoint 0.846075
+ closeness comparison 
+ ratio 1.80445
+1
+ i 15 j 17
+ hks dif 0.109803
+ distance to modpoint 0.961841
+ closeness comparison 
+ ratio 2.03967
+1
+ i 15 j 18
+ hks dif 0.105882
+ distance to modpoint 0.853913
+ closeness comparison 
+ ratio 2.14201
+1
+ i 15 j 19
+ hks dif 0.87451
+ distance to modpoint 0.0261856
+ closeness comparison 
+ ratio 38.4689
+1
+ i 15 j 20
+ hks dif 0.870589
+ distance to modpoint 0.407031
+ closeness comparison 
+ ratio 3.17915
+1
+ i 16 j 0
+ hks dif 0.933333
+ distance to modpoint 0.23348
+ closeness comparison 
+ ratio 5.28302
+1
+ i 16 j 1
+ hks dif 0.87451
+ distance to modpoint 0.332312
+ closeness comparison 
+ ratio 2.38162
+1
+ i 16 j 2
+ hks dif 0.905883
+ distance to modpoint 0.321626
+ closeness comparison 
+ ratio 2.63745
+1
+ i 16 j 3
+ hks dif 0.905883
+ distance to modpoint 0.290109
+ closeness comparison 
+ ratio 4.34324
+1
+ i 16 j 4
+ hks dif 0.898039
+ distance to modpoint 0.270429
+ closeness comparison 
+ ratio 4.65941
+1
+ i 16 j 5
+ hks dif 0.666667
+ distance to modpoint 0.49233
+ closeness comparison 
+ ratio 2.94603
+1
+ i 16 j 6
+ hks dif 0.678431
+ distance to modpoint 0.448907
+ closeness comparison 
+ ratio 3.22763
+1
+ i 16 j 7
+ hks dif 0.72549
+ distance to modpoint 0.34767
+ closeness comparison 
+ ratio 3.06569
+1
+ i 16 j 8
+ hks dif 0.745098
+ distance to modpoint 0.47408
+ closeness comparison 
+ ratio 1.11913
+1
+ i 16 j 9
+ hks dif 0.752941
+ distance to modpoint 0.481508
+ closeness comparison 
+ ratio 1.13352
+1
+ i 16 j 10
+ hks dif 0.74902
+ distance to modpoint 0.369726
+ closeness comparison 
+ ratio 2.82945
+1
+ i 16 j 11
+ hks dif 0.701961
+ distance to modpoint 0.508089
+ closeness comparison 
+ ratio 2.96816
+1
+ i 16 j 12
+ hks dif 0.698039
+ distance to modpoint 0.514305
+ closeness comparison 
+ ratio 2.94281
+1
+ i 16 j 13
+ hks dif 0.278431
+ distance to modpoint 0.929236
+ closeness comparison 
+ ratio 0.204445
+1
+ i 16 j 14
+ hks dif 0.305882
+ distance to modpoint 0.735736
+ closeness comparison 
+ ratio 1.9251
+1
+ i 16 j 15
+ hks dif 0.05098
+ distance to modpoint 0.846075
+ closeness comparison 
+ ratio 1.80445
+1
+ i 16 j 17
+ hks dif 0.058823
+ distance to modpoint 0.879641
+ closeness comparison 
+ ratio 2.08918
+1
+ i 16 j 18
+ hks dif 0.054902
+ distance to modpoint 0.722474
+ closeness comparison 
+ ratio 2.37789
+1
+ i 16 j 19
+ hks dif 0.92549
+ distance to modpoint 0.022155
+ closeness comparison 
+ ratio 44.8134
+1
+ i 16 j 20
+ hks dif 0.921569
+ distance to modpoint 0.344379
+ closeness comparison 
+ ratio 3.01366
+1
+ i 17 j 0
+ hks dif 0.992156
+ distance to modpoint 0.265426
+ closeness comparison 
+ ratio 2.89091
+1
+ i 17 j 1
+ hks dif 0.933333
+ distance to modpoint 0.377781
+ closeness comparison 
+ ratio 3.19974
+1
+ i 17 j 2
+ hks dif 0.964706
+ distance to modpoint 0.365633
+ closeness comparison 
+ ratio 3.65478
+1
+ i 17 j 3
+ hks dif 0.964706
+ distance to modpoint 0.329803
+ closeness comparison 
+ ratio 2.03667
+1
+ i 17 j 4
+ hks dif 0.956862
+ distance to modpoint 0.307431
+ closeness comparison 
+ ratio 3.13103
+1
+ i 17 j 5
+ hks dif 0.72549
+ distance to modpoint 0.559694
+ closeness comparison 
+ ratio 0.786691
+1
+ i 17 j 6
+ hks dif 0.737254
+ distance to modpoint 0.510329
+ closeness comparison 
+ ratio 2.01344
+1
+ i 17 j 7
+ hks dif 0.784313
+ distance to modpoint 0.395241
+ closeness comparison 
+ ratio 3.53011
+1
+ i 17 j 8
+ hks dif 0.803921
+ distance to modpoint 0.538947
+ closeness comparison 
+ ratio 2.78175
+1
+ i 17 j 9
+ hks dif 0.811764
+ distance to modpoint 0.547391
+ closeness comparison 
+ ratio 2.68682
+1
+ i 17 j 10
+ hks dif 0.807843
+ distance to modpoint 0.420314
+ closeness comparison 
+ ratio 3.37917
+1
+ i 17 j 11
+ hks dif 0.760784
+ distance to modpoint 0.577609
+ closeness comparison 
+ ratio 1.62798
+1
+ i 17 j 12
+ hks dif 0.756862
+ distance to modpoint 0.584675
+ closeness comparison 
+ ratio 1.51064
+1
+ i 17 j 13
+ hks dif 0.337254
+ distance to modpoint 0.946628
+ closeness comparison 
+ ratio 2.00484
+1
+ i 17 j 14
+ hks dif 0.364705
+ distance to modpoint 0.836404
+ closeness comparison 
+ ratio 2.19559
+1
+ i 17 j 15
+ hks dif 0.109803
+ distance to modpoint 0.961841
+ closeness comparison 
+ ratio 2.03967
+1
+ i 17 j 16
+ hks dif 0.058823
+ distance to modpoint 0.879641
+ closeness comparison 
+ ratio 2.08918
+1
+ i 17 j 18
+ hks dif 0.00392103
+ distance to modpoint 0.821328
+ closeness comparison 
+ ratio 1.63681
+1
+ i 17 j 19
+ hks dif 0.984313
+ distance to modpoint 0.0251864
+ closeness comparison 
+ ratio 39.6938
+1
+ i 17 j 20
+ hks dif 0.980392
+ distance to modpoint 0.391499
+ closeness comparison 
+ ratio 2.62218
+1
+ i 18 j 0
+ hks dif 0.988235
+ distance to modpoint 0.323167
+ closeness comparison 
+ ratio 2.38054
+1
+ i 18 j 1
+ hks dif 0.929412
+ distance to modpoint 0.459964
+ closeness comparison 
+ ratio 3.10707
+1
+ i 18 j 2
+ hks dif 0.960784
+ distance to modpoint 0.445172
+ closeness comparison 
+ ratio 2.86337
+1
+ i 18 j 3
+ hks dif 0.960784
+ distance to modpoint 0.401549
+ closeness comparison 
+ ratio 2.20921
+1
+ i 18 j 4
+ hks dif 0.952941
+ distance to modpoint 0.374309
+ closeness comparison 
+ ratio 1.76021
+1
+ i 18 j 5
+ hks dif 0.721569
+ distance to modpoint 0.68145
+ closeness comparison 
+ ratio 1.62175
+1
+ i 18 j 6
+ hks dif 0.733333
+ distance to modpoint 0.621346
+ closeness comparison 
+ ratio 0.687905
+1
+ i 18 j 7
+ hks dif 0.780392
+ distance to modpoint 0.481221
+ closeness comparison 
+ ratio 3.01493
+1
+ i 18 j 8
+ hks dif 0.8
+ distance to modpoint 0.656189
+ closeness comparison 
+ ratio 2.51445
+1
+ i 18 j 9
+ hks dif 0.807843
+ distance to modpoint 0.66647
+ closeness comparison 
+ ratio 2.50044
+1
+ i 18 j 10
+ hks dif 0.803922
+ distance to modpoint 0.511749
+ closeness comparison 
+ ratio 2.82488
+1
+ i 18 j 11
+ hks dif 0.756863
+ distance to modpoint 0.703262
+ closeness comparison 
+ ratio 1.32352
+1
+ i 18 j 12
+ hks dif 0.752941
+ distance to modpoint 0.711866
+ closeness comparison 
+ ratio 1.40873
+1
+ i 18 j 13
+ hks dif 0.333333
+ distance to modpoint 0.777493
+ closeness comparison 
+ ratio 2.27995
+1
+ i 18 j 14
+ hks dif 0.360784
+ distance to modpoint 0.981975
+ closeness comparison 
+ ratio 1.98929
+1
+ i 18 j 15
+ hks dif 0.105882
+ distance to modpoint 0.853913
+ closeness comparison 
+ ratio 2.14201
+1
+ i 18 j 16
+ hks dif 0.054902
+ distance to modpoint 0.722474
+ closeness comparison 
+ ratio 2.3779
+1
+ i 18 j 17
+ hks dif 0.00392103
+ distance to modpoint 0.821328
+ closeness comparison 
+ ratio 1.63681
+1
+ i 18 j 19
+ hks dif 0.980392
+ distance to modpoint 0.0306654
+ closeness comparison 
+ ratio 33.2843
+1
+ i 18 j 20
+ hks dif 0.976471
+ distance to modpoint 0.476666
+ closeness comparison 
+ ratio 2.31507
+1
+ i 19 j 0
+ hks dif 0.00784313
+ distance to modpoint 0.0948901
+ closeness comparison 
+ ratio 10.9102
+1
+ i 19 j 1
+ hks dif 0.0509804
+ distance to modpoint 0.0666692
+ closeness comparison 
+ ratio 14.012
+1
+ i 19 j 2
+ hks dif 0.0196078
+ distance to modpoint 0.0688843
+ closeness comparison 
+ ratio 15.5171
+1
+ i 19 j 3
+ hks dif 0.0196078
+ distance to modpoint 0.0763678
+ closeness comparison 
+ ratio 13.083
+1
+ i 19 j 4
+ hks dif 0.027451
+ distance to modpoint 0.0819253
+ closeness comparison 
+ ratio 13.0845
+1
+ i 19 j 5
+ hks dif 0.258823
+ distance to modpoint 0.0450002
+ closeness comparison 
+ ratio 22.2119
+1
+ i 19 j 6
+ hks dif 0.247059
+ distance to modpoint 0.0493531
+ closeness comparison 
+ ratio 20.8779
+1
+ i 19 j 7
+ hks dif 0.2
+ distance to modpoint 0.0637241
+ closeness comparison 
+ ratio 15.9726
+1
+ i 19 j 8
+ hks dif 0.180392
+ distance to modpoint 0.0467325
+ closeness comparison 
+ ratio 21.0751
+1
+ i 19 j 9
+ hks dif 0.172549
+ distance to modpoint 0.0460117
+ closeness comparison 
+ ratio 21.3152
+1
+ i 19 j 10
+ hks dif 0.17647
+ distance to modpoint 0.0599227
+ closeness comparison 
+ ratio 17.3253
+1
+ i 19 j 11
+ hks dif 0.223529
+ distance to modpoint 0.0436045
+ closeness comparison 
+ ratio 23.3051
+1
+ i 19 j 12
+ hks dif 0.227451
+ distance to modpoint 0.0430775
+ closeness comparison 
+ ratio 23.501
+1
+ i 19 j 13
+ hks dif 0.647059
+ distance to modpoint 0.0238421
+ closeness comparison 
+ ratio 41.6194
+1
+ i 19 j 14
+ hks dif 0.619608
+ distance to modpoint 0.0301127
+ closeness comparison 
+ ratio 33.4886
+1
+ i 19 j 15
+ hks dif 0.87451
+ distance to modpoint 0.0261856
+ closeness comparison 
+ ratio 38.4689
+1
+ i 19 j 16
+ hks dif 0.92549
+ distance to modpoint 0.022155
+ closeness comparison 
+ ratio 44.8134
+1
+ i 19 j 17
+ hks dif 0.984313
+ distance to modpoint 0.0251864
+ closeness comparison 
+ ratio 39.6938
+1
+ i 19 j 18
+ hks dif 0.980392
+ distance to modpoint 0.0306654
+ closeness comparison 
+ ratio 33.2843
+1
+ i 19 j 20
+ hks dif 0.0039216
+ distance to modpoint 0.0643331
+ closeness comparison 
+ ratio 14.5666
+1
+ i 20 j 0
+ hks dif 0.0117647
+ distance to modpoint 0.677974
+ closeness comparison 
+ ratio 1.75382
+1
+ i 20 j 1
+ hks dif 0.0470588
+ distance to modpoint 0.96496
+ closeness comparison 
+ ratio 0.771844
+1
+ dif 0.481204
+ i 20 j 2
+ hks dif 0.0156862
+ distance to modpoint 0.933929
+ closeness comparison 
+ ratio 0.96914
+1
+ dif 0.278925
+ i 20 j 3
+ hks dif 0.0156862
+ distance to modpoint 0.842411
+ closeness comparison 
+ ratio 1.23297
+1
+ i 20 j 4
+ hks dif 0.0235294
+ distance to modpoint 0.785266
+ closeness comparison 
+ ratio 1.19941
+1
+ i 20 j 5
+ hks dif 0.254902
+ distance to modpoint 0.699488
+ closeness comparison 
+ ratio 1.49752
+1
+ i 20 j 6
+ hks dif 0.243138
+ distance to modpoint 0.76715
+ closeness comparison 
+ ratio 1.53286
+1
+ i 20 j 7
+ hks dif 0.196079
+ distance to modpoint 0.990534
+ closeness comparison 
+ ratio 1.76126
+1
+ i 20 j 8
+ hks dif 0.176471
+ distance to modpoint 0.726416
+ closeness comparison 
+ ratio 1.5426
+1
+ i 20 j 9
+ hks dif 0.168628
+ distance to modpoint 0.71521
+ closeness comparison 
+ ratio 1.45832
+1
+ i 20 j 10
+ hks dif 0.172549
+ distance to modpoint 0.931444
+ closeness comparison 
+ ratio 1.64612
+1
+ i 20 j 11
+ hks dif 0.219608
+ distance to modpoint 0.677793
+ closeness comparison 
+ ratio 1.50418
+1
+ i 20 j 12
+ hks dif 0.22353
+ distance to modpoint 0.669601
+ closeness comparison 
+ ratio 1.49317
+1
+ i 20 j 13
+ hks dif 0.643138
+ distance to modpoint 0.370604
+ closeness comparison 
+ ratio 2.76646
+1
+ i 20 j 14
+ hks dif 0.615687
+ distance to modpoint 0.468074
+ closeness comparison 
+ ratio 2.85996
+1
+ i 20 j 15
+ hks dif 0.870589
+ distance to modpoint 0.407031
+ closeness comparison 
+ ratio 3.17915
+1
+ i 20 j 16
+ hks dif 0.921569
+ distance to modpoint 0.344379
+ closeness comparison 
+ ratio 3.01366
+1
+ i 20 j 17
+ hks dif 0.980392
+ distance to modpoint 0.391499
+ closeness comparison 
+ ratio 2.62218
+1
+ i 20 j 18
+ hks dif 0.976471
+ distance to modpoint 0.476666
+ closeness comparison 
+ ratio 2.31507
+1
+ i 20 j 19
+ hks dif 0.0039216
+ distance to modpoint 0.0643331
+ closeness comparison 
+ ratio 14.5666
+1

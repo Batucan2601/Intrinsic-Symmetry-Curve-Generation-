@@ -1,5 +1,7 @@
 set(PROJECT_NAME Trilateral)
 
+
+option(CONSOLE_MODE "Console mode for easy testing" OFF)
 ################################################################################
 # Source groups
 ################################################################################

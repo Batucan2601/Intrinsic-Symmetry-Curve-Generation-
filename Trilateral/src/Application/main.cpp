@@ -29,10 +29,88 @@
 #include "Include/Shader.h"
 #include "Include/TrilateralMap.h"
 #include <raymath.h>
+#include "Include/NLateralMapping.h"
+#include "Include/Voronoi.h"
 #define GLSL_VERSION            330
 
 static ModifiedCamera camera; 
 static void imgui_display_camera(Camera3D& camera, TrilateralMesh* m);
+
+
+#ifdef CONSOLE_MODE
+int main(int argc, char* argv[]) {
+    std::string inputFile;
+    std::string outputFileCors;
+    std::string outputFileAxis;
+    ofstream correspondenceFile;
+    ofstream axisPointFile;
+    int sampleNo = 3;
+    float biggest_dijkstra = 0;
+    float fuziness = 0.1; 
+    float distance_to_mid_param = 0.8;
+    float hks_dif_param = 0.1;
+    float closeness_param = 0.2; 
+    int hist_no = 5;
+    float voronoi_dif_param = 0.1;
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
+    InitWindow(1024, 768, " Trialteral");
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+
+        if (arg == "-I" && i + 1 < argc) {
+            inputFile = argv[++i]; // Get the next argument
+        }
+        else if (arg == "-OCors" && i + 1 < argc) {
+            outputFileCors = argv[++i];
+        }
+        else if (arg == "-OAxis" && i + 1 < argc) {
+            outputFileAxis = argv[++i];
+        }
+        else if (arg == "-SampleNo" && i + 1 < argc) {
+            sampleNo =  std::stoi(argv[++i]);
+        }
+        else {
+            std::cerr << "Unknown or incomplete argument: " << arg << std::endl;
+        }
+    }
+    //generate mesh 
+    TrilateralMesh m((char*)inputFile.c_str());
+    
+    inputFile = inputFile.substr(0,inputFile.size() - m.file_name.size());
+    HKS_read_kernel_signature(&m, inputFile);
+    // do a single Average Geodesic Pass 
+    std::vector<unsigned int> sampled_agd_points = Geodesic_avg_dijkstra_modified(&m , 0.08, 2, false,biggest_dijkstra);
+    std::vector<unsigned int> sampled_mgd_points = sampled_agd_points; 
+    // do mutiple Minimum Geodesic Pass
+    for (size_t i = 0; i < sampleNo; i++)
+    {
+        sampled_mgd_points = Geodesic_min_dijkstra(&m, sampled_agd_points, 0.08 , 0.7,false  );
+    }
+
+    // the main function which does the matching. 
+    NLateralMapping_generate_via_voronoi_midpoints(&m, sampled_mgd_points, 0.08, 0.7
+        , fuziness, distance_to_mid_param, hks_dif_param, closeness_param, 0.2, hist_no, 0, biggest_dijkstra, 
+        sampled_agd_points,voronoi_dif_param);
+
+    std::cout << "Input file: " << inputFile << std::endl;
+    std::cout << "Output file: " << outputFileCors << std::endl;
+    std::cout << "OutputCors file: " << outputFileCors << std::endl;
+
+    correspondenceFile.open(outputFileCors);
+    for (size_t i = 0; i < m.calculated_symmetry_pairs.size(); i++)
+    {
+        correspondenceFile << m.calculated_symmetry_pairs[i].first << " " << m.calculated_symmetry_pairs[i].second << std::endl; 
+    }
+
+    axisPointFile.open(outputFileAxis);
+    Voronoi voronoi = Voronoi_get_closest_voronoi(&m, voronoi_dif_param);
+    for (size_t i = 0; i < voronoi.indices.size(); i++)
+    {
+        axisPointFile << voronoi.indices[i] << std::endl;
+    }
+    return 0;
+}
+#else
 int main(void) 
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
@@ -116,3 +194,4 @@ static void imgui_display_camera(Camera3D& camera , TrilateralMesh* m )
     }
     ImGui::End();
 }
+#endif 

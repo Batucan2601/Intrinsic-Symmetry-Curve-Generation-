@@ -826,7 +826,7 @@ void draw_all_shader(TrilateralMesh* m , Shader& shader_param )
     draw_mesh(m , shader);
     draw_spheres(m, agd_sphere_radius ,shader);
     //draw_resemblance_spheres(m, agd_sphere_radius, shader);
-    draw_midpoints(m, agd_sphere_radius);
+    //draw_midpoints(m, agd_sphere_radius);
 }
 void draw_all(TrilateralMesh* m)
 {
