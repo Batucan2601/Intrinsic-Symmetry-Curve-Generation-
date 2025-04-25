@@ -154,8 +154,8 @@ original_agd_vertices , float voronoi_param)
 			std::vector<float> distances = Geodesic_dijkstra(*m, agd_point_indices[i]);
 			float dist = distances[agd_point_indices[j]];
 			bool is_dist = dist > 0.2; 
-			
-			if (!(is_hks && is_points_close_to_midpoint && is_dist))
+			bool is_ratio = ratio > 0.9; 
+			if (!(is_hks && is_points_close_to_midpoint && is_dist && is_ratio))
 			{
 				continue; 
 			}
@@ -177,14 +177,6 @@ original_agd_vertices , float voronoi_param)
 
 			file << " dif " << dif << std::endl;
 
-
-			
-
-			//bool is_voronoi = NLateral_compare_voronoi(m, descs[i], descs[j], mid_point_index, 0.15, file);
-			//bool is_midpoint_conv = NLateral_compare_divergence(m, descs[i], descs[j], mid_point_index, mid_point_index_2, file);
-			//std::vector<unsigned int> path_i_j = conv_int_to_unsigned(Geodesic_between_two_points(*m, descs[i].indices[0], descs[j].indices[0]));
-			 // && is_close //&& is_voronoi 
-			//&& is_points_far_from_each_other &&  !is_hit  && is_same_agd*/)  
 			std::pair<float, std::pair<unsigned int, unsigned int>> res;
 			//compare_results.push_back(std::make_pair(std::sqrtf((dif_area * dif_area) + (dif_hks * dif_hks)), std::make_pair(i, j)));
 			compare_results.push_back(std::make_pair(dif, std::make_pair(i, j)));
