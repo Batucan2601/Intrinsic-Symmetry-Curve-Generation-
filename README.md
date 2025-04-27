@@ -1,23 +1,46 @@
-Official implementation of Intrinsic Symmetry Curve Generation In 3D Meshes
-The executables are on Executable folder, GraphicsProgram launches the graphics interface that we mainly used for developing the program,
-The Console.exe is just for generating outputs.
+# Intrinsic Symmetry Curve Generation in 3D Meshes
 
-**How to use**
-GraphicsProgram.exe should launch without problme. From there you can load prebuild datasets namely SCAPE TOSCA and Princeton using Mesh->Dataset
-Then with proper parameters you can run Mesh->NLateral->Generate Descritors with midpoint.
-After initial matchings you can generate best suited bisector curve with Mesh->Nlateral->Voronoi test-> Get closest curve with matches
-For pruning there is also a prune curve in the same section.
+Official implementation of intrinsic symmetry curve generation in 3D meshes.
 
-For console program you can do the following
-Console.exe -I inputmesh.off -OCors correspondence.txt -OAxis bisector.txt  -SampleNo 5 
--I is for inputmesh
--OCors for correspondences
--OAxis for bisector region points
--SampleNo is for how many Minimum geodesic  cycles after Average geodesic distance function. 
+---
 
+## Folder Structure
 
-You can also build the code yourselves, 
-cmake -B ./build -A x64 
-builds for graphics support
-cmake -B ./build -A x64 -DCONSOLE_MODE=ON builds for console mode
+- **Executable/**  
+  - `GraphicsProgram.exe`  
+    Launches the graphics interface used during development.  
+  - `Console.exe`  
+    Command-line tool for generating outputs.
+
+---
+
+## How to Use
+
+### Graphics Interface
+
+1. **Launch**  
+   Run `GraphicsProgram.exe`.  
+2. **Load Dataset**  
+   Mesh → Dataset → choose one of SCAPE, TOSCA or Princeton.  
+3. **Generate Descriptors**  
+   Mesh → NLateral → Generate Descriptors (with midpoint).  
+4. **Find Bisector Curve**  
+   Mesh → NLateral → Voronoi test → Get closest curve with matches.  
+5. **Prune Curve**  
+   Mesh → NLateral → Prune curve.
+
+### Console Program
+
+```bash
+Console.exe \
+  -I inputmesh.off \
+  -OCors correspondence.txt \
+  -OAxis bisector.txt \
+  -SampleNo 5
+
+## Input Data
+
+Sample input data can be found under the `Trilateral/Mesh/SCB/Data/` directory.  
+
+Place your `.off` mesh files and any accompanying data in this folder before running either the graphics or console programs.  
 
