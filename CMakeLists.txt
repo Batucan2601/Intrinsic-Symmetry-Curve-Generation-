@@ -17,7 +17,7 @@ add_compile_definitions(PRINCETON_PATH="${PRINCETON_PATH}")
 add_compile_definitions(WATERTIGHT_PATH="${WATERTIGHT_PATH}")
 add_compile_definitions(RAYLIB_PATH="${RAYLIB_PATH}")
 
-project(Trilateral CXX)
+project(IntrinsicCurveGen CXX)
 
 add_subdirectory(Trilateral)
 

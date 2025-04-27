@@ -2,6 +2,8 @@ set(PROJECT_NAME Trilateral)
 
 
 option(CONSOLE_MODE "Console mode for easy testing" OFF)
+option(PRUNING_MODE "Pruning mode for pruning the symmetry curve" OFF)
+
 ################################################################################
 # Source groups
 ################################################################################
@@ -148,7 +150,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/s
 target_link_directories(${PROJECT_NAME} PUBLIC   "${CMAKE_CURRENT_SOURCE_DIR}/Dependencies")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLEW_STATIC)
-
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+  SOURCE_PATH="${CMAKE_CURRENT_SOURCE_DIR}"
+)
 ################################################################################
 # Compile definitions
 ################################################################################

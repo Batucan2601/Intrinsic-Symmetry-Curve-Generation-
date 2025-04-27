@@ -108,12 +108,10 @@ original_agd_vertices , float voronoi_param)
 	float best_distance; 
 	//Geodesic_mid_point_w_AGD(m, mid_point_index, mid_point_index_2, best_distance);
 	mid_point_index = NLateral_get_midpoint_with_agd_points(m, agd_point_indices);
-	//secondary_curve = Geodesic_generate_secondary_curve_w_midpoints(m,mid_point_index , mid_point_index_2 );
 
 	//generate trilateral descriptors from midpoints
 	std::ofstream file("../../Trilateral/Mesh/descriptor.txt");
 	//descs = NLateral_generate_with_midpoints(m, agd_point_indices, mid_point_index, mid_point_index_2 , fuziness,biggest_dijkstra, hist_no);
-	//m->sdf = computeSDF(m, 30, 15);
 	for (size_t i = 0; i < agd_point_indices.size(); i++)
 	{
 		
@@ -127,7 +125,6 @@ original_agd_vertices , float voronoi_param)
 			float hks_dif = std::abs(m->normalized_heat_kernel_signature[agd_point_indices[i]] - m->normalized_heat_kernel_signature[agd_point_indices[j]]);
 			bool is_hks = hks_dif < hks_dif_param;
 			file << " hks dif " << hks_dif << std::endl; 
-			//bool is_sdf = NLateral_compare_SDF(m, agd_point_indices[i], agd_point_indices[j], m->sdf, sdf_param, file);
 			NLateralDescriptor d1, d2;
 			d1.indices.push_back(agd_point_indices[i]);
 			d2.indices.push_back(agd_point_indices[j]);
@@ -154,26 +151,14 @@ original_agd_vertices , float voronoi_param)
 			std::vector<float> distances = Geodesic_dijkstra(*m, agd_point_indices[i]);
 			float dist = distances[agd_point_indices[j]];
 			bool is_dist = dist > 0.2; 
-			bool is_ratio = ratio > 0.9; 
-			if (!(is_hks && is_points_close_to_midpoint && is_dist && is_ratio))
+
+			if (!(is_hks && is_points_close_to_midpoint && is_dist))
 			{
 				continue; 
 			}
 
-			//bool is_points_close_to_midpoint_2 = NLateral_compare_distance_to_midpoint(m, desc_i_j, desc_j_i, mid_point_index_2, distance_to_mid_param, file);
-			//bool is_points_close_to_midpoint_reverse = NLateral_compare_distance_to_midpoint_reverse(m, desc_i_j, desc_j_i, mid_point_index, mid_point_index_2, distance_to_mid_param, file);
-			//bool is_points_far_from_each_other = Nlateral_compare_closeness(m, desc_i_j, desc_j_i, mid_point_index, closeness_param, file);
-
-			
-
-
 			float dif = NLateral_generate_descriptors_with_random_voronoi_points(m, agd_point_indices[i],
 				agd_point_indices[j], voronoi_param, fuziness, hist_no, 5); 
-
-			//NLateralDescriptor desc_j_i = NLateral_generate_symmetric_descriptor(m, agd_point_indices[j], agd_point_indices[i],hist_no, fuziness);
-			//NLateralDescriptor desc_i_j = NLateral_generate_symmetric_descriptor(m, agd_point_indices[i], agd_point_indices[j],hist_no, fuziness);
-			//float dif = VarianceMin_compare(m, desc_i_j, desc_j_i, true, hist_no, 1);
-
 
 			file << " dif " << dif << std::endl;
 

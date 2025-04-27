@@ -458,6 +458,8 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 		float part1 = 0;
 		float part2 = 0;
 		bool is_bad_voronoi = false; 
+
+		//areas of both sides
 		for (size_t i = 0; i < v.status.size(); i++)
 		{
 			if (v.status[i] == 1)
@@ -468,25 +470,14 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 			{
 				part2 = part2 + m->areas[i];
 			}
-			/*if (v.status[i] == 3)
-			{
-				is_bad_voronoi = true; 
-			}*/ 
-			
 		}
 		float area_ratio = std::min(part1, part2) / std::max(part1, part2);
 		std::cout << i << " area ratio  " << area_ratio << std::endl;
-		if (is_bad_voronoi || area_ratio < 0.85)
+		if (is_bad_voronoi || area_ratio < 0.9)
 		{
 			total_distances[i] = INFINITY;
 			continue; 
 		}
-		/*float voronoi_ratio = (float)v.indices.size() / m->vertices.size();
-		if (voronoi_ratio > 0.1)
-		{
-			total_distances[i] = INFINITY; 
-			continue; 
-		}*/
 
 		voronoi_lengths[i] = v.indices.size();
 		for (size_t j = 0; j < m->calculated_symmetry_pairs.size(); j++)
@@ -536,23 +527,9 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 			//total_distances[i] += min_dist * weights[j];
 			total_distances[i] += best_ratio * (1 - area_ratio); //* weights[j];
 		}
-		/*for (size_t j = 0; j < v.status.size(); j++)
-		{
-			if (v.status[j] > 2)
-			{
-				total_distances[i] = INFINITY; 
-				break;
-			}
-		}*/
+		
 	}
-	/*auto most_voronoi_length = std::max_element(voronoi_lengths.begin(), voronoi_lengths.end());
-	for (size_t i = 0; i < m->calculated_symmetry_pairs.size(); i++)
-	{
-		voronoi_lengths[i] = voronoi_lengths[i] / *most_voronoi_length;
-		float epsilon = 5 * 1e-2; 
-		float weight = epsilon + (1 - epsilon) * std::pow((1 - voronoi_lengths[i]),2);
-		total_distances[i] = total_distances[i] * weight;
-	} */
+
 	auto least_elem_auto = std::min_element(total_distances.begin(), total_distances.end());
 	int minIndex = std::distance(total_distances.begin(), least_elem_auto);
 

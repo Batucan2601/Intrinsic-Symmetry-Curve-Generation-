@@ -36,7 +36,6 @@
 static ModifiedCamera camera; 
 static void imgui_display_camera(Camera3D& camera, TrilateralMesh* m);
 
-
 #ifdef CONSOLE_MODE
 int main(int argc, char* argv[]) {
     std::string inputFile;
@@ -46,14 +45,14 @@ int main(int argc, char* argv[]) {
     ofstream axisPointFile;
     int sampleNo = 3;
     float biggest_dijkstra = 0;
-    float fuziness = 0.1; 
+    float fuziness = 0.1;
     float distance_to_mid_param = 0.8;
     float hks_dif_param = 0.1;
-    float closeness_param = 0.2; 
+    float closeness_param = 0.2;
     int hist_no = 5;
     float voronoi_dif_param = 0.1;
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(1024, 768, " Trialteral");
+    InitWindow(1024, 768, " Trilateral");
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 
@@ -67,7 +66,7 @@ int main(int argc, char* argv[]) {
             outputFileAxis = argv[++i];
         }
         else if (arg == "-SampleNo" && i + 1 < argc) {
-            sampleNo =  std::stoi(argv[++i]);
+            sampleNo = std::stoi(argv[++i]);
         }
         else {
             std::cerr << "Unknown or incomplete argument: " << arg << std::endl;
@@ -75,35 +74,47 @@ int main(int argc, char* argv[]) {
     }
     //generate mesh 
     TrilateralMesh m((char*)inputFile.c_str());
-    
-    inputFile = inputFile.substr(0,inputFile.size() - m.file_name.size());
+
+    inputFile = inputFile.substr(0, inputFile.size() - m.file_name.size());
     HKS_read_kernel_signature(&m, inputFile);
     // do a single Average Geodesic Pass 
-    std::vector<unsigned int> sampled_agd_points = Geodesic_avg_dijkstra_modified(&m , 0.08, 2, false,biggest_dijkstra);
-    std::vector<unsigned int> sampled_mgd_points = sampled_agd_points; 
+    std::vector<unsigned int> sampled_agd_points = Geodesic_avg_dijkstra_modified(&m, 0.08, 2, false, biggest_dijkstra);
+    std::vector<unsigned int> sampled_mgd_points = sampled_agd_points;
     // do mutiple Minimum Geodesic Pass
     for (size_t i = 0; i < sampleNo; i++)
     {
-        sampled_mgd_points = Geodesic_min_dijkstra(&m, sampled_agd_points, 0.08 , 0.7,false  );
+        sampled_mgd_points = Geodesic_min_dijkstra(&m, sampled_agd_points, 0.08, 0.7, false);
     }
 
     // the main function which does the matching. 
     NLateralMapping_generate_via_voronoi_midpoints(&m, sampled_mgd_points, 0.08, 0.7
-        , fuziness, distance_to_mid_param, hks_dif_param, closeness_param, 0.2, hist_no, 0, biggest_dijkstra, 
-        sampled_agd_points,voronoi_dif_param);
+        , fuziness, distance_to_mid_param, hks_dif_param, closeness_param, 0.2, hist_no, 0, biggest_dijkstra,
+        sampled_agd_points, voronoi_dif_param);
 
     std::cout << "Input file: " << inputFile << std::endl;
     std::cout << "Output file: " << outputFileCors << std::endl;
     std::cout << "OutputCors file: " << outputFileCors << std::endl;
 
+    // generate the voronoi region. 
+    Voronoi voronoi = Voronoi_get_closest_voronoi(&m, voronoi_dif_param);
+#ifdef PRUNING_MODE
+    //recommended for SCAPE meshes where spill out happens.
+    Voronoi_prune_voronoi(&m, voronoi, voronoi_dif_param);
+    //a single iteration
+    // kill correspondences on same path
+    voronoi = Voronoi_destroy_wrong_matches_and_recalculate(&m, voronoi_dif_param, voronoi);
+    // generate new pairs. 
+    voronoi = Voronoi_check_pair_closeness_and_recalculate(&m, voronoi_dif_param, distance_to_mid_param, voronoi);
+
+#endif 
     correspondenceFile.open(outputFileCors);
     for (size_t i = 0; i < m.calculated_symmetry_pairs.size(); i++)
     {
-        correspondenceFile << m.calculated_symmetry_pairs[i].first << " " << m.calculated_symmetry_pairs[i].second << std::endl; 
+        correspondenceFile << m.calculated_symmetry_pairs[i].first << " " << m.calculated_symmetry_pairs[i].second << std::endl;
     }
 
     axisPointFile.open(outputFileAxis);
-    Voronoi voronoi = Voronoi_get_closest_voronoi(&m, voronoi_dif_param);
+   
     for (size_t i = 0; i < voronoi.indices.size(); i++)
     {
         axisPointFile << voronoi.indices[i] << std::endl;
@@ -114,10 +125,10 @@ int main(int argc, char* argv[]) {
 int main(void) 
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(1024, 768, " Trialteral");
+    InitWindow(1024, 768, " Trilateral");
     // build and compile our shader program
     //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.12.off");
-    TrilateralMesh m1((char*)"D:\\Trilateral\\Trilateral\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off");
+    TrilateralMesh m1((char*)(SOURCE_PATH + std::string("\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off")).c_str());
     // Load basic lighting shader
     std::string vs_path = RAYLIB_PATH"/examples/shaders/resources/shaders/glsl330/lighting.vs";
     std::string fs_path = RAYLIB_PATH"/examples/shaders/resources/shaders/glsl330/lighting.fs";
