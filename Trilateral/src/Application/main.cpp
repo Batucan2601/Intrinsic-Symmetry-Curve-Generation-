@@ -36,6 +36,7 @@
 static ModifiedCamera camera; 
 static void imgui_display_camera(Camera3D& camera, TrilateralMesh* m);
 
+#define CONSOLE_MODE
 #ifdef CONSOLE_MODE
 int main(int argc, char* argv[]) {
     std::string inputFile;
@@ -46,8 +47,8 @@ int main(int argc, char* argv[]) {
     int sampleNo = 3;
     float biggest_dijkstra = 0;
     float fuziness = 0.1;
-    float distance_to_mid_param = 0.8;
-    float hks_dif_param = 0.1;
+    float distance_to_mid_param = 0.85;
+    float hks_dif_param = 0.08;
     float closeness_param = 0.2;
     int hist_no = 5;
     float voronoi_dif_param = 0.1;
@@ -100,12 +101,12 @@ int main(int argc, char* argv[]) {
 #ifdef PRUNING_MODE
     //recommended for SCAPE meshes where spill out happens.
     Voronoi_prune_voronoi(&m, voronoi, voronoi_dif_param);
+#else
     //a single iteration
     // kill correspondences on same path
     voronoi = Voronoi_destroy_wrong_matches_and_recalculate(&m, voronoi_dif_param, voronoi);
     // generate new pairs. 
     voronoi = Voronoi_check_pair_closeness_and_recalculate(&m, voronoi_dif_param, distance_to_mid_param, voronoi);
-
 #endif 
     correspondenceFile.open(outputFileCors);
     for (size_t i = 0; i < m.calculated_symmetry_pairs.size(); i++)
