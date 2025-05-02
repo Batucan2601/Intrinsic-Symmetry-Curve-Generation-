@@ -555,6 +555,12 @@ Voronoi Voronoi_get_closest_voronoi(TrilateralMesh* m, float voronoi_param)
 
 void Voronoi_prune_voronoi(TrilateralMesh* m, Voronoi& voronoi, float voronoi_param)
 {
+	if (voronoi.indices.size() > m->vertices.size() / 2)
+	{
+		return; 
+	}
+
+
 	unsigned int midpoint = Geodesic_get_midpoint_from_path(m, voronoi.p1, voronoi.p2);
 	unsigned  int voronoi_midpoint_inverse = Geodesic_send_ray_get_counterpart(m, midpoint);
 	std::vector<float> distances_from_mid = Geodesic_dijkstra(*m, midpoint);

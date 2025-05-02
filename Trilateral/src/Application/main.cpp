@@ -128,7 +128,6 @@ int main(void)
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(1024, 768, " Trilateral");
     // build and compile our shader program
-    //TrilateralMesh m1((char*)"C:\\Users\\Batuhan\\Desktop\\master\\Trilateral\\Trilateral\\Trilateral\\Mesh\\off\\0001.isometry.12.off");
     TrilateralMesh m1((char*)(SOURCE_PATH + std::string("\\Mesh\\SCB\\DATA\\SCAPE\\Meshes\\mesh000.off")).c_str());
     // Load basic lighting shader
     std::string vs_path = RAYLIB_PATH"/examples/shaders/resources/shaders/glsl330/lighting.vs";
