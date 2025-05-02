@@ -37,6 +37,7 @@ static ModifiedCamera camera;
 static void imgui_display_camera(Camera3D& camera, TrilateralMesh* m);
 
 #define CONSOLE_MODE
+#define PRUNING_MODE
 #ifdef CONSOLE_MODE
 int main(int argc, char* argv[]) {
     std::string inputFile;
